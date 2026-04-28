@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Utente {
     protected String nome;
-    protected string cognome;
+    protected String cognome;
     protected String email;
     protected String login;
     protected String password;
@@ -22,6 +22,6 @@ public class Utente {
     }
 
     public void saluto(){
-  System.out.println("ciao mi chiamo" + this.nome+" "+this.cognome);
+  System.out.println("ciao mi chiamo " + this.nome+" "+this.cognome);
     }
 }
