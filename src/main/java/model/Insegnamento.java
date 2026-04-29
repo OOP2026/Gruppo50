@@ -2,15 +2,17 @@ package model;
 
 public class Insegnamento {
     public String Nome;
-    public String NumeroCFU;
-    public String AnnoCorso;
-    public String Docente;
+    public int NumeroCFU;
+    public int AnnoCorso;
+    public Docente docente;
 
-    public Insegnamento(String Nome,String NumeroCFU,String AnnoCorso,String Docente){
+    public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso,Docente docente){
         this.Nome=Nome;
         this.NumeroCFU=NumeroCFU;
         this.AnnoCorso=AnnoCorso;
-        this.Docente=Docente;
+        this.docente=docente;
     }
+
+    
     
 }
