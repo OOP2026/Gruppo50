@@ -1,5 +1,4 @@
 package model;
-
 import java.util.ArrayList;
 
 public class Utente {
@@ -20,7 +19,7 @@ public class Utente {
     public boolean login(String login, String password) {
         return ( login.equals(this.login) && password.equals(this.password));
     }
-
+    
     public void saluto(){
   System.out.println("ciao mi chiamo " + this.nome+" "+this.cognome);
     }
