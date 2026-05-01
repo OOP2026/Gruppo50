@@ -10,4 +10,5 @@ public class Lezione {
         this.orario=o;
 
     }
+    
 }

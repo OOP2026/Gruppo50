@@ -14,10 +14,15 @@ public class Orario {
         add("mercoledì");
         add("giovedì");
         add("venerdì");
+        add("lunedi");
+        add("martedi");
+        add("mercoledi");
+        add("giovedi");
+        add("venerdi"); 
     }};
     public Orario(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
       try {
-if(!giorni.contains(giorno.toLowerCase())){throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti: " + giorni);}
+if( giorno==null ||!giorni.contains(giorno.toLowerCase())){throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti: " + giorni);}
 if(oraInizio<0 || oraInizio>23){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 0 e 23");}
 if(minutoInizio<0 || minutoInizio>59){throw new IllegalArgumentException("Il minuto di inizio deve essere compreso tra 0 e 59");}
 if(oraFine<0 || oraFine>23){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 0 e 23");}
@@ -25,6 +30,7 @@ if(minutoFine<0 || minutoFine>59){throw new IllegalArgumentException("Il minuto 
 if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw new IllegalArgumentException("L'orario di fine deve essere successivo all'orario di inizio");}      
       } catch (IllegalArgumentException e) {
         System.out.println("errore nell'orario: "+e.getMessage());
+        System.exit(1);
     }
 
         this.giorno = giorno;
@@ -33,5 +39,6 @@ if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw 
         this.oraFine = oraFine;
         this.minutoFine = minutoFine;
     }
+    
 
 }

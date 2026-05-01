@@ -1,10 +1,11 @@
 package model;
 import java.util.ArrayList;
 public class Docente extends Utente {
-
-    public Docente(String nome, String cognome, String email, String login, String password) {
+ArrayList<String> insegnamenti = new ArrayList<String>();
+ ArrayList<Richiesta> richiesteSpostamentoInviate = new ArrayList<Richiesta>();
+    public Docente(String nome, String cognome, String email, String login, String password,String insegnamento) {
         super(nome, cognome, email, login, password);
-       
+        this.insegnamenti.add(insegnamento);
     }
 
     @Override
@@ -18,7 +19,10 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
     Orario nuovoOrario = new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
     Richiesta richiesta = new Richiesta(this, motivo, orarioDaSpostare, nuovoOrario);
     responsabile.richiesteSpostamento.add(richiesta);
+    this.richiesteSpostamentoInviate.add(richiesta);
+    
 }
+
 
     
 }
