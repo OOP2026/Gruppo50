@@ -2,7 +2,7 @@ package model;
 import java.util.ArrayList;
 
 public class Responsabile extends Docente {
- public static ArrayList<Richiesta> richiesteSpostamento= new ArrayList<Richiesta>();
+ public ArrayList<Richiesta> richiesteSpostamento= new ArrayList<Richiesta>();
 
     public Responsabile(String nome, String cognome, String email, String login, String password, String insegnamento) {
         super(nome, cognome, email, login, password,insegnamento);
@@ -31,14 +31,14 @@ public class Responsabile extends Docente {
 
     }
 
-    protected void creaLezione(Insegnamento insegnamento, Aula aula, Orario orario) {
+    protected void creaLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni ElencoLezioni) {
         //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = new Lezione(insegnamento, aula, orario);
-OrarioLezioni.AggiungiLezione(nuovaLezione);
+ElencoLezioni.AggiungiLezione(nuovaLezione);
     }
 
 
-protected void SpostamentoLezione(int numeroRichiesta){
+protected void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){ {
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     Lezione lezioneDaSpostare = null;
     boolean trovato = false;
@@ -54,7 +54,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     System.out.println("La richiesta è già stata rifiutata");
     return;}
      if(richiesta.statoRichiesta==StatoRichiesta.IN_ATTESA){
-    for(Lezione lezione : OrarioLezioni.orariolezioni){
+    for(Lezione lezione : ElencoLezioni.orariolezioni){
         if(lezione.insegnamento.docente.email.equals(richiesta.docenteRichiedente.email)==false){
             continue;
         }
@@ -77,7 +77,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
         return;
      }
           try{
-                OrarioLezioni.orariolezioni.remove(lezioneDaSpostare);
+                ElencoLezioni.orariolezioni.remove(lezioneDaSpostare);
             }
             
             catch(Exception e){
@@ -85,7 +85,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
                 System.exit(1);
             }
                Lezione nuovaLezione = new Lezione(lezioneDaSpostare.insegnamento, lezioneDaSpostare.aula, richiesta.nuovoOrarioLezione);
-                OrarioLezioni.AggiungiLezione(nuovaLezione);
+                ElencoLezioni.AggiungiLezione(nuovaLezione);
                 lezioneDaSpostare=null;
                 richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
                 System.out.println("La richiesta è stata approvata");
@@ -94,4 +94,4 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
   }
 
  }
-}
+} }

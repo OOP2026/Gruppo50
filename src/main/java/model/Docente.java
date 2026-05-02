@@ -23,6 +23,23 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
     
 }
 
+public void VisualizzaRichiesteInviate(){
+     int numeroRichiesta=0;
+        //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
+  for(Richiesta richiesta : richiesteSpostamentoInviate) {
+    System.out.println("Richieste di spostamento inviate:");
+    //System.out.println("Numero richiesta: " + (numeroRichiesta));
+    System.out.println("Docente richiedente: " + richiesta.docenteRichiedente.nome + " " + richiesta.docenteRichiedente.cognome);
+    System.out.println("Motivo della richiesta: " + richiesta.motivoRichiesta);
+    System.out.println("Orario lezione da spostare: " + richiesta.orarioLezioneDaSpostare.giorno + " " + richiesta.orarioLezioneDaSpostare.oraInizio + ":" + richiesta.orarioLezioneDaSpostare.minutoInizio + " - " + richiesta.orarioLezioneDaSpostare.oraFine + ":" + richiesta.orarioLezioneDaSpostare.minutoFine);
+    System.out.println("Orario lezione nuovo: " + richiesta.nuovoOrarioLezione.giorno + " " + richiesta.nuovoOrarioLezione.oraInizio + ":" + richiesta.nuovoOrarioLezione.minutoInizio + " - " + richiesta.nuovoOrarioLezione.oraFine + ":" + richiesta.nuovoOrarioLezione.minutoFine);
+    System.out.println("Stato Richiesta: "+richiesta.statoRichiesta);
+    System.out.println("------------------------------------------------");
+    
+}
+}
+
+
 
     
 }

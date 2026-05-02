@@ -2,9 +2,13 @@ package model;
 import java.util.ArrayList;
 
 public class OrarioLezioni {
-    protected static ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
-    
-    public static void AggiungiLezione(Lezione l){
+    protected ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
+     
+    public OrarioLezioni(){
+
+    }
+
+    public  void AggiungiLezione(Lezione l){
         try {
             if(l==null){throw new NullPointerException("Questa lezione e vuota");}
             if(orariolezioni.size()==0){
@@ -37,7 +41,7 @@ public class OrarioLezioni {
         }
     }
 
-public static void visualizzaOrarioCompleto(){
+public void visualizzaOrarioCompleto(){
 System.out.println("Orario completo delle lezioni:");
 GiornoLezioni("Lunedì");
 GiornoLezioni("Martedì");
@@ -46,11 +50,41 @@ GiornoLezioni("Giovedì");
 GiornoLezioni("Venerdi");
 
 }
-private static void GiornoLezioni(String giorno){
+private void GiornoLezioni(String giorno){
     System.out.println(giorno);
     boolean trovata=false;
     for(Lezione lezione : orariolezioni){
  if(giorno.equalsIgnoreCase(lezione.orario.giorno) == false){continue;}
+        System.out.println("Docente: "+lezione.insegnamento.docente.nome+" "+lezione.insegnamento.docente.cognome);
+    System.out.println("Insegnamento: "+lezione.insegnamento.Nome);
+    System.out.println("Anno corso: "+lezione.insegnamento.AnnoCorso);
+    System.out.println("Orario: "+lezione.orario.oraInizio+":"+lezione.orario.minutoInizio+"-"+lezione.orario.oraFine+":"+lezione.orario.minutoFine);
+    System.out.println("Aula: "+lezione.aula.Nome);
+    trovata=true;
+}
+if(!trovata){System.out.println("Non ci sono lezioni in questo giorno");}
+if(giorno.equalsIgnoreCase("Venerdi")){
+System.out.println("------------------------Fine Orario--------------------------"); 
+return;}
+System.out.println("--------------------------------------------------");
+}
+
+
+public void visualizzaOrarioCompleto(Studente studente){
+System.out.println("Orario completo delle lezioni:");
+GiornoLezioni("Lunedì", studente.annoCorso);
+GiornoLezioni("Martedì", studente.annoCorso);
+GiornoLezioni("Mercoledì", studente.annoCorso);
+GiornoLezioni("Giovedì", studente.annoCorso);
+GiornoLezioni("Venerdi", studente.annoCorso);
+
+}
+
+private void GiornoLezioni(String giorno,int annoCorso){
+    System.out.println(giorno);
+    boolean trovata=false;
+    for(Lezione lezione : orariolezioni){
+ if(giorno.equalsIgnoreCase(lezione.orario.giorno) == false || lezione.insegnamento.AnnoCorso != annoCorso){continue;}
         System.out.println("Docente: "+lezione.insegnamento.docente.nome+" "+lezione.insegnamento.docente.cognome);
     System.out.println("Insegnamento: "+lezione.insegnamento.Nome);
     System.out.println("Orario: "+lezione.orario.oraInizio+":"+lezione.orario.minutoInizio+"-"+lezione.orario.oraFine+":"+lezione.orario.minutoFine);
@@ -63,5 +97,4 @@ System.out.println("------------------------Fine Orario-------------------------
 return;}
 System.out.println("--------------------------------------------------");
 }
-
 }
