@@ -2,10 +2,10 @@ package model;
 
 public class Aula {
     public String Nome;
-    public String Capienza;
+    public int Capienza;
     public Boolean StatoAula;
 
-    public Aula(String Nome,String Capienza,Boolean StatoAula) {
+    public Aula(String Nome,int Capienza,Boolean StatoAula) {
         this.Nome=Nome;
         this.Capienza=Capienza;
         this.StatoAula=StatoAula;
