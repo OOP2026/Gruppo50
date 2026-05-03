@@ -36,10 +36,11 @@ public void VisualizzaRichiesteInviate(){
     System.out.println("Stato Richiesta: "+richiesta.statoRichiesta);
     System.out.println("------------------------------------------------");
     
+
+    }
 }
+
+public void VizualizzaOrario(OrarioLezioni ElencoLezioni){
+ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 }
-
-
-
-    
 }

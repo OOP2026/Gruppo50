@@ -22,7 +22,7 @@ public class Studente extends Utente {
     }
     protected void visualizzaOrarioLezioni(OrarioLezioni ElencoLezioni) {
         // Implementazione del metodo per visualizzare l'orario delle lezioni
-ElencoLezioni.visualizzaOrarioCompleto(this);
+ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 
     }   
 

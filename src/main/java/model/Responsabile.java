@@ -40,9 +40,10 @@ try{
     System.out.println("Errore nella creazione della lezione: " + e.getMessage());
 
 }
+System.out.println("Lezione aggiunta con successo responsabile"); 
     }
 
-        protected void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
+protected void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
         //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = l;
 try{
@@ -52,7 +53,8 @@ try{
 
 }
 
-    }
+System.out.println("Lezione aggiunta con successo responsabile"); 
+}
 
 protected void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){ {
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
@@ -126,6 +128,21 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 
   }
  } 
+
+ public void rifiutaRichiesta(int numeroRichiesta){
+
+    Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
+    if(richiesta==null){
+        System.out.println("La richiesta non esiste");
+        return;
+    }
+    richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
+    System.out.println("La richiesta è stata rifiutata");
+ }
+ public void vizualizzaOrarioCompleto(OrarioLezioni ElencoLezioni){
+
+    ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
+ }
 
 public class Token {
 
