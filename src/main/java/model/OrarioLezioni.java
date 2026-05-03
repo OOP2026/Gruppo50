@@ -13,7 +13,7 @@ public class OrarioLezioni {
     public boolean AggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    
     if(token==null){
-        throw new IllegalArgumentException("Non hai il permesso");
+        throw new NullPointerException("Non hai il permesso");
     }
             if (l == null) {
                 throw new NullPointerException("Questa lezione è vuota");
