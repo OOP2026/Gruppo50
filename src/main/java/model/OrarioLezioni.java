@@ -109,7 +109,7 @@ System.out.println("--------------------------------------------------");
 //Studente
 public void visualizzaOrarioCompleto(Studente studente,OrarioLezioni o){
   ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
-    System.out.println("Orario completo delle lezioni:");
+    System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
 GiornoLezioni("Lunedì", studente.annoCorso,ElencoLezioni);
 GiornoLezioni("Martedì", studente.annoCorso,ElencoLezioni);
 GiornoLezioni("Mercoledì", studente.annoCorso,ElencoLezioni);
@@ -139,7 +139,7 @@ System.out.println("--------------------------------------------------");
 //Docente
 public void visualizzaOrarioCompleto(Docente docente, OrarioLezioni o){
   ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
-    System.out.println("Orario completo delle lezioni:");
+    System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
 GiornoLezioni("Lunedì", docente, ElencoLezioni);
 GiornoLezioni("Martedì", docente, ElencoLezioni);
 GiornoLezioni("Mercoledì", docente, ElencoLezioni);
