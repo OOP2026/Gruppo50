@@ -24,24 +24,40 @@ public class OrarioLezioni {
             
             int inizioNuova = (l.orario.oraInizio * 60) + l.orario.minutoInizio;
             int fineNuova = (l.orario.oraFine * 60) + l.orario.minutoFine;
+           
 
            
             for (Lezione lezioneGiaPresente : orariolezioni) {
                 
                 
-                if (!lezioneGiaPresente.orario.giorno.equals(l.orario.giorno) || 
-                    !lezioneGiaPresente.aula.Nome.equals(l.aula.Nome)) {
+                if (!lezioneGiaPresente.orario.giorno.equals(l.orario.giorno)) {
                     continue;
                 }
+                
+                if(!lezioneGiaPresente.insegnamento.docente.equals(l.insegnamento.docente)){
+                    continue;
+                }
+                
+                 
+                
+               //lezione giorno orario = lezione giorno orario & lezione insegneamento docente = lezione insegnamento docente
 
-               
+
                 int inizioEsistente = (lezioneGiaPresente.orario.oraInizio * 60) + lezioneGiaPresente.orario.minutoInizio;
                 int fineEsistente = (lezioneGiaPresente.orario.oraFine * 60) + lezioneGiaPresente.orario.minutoFine;
+
+
+                if ((inizioNuova < fineEsistente && inizioEsistente < fineNuova) && l.insegnamento.Nome.equals(lezioneGiaPresente.insegnamento.Nome)) {
+                    throw new IllegalArgumentException("C'è già una lezione in questa aula in questo orario con questo docente");
+                }  
 
                 if (inizioNuova < fineEsistente && inizioEsistente < fineNuova) {
                     throw new IllegalArgumentException("C'è già una lezione in questa aula in questo orario");
                 }
+                 
+                 
             }
+           
 
           
         orariolezioni.add(l);
@@ -158,4 +174,7 @@ public ArrayList<Lezione> getOrarioLezioni(Token token) {
     }
     return orariolezioni;
 }
+
+
+
 }
