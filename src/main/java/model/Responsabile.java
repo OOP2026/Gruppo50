@@ -3,10 +3,10 @@ import java.util.ArrayList;
 
 public class Responsabile extends Docente {
  public ArrayList<Richiesta> richiesteSpostamento= new ArrayList<Richiesta>();
-
+private final Token token;
     public Responsabile(String nome, String cognome, String email, String login, String password, String insegnamento) {
         super(nome, cognome, email, login, password,insegnamento);
-    
+        this.token = new Token();
     }
     @Override
     public void saluto() {
@@ -31,12 +31,28 @@ public class Responsabile extends Docente {
 
     }
 
-    protected void creaLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni ElencoLezioni) {
+    protected void inserisciLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni ElencoLezioni) {
         //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = new Lezione(insegnamento, aula, orario);
-ElencoLezioni.AggiungiLezione(nuovaLezione);
+try{
+    ElencoLezioni.AggiungiLezione(nuovaLezione,this.token);
+}catch(Exception e){
+    System.out.println("Errore nella creazione della lezione: " + e.getMessage());
+
+}
     }
 
+        protected void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
+        //Implementazione del metodo per creare una nuova lezione
+Lezione nuovaLezione = l;
+try{
+    ElencoLezioni.AggiungiLezione(nuovaLezione,this.token);
+}catch(Exception e){
+    System.out.println("Errore nella creazione della lezione: " + e.getMessage());
+
+}
+
+    }
 
 protected void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){ {
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
@@ -54,7 +70,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     System.out.println("La richiesta è già stata rifiutata");
     return;}
      if(richiesta.statoRichiesta==StatoRichiesta.IN_ATTESA){
-    for(Lezione lezione : ElencoLezioni.orariolezioni){
+    for(Lezione lezione : ElencoLezioni.getOrarioLezioni(this.token)) {
         if(lezione.insegnamento.docente.email.equals(richiesta.docenteRichiedente.email)==false){
             continue;
         }
@@ -77,15 +93,28 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
         return;
      }
           try{
-                ElencoLezioni.orariolezioni.remove(lezioneDaSpostare);
+                ElencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
             }
             
             catch(Exception e){
                 System.out.println("Errore nello spostamento della lezione: " + e.getMessage());
-                System.exit(1);
+                return;
             }
                Lezione nuovaLezione = new Lezione(lezioneDaSpostare.insegnamento, lezioneDaSpostare.aula, richiesta.nuovoOrarioLezione);
-                ElencoLezioni.AggiungiLezione(nuovaLezione);
+               
+                try {
+                     ElencoLezioni.AggiungiLezione(nuovaLezione,this.token);
+                    
+                } catch (Exception e1) {
+                    System.out.println("Errore nello spostamento della lezione: " + e1.getMessage());
+                    System.out.println("Tentativo di ripristinare la lezione originale...");
+                    try {
+                        ElencoLezioni.AggiungiLezione(lezioneDaSpostare,this.token);
+                    } catch (Exception e2) {
+                        System.out.println("Errore nel ripristino della lezione originale: " + e2.getMessage());
+                    }
+                    return;
+                }
                 lezioneDaSpostare=null;
                 richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
                 System.out.println("La richiesta è stata approvata");
@@ -93,5 +122,14 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 
   }
 
- }
-} }
+  }
+ } 
+
+public class Token {
+
+    private Token() {
+
+    }
+
+}
+}

@@ -1,15 +1,20 @@
 package model;
 import java.util.ArrayList;
 
+import model.Responsabile.Token;
+
 public class OrarioLezioni {
-    protected ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
+    private ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
      
     public OrarioLezioni(){
 
     }
 
-    public  void AggiungiLezione(Lezione l){
-       try {
+    public boolean AggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
+   
+    if(token==null){
+        throw new IllegalArgumentException("Non hai il permesso");
+    }
             if (l == null) {
                 throw new NullPointerException("Questa lezione è vuota");
             }
@@ -37,15 +42,13 @@ public class OrarioLezioni {
             }
 
           
-            orariolezioni.add(l);
-            System.out.println("GG - Lezione aggiunta con successo");
+        orariolezioni.add(l);
+           return true;
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-           
-        }
+        
 
     }
+
 
 public void visualizzaOrarioCompleto(){
 System.out.println("Orario completo delle lezioni:");
@@ -102,5 +105,13 @@ if(giorno.equalsIgnoreCase("Venerdi")){
 System.out.println("------------------------Fine Orario--------------------------"); 
 return;}
 System.out.println("--------------------------------------------------");
+}
+
+public ArrayList<Lezione> getOrarioLezioni(Token token) {
+    if(token==null){
+        System.out.println("Non hai il permesso");
+        return null;
+    }
+    return orariolezioni;
 }
 }
