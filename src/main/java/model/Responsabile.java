@@ -105,8 +105,10 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
                 try {
                      ElencoLezioni.AggiungiLezione(nuovaLezione,this.token);
                     
-                } catch (Exception e1) {
+                } catch (IllegalArgumentException e1) {
                     System.out.println("Errore nello spostamento della lezione: " + e1.getMessage());
+                    richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
+                    System.out.println("La richiesta è stata rifiutata");
                     System.out.println("Tentativo di ripristinare la lezione originale...");
                     try {
                         ElencoLezioni.AggiungiLezione(lezioneDaSpostare,this.token);
