@@ -20,14 +20,15 @@ public class TestModel {
 		Luca.saluto();
 		Insegnamento Matematica = new Insegnamento ("Matematica",6,1,Marco);
 		Aula Aula1 = new Aula("Aula 1",30, true);
+		Aula Aula2 = new Aula("Aula 2",20, true);
 		Orario Orario1 = new Orario("Lunedì",9,0,10,30);
-		Orario Orario2 = new Orario("Lunedì",10,30	,12,0);
+		Orario Orario2 = new Orario("Lunedì",8,00	,9,5);
 		Lezione l1 = new Lezione(Matematica,Aula1,Orario1);
-		Lezione l2 = new Lezione(Matematica,Aula1,Orario2);	
+		Lezione l2 = new Lezione(Matematica,Aula2,Orario1);	
 
 		OrarioLezioni orarioLezioni = new OrarioLezioni();
-		orarioLezioni.AggiungiLezione(l1);	
-		orarioLezioni.AggiungiLezione(l2);	
+		Giovanni.inserisciLezione(l1, orarioLezioni);	
+		Giovanni.inserisciLezione(l2, orarioLezioni);
 		orarioLezioni.visualizzaOrarioCompleto();
 		Richiesta richiestaSpostamento = new Richiesta(Marco,"Motivo personale",Orario1,Orario2);
 		Giovanni.richiesteSpostamento.add(richiestaSpostamento);
