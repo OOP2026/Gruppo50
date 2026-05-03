@@ -139,7 +139,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
     System.out.println("La richiesta è stata rifiutata");
  }
- public void vizualizzaOrarioCompleto(OrarioLezioni ElencoLezioni){
+ public void VisualizzaOrarioCompleto(OrarioLezioni ElencoLezioni){
 
     ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
  }

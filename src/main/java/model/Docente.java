@@ -40,7 +40,7 @@ public void VisualizzaRichiesteInviate(){
     }
 }
 
-public void VizualizzaOrario(OrarioLezioni ElencoLezioni){
+public void VisualizzaOrario(OrarioLezioni ElencoLezioni){
 ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 }
 }
