@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.Responsabile.Token;
 
 //se non funziona la funzione ler vedere le lezione è perche
-// il giorno probabilemnte conclude con una i differente!
+// il giorno probabilmente conclude con una i differente!
 public class OrarioLezioni {
     private ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
      
