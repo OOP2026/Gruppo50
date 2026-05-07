@@ -1,13 +1,17 @@
 package model;
 import java.util.ArrayList;
+import java.util.List;
 public class Docente extends Utente {
-ArrayList<String> insegnamenti = new ArrayList<String>();
+   List<Insegnamento> insegnamenti = new ArrayList<Insegnamento>();
  ArrayList<Richiesta> richiesteSpostamentoInviate = new ArrayList<Richiesta>();
-    public Docente(String nome, String cognome, String email, String login, String password,String insegnamento) {
+    public Docente(String nome, String cognome, String email, String login, String password) {
         super(nome, cognome, email, login, password);
-        this.insegnamenti.add(insegnamento);
+
     }
 
+    public void Inserisci_insegnamenti(List<Insegnamento> insegnamenti){
+        this.insegnamenti=new ArrayList<>(insegnamenti);
+    }
     @Override
     public void saluto() {
 System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
