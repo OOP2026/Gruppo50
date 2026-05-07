@@ -95,6 +95,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
         return;
      }
           try{
+        //prova a rimuovere la lezione da spostare
                 ElencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
             }
             
@@ -130,7 +131,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
  } 
 
  public void rifiutaRichiesta(int numeroRichiesta){
-
+//get(); ottiene la richiesta usando numeroRichiesta. cosi trova la posizione della richiesta
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     if(richiesta==null){
         System.out.println("La richiesta non esiste");
@@ -143,7 +144,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 
     ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
  }
-// Il toke serve per usare alcuni metodi che solo il responsabile puo usare
+// Il token serve per usare alcuni metodi che solo il responsabile puo usare
 public class Token {
 
     private Token() {

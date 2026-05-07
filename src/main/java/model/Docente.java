@@ -19,7 +19,7 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
     }
     //questa funzione invia una richiesta di spostamento al responsabile
     public void RichiestaSpostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo, int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {  
-      
+      //creazione della richiesta
     Orario orarioDaSpostare = new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio);
     Orario nuovoOrario = new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
     Richiesta richiesta = new Richiesta(this, motivo, orarioDaSpostare, nuovoOrario);

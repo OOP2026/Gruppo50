@@ -31,6 +31,7 @@ if(oraFine<8 || oraFine>18){throw new IllegalArgumentException("L'ora di fine de
 if(minutoFine<0 || minutoFine>59){throw new IllegalArgumentException("Il minuto di fine deve essere compreso tra 0 e 59");}
 if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw new IllegalArgumentException("L'orario di fine deve essere successivo all'orario di inizio");}      
       } catch (IllegalArgumentException e) {
+        //Finisce il programma
         System.out.println("errore nell'orario: "+e.getMessage());
         System.exit(1);
     }
