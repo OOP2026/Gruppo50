@@ -1,7 +1,7 @@
 package model;
 import java.util.ArrayList;
 public class Studente extends Utente {
-    protected String matricola;
+    private final String matricola;
    public int annoCorso;
    private static ArrayList<String> Matricole= new ArrayList<String>();
 
@@ -31,6 +31,9 @@ public class Studente extends Utente {
         // Implementazione del metodo per visualizzare l'orario delle lezioni
 ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 
-    }   
+    }
 
+    public String getmatricola(){
+        return matricola;
+    }
 }

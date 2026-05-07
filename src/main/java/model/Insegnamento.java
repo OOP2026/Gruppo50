@@ -6,7 +6,7 @@ public class Insegnamento {
     public int AnnoCorso;
     public Docente docente;
 
-    public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso,Docente docente){
+    public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso, Docente docente){
         this.Nome=Nome;
         this.NumeroCFU=NumeroCFU;
         this.AnnoCorso=AnnoCorso;

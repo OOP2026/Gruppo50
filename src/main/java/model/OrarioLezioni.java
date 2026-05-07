@@ -1,17 +1,17 @@
 package model;
 import java.util.ArrayList;
-
+import java.util.function.Predicate;
 import model.Responsabile.Token;
 
 //se non funziona la funzione ler vedere le lezione è perche
-// il giorno probabilemnte conclude con una i differente!
+// il giorno probabilmente conclude con una i differente!
 public class OrarioLezioni {
     private ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
      
     public OrarioLezioni(){
 
     }
-// il token serve per avere il permesso per usare alcuni metodi che solo il responsabile puo usare
+
     public boolean AggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    
     if(token==null){
@@ -67,7 +67,7 @@ public class OrarioLezioni {
 
     }
 
-//Solo il responsabile puo vedere l'orario completo con tutte le lezioni, gli altri utenti possono vedere solo le lezioni che li riguardano
+
 public void visualizzaOrarioCompleto(Token token,OrarioLezioni o){
     if(token==null){
         System.out.println("Non hai il permesso");
@@ -76,94 +76,58 @@ public void visualizzaOrarioCompleto(Token token,OrarioLezioni o){
 
       ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
 System.out.println("Orario completo delle lezioni:");
-GiornoLezioni("Lunedì",ElencoLezioni);
-GiornoLezioni("Martedì",ElencoLezioni);
-GiornoLezioni("Mercoledì",ElencoLezioni);
-GiornoLezioni("Giovedì",ElencoLezioni);
-GiornoLezioni("Venerdi",ElencoLezioni);
+
+GiornoLezioni("Lunedì",  ElencoLezioni, l -> true);
+GiornoLezioni("Martedì",  ElencoLezioni, l -> true);
+GiornoLezioni("Mercoledì",  ElencoLezioni, l -> true);
+GiornoLezioni("Giovedì",  ElencoLezioni, l -> true);
+GiornoLezioni("Venerdì",  ElencoLezioni, l -> true);
 
 }
-// stampa le lezioni in base al giorno, se non ci sono lezioni in quel giorno stampa un messaggio, alla fine del venerdi stampa un messaggio di fine orario
-private void GiornoLezioni(String giorno, ArrayList<Lezione> ElencoLezioni){
-    System.out.println(giorno);
-    boolean trovata=false;
-   
-    for(Lezione lezione : ElencoLezioni){
-        
- if(giorno.equalsIgnoreCase(lezione.orario.giorno) == false){continue;}
-        System.out.println("Numero lezione: "+ElencoLezioni.indexOf(lezione));
-        System.out.println("Docente: "+lezione.insegnamento.docente.nome+" "+lezione.insegnamento.docente.cognome);
-    System.out.println("Insegnamento: "+lezione.insegnamento.Nome);
-    System.out.println("Anno corso: "+lezione.insegnamento.AnnoCorso);
-    System.out.println("Orario: "+lezione.orario.oraInizio+":"+lezione.orario.minutoInizio+"-"+lezione.orario.oraFine+":"+lezione.orario.minutoFine);
-    System.out.println("Aula: "+lezione.aula.Nome);
-    trovata=true;
-}
-if(!trovata){System.out.println("Non ci sono lezioni in questo giorno");}
-if(giorno.equalsIgnoreCase("Venerdi")){
-System.out.println("------------------------Fine Orario--------------------------"); 
-return;}
-System.out.println("--------------------------------------------------");
-}
+
+    private void GiornoLezioni(String giorno, ArrayList<Lezione> elenco, Predicate<Lezione> filtro) {
+        System.out.println(giorno);
+        boolean trovata = false;
+        for (Lezione l : elenco) {
+            if (!giorno.equalsIgnoreCase(l.orario.giorno)) continue;
+            if (!filtro.test(l)) continue;
+            // stampa campi comuni...
+            trovata = true;
+        }
+        if (!trovata) System.out.println("Non ci sono lezioni in questo giorno");
+        if (giorno.equalsIgnoreCase("Venerdi")) {
+            System.out.println("---Fine Orario---");
+            return;
+        }
+        System.out.println("------------------");
+    }
 
 //Studente
 public void visualizzaOrarioCompleto(Studente studente,OrarioLezioni o){
   ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
     System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
-GiornoLezioni("Lunedì", studente.annoCorso,ElencoLezioni);
-GiornoLezioni("Martedì", studente.annoCorso,ElencoLezioni);
-GiornoLezioni("Mercoledì", studente.annoCorso,ElencoLezioni);
-GiornoLezioni("Giovedì", studente.annoCorso,ElencoLezioni);
-GiornoLezioni("Venerdi", studente.annoCorso,ElencoLezioni);
+    GiornoLezioni("Lunedì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    GiornoLezioni("Martedì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    GiornoLezioni("Mercoledì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    GiornoLezioni("Giovedì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    GiornoLezioni("Venerdì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
 
 }
 
-private void GiornoLezioni(String giorno,int annoCorso, ArrayList<Lezione> ElencoLezioni){
-    System.out.println(giorno);
-    boolean trovata=false;
-    for(Lezione lezione : ElencoLezioni){
- if(giorno.equalsIgnoreCase(lezione.orario.giorno) == false || lezione.insegnamento.AnnoCorso != annoCorso){continue;}
-        System.out.println("Docente: "+lezione.insegnamento.docente.nome+" "+lezione.insegnamento.docente.cognome);
-    System.out.println("Insegnamento: "+lezione.insegnamento.Nome);
-    System.out.println("Orario: "+lezione.orario.oraInizio+":"+lezione.orario.minutoInizio+"-"+lezione.orario.oraFine+":"+lezione.orario.minutoFine);
-    System.out.println("Aula: "+lezione.aula.Nome);
-    trovata=true;
-}
-if(!trovata){System.out.println("Non ci sono lezioni in questo giorno");}
-if(giorno.equalsIgnoreCase("Venerdi")){
-System.out.println("------------------------Fine Orario--------------------------"); 
-return;}
-System.out.println("--------------------------------------------------");
-}
+
 
 //Docente
 public void visualizzaOrarioCompleto(Docente docente, OrarioLezioni o){
   ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
     System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
-GiornoLezioni("Lunedì", docente, ElencoLezioni);
-GiornoLezioni("Martedì", docente, ElencoLezioni);
-GiornoLezioni("Mercoledì", docente, ElencoLezioni);
-GiornoLezioni("Giovedì", docente, ElencoLezioni);
-GiornoLezioni("Venerdi", docente, ElencoLezioni);
+    GiornoLezioni("Lunedì", ElencoLezioni, l -> l.insegnamento.docente == docente);
+    GiornoLezioni("Martedì", ElencoLezioni, l -> l.insegnamento.docente == docente);
+    GiornoLezioni("Mercoledì", ElencoLezioni, l -> l.insegnamento.docente == docente);
+    GiornoLezioni("Giovedì", ElencoLezioni, l -> l.insegnamento.docente == docente);
+    GiornoLezioni("Venerdì", ElencoLezioni, l -> l.insegnamento.docente == docente);
 }
 
-private void GiornoLezioni(String giorno, Docente docente, ArrayList<Lezione> ElencoLezioni){
-    System.out.println(giorno);
-    boolean trovata=false;
-    for(Lezione lezione : ElencoLezioni){
- if(giorno.equalsIgnoreCase(lezione.orario.giorno) == false || lezione.insegnamento.docente != docente){continue;}
-        System.out.println("Docente: "+lezione.insegnamento.docente.nome+" "+lezione.insegnamento.docente.cognome);
-    System.out.println("Insegnamento: "+lezione.insegnamento.Nome);
-    System.out.println("Orario: "+lezione.orario.oraInizio+":"+lezione.orario.minutoInizio+"-"+lezione.orario.oraFine+":"+lezione.orario.minutoFine);
-    System.out.println("Aula: "+lezione.aula.Nome);
-    trovata=true;
-}
-if(!trovata){System.out.println("Non ci sono lezioni in questo giorno");}
-if(giorno.equalsIgnoreCase("Venerdi")){
-System.out.println("------------------------Fine Orario--------------------------"); 
-return;}
-System.out.println("--------------------------------------------------");
-}
+
 
 
 
