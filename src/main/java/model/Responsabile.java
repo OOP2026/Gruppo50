@@ -143,7 +143,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 
     ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
  }
-
+// Il toke serve per usare alcuni metodi che solo il responsabile puo usare
 public class Token {
 
     private Token() {
@@ -151,4 +151,5 @@ public class Token {
     }
 
 }
+
 }

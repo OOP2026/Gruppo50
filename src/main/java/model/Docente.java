@@ -13,8 +13,9 @@ ArrayList<String> insegnamenti = new ArrayList<String>();
 System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
 
     }
+    //questa funzione invia una richiesta di spostamento al responsabile
     public void RichiestaSpostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo, int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {  
-        //Incompleto manca l'orario della lezione da spostare e l'orario nuovo
+      
     Orario orarioDaSpostare = new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio);
     Orario nuovoOrario = new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
     Richiesta richiesta = new Richiesta(this, motivo, orarioDaSpostare, nuovoOrario);
@@ -22,7 +23,7 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
     this.richiesteSpostamentoInviate.add(richiesta);
     
 }
-
+//Vede le proprie richieste che ha inviato
 public void VisualizzaRichiesteInviate(){
      int numeroRichiesta=0;
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni

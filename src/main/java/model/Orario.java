@@ -22,10 +22,12 @@ public class Orario {
     }};
     public Orario(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
       try {
+        //controlli se il giorno è scritto bene ed fa parte dei giorni della settimana
 if( giorno==null ||!giorni.contains(giorno.toLowerCase())){throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti: " + giorni);}
-if(oraInizio<0 || oraInizio>23){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 0 e 23");}
+//Controlla se le ore sono compresi negli intervalli validi e se l'orario di fine è successivo a quello di inizio
+if(oraInizio<8 || oraInizio>17){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 8 e 17");}
 if(minutoInizio<0 || minutoInizio>59){throw new IllegalArgumentException("Il minuto di inizio deve essere compreso tra 0 e 59");}
-if(oraFine<0 || oraFine>23){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 0 e 23");}
+if(oraFine<8 || oraFine>18){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 8 e 18");}
 if(minutoFine<0 || minutoFine>59){throw new IllegalArgumentException("Il minuto di fine deve essere compreso tra 0 e 59");}
 if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw new IllegalArgumentException("L'orario di fine deve essere successivo all'orario di inizio");}      
       } catch (IllegalArgumentException e) {

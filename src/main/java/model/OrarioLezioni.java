@@ -11,7 +11,7 @@ public class OrarioLezioni {
     public OrarioLezioni(){
 
     }
-
+// il token serve per avere il permesso per usare alcuni metodi che solo il responsabile puo usare
     public boolean AggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    
     if(token==null){
@@ -67,7 +67,7 @@ public class OrarioLezioni {
 
     }
 
-
+//Solo il responsabile puo vedere l'orario completo con tutte le lezioni, gli altri utenti possono vedere solo le lezioni che li riguardano
 public void visualizzaOrarioCompleto(Token token,OrarioLezioni o){
     if(token==null){
         System.out.println("Non hai il permesso");
@@ -83,7 +83,7 @@ GiornoLezioni("Giovedì",ElencoLezioni);
 GiornoLezioni("Venerdi",ElencoLezioni);
 
 }
-
+// stampa le lezioni in base al giorno, se non ci sono lezioni in quel giorno stampa un messaggio, alla fine del venerdi stampa un messaggio di fine orario
 private void GiornoLezioni(String giorno, ArrayList<Lezione> ElencoLezioni){
     System.out.println(giorno);
     boolean trovata=false;
