@@ -3,7 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 public class Docente extends Utente {
    List<Insegnamento> insegnamenti = new ArrayList<Insegnamento>();
- ArrayList<Richiesta> richiesteSpostamentoInviate = new ArrayList<Richiesta>();
+private ArrayList<Richiesta> richiesteSpostamentoInviate = new ArrayList<Richiesta>();
+ private ArrayList<Vincolo> vincoli= new ArrayList<Vincolo>();
     public Docente(String nome, String cognome, String email, String login, String password) {
         super(nome, cognome, email, login, password);
 
@@ -33,7 +34,7 @@ public void VisualizzaRichiesteInviate(){
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
   for(Richiesta richiesta : richiesteSpostamentoInviate) {
     System.out.println("Richieste di spostamento inviate:");
-    //System.out.println("Numero richiesta: " + (numeroRichiesta));
+    
     System.out.println("Docente richiedente: " + richiesta.docenteRichiedente.nome + " " + richiesta.docenteRichiedente.cognome);
     System.out.println("Motivo della richiesta: " + richiesta.motivoRichiesta);
     System.out.println("Orario lezione da spostare: " + richiesta.orarioLezioneDaSpostare.giorno + " " + richiesta.orarioLezioneDaSpostare.oraInizio + ":" + richiesta.orarioLezioneDaSpostare.minutoInizio + " - " + richiesta.orarioLezioneDaSpostare.oraFine + ":" + richiesta.orarioLezioneDaSpostare.minutoFine);
@@ -47,5 +48,44 @@ public void VisualizzaRichiesteInviate(){
 
 public void VisualizzaOrario(OrarioLezioni ElencoLezioni){
 ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
+}
+
+public void aggiungiVincolo(String giorno, int OraInzio, int MinutoInzio,int OraFIne,int MinutoFine){
+    if(vincoli.size()==3){
+        System.out.println("Hai già raggiunto il numero massimo di vincoli");
+        return;
+    }
+vincoli.add(new Vincolo(giorno, OraInzio, MinutoInzio, OraFIne, MinutoFine));
+System.out.println("Vincolo aggiunto con successo");
+
+}
+//funzione che restituisce i vincoli del docente, utile per verificare se il docente è disponibile in un certo orario
+public ArrayList<Vincolo> getVincoli(){
+return new ArrayList<>(vincoli);
+}
+//rimuove un vincolo in base all'indice.
+public void rimuoviVincolo(int indice){
+    if(indice<0 || indice>=vincoli.size()){
+        System.out.println("Indice non valido");
+        return;
+    }
+    vincoli.remove(indice);
+    System.out.println("Vincolo rimosso con successo");
+}
+//Mostra i vincoli
+public void mostraVincoli(){
+    if(vincoli.size()==0){
+        System.out.println("Non hai vincoli");
+        return;
+    }
+    System.out.println("Vincoli di"+this.nome+" "+this.cognome+":");
+    int numeroVincolo=0;
+    for(Vincolo vincolo : vincoli){
+        System.out.println("Numero vincolo: "+numeroVincolo);
+        System.out.println("Giorno: "+vincolo.orario.giorno);
+        System.out.println("Orario: "+vincolo.orario.oraInizio+":"+vincolo.orario.minutoInizio+" - "+vincolo.orario.oraFine+":"+vincolo.orario.minutoFine);
+        System.out.println("-----------------------------------");
+        numeroVincolo++;
+    }
 }
 }

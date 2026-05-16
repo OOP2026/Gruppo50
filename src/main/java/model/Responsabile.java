@@ -4,8 +4,8 @@ import java.util.ArrayList;
 public class Responsabile extends Docente {
  public ArrayList<Richiesta> richiesteSpostamento= new ArrayList<Richiesta>();
 private final Token token;
-    public Responsabile(String nome, String cognome, String email, String login, String password, String insegnamento) {
-        super(nome, cognome, email, login, password,insegnamento);
+    public Responsabile(String nome, String cognome, String email, String login, String password) {
+        super(nome, cognome, email, login, password);
         this.token = new Token();
     }
     @Override
@@ -30,9 +30,13 @@ private final Token token;
 // System.out.println("----------------------Fine Richieste di Spostamento--------------------------");
 
     }
-
+//La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
     protected void inserisciLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni ElencoLezioni) {
         //Implementazione del metodo per creare una nuova lezione
+        if(!(VerificaDisponibilita(insegnamento.docente.getVincoli(), orario))){
+            System.out.println("Il docente non è disponibile in questo orario");
+            return;
+        }
 Lezione nuovaLezione = new Lezione(insegnamento, aula, orario);
 try{
     ElencoLezioni.AggiungiLezione(nuovaLezione,this.token);
@@ -42,8 +46,12 @@ try{
 }
 System.out.println("Lezione aggiunta con successo responsabile"); 
     }
-
+//La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
 protected void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
+    if(!(VerificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
+            System.out.println("Il docente non è disponibile in questo orario");
+            return;
+        }
         //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = l;
 try{
@@ -70,7 +78,8 @@ if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
 }
 if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     System.out.println("La richiesta è già stata rifiutata");
-    return;}
+    return;
+}
      if(richiesta.statoRichiesta==StatoRichiesta.IN_ATTESA){
     for(Lezione lezione : ElencoLezioni.getOrarioLezioni(this.token)) {
         if(lezione.insegnamento.docente.email.equals(richiesta.docenteRichiedente.email)==false){
@@ -144,6 +153,25 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 
     ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
  }
+ 
+//permette di verificare se l'orario viola uno dei vincoli del docente
+//cioe controlla se il docente è disponibile in quel orario
+private boolean VerificaDisponibilita(ArrayList<Vincolo> vincoli, Orario orario){
+for(Vincolo vincolo:vincoli){
+int orarioInizioVincolo= (vincolo.orario.oraInizio*60)+vincolo.orario.minutoInizio;
+int orarioFineVincolo= (vincolo.orario.oraFine*60)+vincolo.orario.minutoFine;
+int orarioInizioLezione= (orario.oraInizio*60)+orario.minutoInizio;
+int orarioFineLezione= (orario.oraFine*60)+orario.minutoFine;
+
+if(!vincolo.orario.giorno.equals(orario.giorno))continue;
+
+if(orarioInizioLezione>orarioFineVincolo || orarioFineLezione<orarioInizioVincolo){
+    continue;}
+    else{return false;} 
+ 
+}
+return true;
+}
 // Il token serve per usare alcuni metodi che solo il responsabile puo usare
 public class Token {
 
