@@ -43,5 +43,16 @@ if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw 
         this.minutoFine = minutoFine;
     }
     
+public int getOrarioInizioInMinuti() {
+    return (this.oraInizio * 60) + this.minutoInizio;
+}
+public int getOrarioFineInMinuti() {
+    return (this.oraFine * 60) + this.minutoFine;
+}
+ 
+public String getOrarioCompleto()
+{
+    return this.oraInizio + ":" + this.minutoInizio + " - " + this.oraFine + ":" + this.minutoFine;
+}
 
 }

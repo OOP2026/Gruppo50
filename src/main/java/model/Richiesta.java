@@ -11,6 +11,7 @@ public class Richiesta{
    public Orario orarioLezioneDaSpostare;
    public Orario nuovoOrarioLezione;
    public StatoRichiesta statoRichiesta= StatoRichiesta.IN_ATTESA;
+   
    public Richiesta(Docente docenteRichiedente, String motivoRichiesta, Orario orarioLezioneDaSpostare, Orario nuovoOrarioLezione) {
     this.docenteRichiedente = docenteRichiedente;
     this.motivoRichiesta = motivoRichiesta;
