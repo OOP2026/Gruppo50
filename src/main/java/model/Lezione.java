@@ -17,12 +17,20 @@ public class Lezione {
 
    
  //permette di confrontare due lezioni e vedere se sono uguali o meno, utile per verificare se una lezione è già presente nell'orario o per verificare se una richiesta di spostamento riguarda la stessa lezione
-   
- public boolean equals(Lezione lezione) {
-      if(this.insegnamento.equals(lezione.insegnamento) && this.orario.equals(lezione.orario) && this.aula.Nome.equals(lezione.aula.Nome))
-          return true;
-      
-      return false;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Lezione)) return false;
+        Lezione lezione = (Lezione) obj;
+        return this.insegnamento.equals(lezione.insegnamento)
+                && this.orario.equals(lezione.orario)
+                && this.aula.Nome.equals(lezione.aula.Nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(this.insegnamento, this.orario, this.aula.Nome);
     }
 
     
