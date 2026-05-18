@@ -26,6 +26,7 @@ public class Orario {
 if( giorno==null ||!giorni.contains(giorno.toLowerCase())){throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti: " + giorni);}
 //Controlla se le ore sono compresi negli intervalli validi e se l'orario di fine è successivo a quello di inizio
 if(oraInizio<8 || oraInizio>17){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 8 e 17");}
+if(oraFine<8 || oraFine>18){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 8 e 18");}
 if(minutoInizio<0 || minutoInizio>59){throw new IllegalArgumentException("Il minuto di inizio deve essere compreso tra 0 e 59");}
 
 if(oraFine == 18 && minutoFine > 0) {
@@ -66,4 +67,8 @@ public String getOrarioCompleto() {
                 && this.getOrarioFineInMinuti() == orario.getOrarioFineInMinuti();
     }
 
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(this.giorno, this.getOrarioInizioInMinuti(), this.getOrarioFineInMinuti());
+    }
 }
