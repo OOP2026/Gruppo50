@@ -32,7 +32,7 @@ if(oraFine == 18 && minutoFine > 0) {
     throw new IllegalArgumentException("L'ora di fine non può superare le 18:00");
 }
 
-if(minutoFine<0 || minutoFine>59){throw new IllegalArgumentException("Il minuto di fine deve essere compreso tra 0 e 59");}
+
 if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw new IllegalArgumentException("L'orario di fine deve essere successivo all'orario di inizio");}      
       } catch (IllegalArgumentException e) {
         throw  e;
@@ -56,8 +56,14 @@ public String getOrarioCompleto() {
         return String.format("%d:%02d - %d:%02d", this.oraInizio, this.minutoInizio, this.oraFine, this.minutoFine);
     }
 
-public boolean equals(Orario orario){
-    return this.giorno.equals(orario.giorno) && this.getOrarioInizioInMinuti() == orario.getOrarioInizioInMinuti() && this.getOrarioFineInMinuti() == orario.getOrarioFineInMinuti();
-}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Orario)) return false;
+        Orario orario = (Orario) obj;
+        return this.giorno.equals(orario.giorno)
+                && this.getOrarioInizioInMinuti() == orario.getOrarioInizioInMinuti()
+                && this.getOrarioFineInMinuti() == orario.getOrarioFineInMinuti();
+    }
 
 }
