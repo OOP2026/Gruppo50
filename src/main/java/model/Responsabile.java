@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Responsabile extends Docente {
   ArrayList<Richiesta> richiesteSpostamento;
 private final Token token;
-    public Responsabile(String nome, String cognome, String email, String login, String password) {
+    public Responsabile(String nome, String cognome, String email, String login, String password, String matematica) {
         super(nome, cognome, email, login, password);
         richiesteSpostamento= new ArrayList<Richiesta>();
         this.token = new Token();
@@ -78,7 +78,6 @@ protected void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezio
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     Lezione lezioneDaSpostare = null;
-    boolean trovato = false;
 if(richiesta==null){
     System.out.println("La richiesta non esiste");
     return;
@@ -92,12 +91,13 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     return;
 }
      if(richiesta.statoRichiesta==StatoRichiesta.IN_ATTESA){
-  
 
-     if(cercaLezioneDaSpostare(richiesta, ElencoLezioni)==null){
-        System.out.println("La lezione da spostare non è stata trovata");
-        return;
-     }
+         lezioneDaSpostare = cercaLezioneDaSpostare(richiesta, ElencoLezioni);
+         if(lezioneDaSpostare == null){
+             System.out.println("La lezione da spostare non è stata trovata");
+             return;
+         }
+
           try{
                 ElencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
             }
@@ -123,9 +123,8 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
                     }
                     return;
                 }
-                
-                lezioneDaSpostare=null;
-                richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
+
+         richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
                 System.out.println("La richiesta è stata approvata");
                 
 
