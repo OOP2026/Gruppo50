@@ -27,13 +27,15 @@ if( giorno==null ||!giorni.contains(giorno.toLowerCase())){throw new IllegalArgu
 //Controlla se le ore sono compresi negli intervalli validi e se l'orario di fine è successivo a quello di inizio
 if(oraInizio<8 || oraInizio>17){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 8 e 17");}
 if(minutoInizio<0 || minutoInizio>59){throw new IllegalArgumentException("Il minuto di inizio deve essere compreso tra 0 e 59");}
-if(oraFine<8 || oraFine>18){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 8 e 18");}
+
+if(oraFine == 18 && minutoFine > 0) {
+    throw new IllegalArgumentException("L'ora di fine non può superare le 18:00");
+}
+
 if(minutoFine<0 || minutoFine>59){throw new IllegalArgumentException("Il minuto di fine deve essere compreso tra 0 e 59");}
 if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw new IllegalArgumentException("L'orario di fine deve essere successivo all'orario di inizio");}      
       } catch (IllegalArgumentException e) {
-        //Finisce il programma
-        System.out.println("errore nell'orario: "+e.getMessage());
-        System.exit(1);
+        throw  e;
     }
 
         this.giorno = giorno;
@@ -49,16 +51,13 @@ public int getOrarioInizioInMinuti() {
 public int getOrarioFineInMinuti() {
     return (this.oraFine * 60) + this.minutoFine;
 }
- 
-public String getOrarioCompleto()
-{
-    return this.oraInizio + ":" + this.minutoInizio + " - " + this.oraFine + ":" + this.minutoFine;
-}
+
+public String getOrarioCompleto() {
+        return String.format("%d:%02d - %d:%02d", this.oraInizio, this.minutoInizio, this.oraFine, this.minutoFine);
+    }
 
 public boolean equals(Orario orario){
-    if(this.giorno.equals(orario.giorno)&& this.getOrarioInizioInMinuti()==orario.getOrarioInizioInMinuti() && this.getOrarioFineInMinuti()==orario.getOrarioFineInMinuti())
-        return true;
-    return false;
+    return this.giorno.equals(orario.giorno) && this.getOrarioInizioInMinuti() == orario.getOrarioInizioInMinuti() && this.getOrarioFineInMinuti() == orario.getOrarioFineInMinuti();
 }
 
 }
