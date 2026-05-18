@@ -55,4 +55,10 @@ public String getOrarioCompleto()
     return this.oraInizio + ":" + this.minutoInizio + " - " + this.oraFine + ":" + this.minutoFine;
 }
 
+public boolean equals(Orario orario){
+    if(this.giorno.equals(orario.giorno)&& this.getOrarioInizioInMinuti()==orario.getOrarioInizioInMinuti() && this.getOrarioFineInMinuti()==orario.getOrarioFineInMinuti())
+        return true;
+    return false;
+}
+
 }

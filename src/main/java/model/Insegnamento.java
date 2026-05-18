@@ -13,6 +13,12 @@ public class Insegnamento {
         this.docente=docente;
     }
 
+public boolean equals(Insegnamento insegnamento) {
+    if(this.Nome.equals(insegnamento.Nome) && this.NumeroCFU==insegnamento.NumeroCFU && this.AnnoCorso==insegnamento.AnnoCorso && this.docente.email.equals(insegnamento.docente.email))
+        return true;
     
+    return false;
+
+}
     
 }
