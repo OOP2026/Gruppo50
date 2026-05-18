@@ -1,25 +1,18 @@
 package model;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.List;
 public class Orario {
     public String giorno;
     public int oraInizio;
     public int minutoInizio;
     public int oraFine;
     public int minutoFine;
-    private ArrayList<String> giorni= new ArrayList<String>(){{
-        add("lunedì");
-        add("martedì");
-        add("mercoledì");
-        add("giovedì");
-        add("venerdì");
-        add("lunedi");
-        add("martedi");
-        add("mercoledi");
-        add("giovedi");
-        add("venerdi"); 
-    }};
+    private static final List<String> giorni = new ArrayList<>(Arrays.asList(
+            "lunedì", "martedì", "mercoledì", "giovedì", "venerdì",
+            "lunedi", "martedi", "mercoledi", "giovedi", "venerdi"
+    ));
     public Orario(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
       try {
         //controlli se il giorno è scritto bene ed fa parte dei giorni della settimana
