@@ -14,7 +14,7 @@ private final Token token;
         System.out.println("Ciao, sono il responsabile " + this.nome + " " + this.cognome);
     }
    
-    protected void VizualizzaRichiesteSpostamento() {
+    public void VizualizzaRichiesteSpostamento() {
         int numeroRichiesta=0;
         int numeroRichieste=richiesteSpostamento.size();
             System.out.println("Richieste di spostamento:");
@@ -57,7 +57,7 @@ try{
 System.out.println("Lezione aggiunta con successo responsabile"); 
     }
 //La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
-protected void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
+public void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
     if(!(VerificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
             System.out.println("Il docente non è disponibile in questo orario");
             return;
@@ -74,7 +74,7 @@ try{
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
 
-protected void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
+public void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     Lezione lezioneDaSpostare = null;

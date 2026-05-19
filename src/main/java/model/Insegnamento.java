@@ -13,12 +13,20 @@ public class Insegnamento {
         this.docente=docente;
     }
 
-public boolean equals(Insegnamento insegnamento) {
-    if(this.Nome.equals(insegnamento.Nome) && this.NumeroCFU==insegnamento.NumeroCFU && this.AnnoCorso==insegnamento.AnnoCorso && this.docente.email.equals(insegnamento.docente.email))
-        return true;
-    
-    return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Insegnamento)) return false;
+        Insegnamento insegnamento = (Insegnamento) obj;
+        return this.Nome.equals(insegnamento.Nome)
+                && this.NumeroCFU == insegnamento.NumeroCFU
+                && this.AnnoCorso == insegnamento.AnnoCorso
+                && this.docente.email.equals(insegnamento.docente.email);
+    }
 
-}
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(this.Nome, this.NumeroCFU, this.AnnoCorso, this.docente.email);
+    }
     
 }
