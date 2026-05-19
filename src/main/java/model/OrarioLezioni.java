@@ -41,7 +41,7 @@ orariolezioni=new ArrayList<Lezione>();
                 
 
                 if ((inizioNuova < fineEsistente && inizioEsistente < fineNuova) && l.insegnamento.Nome.equals(lezioneGiaPresente.insegnamento.Nome)) {
-                    throw new IllegalArgumentException("C'è già una lezione in questa aula in questo orario con questo docente");
+                    throw new IllegalArgumentException("C'è già una lezione in questo orario con questo docente");
                 }  
 
                 if (inizioNuova < fineEsistente && inizioEsistente < fineNuova) {

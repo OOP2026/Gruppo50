@@ -17,7 +17,7 @@ public class Lezione {
 
    
  //permette di confrontare due lezioni e vedere se sono uguali o meno, utile per verificare se una lezione è già presente nell'orario o per verificare se una richiesta di spostamento riguarda la stessa lezione
-   
+
  public boolean equals(Lezione lezione) {
       if(this.insegnamento.equals(lezione.insegnamento) && this.orario.equals(lezione.orario) && this.aula.Nome.equals(lezione.aula.Nome))
           return true;
