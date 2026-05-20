@@ -6,14 +6,14 @@ import model.Responsabile.Token;
 //se non funziona la funzione ler vedere le lezione è perche
 // il giorno probabilmente conclude con una i differente!
 public class OrarioLezioni {
-    private ArrayList<Lezione> orariolezioni=new ArrayList<Lezione>();
+    private ArrayList<Lezione> orariolezioni;
      
     public OrarioLezioni(){
-
+orariolezioni=new ArrayList<Lezione>();
     }
 
     public boolean AggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
-   
+   //Solo il responsabile puo usare questo metodo
     if(token==null){
         throw new NullPointerException("Non hai il permesso");
     }
@@ -22,13 +22,14 @@ public class OrarioLezioni {
             }
 
             
-            int inizioNuova = (l.orario.oraInizio * 60) + l.orario.minutoInizio;
-            int fineNuova = (l.orario.oraFine * 60) + l.orario.minutoFine;
+            int inizioNuova = l.orario.getOrarioInizioInMinuti();
+            int fineNuova = l.orario.getOrarioFineInMinuti();
            
 
            
             for (Lezione lezioneGiaPresente : orariolezioni) {
-                
+                int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
+                int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
                 
                 if (!lezioneGiaPresente.orario.giorno.equals(l.orario.giorno)) {
                     continue;
@@ -38,17 +39,9 @@ public class OrarioLezioni {
                     continue;
                 }
                 
-                 
-                
-               //lezione giorno orario = lezione giorno orario & lezione insegneamento docente = lezione insegnamento docente
-
-
-                int inizioEsistente = (lezioneGiaPresente.orario.oraInizio * 60) + lezioneGiaPresente.orario.minutoInizio;
-                int fineEsistente = (lezioneGiaPresente.orario.oraFine * 60) + lezioneGiaPresente.orario.minutoFine;
-
 
                 if ((inizioNuova < fineEsistente && inizioEsistente < fineNuova) && l.insegnamento.Nome.equals(lezioneGiaPresente.insegnamento.Nome)) {
-                    throw new IllegalArgumentException("C'è già una lezione in questa aula in questo orario con questo docente");
+                    throw new IllegalArgumentException("C'è già una lezione in questo orario con questo docente");
                 }  
 
                 if (inizioNuova < fineEsistente && inizioEsistente < fineNuova) {
@@ -89,8 +82,13 @@ GiornoLezioni("Venerdì",  ElencoLezioni, l -> true);
         System.out.println(giorno);
         boolean trovata = false;
         for (Lezione l : elenco) {
-            if (!giorno.equalsIgnoreCase(l.orario.giorno)) continue;
-            if (!filtro.test(l)) continue;
+            if (!giorno.equalsIgnoreCase(l.orario.giorno) || !filtro.test(l)) continue;
+        
+            System.out.println("Docente: "+l.insegnamento.docente.nome+" "+l.insegnamento.docente.cognome);
+            System.out.println("Insegamento: "+l.insegnamento.Nome);
+            System.out.println("Orario: "+l.orario.getOrarioCompleto());
+            System.out.println("Aula: "+l.aula.Nome);
+            
             // stampa campi comuni...
             trovata = true;
         }

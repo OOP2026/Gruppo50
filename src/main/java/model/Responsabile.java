@@ -2,10 +2,11 @@ package model;
 import java.util.ArrayList;
 
 public class Responsabile extends Docente {
- public ArrayList<Richiesta> richiesteSpostamento= new ArrayList<Richiesta>();
+  ArrayList<Richiesta> richiesteSpostamento;
 private final Token token;
-    public Responsabile(String nome, String cognome, String email, String login, String password, String insegnamento) {
+    public Responsabile(String nome, String cognome, String email, String login, String password, String matematica) {
         super(nome, cognome, email, login, password);
+        richiesteSpostamento= new ArrayList<Richiesta>();
         this.token = new Token();
     }
     @Override
@@ -13,26 +14,39 @@ private final Token token;
         System.out.println("Ciao, sono il responsabile " + this.nome + " " + this.cognome);
     }
    
-    protected void VizualizzaRichiesteSpostamento() {
+    public void VizualizzaRichiesteSpostamento() {
         int numeroRichiesta=0;
+        int numeroRichieste=richiesteSpostamento.size();
+            System.out.println("Richieste di spostamento:");
+            if(numeroRichieste==0){
+                System.out.println("Non ci sono richieste di spostamento");
+                 System.out.println("-----Fine-----");
+                return;
+            }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
   for(Richiesta richiesta : richiesteSpostamento) {
-    System.out.println("Richieste di spostamento:");
     System.out.println("Numero richiesta: " + (numeroRichiesta));
     System.out.println("Docente richiedente: " + richiesta.docenteRichiedente.nome + " " + richiesta.docenteRichiedente.cognome);
     System.out.println("Motivo della richiesta: " + richiesta.motivoRichiesta);
-    System.out.println("Orario lezione da spostare: " + richiesta.orarioLezioneDaSpostare.giorno + " " + richiesta.orarioLezioneDaSpostare.oraInizio + ":" + richiesta.orarioLezioneDaSpostare.minutoInizio + " - " + richiesta.orarioLezioneDaSpostare.oraFine + ":" + richiesta.orarioLezioneDaSpostare.minutoFine);
-    System.out.println("Orario lezione nuovo: " + richiesta.nuovoOrarioLezione.giorno + " " + richiesta.nuovoOrarioLezione.oraInizio + ":" + richiesta.nuovoOrarioLezione.minutoInizio + " - " + richiesta.nuovoOrarioLezione.oraFine + ":" + richiesta.nuovoOrarioLezione.minutoFine);
+    System.out.println("Orario lezione da spostare: " + richiesta.orarioLezioneDaSpostare.getOrarioCompleto());
+    System.out.println("Orario lezione nuovo: " + richiesta.nuovoOrarioLezione.getOrarioCompleto());
     System.out.println("Stato Richiesta: "+richiesta.statoRichiesta);
+    if(numeroRichieste==numeroRichiesta+1){
+        System.out.println("-----Fine-----");
+   return; }
     System.out.println("------------------------------------------------");
     numeroRichiesta++;
 }
 // System.out.println("----------------------Fine Richieste di Spostamento--------------------------");
 
     }
-
+//La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
     protected void inserisciLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni ElencoLezioni) {
         //Implementazione del metodo per creare una nuova lezione
+        if(!(VerificaDisponibilita(insegnamento.docente.getVincoli(), orario))){
+            System.out.println("Il docente non è disponibile in questo orario");
+            return;
+        }
 Lezione nuovaLezione = new Lezione(insegnamento, aula, orario);
 try{
     ElencoLezioni.AggiungiLezione(nuovaLezione,this.token);
@@ -42,8 +56,12 @@ try{
 }
 System.out.println("Lezione aggiunta con successo responsabile"); 
     }
-
-protected void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
+//La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+public void inserisciLezione(Lezione l, OrarioLezioni ElencoLezioni) {
+    if(!(VerificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
+            System.out.println("Il docente non è disponibile in questo orario");
+            return;
+        }
         //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = l;
 try{
@@ -56,10 +74,10 @@ try{
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
 
-protected void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){ {
+public void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
+
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     Lezione lezioneDaSpostare = null;
-    boolean trovato = false;
 if(richiesta==null){
     System.out.println("La richiesta non esiste");
     return;
@@ -70,32 +88,17 @@ if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
 }
 if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     System.out.println("La richiesta è già stata rifiutata");
-    return;}
+    return;
+}
      if(richiesta.statoRichiesta==StatoRichiesta.IN_ATTESA){
-    for(Lezione lezione : ElencoLezioni.getOrarioLezioni(this.token)) {
-        if(lezione.insegnamento.docente.email.equals(richiesta.docenteRichiedente.email)==false){
-            continue;
-        }
-        if(lezione.orario.giorno.equals(richiesta.orarioLezioneDaSpostare.giorno)==false){
-            continue;
-        }
-        if(lezione.orario.oraInizio==richiesta.orarioLezioneDaSpostare.oraInizio && lezione.orario.minutoInizio==richiesta.orarioLezioneDaSpostare.minutoInizio){
-            if(lezione.orario.oraFine==richiesta.orarioLezioneDaSpostare.oraFine && lezione.orario.minutoFine==richiesta.orarioLezioneDaSpostare.minutoFine){
-               lezioneDaSpostare=lezione;
-               trovato=true;
-               break;
-        }
-     
-    }
 
-     }
+         lezioneDaSpostare = cercaLezioneDaSpostare(richiesta, ElencoLezioni);
+         if(lezioneDaSpostare == null){
+             System.out.println("La lezione da spostare non è stata trovata");
+             return;
+         }
 
-     if(trovato==false){
-        System.out.println("La lezione da spostare non è stata trovata");
-        return;
-     }
           try{
-        //prova a rimuovere la lezione da spostare
                 ElencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
             }
             
@@ -120,14 +123,14 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
                     }
                     return;
                 }
-                lezioneDaSpostare=null;
-                richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
+
+         richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
                 System.out.println("La richiesta è stata approvata");
-                return;  
+                
 
-  }
+        }
 
-  }
+  
  } 
 
  public void rifiutaRichiesta(int numeroRichiesta){
@@ -144,6 +147,44 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 
     ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
  }
+ 
+//permette di verificare se l'orario viola uno dei vincoli del docente
+//cioe controlla se il docente è disponibile in quella fascia oraria
+private boolean VerificaDisponibilita(ArrayList<Vincolo> vincoli, Orario orario){
+for(Vincolo vincolo:vincoli){
+int orarioInizioVincolo= (vincolo.orario.oraInizio*60)+vincolo.orario.minutoInizio;
+int orarioFineVincolo= (vincolo.orario.oraFine*60)+vincolo.orario.minutoFine;
+int orarioInizioLezione= (orario.oraInizio*60)+orario.minutoInizio;
+int orarioFineLezione= (orario.oraFine*60)+orario.minutoFine;
+
+if(!vincolo.orario.giorno.equals(orario.giorno))continue;
+
+if(orarioInizioLezione>orarioFineVincolo || orarioFineLezione<orarioInizioVincolo){
+    continue;}
+    else{return false;} 
+ 
+}
+return true;
+}
+private Lezione cercaLezioneDaSpostare(Richiesta R, OrarioLezioni O){
+          for(Lezione lezione : O.getOrarioLezioni(this.token)) {
+        if(lezione.insegnamento.docente.email.equals(R.docenteRichiedente.email)==false){
+            continue;
+        }
+        if(lezione.orario.giorno.equals(R.orarioLezioneDaSpostare.giorno)==false){
+            continue;
+        }
+        if(lezione.orario.oraInizio==R.orarioLezioneDaSpostare.oraInizio && lezione.orario.minutoInizio==R.orarioLezioneDaSpostare.minutoInizio){
+            if(lezione.orario.oraFine==R.orarioLezioneDaSpostare.oraFine && lezione.orario.minutoFine==R.orarioLezioneDaSpostare.minutoFine){
+               
+              return lezione;
+        }
+     
+    }
+
+     }
+return null;
+    }
 // Il token serve per usare alcuni metodi che solo il responsabile puo usare
 public class Token {
 
