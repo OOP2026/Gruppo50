@@ -5,7 +5,7 @@ public class Responsabile extends Docente {
  public ArrayList<Richiesta> richiesteSpostamento= new ArrayList<Richiesta>();
 private final Token token;
     public Responsabile(String nome, String cognome, String email, String login, String password, String insegnamento) {
-        super(nome, cognome, email, login, password,insegnamento);
+        super(nome, cognome, email, login, password);
         this.token = new Token();
     }
     @Override
