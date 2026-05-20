@@ -28,7 +28,7 @@ public class Studente extends Utente {
     public void saluto() {
         System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
     }
-    protected void visualizzaOrarioLezioni(OrarioLezioni ElencoLezioni) {
+    public void visualizzaOrarioLezioni(OrarioLezioni ElencoLezioni) {
         // Implementazione del metodo per visualizzare l'orario delle lezioni
 ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 

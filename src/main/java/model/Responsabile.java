@@ -14,7 +14,7 @@ private final Token token;
         System.out.println("Ciao, sono il responsabile " + this.nome + " " + this.cognome);
     }
    
-    public void VizualizzaRichiesteSpostamento() {
+    public void visualizzaRichiesteSpostamento() {
         int numeroRichiesta=0;
         int numeroRichieste=richiesteSpostamento.size();
             System.out.println("Richieste di spostamento:");
@@ -74,7 +74,7 @@ try{
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
 
-public void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
+public void spostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     Lezione lezioneDaSpostare = null;

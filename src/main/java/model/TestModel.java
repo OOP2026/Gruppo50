@@ -42,9 +42,9 @@ public class TestModel {
 		Giovanni.VisualizzaOrarioCompleto(orarioLezioni);
 		Richiesta richiestaSpostamento = new Richiesta(Marco,"Motivo personale",Orario1,Orario2);
 		Giovanni.richiesteSpostamento.add(richiestaSpostamento);
-		Giovanni.VizualizzaRichiesteSpostamento();
-		Giovanni.SpostamentoLezione(0, orarioLezioni);
-		Giovanni.VizualizzaRichiesteSpostamento();
+		Giovanni.visualizzaRichiesteSpostamento();
+		Giovanni.spostamentoLezione(0, orarioLezioni);
+		Giovanni.visualizzaRichiesteSpostamento();
 
 	}
 

@@ -22,7 +22,7 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
 
     }
     //questa funzione invia una richiesta di spostamento al responsabile
-    public void RichiestaSpostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo, int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {  
+    public void richiestaSpostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo, int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
       //creazione della richiesta
     Orario orarioDaSpostare = new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio);
     Orario nuovoOrario = new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
@@ -32,7 +32,7 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
     
 }
 //Vede le proprie richieste che ha inviato
-protected void VisualizzaRichiesteInviate(){
+protected void visualizzaRichiesteInviate(){
      int numeroRichiesta=1;
      int numeroRichieste=richiesteSpostamentoInviate.size();
          System.out.println("Richieste di spostamento inviate:");
@@ -58,7 +58,7 @@ numeroRichiesta++;
 
 }
 
-public void VisualizzaOrario(OrarioLezioni ElencoLezioni){
+public void visualizzaOrario(OrarioLezioni ElencoLezioni){
 ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 }
 
