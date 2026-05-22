@@ -1,6 +1,7 @@
 package controller;
 import model.*;
-
+import java.util.List;
+import java.util.ArrayList;
 
 
 
@@ -9,24 +10,35 @@ public class Controller {
 	private Responsabile responsabile;
 	private Docente docente;
 	private Utente utente;
+	private List<Utente> utentiRegistrati;
 
 
-	public Controller(Utente utente) {
-		if(utente instanceof Studente) {
-			this.studente = (Studente) utente;
-		}
-		if(utente instanceof Responsabile) {
-			this.responsabile = (Responsabile) utente;
-		}
-		if(utente instanceof Docente) {
-			this.docente = (Docente) utente;
-		}
+	public Controller(List<Utente> utentiRegistrati) {
+		this.utentiRegistrati = utentiRegistrati;
 	}
 
 
+	public boolean accedi(String username, String password) {
+		//Scorre tutti gli utenti registrati finche non trova l'utente
+		for (Utente u : utentiRegistrati) {
+			if (u.login(username, password)) {
+				this.utente = u;
+				assegnaRuolo(u);
+				return true;
+			}
+		}
+		return false;
+	}
 
-	public boolean accedi(String l, String pass) {
-		return utente.login(l, pass);
+
+	private void assegnaRuolo(Utente u) {
+		if (u instanceof Responsabile) {
+			this.responsabile = (Responsabile) u;
+		} else if (u instanceof Docente) {
+			this.docente = (Docente) u;
+		} else if (u instanceof Studente) {
+			this.studente = (Studente) u;
+		}
 	}
 
 	public void visualizzaRichiesteSpostamento() {
@@ -65,6 +77,16 @@ public class Controller {
 		studente.visualizzaOrarioLezioni(elencoLezioni);
 	}
 
+	//Utente
+	public boolean registra(String name,String cogn, String email,String login, String pass){
+			for (Utente u : utentiRegistrati) {
+			if (u.getmail().equals(email)) {
+                return false; // Non possono esistere più user con la stessa mail.
+            }
+		}
+		utentiRegistrati.add(new Utente(name, cogn, email, login, pass));
+		return true;
+	}
 
 }
 
