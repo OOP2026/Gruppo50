@@ -31,7 +31,7 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
     
 }
 //Vede le proprie richieste che ha inviato
-protected void VisualizzaRichiesteInviate(){
+protected void visualizzaRichiesteInviate(){
      int numeroRichiesta=1;
      int numeroRichieste=richiesteSpostamentoInviate.size();
          System.out.println("Richieste di spostamento inviate:");

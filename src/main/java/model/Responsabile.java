@@ -74,7 +74,7 @@ try{
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
 
-public void SpostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
+public void spostamentoLezione(int numeroRichiesta, OrarioLezioni ElencoLezioni){
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
     Lezione lezioneDaSpostare = null;

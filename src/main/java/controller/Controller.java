@@ -29,21 +29,42 @@ public class Controller {
 		return utente.login(l, pass);
 	}
 
-	public void visualizzaRichiesteSpostamento(Responsabile responsabile) {
+	public void visualizzaRichiesteSpostamento() {
 		responsabile.visualizzaRichiesteSpostamento();
 	}
 
-	public void apporvaRichiesta (Responsabile responsabile, int numeroRichiesta, OrarioLezioni ElencoLezioni){
-		responsabile.SpostamentoLezione(numeroRichiesta,ElencoLezioni);
+	public void apporvaRichiesta (int numeroRichiesta, OrarioLezioni ElencoLezioni){
+		responsabile.spostamentoLezione(numeroRichiesta,ElencoLezioni);
 	}
 
-	public void rifiutarichiesta (Responsabile responsabile, int numeroRichiesta){
+	public void rifiutarichiesta (int numeroRichiesta){
 		responsabile.rifiutaRichiesta(numeroRichiesta);
 	}
 
-	public void creaLezione(Responsabile responsabile,Lezione l, OrarioLezioni ElencoLezioni){
+	public void creaLezione(Lezione l, OrarioLezioni ElencoLezioni){
 		responsabile.inserisciLezione(l,ElencoLezioni);
 	}
 
-	//Docente
+	//Docente visualizza l'orario delle proprie lezionoùi
+	public void visualizzaLezione(OrarioLezioni ElencoLezioni){
+		docente.visualizzaOrario(ElencoLezioni);
+	}
+	//Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+	public void aggiungiVincolo(String giorno, int OraInzio, int MinutoInzio,int OraFIne,int MinutoFine){
+		docente.aggiungiVincolo(giorno,OraInzio,MinutoInzio,OraFIne,MinutoFine);
+	}
+
+	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
+	public void richiestaspostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
+											int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo){
+		docente.richiestaSpostamentoLezione(responsabile,motivo,new Orario(giornoVecchio,oraInizioVecchio,minutoInizioVecchio,oraFineVecchio,minutoFineVecchio),new Orario(giornoNuovo,oraInizioNuovo,minutoInizioNuovo,oraFineNuovo,minutoFineNuovo));
+	}
+
+	//Studente visualizza l'orario delle lezioni del corso.
+	public void visualizzaOrarioLezioni(OrarioLezioni ElencoLezioni){
+		studente.visualizzaOrarioLezioni(ElencoLezioni);
+	}
+
+
 }
+
