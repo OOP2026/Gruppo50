@@ -14,7 +14,7 @@ private final Token token;
         System.out.println("Ciao, sono il responsabile " + this.nome + " " + this.cognome);
     }
    
-    public void VizualizzaRichiesteSpostamento() {
+    public void visualizzaRichiesteSpostamento() {
         int numeroRichiesta=0;
         int numeroRichieste=richiesteSpostamento.size();
             System.out.println("Richieste di spostamento:");
@@ -140,17 +140,30 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
         System.out.println("La richiesta non esiste");
         return;
     }
+    if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
+        System.out.println("La richiesta è stata gia approvata non puo essere rifiutata");
+        return;
+    }
+     if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
+        System.out.println("La richiesta è stata gia rifiutata");
+        return;
+    }
     richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
     System.out.println("La richiesta è stata rifiutata");
  }
+ public void cambiaOrarioRichiesta(int numeroRichiesta){
+
+ };
  public void VisualizzaOrarioCompleto(OrarioLezioni ElencoLezioni){
 
     ElencoLezioni.visualizzaOrarioCompleto(this.token,ElencoLezioni);
  }
  
+
 //permette di verificare se l'orario viola uno dei vincoli del docente
 //cioe controlla se il docente è disponibile in quella fascia oraria
 private boolean VerificaDisponibilita(ArrayList<Vincolo> vincoli, Orario orario){
+    if(vincoli.size()==0) return true;
 for(Vincolo vincolo:vincoli){
 int orarioInizioVincolo= (vincolo.orario.oraInizio*60)+vincolo.orario.minutoInizio;
 int orarioFineVincolo= (vincolo.orario.oraFine*60)+vincolo.orario.minutoFine;

@@ -32,7 +32,7 @@ if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw 
         throw  e;
     }
 
-        this.giorno = giorno;
+        this.giorno = giorno.toLowerCase();
         this.oraInizio = oraInizio;
         this.minutoInizio = minutoInizio;
         this.oraFine = oraFine;
@@ -49,6 +49,8 @@ public int getOrarioFineInMinuti() {
 public String getOrarioCompleto() {
         return String.format("%d:%02d - %d:%02d", this.oraInizio, this.minutoInizio, this.oraFine, this.minutoFine);
     }
+
+
 
     @Override
     public boolean equals(Object obj) {

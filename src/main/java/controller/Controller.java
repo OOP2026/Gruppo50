@@ -30,7 +30,7 @@ public class Controller {
 	}
 
 	public void visualizzaRichiesteSpostamento(Responsabile responsabile) {
-		responsabile.VizualizzaRichiesteSpostamento();
+		responsabile.visualizzaRichiesteSpostamento();
 	}
 
 	public void apporvaRichiesta (Responsabile responsabile, int numeroRichiesta, OrarioLezioni ElencoLezioni){

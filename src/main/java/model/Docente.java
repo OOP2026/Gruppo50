@@ -13,8 +13,9 @@ private ArrayList<Richiesta> richiesteSpostamentoInviate;
         insegnamenti=new ArrayList<Insegnamento>();
     }
 
-    public void Inserisci_insegnamenti(List<Insegnamento> insegnamenti){
-        this.insegnamenti=new ArrayList<>(insegnamenti);
+    public void Inserisci_insegnamenti(Insegnamento insegnamento){
+       this.insegnamenti.add(insegnamento);
+       System.out.println(insegnamento.Nome+" è stato aggiunto a "+insegnamento.docente.nome);
     }
     @Override
     public void saluto() {
@@ -22,11 +23,9 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
 
     }
     //questa funzione invia una richiesta di spostamento al responsabile
-    public void RichiestaSpostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo, int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {  
+    public void RichiestaSpostamentoLezione(Responsabile responsabile, String motivo, Orario OrarioVecchio, Orario OrarioProposto) {  
       //creazione della richiesta
-    Orario orarioDaSpostare = new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio);
-    Orario nuovoOrario = new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
-    Richiesta richiesta = new Richiesta(this, motivo, orarioDaSpostare, nuovoOrario);
+    Richiesta richiesta = new Richiesta(this, motivo, OrarioVecchio, OrarioProposto);
     responsabile.richiesteSpostamento.add(richiesta);
     this.richiesteSpostamentoInviate.add(richiesta);
     
@@ -58,7 +57,7 @@ numeroRichiesta++;
 
 }
 
-public void VisualizzaOrario(OrarioLezioni ElencoLezioni){
+public void visualizzaOrario(OrarioLezioni ElencoLezioni){
 ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
 }
 

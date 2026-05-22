@@ -21,34 +21,22 @@ orariolezioni=new ArrayList<Lezione>();
                 throw new NullPointerException("Questa lezione è vuota");
             }
 
+        
+            for (Lezione lf : orariolezioni) {
+               Boolean conflittoOrario= controlloConflittoOrario(l,lf); 
+                if ((lf.orario.giorno.equals(l.orario.giorno))) {
+                    System.out.println(l.orario.giorno+" "+l.orario.getOrarioCompleto()+" "+lf.orario.getOrarioCompleto());
+                     if(conflittoOrario){
+                        System.out.println("l'orario e conflittato");
+                         if(l.aula.Nome.equals(lf.aula.Nome)) return false;
+                         System.out.println("Aula diversa"+" "+l.aula.Nome+" "+lf.aula.Nome+" "+l.aula.Nome.equals(lf.aula.Nome));
+                         if(l.insegnamento.docente.equals(lf.insegnamento.docente)) return false;
+                          System.out.println("Docente diverso!");
             
-            int inizioNuova = l.orario.getOrarioInizioInMinuti();
-            int fineNuova = l.orario.getOrarioFineInMinuti();
-           
+                     }
 
-           
-            for (Lezione lezioneGiaPresente : orariolezioni) {
-                int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
-                int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
-                
-                if (!lezioneGiaPresente.orario.giorno.equals(l.orario.giorno)) {
-                    continue;
-                }
-                
-                if(!lezioneGiaPresente.insegnamento.docente.equals(l.insegnamento.docente)){
-                    continue;
-                }
-                
-
-                if ((inizioNuova < fineEsistente && inizioEsistente < fineNuova) && l.insegnamento.Nome.equals(lezioneGiaPresente.insegnamento.Nome)) {
-                    throw new IllegalArgumentException("C'è già una lezione in questo orario con questo docente");
-                }  
-
-                if (inizioNuova < fineEsistente && inizioEsistente < fineNuova) {
-                    throw new IllegalArgumentException("C'è già una lezione in questa aula in questo orario");
-                }
-                 
-                 
+               }
+                                      
             }
            
 
@@ -137,6 +125,18 @@ public ArrayList<Lezione> getOrarioLezioni(Token token) {
     return orariolezioni;
 }
 
-
+private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente){
+    int inizioNuovo = l.orario.getOrarioInizioInMinuti();
+    int fineNuovo = l.orario.getOrarioFineInMinuti();
+           
+   int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
+ int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
+   
+ if(inizioNuovo<fineEsistente && fineNuovo>inizioEsistente) return true;
+    
+             
+        
+return false;
+}
 
 }
