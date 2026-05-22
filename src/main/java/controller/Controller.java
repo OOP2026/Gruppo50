@@ -41,6 +41,13 @@ public class Controller {
 		}
 	}
 
+	public String getRuolo() {
+		if (utente instanceof Responsabile) return "RESPONSABILE";
+		if (utente instanceof Docente)      return "DOCENTE";
+		if (utente instanceof Studente)     return "STUDENTE";
+		return null;
+	}
+
 	public void visualizzaRichiesteSpostamento() {
 		responsabile.visualizzaRichiesteSpostamento();
 	}
@@ -68,7 +75,7 @@ public class Controller {
 
 	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
 	public void richiestaspostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
-											int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo){
+	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo){
 		docente.richiestaSpostamentoLezione(responsabile,motivo,new Orario(giornoVecchio,oraInizioVecchio,minutoInizioVecchio,oraFineVecchio,minutoFineVecchio),new Orario(giornoNuovo,oraInizioNuovo,minutoInizioNuovo,oraFineNuovo,minutoFineNuovo));
 	}
 
@@ -79,14 +86,13 @@ public class Controller {
 
 	//Utente
 	public boolean registra(String name,String cogn, String email,String login, String pass){
-			for (Utente u : utentiRegistrati) {
+		for (Utente u : utentiRegistrati) {
 			if (u.getmail().equals(email)) {
-                return false; // Non possono esistere più user con la stessa mail.
-            }
+				return false; // Non possono esistere più user con la stessa mail.
+			}
 		}
 		utentiRegistrati.add(new Utente(name, cogn, email, login, pass));
 		return true;
 	}
 
 }
-

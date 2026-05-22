@@ -3,20 +3,17 @@ package gui;
 import controller.Controller;
 import javax.swing.*;
 
-public class RegisterPage {
+public class LoginPage {
     JFrame frame;
     private JPanel panel1;
-    private JTextField nomeText;
-    private JTextField cognomeText;
-    private JTextField emailText;
     private JTextField usernameText;
     private JPasswordField passwordText;
-    private JButton confermaButton;
+    private JButton accediButton;
     private JButton annullaButton;
     private JLabel labelErrore;
 
-    public RegisterPage(Controller controller, JFrame frameChiamante) {
-        frame = new JFrame("Registrati");
+    public LoginPage(Controller controller, JFrame frameChiamante) {
+        frame = new JFrame("Login");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -28,31 +25,36 @@ public class RegisterPage {
             frame.dispose();
         });
 
-        confermaButton.addActionListener(e -> {
+        accediButton.addActionListener(e -> {
             labelErrore.setText("");
-            String nome     = nomeText.getText();
-            String cognome  = cognomeText.getText();
-            String email    = emailText.getText();
             String username = usernameText.getText();
             String password = new String(passwordText.getPassword());
 
             // Solo controllo input
-            if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty()
-                    || username.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty()) {
                 labelErrore.setText("Compila tutti i campi.");
                 return;
             }
 
             // Delega al controller
-            if (!controller.registra(nome, cognome, email, username, password)) {
-                labelErrore.setText("Username già in uso.");
+            if (!controller.accedi(username, password)) {
+                labelErrore.setText("Credenziali non valide.");
                 return;
             }
 
-            JOptionPane.showMessageDialog(frame, "Registrazione completata!");
+            // Apri la schermata giusta in base al ruolo
+            String ruolo = controller.getRuolo();
+            if (ruolo.equals("RESPONSABILE")) {
+                SchermataResponsabile s = new SchermataResponsabile(controller, frame);
+                s.frame.setVisible(true);
+            } else if (ruolo.equals("DOCENTE")) {
+                SchermataDocente s = new SchermataDocente(controller, frame);
+                s.frame.setVisible(true);
+            } else if (ruolo.equals("STUDENTE")) {
+                SchermataStudente s = new SchermataStudente(controller, frame);
+                s.frame.setVisible(true);
+            }
             frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
         });
     }
 }
