@@ -33,25 +33,25 @@ public class Controller {
 		responsabile.visualizzaRichiesteSpostamento();
 	}
 
-	public void apporvaRichiesta (int numeroRichiesta, OrarioLezioni ElencoLezioni){
-		responsabile.spostamentoLezione(numeroRichiesta,ElencoLezioni);
+	public void approvaRichiesta (int numeroRichiesta, OrarioLezioni elencoLezioni){
+		responsabile.spostamentoLezione(numeroRichiesta,elencoLezioni);
 	}
 
 	public void rifiutarichiesta (int numeroRichiesta){
 		responsabile.rifiutaRichiesta(numeroRichiesta);
 	}
 
-	public void creaLezione(Lezione l, OrarioLezioni ElencoLezioni){
-		responsabile.inserisciLezione(l,ElencoLezioni);
+	public void creaLezione(Lezione l, OrarioLezioni elencoLezioni){
+		responsabile.inserisciLezione(l,elencoLezioni);
 	}
 
 	//Docente visualizza l'orario delle proprie lezionoùi
-	public void visualizzaLezione(OrarioLezioni ElencoLezioni){
-		docente.visualizzaOrario(ElencoLezioni);
+	public void visualizzaLezione(OrarioLezioni elencoLezioni){
+		docente.visualizzaOrario(elencoLezioni);
 	}
 	//Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	public void aggiungiVincolo(String giorno, int OraInzio, int MinutoInzio,int OraFIne,int MinutoFine){
-		docente.aggiungiVincolo(giorno,OraInzio,MinutoInzio,OraFIne,MinutoFine);
+	public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio,int oraFIne,int minutoFine){
+		docente.aggiungiVincolo(giorno,oraInzio,minutoInzio,oraFIne,minutoFine);
 	}
 
 	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
@@ -61,8 +61,8 @@ public class Controller {
 	}
 
 	//Studente visualizza l'orario delle lezioni del corso.
-	public void visualizzaOrarioLezioni(OrarioLezioni ElencoLezioni){
-		studente.visualizzaOrarioLezioni(ElencoLezioni);
+	public void visualizzaOrarioLezioni(OrarioLezioni elencoLezioni){
+		studente.visualizzaOrarioLezioni(elencoLezioni);
 	}
 
 

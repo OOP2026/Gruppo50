@@ -1,5 +1,5 @@
 package model;
-import java.util.ArrayList;
+
 
 public class Utente {
     protected String nome;

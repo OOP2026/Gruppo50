@@ -2,35 +2,34 @@ package model;
 import java.util.ArrayList;
 public class Studente extends Utente {
     private final String matricola;
-   public int annoCorso;
-   private static ArrayList<String> Matricole= new ArrayList<String>();
+   protected int annoCorso;
+   private static ArrayList<String> matricole= new ArrayList<>();
 
     public Studente(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) {
         super(nome, cognome, email, login, password);
-    // controlla se la matricola è vuota e se esiste gia uno con la stessa matricola
+
         if(matricola==null || matricola.isEmpty()){
             throw new IllegalArgumentException("La matricola non può essere vuota");
         }
-    if(Matricole.contains(matricola)){
+    if(matricole.contains(matricola)){
         throw new IllegalArgumentException("La matricola deve essere unica");
     }
 
-       // controlla che l'anno di corso e tra (1,3);
         if(annoCorso<1 || annoCorso>3){
             throw new IllegalArgumentException("L'anno di corso deve essere compreso tra 1 e 3");
         }
         this.matricola = matricola;
         this.annoCorso = annoCorso;
-            Matricole.add(matricola);
+            matricole.add(matricola);
  
     }
  @Override
     public void saluto() {
         System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
     }
-    public void visualizzaOrarioLezioni(OrarioLezioni ElencoLezioni) {
+    public void visualizzaOrarioLezioni(OrarioLezioni elencoLezioni) {
         // Implementazione del metodo per visualizzare l'orario delle lezioni
-ElencoLezioni.visualizzaOrarioCompleto(this,ElencoLezioni);
+elencoLezioni.visualizzaOrarioCompleto(this);
 
     }
 

@@ -1,72 +1,56 @@
 package model;
 import java.util.ArrayList;
 import java.util.function.Predicate;
-import model.Responsabile.Token;
+import model.Responsabile.Token; 
+import java.util.List;
 
 //se non funziona la funzione ler vedere le lezione è perche
 // il giorno probabilmente conclude con una i differente!
 public class OrarioLezioni {
     private ArrayList<Lezione> orariolezioni;
-     
+    private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"};
     public OrarioLezioni(){
-orariolezioni=new ArrayList<Lezione>();
+orariolezioni=new ArrayList<>();
     }
 
-    public boolean AggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
+    public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    //Solo il responsabile puo usare questo metodo
-    if(token==null){
-        throw new NullPointerException("Non hai il permesso");
+    if(token==null){ throw new NullPointerException("Non hai il permesso");}
+   
+     if (l == null){
+        throw new NullPointerException("Questa lezione è vuota");
     }
-            if (l == null) {
-                throw new NullPointerException("Questa lezione è vuota");
-            }
-
-        
-            for (Lezione lf : orariolezioni) {
-               Boolean conflittoOrario= controlloConflittoOrario(l,lf); 
-                if ((lf.orario.giorno.equals(l.orario.giorno))) {
-                    System.out.println(l.orario.giorno+" "+l.orario.getOrarioCompleto()+" "+lf.orario.getOrarioCompleto());
-                     if(conflittoOrario){
-                        System.out.println("l'orario e conflittato");
-                         if(l.aula.Nome.equals(lf.aula.Nome)) return false;
-                         System.out.println("Aula diversa"+" "+l.aula.Nome+" "+lf.aula.Nome+" "+l.aula.Nome.equals(lf.aula.Nome));
-                         if(l.insegnamento.docente.equals(lf.insegnamento.docente)) return false;
-                          System.out.println("Docente diverso!");
             
-                     }
-
-               }
-                                      
-            }
-           
-
-          
-        orariolezioni.add(l);
-           return true;
 
         
+          
+
+    if(controlloConflittoLezione(l)){ 
+      throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
+     }
+orariolezioni.add(l);
+return true;
 
     }
 
 
-public void visualizzaOrarioCompleto(Token token,OrarioLezioni o){
+public void visualizzaOrarioCompleto(Token token){
     if(token==null){
         System.out.println("Non hai il permesso");
         return;
     }
 
-      ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
 System.out.println("Orario completo delle lezioni:");
 
-GiornoLezioni("Lunedì",  ElencoLezioni, l -> true);
-GiornoLezioni("Martedì",  ElencoLezioni, l -> true);
-GiornoLezioni("Mercoledì",  ElencoLezioni, l -> true);
-GiornoLezioni("Giovedì",  ElencoLezioni, l -> true);
-GiornoLezioni("Venerdì",  ElencoLezioni, l -> true);
+giornoLezioni(giorni[0],  orariolezioni, l -> true);
+giornoLezioni(giorni[1],  orariolezioni, l -> true);
+giornoLezioni(giorni[2],  orariolezioni, l -> true);
+giornoLezioni(giorni[3],  orariolezioni, l -> true);
+giornoLezioni(giorni[4],  orariolezioni, l -> true);
 
 }
 
-    private void GiornoLezioni(String giorno, ArrayList<Lezione> elenco, Predicate<Lezione> filtro) {
+    private void giornoLezioni(String giorno, ArrayList<Lezione> elenco, Predicate<Lezione> filtro) {
         System.out.println(giorno);
         boolean trovata = false;
         for (Lezione l : elenco) {
@@ -89,38 +73,38 @@ GiornoLezioni("Venerdì",  ElencoLezioni, l -> true);
     }
 
 //Studente
-public void visualizzaOrarioCompleto(Studente studente,OrarioLezioni o){
-  ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
+public void visualizzaOrarioCompleto(Studente studente){
+
     System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
-    GiornoLezioni("Lunedì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    GiornoLezioni("Martedì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    GiornoLezioni("Mercoledì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    GiornoLezioni("Giovedì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    GiornoLezioni("Venerdì",    ElencoLezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    giornoLezioni(giorni[0],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    giornoLezioni(giorni[1],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    giornoLezioni(giorni[2],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    giornoLezioni(giorni[3],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+    giornoLezioni(giorni[4],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
 
 }
 
 
 
 //Docente
-public void visualizzaOrarioCompleto(Docente docente, OrarioLezioni o){
-  ArrayList<Lezione> ElencoLezioni = o.orariolezioni;
+public void visualizzaOrarioCompleto(Docente docente){
+ 
     System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
-    GiornoLezioni("Lunedì", ElencoLezioni, l -> l.insegnamento.docente == docente);
-    GiornoLezioni("Martedì", ElencoLezioni, l -> l.insegnamento.docente == docente);
-    GiornoLezioni("Mercoledì", ElencoLezioni, l -> l.insegnamento.docente == docente);
-    GiornoLezioni("Giovedì", ElencoLezioni, l -> l.insegnamento.docente == docente);
-    GiornoLezioni("Venerdì", ElencoLezioni, l -> l.insegnamento.docente == docente);
+    giornoLezioni(giorni[0], orariolezioni, l -> l.insegnamento.docente == docente);
+    giornoLezioni(giorni[1], orariolezioni, l -> l.insegnamento.docente == docente);
+    giornoLezioni(giorni[2], orariolezioni, l -> l.insegnamento.docente == docente);
+    giornoLezioni(giorni[3], orariolezioni, l -> l.insegnamento.docente == docente);
+    giornoLezioni(giorni[4], orariolezioni, l -> l.insegnamento.docente == docente);
 }
 
 
 
 
 
-public ArrayList<Lezione> getOrarioLezioni(Token token) {
+public List<Lezione> getOrarioLezioni(Token token) {
     if(token==null){
         System.out.println("Non hai il permesso");
-        return null;
+        return new ArrayList<>();
     }
     return orariolezioni;
 }
@@ -131,12 +115,23 @@ private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente)
            
    int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
  int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
-   
- if(inizioNuovo<fineEsistente && fineNuovo>inizioEsistente) return true;
-    
-             
-        
-return false;
+
+return (inizioNuovo<fineEsistente && fineNuovo>inizioEsistente);
+}
+
+private boolean controlloConflittoLezione(Lezione l){
+    for (Lezione lf : orariolezioni) {
+               Boolean conflittoOrario= controlloConflittoOrario(l,lf); 
+                if ((lf.orario.giorno.equals(l.orario.giorno))) {
+                     if(conflittoOrario){
+                     if(l.aula.Nome.equals(lf.aula.Nome)) return true;
+                     if(l.insegnamento.docente.equals(lf.insegnamento.docente)) return true;
+                          
+                }
+
+               }
+         }
+         return false;
 }
 
 }
