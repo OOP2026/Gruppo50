@@ -5,7 +5,7 @@ import java.util.List;
 public class Responsabile extends Docente {
   ArrayList<Richiesta> richiesteSpostamento;
 private final Token token;
-    public Responsabile(String nome, String cognome, String email, String login, String password, String matematica) {
+    public Responsabile(String nome, String cognome, String email, String login, String password) {
         super(nome, cognome, email, login, password);
         richiesteSpostamento= new ArrayList<>();
         this.token = new Token();
@@ -52,8 +52,8 @@ Lezione nuovaLezione = new Lezione(insegnamento, aula, orario);
 try{
     elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
 }catch(Exception e){
-    System.out.println("Errore nella creazione della lezione: " + e.getMessage());
-
+    System.out.println("Errore nell'inserimento della lezione: " + e.getMessage());
+return;
 }
 System.out.println("Lezione aggiunta con successo responsabile"); 
     }
@@ -68,8 +68,8 @@ Lezione nuovaLezione = l;
 try{
     elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
 }catch(Exception e){
-    System.out.println("Errore nella creazione della lezione: " + e.getMessage());
-
+    System.out.println("Errore nell'inserimento della lezione: " + e.getMessage());
+return;
 }
 
 System.out.println("Lezione aggiunta con successo responsabile"); 
@@ -151,8 +151,23 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
     System.out.println("La richiesta è stata rifiutata");
  }
- public void cambiaOrarioRichiesta(int numeroRichiesta){
-//Workin in progress
+ public void cambiaOrarioRichiesta(int numeroRichiesta,Orario orarioNuovo){
+Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
+if(richiesta==null){
+    System.out.println("La richiesta non esiste");
+    return;
+}
+if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
+    System.out.println("La richiesta è già stata approvata");
+    return;
+}
+if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
+    System.out.println("La richiesta è già stata rifiutata");
+    return;
+}
+
+richiesta.nuovoOrarioLezione= orarioNuovo;
+
  }
  public void visualizzaOrarioCompleto(OrarioLezioni elencoLezioni){
 
@@ -179,13 +194,13 @@ if(orarioInizioLezione<orarioFineVincolo && orarioFineLezione>orarioInizioVincol
 }
 return true;
 }
-private Lezione cercaLezioneDaSpostare(Richiesta R, OrarioLezioni O){
-          for(Lezione lezione : O.getOrarioLezioni(this.token)) {
-        if(!lezione.insegnamento.docente.email.equals(R.docenteRichiedente.email)||!lezione.orario.giorno.equals(R.orarioLezioneDaSpostare.giorno)){
+private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni){
+          for(Lezione lezione : elencoLezioni.getOrarioLezioni(this.token)) {
+        if(!lezione.insegnamento.docente.email.equals(r.docenteRichiedente.email)||!lezione.orario.giorno.equals(r.orarioLezioneDaSpostare.giorno)){
             continue;
         }
         
-        if(lezione.orario.getOrarioInizioInMinuti()==R.orarioLezioneDaSpostare.getOrarioInizioInMinuti() && lezione.orario.getOrarioFineInMinuti()==R.orarioLezioneDaSpostare.getOrarioFineInMinuti()) 
+        if(lezione.orario.getOrarioInizioInMinuti()==r.orarioLezioneDaSpostare.getOrarioInizioInMinuti() && lezione.orario.getOrarioFineInMinuti()==r.orarioLezioneDaSpostare.getOrarioFineInMinuti()) 
              return lezione;
     }
     return null;

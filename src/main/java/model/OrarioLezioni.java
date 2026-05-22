@@ -121,7 +121,7 @@ return (inizioNuovo<fineEsistente && fineNuovo>inizioEsistente);
 
 private boolean controlloConflittoLezione(Lezione l){
     for (Lezione lf : orariolezioni) {
-               Boolean conflittoOrario= controlloConflittoOrario(l,lf); 
+               boolean conflittoOrario= controlloConflittoOrario(l,lf); 
                 if ((lf.orario.giorno.equals(l.orario.giorno))) {
                      if(conflittoOrario){
                      if(l.aula.Nome.equals(lf.aula.Nome)) return true;
