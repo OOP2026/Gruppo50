@@ -8,7 +8,7 @@ public class SchermataResponsabile {
     private JPanel panel1;
 
     public SchermataResponsabile(Controller controller, JFrame frameChiamante) {
-        frame = new JFrame("Studente");
+        frame = new JFrame("Responsabile");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
