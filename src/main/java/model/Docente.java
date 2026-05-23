@@ -3,11 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 public class Docente extends Utente {
    List<Insegnamento> insegnamenti;
-private ArrayList<Richiesta> richiesteSpostamentoInviate;
- private ArrayList<Vincolo> vincoli;
+   private ArrayList<Richiesta> richiesteSpostamentoInviate;
+   private ArrayList<Vincolo> vincoli;
+   protected String nome;
+   protected String cognome;
+   protected String email;
+   protected String username;
+   protected String password;
 
     public Docente(String nome, String cognome, String email, String login, String password) {
-        super(nome, cognome, email, login, password);
+        super(nome,cognome,email,login,password);
         richiesteSpostamentoInviate= new ArrayList<>();
         vincoli= new ArrayList<>();
         insegnamenti=new ArrayList<>();
@@ -17,7 +22,7 @@ private ArrayList<Richiesta> richiesteSpostamentoInviate;
        this.insegnamenti.add(insegnamento);
        System.out.println(insegnamento.Nome+" è stato aggiunto a "+insegnamento.docente.nome);
     }
-    @Override
+
     public void saluto() {
 System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
 
@@ -86,18 +91,23 @@ public void rimuoviVincolo(int indice){
 }
 //Mostra i vincoli
 public void mostraVincoli(){
-    if(vincoli.isEmpty()){
-        System.out.println("Non hai vincoli");
-        return;
+        if(vincoli.isEmpty()){
+            System.out.println("Non hai vincoli");
+            return;
+        }
+        System.out.println("Vincoli di"+this.nome+" "+this.cognome+":");
+        int numeroVincolo=0;
+        for(Vincolo vincolo : vincoli){
+            System.out.println("Numero vincolo: "+numeroVincolo);
+            System.out.println("Giorno: "+vincolo.orario.giorno);
+            System.out.println("Orario: "+vincolo.orario.oraInizio+":"+vincolo.orario.minutoInizio+" - "+vincolo.orario.oraFine+":"+vincolo.orario.minutoFine);
+            System.out.println("-----------------------------------");
+            numeroVincolo++;
+        }
+
     }
-    System.out.println("Vincoli di"+this.nome+" "+this.cognome+":");
-    int numeroVincolo=0;
-    for(Vincolo vincolo : vincoli){
-        System.out.println("Numero vincolo: "+numeroVincolo);
-        System.out.println("Giorno: "+vincolo.orario.giorno);
-        System.out.println("Orario: "+vincolo.orario.oraInizio+":"+vincolo.orario.minutoInizio+" - "+vincolo.orario.oraFine+":"+vincolo.orario.minutoFine);
-        System.out.println("-----------------------------------");
-        numeroVincolo++;
-    }
-}
+
+
+
+
 }

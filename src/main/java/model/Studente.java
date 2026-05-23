@@ -1,12 +1,13 @@
 package model;
 import java.util.ArrayList;
-public class Studente extends Utente {
+public class Studente extends Utente  {
     private final String matricola;
-   protected int annoCorso;
-   private static ArrayList<String> matricole= new ArrayList<>();
+    protected int annoCorso;
+    private static ArrayList<String> matricole= new ArrayList<>();
+
 
     public Studente(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) {
-        super(nome, cognome, email, login, password);
+        super(nome,cognome,email,login,password);
 
         if(matricola==null || matricola.isEmpty()){
             throw new IllegalArgumentException("La matricola non può essere vuota");
@@ -23,7 +24,7 @@ public class Studente extends Utente {
             matricole.add(matricola);
  
     }
- @Override
+
     public void saluto() {
         System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
     }
@@ -36,4 +37,6 @@ elencoLezioni.visualizzaOrarioCompleto(this);
     public String getmatricola(){
         return matricola;
     }
+
+
 }

@@ -14,6 +14,7 @@ public class RegisterPage {
     private JButton confermaButton;
     private JButton annullaButton;
     private JLabel labelErrore;
+    private JComboBox comboBox1;
 
     public RegisterPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Registrati");
@@ -32,6 +33,7 @@ public class RegisterPage {
             labelErrore.setText("");
             String nome     = nomeText.getText();
             String cognome  = cognomeText.getText();
+            String ruolo    = comboBox1.getToolTipText();
             String email    = emailText.getText();
             String username = usernameText.getText();
             String password = new String(passwordText.getPassword());

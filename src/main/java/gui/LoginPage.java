@@ -44,15 +44,22 @@ public class LoginPage {
 
             // Apri la schermata giusta in base al ruolo
             String ruolo = controller.getRuolo();
-            if (ruolo.equals("RESPONSABILE")) {
-                SchermataResponsabile s = new SchermataResponsabile(controller, frame);
-                s.frame.setVisible(true);
-            } else if (ruolo.equals("DOCENTE")) {
-                SchermataDocente s = new SchermataDocente(controller, frame);
-                s.frame.setVisible(true);
-            } else if (ruolo.equals("STUDENTE")) {
-                SchermataStudente s = new SchermataStudente(controller, frame);
-                s.frame.setVisible(true);
+            switch (ruolo) {
+                case "RESPONSABILE": {
+                    SchermataResponsabile s = new SchermataResponsabile(controller, frame);
+                    s.frame.setVisible(true);
+                    break;
+                }
+                case "DOCENTE": {
+                    SchermataDocente s = new SchermataDocente(controller, frame);
+                    s.frame.setVisible(true);
+                    break;
+                }
+                case "STUDENTE": {
+                    SchermataStudente s = new SchermataStudente(controller, frame);
+                    s.frame.setVisible(true);
+                    break;
+                }
             }
             frame.setVisible(false);
         });

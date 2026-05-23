@@ -23,7 +23,8 @@ public class Controller {
 		for (Utente u : utentiRegistrati) {
 			if (u.login(username, password)) {
 				this.utente = u;
-				assegnaRuolo(u);
+
+				getRuolo();
 				return true;
 			}
 		}
@@ -31,20 +32,12 @@ public class Controller {
 	}
 
 
-	private void assegnaRuolo(Utente u) {
-		if (u instanceof Responsabile) {
-			this.responsabile = (Responsabile) u;
-		} else if (u instanceof Docente) {
-			this.docente = (Docente) u;
-		} else if (u instanceof Studente) {
-			this.studente = (Studente) u;
-		}
-	}
+
 
 	public String getRuolo() {
-		if (utente instanceof Responsabile) return "RESPONSABILE";
-		if (utente instanceof Docente)      return "DOCENTE";
-		if (utente instanceof Studente)     return "STUDENTE";
+		if (responsabile != null) return "RESPONSABILE";
+		if (docente!=null)      return "DOCENTE";
+		if (studente!=null)     return "STUDENTE";
 		return null;
 	}
 
@@ -91,7 +84,7 @@ public class Controller {
 				return false; // Non possono esistere più user con la stessa mail.
 			}
 		}
-		utentiRegistrati.add(new Utente(name, cogn, email, login, pass));
+		utentiRegistrati.add(new Utente(name, cogn,  email, login, pass));
 		return true;
 	}
 

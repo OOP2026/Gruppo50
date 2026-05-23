@@ -11,6 +11,7 @@ public class Utente {
     public Utente(String nome,String cognome, String email,String login, String password) {
        this.nome=nome;
        this.cognome=cognome;
+
        this.email=email;
         this.username = login;
         this.password = password;
