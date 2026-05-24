@@ -9,9 +9,14 @@ import java.util.List;
 public class OrarioLezioni {
     private ArrayList<Lezione> orariolezioni;
     private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"};
+
+
+
     public OrarioLezioni(){
 orariolezioni=new ArrayList<>();
     }
+
+
 
     public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    //Solo il responsabile puo usare questo metodo
@@ -20,10 +25,7 @@ orariolezioni=new ArrayList<>();
      if (l == null){
         throw new NullPointerException("Questa lezione è vuota");
     }
-            
 
-        
-          
 
     if(controlloConflittoLezione(l)){ 
       throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
@@ -40,13 +42,13 @@ public void visualizzaOrarioCompleto(Token token){
         return;
     }
 
-System.out.println("Orario completo delle lezioni:");
+    System.out.println("Orario completo delle lezioni:");
 
-giornoLezioni(giorni[0],  orariolezioni, l -> true);
-giornoLezioni(giorni[1],  orariolezioni, l -> true);
-giornoLezioni(giorni[2],  orariolezioni, l -> true);
-giornoLezioni(giorni[3],  orariolezioni, l -> true);
-giornoLezioni(giorni[4],  orariolezioni, l -> true);
+    giornoLezioni(giorni[0],  orariolezioni, l -> true);
+    giornoLezioni(giorni[1],  orariolezioni, l -> true);
+    giornoLezioni(giorni[2],  orariolezioni, l -> true);
+    giornoLezioni(giorni[3],  orariolezioni, l -> true);
+    giornoLezioni(giorni[4],  orariolezioni, l -> true);
 
 }
 

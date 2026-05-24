@@ -16,5 +16,12 @@ public class SchermataResponsabile {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+
+        creaLezioneButton.addActionListener(e -> {
+            CrealezioneDialog d = new CrealezioneDialog(controller, frame);
+            d.dialog.setVisible(true);
+        });
     }
+
+
 }

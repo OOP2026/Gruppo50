@@ -11,7 +11,7 @@ public class Controller {
 	private Docente docente;
 	private Utente utente;
 	private List<Utente> utentiRegistrati;
-
+	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
@@ -64,8 +64,33 @@ public class Controller {
 		responsabile.rifiutaRichiesta(numeroRichiesta);
 	}
 
-	public void creaLezione(Lezione l, OrarioLezioni elencoLezioni){
-		responsabile.inserisciLezione(l,elencoLezioni);
+	public String creaLezione(
+			String nomeInsegnamento, int cfu, int annoCorso,
+			String emailDocente,
+			String nomeAula, int capienza,
+			String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
+
+		Docente docenteTrovato = null;
+		for (Utente u : utentiRegistrati) {
+			if (u instanceof Docente && u.getmail().equals(emailDocente)) {
+				docenteTrovato = (Docente) u;
+				break;
+			}
+		}
+		if (docenteTrovato == null) {
+			return "Nessun docente registrato con questa email.";
+		}
+
+		try {
+			Insegnamento insegnamento = new Insegnamento(nomeInsegnamento, cfu, annoCorso, docenteTrovato);
+			Aula aula                 = new Aula(nomeAula, capienza);
+			Orario orario             = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+			Lezione lezione           = new Lezione(insegnamento, aula, orario);
+			responsabile.inserisciLezione(lezione, orarioLezioni);
+			return null;
+		} catch (IllegalArgumentException e) {
+			return e.getMessage();
+		}
 	}
 
 	//Docente visualizza l'orario delle proprie lezionoùi
@@ -109,7 +134,7 @@ public class Controller {
 				nuovoUtente = new Studente(name, cogn, email, login, pass,matricola,1);
 				break;
 		}
-		utentiRegistrati.add(new Utente(name, cogn,  email, login, pass));
+		utentiRegistrati.add(nuovoUtente);
 		return true;
 	}
 

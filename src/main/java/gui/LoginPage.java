@@ -44,6 +44,10 @@ public class LoginPage {
 
             // Apri la schermata giusta in base al ruolo
             String ruolo = controller.getRuolo();
+            if (ruolo == null) {
+                labelErrore.setText("Errore: ruolo non riconosciuto.");
+                return;
+            }
             switch (ruolo) {
                 case "RESPONSABILE": {
                     SchermataResponsabile s = new SchermataResponsabile(controller, frame);
