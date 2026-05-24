@@ -33,7 +33,7 @@ public class RegisterPage {
             labelErrore.setText("");
             String nome     = nomeText.getText();
             String cognome  = cognomeText.getText();
-            String ruolo    = comboBox1.getToolTipText();
+            String ruolo    = (String) comboBox1.getSelectedItem();
             String email    = emailText.getText();
             String username = usernameText.getText();
             String password = new String(passwordText.getPassword());
@@ -46,8 +46,8 @@ public class RegisterPage {
             }
 
             // Delega al controller
-            if (!controller.registra(nome, cognome, email, username, password)) {
-                labelErrore.setText("Username già in uso.");
+            if (!controller.registra(nome, cognome, email, username, password,ruolo)) {
+                labelErrore.setText("Email già in uso.");
                 return;
             }
 
