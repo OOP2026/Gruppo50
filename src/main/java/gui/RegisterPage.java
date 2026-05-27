@@ -13,7 +13,6 @@ public class RegisterPage {
     private JPasswordField passwordText;
     private JButton confermaButton;
     private JButton annullaButton;
-    private JLabel labelErrore;
     private JComboBox comboBox1;
 
     public RegisterPage(Controller controller, JFrame frameChiamante) {
@@ -30,7 +29,6 @@ public class RegisterPage {
         });
 
         confermaButton.addActionListener(e -> {
-            labelErrore.setText("");
             String nome     = nomeText.getText();
             String cognome  = cognomeText.getText();
             String ruolo    = (String) comboBox1.getSelectedItem();
@@ -41,13 +39,13 @@ public class RegisterPage {
             // Solo controllo input
             if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty()
                     || username.isEmpty() || password.isEmpty()) {
-                labelErrore.setText("Compila tutti i campi.");
+                JOptionPane.showMessageDialog(frame,"Compila tutti i campi","Errore nella registrazione",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Delega al controller
             if (!controller.registra(nome, cognome, email, username, password,ruolo)) {
-                labelErrore.setText("Email già in uso.");
+                JOptionPane.showMessageDialog(frame,"Email già in uso.","Errore nella registrazione",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

@@ -10,7 +10,6 @@ public class LoginPage {
     private JPasswordField passwordText;
     private JButton accediButton;
     private JButton annullaButton;
-    private JLabel labelErrore;
 
     public LoginPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Login");
@@ -26,26 +25,25 @@ public class LoginPage {
         });
 
         accediButton.addActionListener(e -> {
-            labelErrore.setText("");
             String username = usernameText.getText();
             String password = new String(passwordText.getPassword());
 
             // Solo controllo input
             if (username.isEmpty() || password.isEmpty()) {
-                labelErrore.setText("Compila tutti i campi.");
+                JOptionPane.showMessageDialog(frame,"Compila tutti i campi","Errore nel login",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Delega al controller
             if (!controller.accedi(username, password)) {
-                labelErrore.setText("Credenziali non valide.");
+                JOptionPane.showMessageDialog(frame,"Credenziali non valide.","Errore nel login",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Apri la schermata giusta in base al ruolo
             String ruolo = controller.getRuolo();
             if (ruolo == null) {
-                labelErrore.setText("Errore: ruolo non riconosciuto.");
+                JOptionPane.showMessageDialog(frame,"Errore: ruolo non riconosciuto.","Errore nel login",JOptionPane.ERROR_MESSAGE);
                 return;
             }
             switch (ruolo) {
