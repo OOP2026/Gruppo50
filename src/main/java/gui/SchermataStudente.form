@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.SchermataStudente">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="6" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="33" y="26" width="1550" height="492"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="109a7" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Lunedi"/>
+        </properties>
+      </component>
+      <component id="8e447" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Martedi"/>
+        </properties>
+      </component>
+      <component id="9e4bd" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Mercoledi"/>
+        </properties>
+      </component>
+      <component id="fb3ac" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="3" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Giovedi"/>
+        </properties>
+      </component>
+      <component id="a9844" class="javax.swing.JTextArea" binding="a14001600TextArea1" default-binding="true">
+        <constraints>
+          <grid row="2" column="2" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="14:00 - 16:00 : Programmazione Object Oriented"/>
+        </properties>
+      </component>
+      <component id="40a04" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+        <constraints>
+          <grid row="2" column="1" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+      <component id="61f05" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="26" style="1"/>
+          <text value="Orario Lezioni"/>
+        </properties>
+      </component>
+      <component id="c110c" class="javax.swing.JTextArea" binding="a08301030TextArea" default-binding="true">
+        <constraints>
+          <grid row="2" column="0" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="08:30 - 10:30 : Algebra"/>
+        </properties>
+      </component>
+      <component id="79f64" class="javax.swing.JTextArea" binding="a11001300TextArea" default-binding="true">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="11:00 - 13:00 : Programmazione Object Oriented"/>
+        </properties>
+      </component>
+      <component id="8995b" class="javax.swing.JTextArea" binding="a16301830TextArea" default-binding="true">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="16:30 - 18:30 : Basi di Dati"/>
+        </properties>
+      </component>
+      <component id="3de3e" class="javax.swing.JTextArea" binding="a14001600TextArea" default-binding="true">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="14:00 - 16:00 : Basi di Dati"/>
+        </properties>
+      </component>
+      <component id="d8bab" class="javax.swing.JTextArea" binding="a08301030TextArea1" default-binding="true">
+        <constraints>
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="08:30 - 10:30 : Programmazione Object Oriented"/>
+        </properties>
+      </component>
+      <component id="b7a71" class="javax.swing.JTextArea" binding="a11001300TextArea2" default-binding="true">
+        <constraints>
+          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="11:00 - 13:00 : Basi di Dati"/>
+        </properties>
+      </component>
+      <component id="74282" class="javax.swing.JTextArea" binding="a14001600TextArea2" default-binding="true">
+        <constraints>
+          <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+          <text value="14:00 - 16: 00 : Algebra"/>
+        </properties>
+      </component>
+      <component id="450ff" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="4" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Venerdi"/>
+        </properties>
+      </component>
+      <component id="4d780" class="javax.swing.JTextArea" binding="textArea2" default-binding="true">
+        <constraints>
+          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
