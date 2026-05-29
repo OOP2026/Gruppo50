@@ -6,7 +6,7 @@ import javax.swing.*;
 public class SchermataResponsabile {
     JFrame frame;
     private JPanel panel1;
-    private JButton VIsualizzaRichiesteButton;
+    private JButton VisualizzaRichiesteButton;
     private JButton creaLezioneButton;
     private JButton insegnamentiAttiviButton;
 

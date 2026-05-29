@@ -40,7 +40,7 @@
           <text value="Giovedi"/>
         </properties>
       </component>
-      <component id="a9844" class="javax.swing.JTextArea" binding="a14001600TextArea1" default-binding="true">
+      <component id="a9844" class="javax.swing.JTextArea" binding="PrimaLezioneMercoledi">
         <constraints>
           <grid row="2" column="2" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -70,7 +70,7 @@
           <text value="Orario Lezioni"/>
         </properties>
       </component>
-      <component id="c110c" class="javax.swing.JTextArea" binding="a08301030TextArea" default-binding="true">
+      <component id="c110c" class="javax.swing.JTextArea" binding="PrimaLezioneLunedi">
         <constraints>
           <grid row="2" column="0" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -81,7 +81,7 @@
           <text value="08:30 - 10:30 : Algebra"/>
         </properties>
       </component>
-      <component id="79f64" class="javax.swing.JTextArea" binding="a11001300TextArea" default-binding="true">
+      <component id="79f64" class="javax.swing.JTextArea" binding="SecondaLezioneLunedi">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -92,7 +92,7 @@
           <text value="11:00 - 13:00 : Programmazione Object Oriented"/>
         </properties>
       </component>
-      <component id="8995b" class="javax.swing.JTextArea" binding="a16301830TextArea" default-binding="true">
+      <component id="8995b" class="javax.swing.JTextArea" binding="SecondaLezioneMercoledi">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -103,7 +103,7 @@
           <text value="16:30 - 18:30 : Basi di Dati"/>
         </properties>
       </component>
-      <component id="3de3e" class="javax.swing.JTextArea" binding="a14001600TextArea" default-binding="true">
+      <component id="3de3e" class="javax.swing.JTextArea" binding="TerzaLezioneLunedi">
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -114,7 +114,7 @@
           <text value="14:00 - 16:00 : Basi di Dati"/>
         </properties>
       </component>
-      <component id="d8bab" class="javax.swing.JTextArea" binding="a08301030TextArea1" default-binding="true">
+      <component id="d8bab" class="javax.swing.JTextArea" binding="PrimaLezioneGiovedi">
         <constraints>
           <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -125,7 +125,7 @@
           <text value="08:30 - 10:30 : Programmazione Object Oriented"/>
         </properties>
       </component>
-      <component id="b7a71" class="javax.swing.JTextArea" binding="a11001300TextArea2" default-binding="true">
+      <component id="b7a71" class="javax.swing.JTextArea" binding="SecondaLezioneGiovedi">
         <constraints>
           <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -136,7 +136,7 @@
           <text value="11:00 - 13:00 : Basi di Dati"/>
         </properties>
       </component>
-      <component id="74282" class="javax.swing.JTextArea" binding="a14001600TextArea2" default-binding="true">
+      <component id="74282" class="javax.swing.JTextArea" binding="TerzaLezioneGiovedi">
         <constraints>
           <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
