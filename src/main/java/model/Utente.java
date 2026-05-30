@@ -17,8 +17,8 @@ public class Utente {
         this.password = password;
     }
 
-    public boolean login(String login, String password) {
-        return ( login.equals(this.username) && password.equals(this.password));
+    public boolean login(String username, String password) {
+        return ( username.equals(this.username) && password.equals(this.password));
     }
     
     public void saluto(){

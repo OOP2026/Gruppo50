@@ -5,11 +5,7 @@ public class Docente extends Utente {
    List<Insegnamento> insegnamenti;
    private ArrayList<Richiesta> richiesteSpostamentoInviate;
    private ArrayList<Vincolo> vincoli;
-   protected String nome;
-   protected String cognome;
-   protected String email;
-   protected String username;
-   protected String password;
+
 
     public Docente(String nome, String cognome, String email, String login, String password) {
         super(nome,cognome,email,login,password);
@@ -28,7 +24,7 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
 
     }
     //questa funzione invia una richiesta di spostamento al responsabile
-    public void richiestaSpostamentoLezione(Responsabile responsabile, String motivo, Orario orarioVecchio, Orario orarioProposto) {  
+    public void richiestaSpostamentoLezione(Responsabile responsabile, String motivo, Orario orarioVecchio, Orario orarioProposto) {
       //creazione della richiesta
     Richiesta richiesta = new Richiesta(this, motivo, orarioVecchio, orarioProposto);
     responsabile.richiesteSpostamento.add(richiesta);
