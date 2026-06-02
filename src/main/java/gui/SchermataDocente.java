@@ -11,28 +11,34 @@ public class SchermataDocente {
     private JButton visualizzaRichiesteInviateButton;
     private JButton visualizzaOrarioButton;
     private JButton gestioneVincoliButton;
-
-    public SchermataDocente(Controller controller,JFrame frameChiamante) {
+    private Controller controller;
+    private JFrame frameChiamante;
+    public SchermataDocente(Controller c,JFrame f) {
+        controller=c;
+        frameChiamante=f;
         frame = new JFrame("Docente");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+        caricaEvents();
     }
 
-    public JMenuBar creaMenu(){
-       JMenuBar barraMenu= new JMenuBar();
-       JMenu menuRichieste= new JMenu("Richieste");
-       JMenu menuProfilo= new JMenu("Profilo");
-       JMenu menuOrario= new JMenu("Visualizza Orario");
-      JMenuItem  menuItemInviaRichiesta= new JMenuItem("Invia Richiesta");
-       JMenuItem menuItemVediRichieste=new JMenuItem("Vedi Richieste");
-
-        menuRichieste.add(menuItemInviaRichiesta);
-        menuRichieste.add(menuItemVediRichieste);
-        barraMenu.add(menuProfilo);
-        barraMenu.add(menuOrario);
-        barraMenu.add(menuRichieste);
-        return barraMenu;
+    public void caricaEvents(){
+       inviaRichiesteButton.addActionListener(e->{
+           SchermataRichiesta r= new SchermataRichiesta(controller,this.frame);
+           r.frame.setVisible(true);
+           this.frame.setVisible(false);
+       });
+       gestioneVincoliButton.addActionListener(e->{
+           SchermataVincoli v= new SchermataVincoli(controller,this.frame);
+           v.frame.setVisible(true);
+           this.frame.setVisible(false);
+       });
+       visualizzaRichiesteInviateButton.addActionListener(e->{
+           SchermataRichiesteInviate ri= new SchermataRichiesteInviate(controller,this.frame);
+           ri.frame.setVisible(true);
+           this.frame.setVisible(false);
+       });
     }
 }

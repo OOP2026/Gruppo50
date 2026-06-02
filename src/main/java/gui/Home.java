@@ -10,8 +10,9 @@ public class Home {
 	public static void main(String[] args) {
 
 		Controller controller = new Controller(new ArrayList<>());
-		PrimoFrame primoFrame = new PrimoFrame(controller);
+        PrimoFrame primoFrame = new PrimoFrame(controller);
 		primoFrame.frame.setVisible(true);
+
 	}
 
 }
