@@ -56,11 +56,11 @@ public class Controller {
 	public void approvaRichiesta (int numeroRichiesta, OrarioLezioni elencoLezioni){
 		responsabile.spostamentoLezione(numeroRichiesta,elencoLezioni);
 	}
-
+	//Responsabile rifiuta lo spostamento
 	public void rifiutarichiesta (int numeroRichiesta){
 		responsabile.rifiutaRichiesta(numeroRichiesta);
 	}
-
+	//Responsabile crea una lezione
 	public String creaLezione(
 			String nomeInsegnamento, int cfu, int annoCorso,
 			String emailDocente,
@@ -141,6 +141,7 @@ public class Controller {
 			}
 		}
 		Utente nuovoUtente;
+
 		switch (ruolo.toUpperCase()) {
 			case "RESPONSABILE":
 				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
@@ -150,12 +151,20 @@ public class Controller {
 				break;
 			case "STUDENTE":
 			default:
-				String matricola="DE00000000";
-				nuovoUtente = new Studente(name, cogn, email, login, pass,matricola,1);
+				String matricola = "DE"+String.format("%08d",utentiRegistrati.size()+1);
+				Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
+				nuovoUtente = nuovoStudente;
+				this.studente = nuovoStudente;
 				break;
 		}
 		utentiRegistrati.add(nuovoUtente);
 		return true;
 	}
-
+	public String getMatricola() {
+		//Condizione che verifica che lo studente non sia null altrimenti restituisce ""
+		if (studente != null) {
+			return studente.getmatricola();
+		}
+		return "";
+	}
 }

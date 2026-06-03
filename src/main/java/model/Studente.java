@@ -33,10 +33,10 @@ public class Studente extends Utente  {
 elencoLezioni.visualizzaOrarioCompleto(this);
 
     }
-
     public String getmatricola(){
         return matricola;
     }
+
 
 
 }
