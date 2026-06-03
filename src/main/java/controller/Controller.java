@@ -1,8 +1,6 @@
 package controller;
 import model.*;
 import java.util.List;
-import java.util.ArrayList;
-
 
 
 public class Controller {
@@ -12,7 +10,6 @@ public class Controller {
 	private Utente utente;
 	private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
-
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
 	}
@@ -101,11 +98,34 @@ public class Controller {
 	public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio,int oraFIne,int minutoFine){
 		docente.aggiungiVincolo(giorno,oraInzio,minutoInzio,oraFIne,minutoFine);
 	}
+	public void rimuoviVincolo(int ind){
+		docente.rimuoviVincolo(ind);
+	}
+	//return vincoli
+	public Object[][] ottieniVincoli(){
+		List<Vincolo> v= docente.getVincoli();
+		Object[][] data=new Object[v.size()][1];
+		for(int i=0; i<v.size();i++){
+			data[i][0]=v.get(i).orario.giorno+" "+v.get(i).orario.getOrarioCompleto() ;
+		}
+		return data;
+	}
 
 	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
 	public void richiestaspostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo){
 		docente.richiestaSpostamentoLezione(responsabile,motivo,new Orario(giornoVecchio,oraInizioVecchio,minutoInizioVecchio,oraFineVecchio,minutoFineVecchio),new Orario(giornoNuovo,oraInizioNuovo,minutoInizioNuovo,oraFineNuovo,minutoFineNuovo));
+	}
+	public Object[][] ottieniRichiesteInviate(){
+		List<Richiesta> r= docente.getRichiesteInviate();
+		Object[][] data=new Object[r.size()][4];
+		for(int i=0; i<r.size();i++){
+			data[i][0]=r.get(i).orarioLezioneDaSpostare.giorno+" "+r.get(i).orarioLezioneDaSpostare.getOrarioCompleto();
+			data[i][1]=r.get(i).nuovoOrarioLezione.giorno+" "+r.get(i).nuovoOrarioLezione.getOrarioCompleto();
+			data[i][2]=r.get(i).motivoRichiesta;
+			data[i][3]=r.get(i).statoRichiesta;
+		}
+		return data;
 	}
 
 	//Studente visualizza l'orario delle lezioni del corso.

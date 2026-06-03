@@ -20,12 +20,18 @@
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <horizontalScrollBarPolicy value="32"/>
+          <verticalScrollBarPolicy value="22"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="2cc6a" class="javax.swing.JTable" binding="richiestaTable">
             <constraints/>
-            <properties/>
+            <properties>
+              <enabled value="true"/>
+              <fillsViewportHeight value="false"/>
+            </properties>
           </component>
         </children>
       </scrollpane>

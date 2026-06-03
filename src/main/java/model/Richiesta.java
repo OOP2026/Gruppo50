@@ -7,10 +7,10 @@ enum StatoRichiesta {
 }
 public class Richiesta{
    protected Docente docenteRichiedente;
-   protected String motivoRichiesta;
-   protected Orario orarioLezioneDaSpostare;
-   protected Orario nuovoOrarioLezione;
-   protected StatoRichiesta statoRichiesta= StatoRichiesta.IN_ATTESA;
+   public String motivoRichiesta;
+   public Orario orarioLezioneDaSpostare;
+   public Orario nuovoOrarioLezione;
+   public StatoRichiesta statoRichiesta= StatoRichiesta.IN_ATTESA;
    
    public Richiesta(Docente docenteRichiedente, String motivoRichiesta, Orario orarioLezioneDaSpostare, Orario nuovoOrarioLezione) {
     this.docenteRichiedente = docenteRichiedente;

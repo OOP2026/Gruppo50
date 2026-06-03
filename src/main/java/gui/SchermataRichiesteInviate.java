@@ -4,6 +4,7 @@ import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class SchermataRichiesteInviate {
     JFrame frame;
@@ -22,6 +23,7 @@ public class SchermataRichiesteInviate {
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
         caricaEvents();
+        richiestaTable.setSelectionBackground(Color.BLUE);
         creaTable();
     }
 
@@ -34,9 +36,9 @@ public class SchermataRichiesteInviate {
         });
     }
     private void creaTable(){
-
-        richiestaTable.setModel(new DefaultTableModel(null,
-                new String[]{"Giorno Lezione","Orario Lezione","Giorno nuovo","Orario Nuovo","Motivo","Stato"} ) );
+       Object[][] data=controller.ottieniRichiesteInviate();
+        richiestaTable.setModel(new DefaultTableModel(data,
+                new String[]{"Orario Lezione","Orario Nuovo","Motivo","Stato"} ) );
     }
 
 }

@@ -4,16 +4,15 @@ import javax.swing.*;
 import controller.Controller;
 public class SchermataRichiesta {
     JFrame frame;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JComboBox comboBox1;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JTextField textField8;
-    private JComboBox comboBox2;
+    private JTextField oraIniziaLezioneText;
+    private JTextField minutiIniziaLezioneText;
+    private JTextField oraFineLezioneText;
+    private JTextField minutiFineLezioneText;
+    private JComboBox giorniBox;
+    private JTextField minutiIniziaNuovaText;
+    private JTextField oraFineNuovaText;
+    private JTextField minutiFineNuovaText;
+    private JComboBox giorniNuoviBox;
     private JPanel panel1;
     private JPanel panelRichiesta;
     private JPanel panelLezioneDaSpostare;
@@ -23,6 +22,7 @@ public class SchermataRichiesta {
     private JButton inviaButton;
     private JButton indietroButton;
     private JTextArea motivoText;
+    private JTextField oraIniziaNuovaText;
     JFrame frameChiamante;
     Controller controller;
     public SchermataRichiesta(Controller c, JFrame f){

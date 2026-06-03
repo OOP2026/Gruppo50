@@ -57,6 +57,9 @@ numeroRichiesta++;
     }
 
 }
+public List<Richiesta> getRichiesteInviate(){
+    return new ArrayList<>(richiesteSpostamentoInviate);
+}
 
 public void visualizzaOrario(OrarioLezioni elencoLezioni){
 elencoLezioni.visualizzaOrarioCompleto(this);
@@ -65,8 +68,7 @@ elencoLezioni.visualizzaOrarioCompleto(this);
 //Gestione dei vincoli
 public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio,int oraFIne,int minutoFine){
     if(vincoli.size()==3){
-        System.out.println("Hai già raggiunto il numero massimo di vincoli");
-        return;
+        throw new IllegalStateException("Hai già raggiunto il numero massimo di vincoli (3)");
     }
 vincoli.add(new Vincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine));
 System.out.println("Vincolo aggiunto con successo");
@@ -79,8 +81,7 @@ return new ArrayList<>(vincoli);
 //rimuove un vincolo in base all'indice.
 public void rimuoviVincolo(int indice){
     if(indice<0 || indice>=vincoli.size()){
-        System.out.println("Indice non valido");
-        return;
+      throw new IllegalArgumentException("Non esiste il vincolo che vuoi rimuovere");
     }
     vincoli.remove(indice);
     System.out.println("Vincolo rimosso con successo");
