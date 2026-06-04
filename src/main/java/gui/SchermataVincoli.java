@@ -38,6 +38,8 @@ caricaEvents();
 creaTable();
     }
     private void caricaEvents(){
+
+
         indietroButton.addActionListener(e->{
             frame.setVisible(false);
             frameChiamante.setVisible(true);
@@ -45,7 +47,7 @@ creaTable();
 
         });
         aggiungiButton.addActionListener(e->{
-
+    if(!checkCampi()) return;
             int oraFine=Integer.parseInt( oraFineText.getText());
             int minutiFine=Integer.parseInt( minutiFineText.getText());
             int oraInizio=Integer.parseInt( oraInizioText.getText());
@@ -57,7 +59,8 @@ creaTable();
                 JOptionPane.showMessageDialog(frame,ex.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
                 return;
             }
-  creaTable();
+            resetCampi();
+            creaTable();
         });
 
         rimuoviButton.addActionListener(e->{
@@ -79,7 +82,30 @@ creaTable();
 
 
     }
+private boolean checkCampi(){
+    //controlla se tutti i campi sono stati compilati
+    if(oraFineText.getText().isEmpty() || minutiFineText.getText().isEmpty() || oraInizioText.getText().isEmpty() || minutiInizioText.getText().isEmpty()){
+        JOptionPane.showMessageDialog(frame,"Compila tutti i campi","Errore",JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+    try{
+        int oraFine=Integer.parseInt( oraFineText.getText());
+        int minutiFine=Integer.parseInt( minutiFineText.getText());
+        int oraInizio=Integer.parseInt( oraInizioText.getText());
+        int minutiInizio=Integer.parseInt( minutiInizioText.getText());
+    }catch(NumberFormatException ex){
+        JOptionPane.showMessageDialog(frame,"Inserisci valori numerici validi per orari e minuti","Errore",JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
 
+    return true;
+}
+private void resetCampi(){
+    oraFineText.setText("");
+    minutiFineText.setText("");
+    oraInizioText.setText("");
+    minutiInizioText.setText("");
+}
 
     private void creaTable(){
         Object[][] data=controller.ottieniVincoli();

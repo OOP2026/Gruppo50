@@ -40,5 +40,10 @@ public class SchermataDocente {
            ri.frame.setVisible(true);
            this.frame.setVisible(false);
        });
+       visualizzaOrarioButton.addActionListener(e->{
+           OrarioDocente o= new OrarioDocente(controller,this.frame);
+           o.frame.setVisible(true);
+           this.frame.setVisible(false);
+       });
     }
 }

@@ -45,7 +45,35 @@ public class SchermataRichiesta {
         caricaEvents();
         impostaLimiteCaratteri(motivoText, 200);
     }
+    //Controlla i campi
+private boolean checkCampi() {
+    if(oraIniziaLezioneText.getText().trim().isEmpty() || minutiIniziaLezioneText.getText().trim().isEmpty() ||
+            oraFineLezioneText.getText().trim().isEmpty() || minutiFineLezioneText.getText().trim().isEmpty() ||
+            oraIniziaNuovaText.getText().trim().isEmpty() || minutiIniziaNuovaText.getText().trim().isEmpty() ||
+            oraFineNuovaText.getText().trim().isEmpty() || minutiFineNuovaText.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(frame, "Tutti i campi degli orari devono essere compilati.", "Errore", JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+        try {
+            int oraInizioLezione = Integer.parseInt(oraIniziaLezioneText.getText());
+            int minutoInizioLezione = Integer.parseInt(minutiIniziaLezioneText.getText());
+            int oraFineLezione = Integer.parseInt(oraFineLezioneText.getText());
+            int minutoFineLezione = Integer.parseInt(minutiFineLezioneText.getText());
+            int oraInizioNuovo = Integer.parseInt(oraIniziaNuovaText.getText());
+            int minutoInizioNuovo = Integer.parseInt(minutiIniziaNuovaText.getText());
+            int oraFineNuovo = Integer.parseInt(oraFineNuovaText.getText());
+            int minutoFineNuovo = Integer.parseInt(minutiFineNuovaText.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frame, "Inserisci valori numerici validi per orari e minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (motivoText.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Il campo motivo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
+        return true;
+    }
     private void caricaEvents() {
         indietroButton.addActionListener(e -> {
             frame.setVisible(false);
@@ -54,6 +82,7 @@ public class SchermataRichiesta {
 
         });
         inviaButton.addActionListener(e -> {
+            if(!checkCampi()) return;
             int oraInizioLezione = Integer.parseInt(oraIniziaLezioneText.getText());
             int minutoInizioLezione = Integer.parseInt(minutiIniziaLezioneText.getText());
             int oraFineLezione = Integer.parseInt(oraFineLezioneText.getText());
