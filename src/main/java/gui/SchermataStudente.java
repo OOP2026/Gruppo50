@@ -16,6 +16,7 @@ public class SchermataStudente {
     private JTextArea TerzaLezioneGiovedi;
     private JTextArea textArea2;
     private JTextArea textArea1;
+    private JLabel matricola;
 
     public SchermataStudente(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Studente");
@@ -34,6 +35,7 @@ public class SchermataStudente {
         textArea2.setEditable(false);
         textArea1.setEditable(false);
         //.setEditable(false);
+        matricola.setText("Matricola: " + controller.getMatricola());
     }
 
 
