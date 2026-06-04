@@ -11,7 +11,7 @@ public class Controller {
 	private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	public Controller(List<Utente> utentiRegistrati) {
-		this.utentiRegistrati = utentiRegistrati;
+        this.utentiRegistrati = utentiRegistrati;
 	}
 
 	public boolean accedi(String username, String password) {
@@ -112,9 +112,9 @@ public class Controller {
 	}
 
 	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
-	public void richiestaspostamentoLezione(Responsabile responsabile, String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
+	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo){
-		docente.richiestaSpostamentoLezione(responsabile,motivo,new Orario(giornoVecchio,oraInizioVecchio,minutoInizioVecchio,oraFineVecchio,minutoFineVecchio),new Orario(giornoNuovo,oraInizioNuovo,minutoInizioNuovo,oraFineNuovo,minutoFineNuovo));
+		docente.richiestaSpostamentoLezione(motivo,new Orario(giornoVecchio,oraInizioVecchio,minutoInizioVecchio,oraFineVecchio,minutoFineVecchio),new Orario(giornoNuovo,oraInizioNuovo,minutoInizioNuovo,oraFineNuovo,minutoFineNuovo));
 	}
 	public Object[][] ottieniRichiesteInviate(){
 		List<Richiesta> r= docente.getRichiesteInviate();

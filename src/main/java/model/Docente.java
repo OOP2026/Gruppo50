@@ -24,10 +24,10 @@ System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono
 
     }
     //questa funzione invia una richiesta di spostamento al responsabile
-    public void richiestaSpostamentoLezione(Responsabile responsabile, String motivo, Orario orarioVecchio, Orario orarioProposto) {
+    public void richiestaSpostamentoLezione(String motivo, Orario orarioVecchio, Orario orarioProposto) {
       //creazione della richiesta
     Richiesta richiesta = new Richiesta(this, motivo, orarioVecchio, orarioProposto);
-    responsabile.richiesteSpostamento.add(richiesta);
+   // responsabile.richiesteSpostamento.add(richiesta);
     this.richiesteSpostamentoInviate.add(richiesta);
     
 }

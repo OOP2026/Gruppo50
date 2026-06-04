@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
 
+import java.awt.*;
+
 public class SchermataVincoli {
     JFrame frame;
     private JPanel panel1;
@@ -21,7 +23,6 @@ public class SchermataVincoli {
     private JPanel panelButtons;
     private JPanel panelOrarioInizio;
     private JComboBox giorniBox;
-    private JTextField indiceVincoloText;
     private Controller controller;
     private JFrame frameChiamante;
 
@@ -60,16 +61,22 @@ creaTable();
         });
 
         rimuoviButton.addActionListener(e->{
-            int indice= Integer.parseInt(indiceVincoloText.getText());
+            int indice=tabellaVincoli.getSelectedRow();
+            if(indice==-1){
+                JOptionPane.showMessageDialog(frame,"Seleziona un vincolo da rimuovere","Errore",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             try{
-                controller.rimuoviVincolo(indice-1);
+                controller.rimuoviVincolo(indice);
             }catch(Exception ex){
                 JOptionPane.showMessageDialog(frame,ex.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            indiceVincoloText.setText("");
+
                 creaTable();
         });
+
 
     }
 
@@ -84,6 +91,10 @@ creaTable();
         for(int i=0; i<tabellaVincoli.getColumnCount();i++){
             tabellaVincoli.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
+        //non rende possibile modificare le righe all'utente
+        tabellaVincoli.setDefaultEditor(Object.class, null);
+        //quando le righe vengono cliccati diventano grigio chiaro
+        tabellaVincoli.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
 
