@@ -17,16 +17,20 @@ public class PrimoFrame {
         frame.pack();
         frame.setLocationRelativeTo(null);
 
-        loginButton.addActionListener(e -> {
-            LoginPage loginPage = new LoginPage(controller, frame);
-            loginPage.frame.setVisible(true);
-            frame.setVisible(false);
-        });
+        if(loginButton!=null) {
+            loginButton.addActionListener(e -> {
+                LoginPage loginPage = new LoginPage(controller, frame);
+                loginPage.frame.setVisible(true);
+                frame.setVisible(false);
+            });
+        }
 
-        registratiButton.addActionListener(e -> {
-            RegisterPage registerPage = new RegisterPage(controller, frame);
-            registerPage.frame.setVisible(true);
-            frame.setVisible(false);
-        });
+        if(registratiButton!=null) {
+            registratiButton.addActionListener(e -> {
+                RegisterPage registerPage = new RegisterPage(controller, frame);
+                registerPage.frame.setVisible(true);
+                frame.setVisible(false);
+            });
+        }
     }
 }

@@ -21,29 +21,52 @@ public class SchermataDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        caricaEvents();
+        if (inviaRichiesteButton != null) {
+            caricaEvents();
+        }
+        if (visualizzaRichiesteInviateButton != null) {
+            caricaEvents();
+        }
+        if (visualizzaOrarioButton != null) {
+            caricaEvents();
+        }
+        if (gestioneVincoliButton != null) {
+            caricaEvents();
+        }
+
     }
 
     public void caricaEvents(){
-       inviaRichiesteButton.addActionListener(e->{
-           SchermataRichiesta r= new SchermataRichiesta(controller,this.frame);
-           r.frame.setVisible(true);
-           this.frame.setVisible(false);
-       });
-       gestioneVincoliButton.addActionListener(e->{
-           SchermataVincoli v= new SchermataVincoli(controller,this.frame);
-           v.frame.setVisible(true);
-           this.frame.setVisible(false);
-       });
-       visualizzaRichiesteInviateButton.addActionListener(e->{
-           SchermataRichiesteInviate ri= new SchermataRichiesteInviate(controller,this.frame);
-           ri.frame.setVisible(true);
-           this.frame.setVisible(false);
-       });
-       visualizzaOrarioButton.addActionListener(e->{
-           OrarioDocente o= new OrarioDocente(controller,this.frame);
-           o.frame.setVisible(true);
-           this.frame.setVisible(false);
-       });
+        //Controllo che il bottone invia richieste sia inizializzato corettamente
+        if (inviaRichiesteButton != null) {
+            inviaRichiesteButton.addActionListener(e -> {
+                SchermataRichiesta r = new SchermataRichiesta(controller, this.frame);
+                r.frame.setVisible(true);
+                this.frame.setVisible(false);
+            });
+        }
+        //Controllo che il bottone per gestire i vincoli sia creato
+        if (gestioneVincoliButton != null) {
+            gestioneVincoliButton.addActionListener(e -> {
+                SchermataVincoli v = new SchermataVincoli(controller, this.frame);
+                v.frame.setVisible(true);
+                this.frame.setVisible(false);
+            });
+        }
+        //Controllo che il bottone
+        if (visualizzaRichiesteInviateButton != null) {
+            visualizzaRichiesteInviateButton.addActionListener(e -> {
+                SchermataRichiesteInviate ri = new SchermataRichiesteInviate(controller, this.frame);
+                ri.frame.setVisible(true);
+                this.frame.setVisible(false);
+            });
+        }
+        if (visualizzaOrarioButton != null) {
+            visualizzaOrarioButton.addActionListener(e -> {
+                OrarioDocente o = new OrarioDocente(controller, this.frame);
+                o.frame.setVisible(true);
+                this.frame.setVisible(false);
+            });
+        }
     }
 }

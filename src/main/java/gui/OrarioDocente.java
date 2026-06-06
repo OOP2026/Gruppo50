@@ -27,7 +27,7 @@ public class OrarioDocente {
             caricaEvents();
         }
 
-        // CORREZIONE 2: Passa la tabella solo se è stata inizializzata
+        //Passa la tabella solo se è stata inizializzata
         if (tabellaOrario != null) {
             creaTable(tabellaOrario);
         }
