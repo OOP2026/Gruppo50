@@ -18,11 +18,13 @@ public class LoginPage {
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
 
-        annullaButton.addActionListener(e -> {
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
-        });
+        if (annullaButton != null) {
+            annullaButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
+            });
+        }
 
         accediButton.addActionListener(e -> {
             String username = usernameText.getText();

@@ -21,12 +21,13 @@ public class RegisterPage {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-
-        annullaButton.addActionListener(e -> {
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
-        });
+        if (annullaButton != null) {
+            annullaButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
+            });
+        }
 
         confermaButton.addActionListener(e -> {
             String nome     = nomeText.getText();
