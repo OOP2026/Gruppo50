@@ -26,7 +26,7 @@ public class CrealezioneDialog {
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.pack();
         dialog.setLocationRelativeTo(frameChiamante);
-
+        if(annullaButton != null) dialog.setVisible(false);
         annullaButton.addActionListener(e -> dialog.dispose());
 
         confermaButton.addActionListener(e -> {

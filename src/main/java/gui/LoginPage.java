@@ -25,47 +25,49 @@ public class LoginPage {
                 frame.dispose();
             });
         }
+        if (accediButton != null) {
 
-        accediButton.addActionListener(e -> {
-            String username = usernameText.getText();
-            String password = new String(passwordText.getPassword());
+            accediButton.addActionListener(e -> {
+                String username = usernameText.getText();
+                String password = new String(passwordText.getPassword());
 
-            // Solo controllo input
-            if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(frame,"Compila tutti i campi","Errore nel login",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Delega al controller
-            if (!controller.accedi(username, password)) {
-                JOptionPane.showMessageDialog(frame,"Credenziali non valide.","Errore nel login",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Apri la schermata giusta in base al ruolo
-            String ruolo = controller.getRuolo();
-            if (ruolo == null) {
-                JOptionPane.showMessageDialog(frame,"Errore: ruolo non riconosciuto.","Errore nel login",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            switch (ruolo) {
-                case "RESPONSABILE": {
-                    SchermataResponsabile s = new SchermataResponsabile(controller, frame);
-                    s.frame.setVisible(true);
-                    break;
+                // Solo controllo input
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore nel login", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                case "DOCENTE": {
-                    SchermataDocente s = new SchermataDocente(controller, frame);
-                    s.frame.setVisible(true);
-                    break;
+
+                // Delega al controller
+                if (!controller.accedi(username, password)) {
+                    JOptionPane.showMessageDialog(frame, "Credenziali non valide.", "Errore nel login", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                case "STUDENTE": {
-                    SchermataStudente s = new SchermataStudente(controller, frame);
-                    s.frame.setVisible(true);
-                    break;
+
+                // Apri la schermata giusta in base al ruolo
+                String ruolo = controller.getRuolo();
+                if (ruolo == null) {
+                    JOptionPane.showMessageDialog(frame, "Errore: ruolo non riconosciuto.", "Errore nel login", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            }
-            frame.setVisible(false);
-        });
+                switch (ruolo) {
+                    case "RESPONSABILE": {
+                        SchermataResponsabile s = new SchermataResponsabile(controller, frame);
+                        s.frame.setVisible(true);
+                        break;
+                    }
+                    case "DOCENTE": {
+                        SchermataDocente s = new SchermataDocente(controller, frame);
+                        s.frame.setVisible(true);
+                        break;
+                    }
+                    case "STUDENTE": {
+                        SchermataStudente s = new SchermataStudente(controller, frame);
+                        s.frame.setVisible(true);
+                        break;
+                    }
+                }
+                frame.setVisible(false);
+            });
+        }
     }
 }
