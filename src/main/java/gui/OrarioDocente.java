@@ -23,18 +23,26 @@ public class OrarioDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        caricaEvents();
-        creaTable(tabellaOrario);
+        if (indietroButton != null) {
+            caricaEvents();
+        }
+
+        // CORREZIONE 2: Passa la tabella solo se è stata inizializzata
+        if (tabellaOrario != null) {
+            creaTable(tabellaOrario);
+        }
     }
 
 
     private void caricaEvents(){
-        indietroButton.addActionListener(e->{
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
+        if(indietroButton != null) {
+            indietroButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
 
-        });
+            });
+        }
     }
     private void creaTable(JTable table){
        DefaultTableModel model=new DefaultTableModel(null,
