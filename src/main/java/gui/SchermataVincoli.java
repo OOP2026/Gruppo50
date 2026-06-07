@@ -34,18 +34,25 @@ public class SchermataVincoli {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
-caricaEvents();
-creaTable();
+        if (indietroButton != null) {
+            caricaEvents();
+        }
+
+        //Passa la tabella solo se è stata inizializzata
+        if (tabellaVincoli != null) {
+            creaTable();
+        }
     }
     private void caricaEvents(){
 
+        if(indietroButton != null) {
+            indietroButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
 
-        indietroButton.addActionListener(e->{
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
-
-        });
+            });
+        }
         aggiungiButton.addActionListener(e->{
     if(!checkCampi()) return;
             int oraFine=Integer.parseInt( oraFineText.getText());

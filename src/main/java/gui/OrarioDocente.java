@@ -23,18 +23,26 @@ public class OrarioDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        caricaEvents();
-        creaTable(tabellaOrario);
+        if (indietroButton != null) {
+            caricaEvents();
+        }
+
+        //Passa la tabella solo se è stata inizializzata
+        if (tabellaOrario != null) {
+            creaTable(tabellaOrario);
+        }
     }
 
 
     private void caricaEvents(){
-        indietroButton.addActionListener(e->{
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
+        if(indietroButton != null) {
+            indietroButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
 
-        });
+            });
+        }
     }
     private void creaTable(JTable table){
        DefaultTableModel model=new DefaultTableModel(null,
@@ -48,13 +56,7 @@ public class OrarioDocente {
     private void configuraTable(JTable table){
         //TableCellRenderer gestisce la creazione delle celle della tabella
         TableCellRenderer orarioRender= new TableCellRenderer() {
-            final JTextArea area= new JTextArea(){{
-                //torna a capo automaticamente e non rende editabile l'area di testo
-                setLineWrap(true);
-                setWrapStyleWord(true);
-                setEditable(false);
-                setMaximumSize(new Dimension(70,90));
-            }};
+            final JTextArea area= creaTextArea();
             @Override
             //questo metodo viene chiamto ogni volta che la tabella crea una cella, e permette di personalizzare il modo in cui viene renderizzata la cella
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -72,6 +74,14 @@ public class OrarioDocente {
             table.getColumnModel().getColumn(i).setCellRenderer(orarioRender);;
         }
         table.setRowHeight(50);
+    }
+    private JTextArea creaTextArea() {
+        JTextArea area = new JTextArea();
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        area.setEditable(false);
+        area.setMaximumSize(new Dimension(70, 90));
+        return area;
     }
     private void caricaLezioni(JTable table,Object[][] data){
         DefaultTableModel model= (DefaultTableModel) table.getModel();

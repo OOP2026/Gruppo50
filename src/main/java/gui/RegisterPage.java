@@ -21,38 +21,43 @@ public class RegisterPage {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+        //Controllo che il bottone si iniziallizzi corettamente
+        if (annullaButton != null) {
+            annullaButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
+            });
+        }
+        //Controllo che il bottone si iniziallizzi corettamente
+        if (confermaButton != null) {
 
-        annullaButton.addActionListener(e -> {
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
-        });
+            confermaButton.addActionListener(e -> {
+                String nome = nomeText.getText();
+                String cognome = cognomeText.getText();
+                String ruolo = (String) comboBox1.getSelectedItem();
+                String email = emailText.getText();
+                String username = usernameText.getText();
+                String password = new String(passwordText.getPassword());
 
-        confermaButton.addActionListener(e -> {
-            String nome     = nomeText.getText();
-            String cognome  = cognomeText.getText();
-            String ruolo    = (String) comboBox1.getSelectedItem();
-            String email    = emailText.getText();
-            String username = usernameText.getText();
-            String password = new String(passwordText.getPassword());
+                // Solo controllo input
+                if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty()
+                        || username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-            // Solo controllo input
-            if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty()
-                    || username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(frame,"Compila tutti i campi","Errore nella registrazione",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+                // Delega al controller
+                if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
+                    JOptionPane.showMessageDialog(frame, "Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-            // Delega al controller
-            if (!controller.registra(nome, cognome, email, username, password,ruolo)) {
-                JOptionPane.showMessageDialog(frame,"Email già in uso.","Errore nella registrazione",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            JOptionPane.showMessageDialog(frame, "Registrazione completata!");
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
-        });
+                JOptionPane.showMessageDialog(frame, "Registrazione completata!");
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
+            });
+        }
     }
 }

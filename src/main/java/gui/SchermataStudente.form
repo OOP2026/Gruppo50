@@ -51,7 +51,7 @@
           <text value="14:00 - 16:00 : Programmazione Object Oriented"/>
         </properties>
       </component>
-      <component id="40a04" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+      <component id="40a04" class="javax.swing.JTextArea" binding="PrimaLezioneMartedi">
         <constraints>
           <grid row="2" column="1" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -155,7 +155,7 @@
           <text value="Venerdi"/>
         </properties>
       </component>
-      <component id="4d780" class="javax.swing.JTextArea" binding="textArea2" default-binding="true">
+      <component id="4d780" class="javax.swing.JTextArea" binding="PrimaLezioneVenerdi">
         <constraints>
           <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -171,6 +171,64 @@
         </constraints>
         <properties>
           <text value="Label"/>
+        </properties>
+      </component>
+      <component id="cb856" class="javax.swing.JTextArea" binding="SecondaLezioneMartedi">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+      <component id="53773" class="javax.swing.JTextArea" binding="TerzaLezioneMartedi">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+      <component id="fe7b" class="javax.swing.JTextArea" binding="SecondaLezioneVenerdi">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+      <component id="a7a74" class="javax.swing.JTextArea" binding="TerzaLezioneVenerdi">
+        <constraints>
+          <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+      <component id="87ecb" class="javax.swing.JTextArea" binding="TerzaLezioneMercoledi">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+      </component>
+      <component id="bca17" class="javax.swing.JButton" binding="indietroButton" default-binding="true">
+        <constraints>
+          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Indietro"/>
         </properties>
       </component>
     </children>

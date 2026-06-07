@@ -144,4 +144,18 @@ private boolean controlloConflittoLezione(Lezione l){
          return false;
 }
 
+    /**
+     * Restituisce le lezioni filtrate per anno di corso dello studente.
+     * Non richiede il Token perché lo studente ha diritto di vedere il proprio orario.
+     */
+    public List<Lezione> getLezioniStudente(Studente studente) {
+        List<Lezione> risultato = new ArrayList<>();
+        for (Lezione l : orariolezioni) {
+            if (l.insegnamento.AnnoCorso == studente.annoCorso) {
+                risultato.add(l);
+            }
+        }
+        return risultato;
+    }
+
 }
