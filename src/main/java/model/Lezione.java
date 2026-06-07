@@ -1,7 +1,7 @@
 package model;
 
 
-public class Lezione {
+public class Lezione implements Comparable<Lezione> {
     public Insegnamento insegnamento;
     public Aula aula;
     public Orario orario;
@@ -15,7 +15,9 @@ public class Lezione {
         
     }
 
-   
+   public String infoLezione(){
+     return "Insegnamento: "+this.insegnamento.Nome+" Docente: "+this.insegnamento.docente.nome+" "+this.insegnamento.docente.cognome+" Aula: "+this.aula.Nome+" Orario: "+this.orario.getOrarioCompleto();
+   }
  //permette di confrontare due lezioni e vedere se sono uguali o meno, utile per verificare se una lezione è già presente nell'orario o per verificare se una richiesta di spostamento riguarda la stessa lezione
 
     @Override
@@ -33,5 +35,17 @@ public class Lezione {
         return java.util.Objects.hash(this.insegnamento, this.orario, this.aula.Nome);
     }
 
+    //Ordina le lezioni per giorno e orario!
+    @Override
+    public int compareTo(Lezione l) {
+        int giorno1 = this.orario.giornoToInt();
+        int giorno2 = l.orario.giornoToInt();
+        if (giorno1 != giorno2) {
+            return Integer.compare(giorno1, giorno2);
+        }
+      int orarioMinuti= this.orario.getOrarioInizioInMinuti();
+        int orarioMinuti2= l.orario.getOrarioInizioInMinuti();
+        return Integer.compare(orarioMinuti, orarioMinuti2);
+    }
     
 }

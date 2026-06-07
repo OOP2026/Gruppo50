@@ -49,7 +49,27 @@ public int getOrarioFineInMinuti() {
 public String getOrarioCompleto() {
         return String.format("%d:%02d - %d:%02d", this.oraInizio, this.minutoInizio, this.oraFine, this.minutoFine);
     }
-
+    protected int giornoToInt() {
+        switch (this.giorno.toLowerCase()) {
+            case "lunedì":
+            case "lunedi":
+                return 1;
+            case "martedì":
+            case "martedi":
+                return 2;
+            case "mercoledì":
+            case "mercoledi":
+                return 3;
+            case "giovedì":
+            case "giovedi":
+                return 4;
+            case "venerdì":
+            case "venerdi":
+                return 5;
+            default:
+                throw new IllegalArgumentException("Giorno non valido: " + this.giorno);
+        }
+    }
 
 
     @Override

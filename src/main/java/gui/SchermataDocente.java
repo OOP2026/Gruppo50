@@ -21,18 +21,7 @@ public class SchermataDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        if (inviaRichiesteButton != null) {
-            caricaEvents();
-        }
-        if (visualizzaRichiesteInviateButton != null) {
-            caricaEvents();
-        }
-        if (visualizzaOrarioButton != null) {
-            caricaEvents();
-        }
-        if (gestioneVincoliButton != null) {
-            caricaEvents();
-        }
+    caricaEvents();
 
     }
 

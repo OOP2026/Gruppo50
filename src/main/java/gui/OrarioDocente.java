@@ -10,7 +10,7 @@ import java.awt.*;
 public class OrarioDocente {
     JFrame frame;
     private Controller controller;
-    private JFrame frameChiamante;
+     private JFrame frameChiamante;
     private JPanel panel1;
     private JTable tabellaOrario;
     private JButton indietroButton;
@@ -29,7 +29,7 @@ public class OrarioDocente {
 
         //Passa la tabella solo se è stata inizializzata
         if (tabellaOrario != null) {
-            creaTable(tabellaOrario);
+            creaTable(tabellaOrario, controller.getLezioniDocente());
         }
     }
 
@@ -44,13 +44,14 @@ public class OrarioDocente {
             });
         }
     }
-    private void creaTable(JTable table){
+    private void creaTable(JTable table, Object[][] data){
        DefaultTableModel model=new DefaultTableModel(null,
                new String[]{"Lunedi","Martedi","Mercoledi","Giovedi","Venerdi"} );
         table.setModel(model);
         //non rende editable la tabella
         table.setDefaultEditor(Object.class, null);
       configuraTable(table);
+      caricaLezioni(table,data);
         //inseriamo manualmente i dati per un test
     }
     private void configuraTable(JTable table){
@@ -85,10 +86,13 @@ public class OrarioDocente {
     }
     private void caricaLezioni(JTable table,Object[][] data){
         DefaultTableModel model= (DefaultTableModel) table.getModel();
+        if(data.length==0){
+            JOptionPane.showMessageDialog(this.frame,"Non hai lezioni!");
+        return;
+        }
         for(Object[] riga:data){
             model.addRow(riga);
         }
-
     }
 
 }

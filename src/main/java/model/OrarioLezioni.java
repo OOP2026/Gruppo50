@@ -1,9 +1,10 @@
 package model;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Predicate;
 import model.Responsabile.Token;
 import java.util.List;
-
 //se non funziona la funzione ler vedere le lezione è perche
 // il giorno probabilmente conclude con una i differente!
 public class OrarioLezioni {
@@ -24,7 +25,14 @@ public List<Lezione> getDocenteLezioni(Docente docente){
                 lista.add(l);
             }
         }
-    return new ArrayList<>(lista);
+    if(lista.isEmpty()){
+        System.out.println("Non hai lezioni assegnate");
+        return new ArrayList<>();
+    }
+    List<Lezione> lista2 = new ArrayList<>(lista);
+    Collections.sort(lista2);
+    return lista2;
+
     };
     public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    //Solo il responsabile puo usare questo metodo
