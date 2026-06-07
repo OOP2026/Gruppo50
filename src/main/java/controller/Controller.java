@@ -167,4 +167,42 @@ public class Controller {
 		}
 		return "";
 	}
+
+	/**
+	 * Restituisce le lezioni dello studente attualmente loggato, raggruppate per giorno.
+	 * <p>
+	 * Le stringhe nella lista dei valori seguono il formato: {@code "HH:mm - HH:mm  |  NomeInsegnamento"}.
+	 * Questo metodo viene utilizzato dalla vista (es. {@code SchermataStudente}) per popolare
+	 * il tabellone dell'orario in modo dinamico.
+	 * </p>
+	 *
+	 * @return Una {@link java.util.Map} ordinata (LinkedHashMap) dove la chiave è il giorno
+	 * della settimana (es. "Lunedì") e il valore è la lista delle lezioni formattate.
+	 * Restituisce una mappa vuota se non vi è nessuno studente loggato.
+	 */
+	public java.util.Map<String, java.util.List<String>> getLezioniStudentePerGiorno() {
+		if (studente == null) return new java.util.HashMap<>();
+
+		/*
+		 * NOTA DI PROGETTAZIONE:
+		 * Le lezioni accessibili allo studente sono filtrate per anno di corso.
+		 * OrarioLezioni non espone la lista senza token, ma possiamo appoggiarci al metodo
+		 * visualizzaOrarioCompleto(Studente) che già fa il filtraggio. Poiché però abbiamo
+		 * bisogno dei dati strutturati (non solo stampa), estendiamo il Controller con
+		 * accesso diretto all'orario interno tramite un metodo dedicato.
+		 */
+		java.util.Map<String, java.util.List<String>> mappa = new java.util.LinkedHashMap<>();
+		String[] giorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"};
+		for (String g : giorni) mappa.put(g, new java.util.ArrayList<>());
+
+		for (model.Lezione l : orarioLezioni.getLezioniStudente(studente)) {
+			String giorno = l.orario.giorno;
+			String testo  = String.format("%02d:%02d - %02d:%02d  |  %s",
+					l.orario.oraInizio, l.orario.minutoInizio,
+					l.orario.oraFine,   l.orario.minutoFine,
+					l.insegnamento.Nome);
+			mappa.getOrDefault(giorno, new java.util.ArrayList<>()).add(testo);
+		}
+		return mappa;
+	}
 }
