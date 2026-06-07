@@ -1,7 +1,7 @@
 package model;
 import java.util.ArrayList;
 import java.util.function.Predicate;
-import model.Responsabile.Token; 
+import model.Responsabile.Token;
 import java.util.List;
 
 //se non funziona la funzione ler vedere le lezione è perche
@@ -17,7 +17,15 @@ orariolezioni=new ArrayList<>();
     }
 
 
-
+public List<Lezione> getDocenteLezioni(Docente docente){
+        List<Lezione> lista=new ArrayList<Lezione>();
+        for(Lezione l : orariolezioni){
+            if(l.insegnamento.docente.email==docente.email){
+                lista.add(l);
+            }
+        }
+    return new ArrayList<>(lista);
+    };
     public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    //Solo il responsabile puo usare questo metodo
     if(token==null){ throw new NullPointerException("Non hai il permesso");}

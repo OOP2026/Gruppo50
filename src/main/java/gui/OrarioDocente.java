@@ -44,8 +44,6 @@ public class OrarioDocente {
         table.setDefaultEditor(Object.class, null);
       configuraTable(table);
         //inseriamo manualmente i dati per un test
-        model.addRow(new Object[]{"Orario: 15:00-16:00\nAula: 101","Orario: 10:00-11:00\nAula: 102","","",""});
-
     }
     private void configuraTable(JTable table){
         //TableCellRenderer gestisce la creazione delle celle della tabella

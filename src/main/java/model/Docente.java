@@ -23,6 +23,12 @@ public class Docente extends Utente {
 System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
 
     }
+    public List<Lezione> ottieniLezioni(OrarioLezioni o){
+      List<Lezione> lista= o.getDocenteLezioni(this);
+      //Devi ritornare una lista ordinata per giorno e orario, altrimenti quando visualizzi l'orario completo non è ordinato
+
+      return null;
+    }
     //questa funzione invia una richiesta di spostamento al responsabile
     public void richiestaSpostamentoLezione(String motivo, Orario orarioVecchio, Orario orarioProposto) {
       //creazione della richiesta
@@ -104,7 +110,24 @@ public void mostraVincoli(){
 
     }
 
+private List<Lezione> ordinaLezioni(List<Lezione> lezioni){
+        String[] giorni = {"lunedì", "martedì", "mercoledì", "giovedì", "venerdì"};
+        List<Lezione> lezioniNonOrdinate= new ArrayList<>();
+        List<Lezione> lezioniOrdinate= new ArrayList<>();
+        for(int i=0; i<giorni.length;i++){
+            //inserisce le lezioni dentro lezioniNonOrdinate
+            for(int j=0; j<lezioni.size(); j++){
+                if(lezioni.get(j).orario.giorno==giorni[i]){
+                    lezioniNonOrdinate.add(lezioni.get(j));
+                }
+            }
+            for(int g=0; lezioniNonOrdinate.size()!=0;g++){
+                Lezione lezioneCheIniziaPrima=
 
+            }
+
+        }
+};
 
 
 }
