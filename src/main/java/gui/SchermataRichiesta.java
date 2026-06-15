@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -31,6 +32,8 @@ public class SchermataRichiesta {
     private JButton indietroButton;
     private JTextArea motivoText;
     private JTextField oraIniziaNuovaText;
+    private JScrollPane Scroller;
+    private JTable table;
     JFrame frameChiamante;
     Controller controller;
 
@@ -42,7 +45,9 @@ public class SchermataRichiesta {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+        Scroller.setPreferredSize(new Dimension(1000,-1));
         caricaEvents();
+        creaTableRichiesta();
         impostaLimiteCaratteri(motivoText, 200);
     }
     //Controlla i campi
@@ -104,7 +109,23 @@ private boolean checkCampi() {
                 return;
             }
             resetCampi();
+            creaTableRichiesta();
             JOptionPane.showMessageDialog(frame, "Richiesta inviata con successo!");
+        });
+        //permette di aprire un pop up per vedere il testo nella colonna motivo
+        table.getSelectionModel().addListSelectionListener(e->{
+            int riga= table.getSelectedRow();
+            if(riga==-1|| !e.getValueIsAdjusting()) return;
+            String motivo= table.getValueAt(riga,2).toString();
+            JTextArea textArea = new JTextArea(motivo);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setEditable(false);
+            //textArea.setBackground(new Color(255, 255, 255, 0) );
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(120, 100));
+            JOptionPane.showMessageDialog(frame,scrollPane,"Motivo della richiesta: ",JOptionPane.INFORMATION_MESSAGE);
+           table.getSelectionModel().clearSelection();
         });
     }
 
@@ -151,6 +172,15 @@ private boolean checkCampi() {
             }
 
         });
+    }
+
+    private void creaTableRichiesta(){
+        Object[][] data=controller.ottieniRichiesteInviate();
+        table.setModel(new DefaultTableModel(data,
+                new String[]{"Orario Lezione","Orario Nuovo","Motivo","Stato"} ) );
+        //non rende editable la tabella
+        table.setDefaultEditor(Object.class, null);
+        table.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
 }

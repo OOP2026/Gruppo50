@@ -7,7 +7,7 @@ public class SchermataDocente {
    static JFrame frame;
     JMenuBar barraStrumenti;
     private JPanel panel1;
-    private JButton inviaRichiesteButton;
+    private JButton schermataRichiesteButton;
     private JButton visualizzaRichiesteInviateButton;
     private JButton visualizzaOrarioButton;
     private JButton gestioneVincoliButton;
@@ -27,8 +27,8 @@ public class SchermataDocente {
 
     public void caricaEvents(){
         //Controllo che il bottone invia richieste sia inizializzato corettamente
-        if (inviaRichiesteButton != null) {
-            inviaRichiesteButton.addActionListener(e -> {
+        if (schermataRichiesteButton != null) {
+            schermataRichiesteButton.addActionListener(e -> {
                 SchermataRichiesta r = new SchermataRichiesta(controller, this.frame);
                 r.frame.setVisible(true);
                 this.frame.setVisible(false);
@@ -42,14 +42,7 @@ public class SchermataDocente {
                 this.frame.setVisible(false);
             });
         }
-        //Controllo che il bottone
-        if (visualizzaRichiesteInviateButton != null) {
-            visualizzaRichiesteInviateButton.addActionListener(e -> {
-                SchermataRichiesteInviate ri = new SchermataRichiesteInviate(controller, this.frame);
-                ri.frame.setVisible(true);
-                this.frame.setVisible(false);
-            });
-        }
+        //Controllo che il bottone per visualizzare l'orario sia creato
         if (visualizzaOrarioButton != null) {
             visualizzaOrarioButton.addActionListener(e -> {
                 OrarioDocente o = new OrarioDocente(controller, this.frame);

@@ -22,8 +22,8 @@ public class SchermataRichiesteInviate {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        caricaEvents();
-        creaTable();
+       caricaEvents();
+       creaTable();
     }
 
     private void caricaEvents(){
@@ -33,6 +33,7 @@ public class SchermataRichiesteInviate {
             frame.dispose();
 
         });
+        //permette di aprire un pop up per vedere il testo nella colonna motivo
         richiestaTable.getSelectionModel().addListSelectionListener(e->{
             int riga= richiestaTable.getSelectedRow();
             if(riga==-1|| !e.getValueIsAdjusting()) return;

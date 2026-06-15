@@ -16,7 +16,7 @@ public class Controller {
 
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
-
+		
 	}
 
 	public boolean accedi(String username, String password) {
