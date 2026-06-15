@@ -42,7 +42,7 @@ public class SchermataDocente {
                 this.frame.setVisible(false);
             });
         }
-        //Controllo che il bottone
+        //Controllo che il bottone  visualizzarichiesteinviate sia inizializzato correttamente
         if (visualizzaRichiesteInviateButton != null) {
             visualizzaRichiesteInviateButton.addActionListener(e -> {
                 SchermataRichiesteInviate ri = new SchermataRichiesteInviate(controller, this.frame);

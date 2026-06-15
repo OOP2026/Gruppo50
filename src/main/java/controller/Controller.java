@@ -13,6 +13,7 @@ public class Controller {
 	private Utente utente;
 	private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
+	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
 
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
@@ -249,5 +250,39 @@ public class Controller {
 			mappa.getOrDefault(giorno, new java.util.ArrayList<>()).add(testo);
 		}
 		return mappa;
+	}
+	public String registraInsegnamento(String nome, int cfu, int annoCorso, String emailDocente) {
+		Docente docenteTrovato = null;
+		for (Utente u : utentiRegistrati) {
+			if (u instanceof Docente && u.getmail().equals(emailDocente)) {
+				docenteTrovato = (Docente) u;
+				break;
+			}
+		}
+		if (docenteTrovato == null) return "Nessun docente registrato con questa email.";
+
+		Insegnamento candidato = new Insegnamento(nome, cfu, annoCorso, docenteTrovato);
+		if (insegnamentiRegistrati.contains(candidato)) {
+			return "Insegnamento già presente.";
+		}
+		insegnamentiRegistrati.add(candidato);
+		return null;
+	}
+
+	/**
+	 * Restituisce la lista degli insegnamenti attivi formattata per la JTable.
+	 * Ogni Object[] contiene: [Nome, CFU, AnnoCorso, email docente]
+	 */
+	public List<Object[]> getInsegnamentiAttivi() {
+		List<Object[]> righe = new ArrayList<>();
+		for (Insegnamento ins : insegnamentiRegistrati) {
+			righe.add(new Object[]{
+					ins.Nome,
+					ins.NumeroCFU,
+					ins.AnnoCorso,
+					ins.docente.getmail()
+			});
+		}
+		return righe;
 	}
 }

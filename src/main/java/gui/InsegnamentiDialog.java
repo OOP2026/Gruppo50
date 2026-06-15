@@ -1,0 +1,91 @@
+package gui;
+
+import controller.Controller;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+public class InsegnamentiDialog {
+    JDialog dialog;
+    private JPanel panel1;
+    private JPanel SottoPannello2;
+    private JPanel SottoPannello1;
+    private JTable tabellaInsegnamenti;
+    private JButton chiudiButton;
+    private JLabel labelErrore;
+    private JTextField nomeInsField;
+    private JTextField cfuField;
+    private JTextField annoField;
+    private JTextField emailDocField;
+    private JButton aggiungiButton;
+
+    private DefaultTableModel tableModel;
+
+    public InsegnamentiDialog(Controller controller, JFrame frameChiamante) {
+        dialog = new JDialog(frameChiamante, "Insegnamenti Attivi", true);
+        dialog.setContentPane(panel1);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.pack();
+        dialog.setLocationRelativeTo(frameChiamante);
+
+        // Inizializza il DefaultTableModel e assegnalo alla JTable
+        String[] colonne = {"Nome", "CFU", "Anno corso", "Email docente"};
+        tableModel = new DefaultTableModel(colonne, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) { return false; }
+        };
+        tabellaInsegnamenti.setModel(tableModel);
+        tabellaInsegnamenti.getTableHeader().setReorderingAllowed(false);
+        tabellaInsegnamenti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Carica subito gli insegnamenti già presenti
+        aggiornaTabella(controller);
+
+        // ── Listener ────────────────────────────────────────────────────────
+        chiudiButton.addActionListener(e -> dialog.dispose());
+
+        aggiungiButton.addActionListener(e -> {
+            labelErrore.setText("");
+
+            String nome     = nomeInsField.getText().trim();
+            String cfuTxt   = cfuField.getText().trim();
+            String annoTxt  = annoField.getText().trim();
+            String emailDoc = emailDocField.getText().trim();
+
+            if (nome.isEmpty() || cfuTxt.isEmpty() || annoTxt.isEmpty() || emailDoc.isEmpty()) {
+                labelErrore.setText("Compila tutti i campi.");
+                return;
+            }
+
+            try {
+                int cfu  = Integer.parseInt(cfuTxt);
+                int anno = Integer.parseInt(annoTxt);
+
+                String errore = controller.registraInsegnamento(nome, cfu, anno, emailDoc);
+                if (errore != null) {
+                    labelErrore.setText(errore);
+                    return;
+                }
+
+                aggiornaTabella(controller);
+                emailDocField.setText("");
+                cfuField.setText("");
+                annoField.setText("");
+                emailDocField.setText("");
+                JOptionPane.showMessageDialog(dialog, "Insegnamento aggiunto con successo!");
+
+            } catch (NumberFormatException ex) {
+                labelErrore.setText("CFU e anno corso devono essere numeri interi.");
+            }
+        });
+    }
+
+    private void aggiornaTabella(Controller controller) {
+        tableModel.setRowCount(0);
+        for (Object[] riga : controller.getInsegnamentiAttivi()) {
+            tableModel.addRow(riga);
+        }
+    }
+}
+
+

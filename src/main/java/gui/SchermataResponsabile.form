@@ -49,13 +49,12 @@
           <text value="Responsabile"/>
         </properties>
       </component>
-      <component id="29ae5" class="javax.swing.JLabel">
+      <component id="54712" class="javax.swing.JButton" binding="logoutButton" default-binding="true">
         <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <font size="20"/>
-          <text value=""/>
+          <text value="Logout"/>
         </properties>
       </component>
     </children>
