@@ -8,9 +8,9 @@ public class SchermataDocente {
     JMenuBar barraStrumenti;
     private JPanel panel1;
     private JButton schermataRichiesteButton;
-    private JButton visualizzaRichiesteInviateButton;
     private JButton visualizzaOrarioButton;
     private JButton gestioneVincoliButton;
+    private JButton insegnamentiButton;
     private Controller controller;
     private JFrame frameChiamante;
     public SchermataDocente(Controller c,JFrame f) {
@@ -50,5 +50,15 @@ public class SchermataDocente {
                 this.frame.setVisible(false);
             });
         }
+
+        if (insegnamentiButton != null) {
+            insegnamentiButton.addActionListener(e -> {
+                SchermataInsegnamentiDocente i = new SchermataInsegnamentiDocente(controller, this.frame);
+                i.frame.setVisible(true);
+                this.frame.setVisible(false);
+            });
+        }
+
+
     }
 }
