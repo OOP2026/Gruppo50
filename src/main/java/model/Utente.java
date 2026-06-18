@@ -2,9 +2,9 @@ package model;
 
 
 public class Utente {
-    protected String nome;
-    protected String cognome;
-    protected String email;
+    public String nome;
+    public String cognome;
+    public String email;
     protected String username;
     protected String password;
 

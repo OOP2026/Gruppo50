@@ -206,8 +206,29 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
     return null;
  }
 
+     /// Restituisce la lista non modificabile delle richieste di spostamento
+     /// ricevute da questo responsabile.
+     public java.util.List<Richiesta> getRichiesteSpostamento() {
+        return java.util.Collections.unmodifiableList(richiesteSpostamento);
+    }
 
-// Il token serve per usare alcuni metodi che solo il responsabile puo usare
+    ///Metodo di appoggio per il controller per ottenere il valore della richiesta come stringa
+    public String getStatoRichiesta(int numeroRichiesta) {
+        if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
+            return null;
+        }
+        return richiesteSpostamento.get(numeroRichiesta).statoRichiesta.name();
+    }
+
+    ///Verifica che una richiesta sia ancora in attesa utilizzato dal controller
+    public boolean isRichiestaInAttesa(int numeroRichiesta) {
+        if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
+            return false;
+        }
+        return richiesteSpostamento.get(numeroRichiesta).statoRichiesta == StatoRichiesta.IN_ATTESA;
+    }
+
+    // Il token serve per usare alcuni metodi che solo il responsabile puo usare
 public class Token {
 
     private Token() {

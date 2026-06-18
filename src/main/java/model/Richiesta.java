@@ -1,12 +1,11 @@
 package model;
-
 enum StatoRichiesta {
     IN_ATTESA,
     APPROVATA,
     RIFIUTATA
 }
 public class Richiesta{
-   protected Docente docenteRichiedente;
+   public Docente docenteRichiedente;
    public String motivoRichiesta;
    public Orario orarioLezioneDaSpostare;
    public Orario nuovoOrarioLezione;

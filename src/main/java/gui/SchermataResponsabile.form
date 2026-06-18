@@ -17,12 +17,12 @@
           <text value="Benvenuto"/>
         </properties>
       </component>
-      <component id="923cc" class="javax.swing.JButton" binding="VIsualizzaRichiesteButton" default-binding="true">
+      <component id="923cc" class="javax.swing.JButton" binding="visualizzaRichiesteButton">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="VIsualizza Richieste"/>
+          <text value="Visualizza Richieste"/>
         </properties>
       </component>
       <component id="66674" class="javax.swing.JButton" binding="creaLezioneButton" default-binding="true">

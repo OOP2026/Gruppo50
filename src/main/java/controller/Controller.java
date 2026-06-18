@@ -285,4 +285,51 @@ public class Controller {
 		}
 		return righe;
 	}
+
+	/// Metodo che utilizza il get richieste di responsabile
+	/// Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
+	public Object[][] getRichiesteSpostamento() {
+		List<model.Richiesta> lista = responsabile.getRichiesteSpostamento();
+		Object[][] data = new Object[lista.size()][6];
+		for (int i = 0; i < lista.size(); i++) {
+			model.Richiesta r = lista.get(i);
+			data[i][0] = i;
+			data[i][1] = r.docenteRichiedente.nome + " " + r.docenteRichiedente.cognome;
+			data[i][2] = r.orarioLezioneDaSpostare.giorno + " "
+					+ r.orarioLezioneDaSpostare.getOrarioCompleto();
+			data[i][3] = r.nuovoOrarioLezione.giorno + " "
+					+ r.nuovoOrarioLezione.getOrarioCompleto();
+			data[i][4] = r.motivoRichiesta;
+			data[i][5] = responsabile.getStatoRichiesta(i);
+		}
+		return data;
+	}
+	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	/// Approva la richiesta dato il numero di richiesta in input
+	public String approvaRichiestaSpostamento(int numeroRichiesta) {
+		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
+			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
+			if (stato == null) return "Numero richiesta non valido.";
+			return "La richiesta è già stata " +
+					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.");
+		}
+
+		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni);
+
+		// spostamentoLezione imposta RIFIUTATA automaticamente in caso di conflitto
+		if (!responsabile.getStatoRichiesta(numeroRichiesta).equals("APPROVATA")) {
+			return "Impossibile spostare la lezione: conflitto di orario. "
+					+ "La richiesta è stata rifiutata automaticamente.";
+		}
+
+		return null; // successo
+	}
+	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	/// Rifiuta la richiesta dato il numero di richiesta in input
+	public void rifiutaRichiestaSpostamento(int numeroRichiesta) {
+		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
+			return; // già processata o indice non valido
+		}
+		responsabile.rifiutaRichiesta(numeroRichiesta);
+	}
 }
