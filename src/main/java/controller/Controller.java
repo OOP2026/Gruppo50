@@ -17,7 +17,7 @@ public class Controller {
 
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
-		
+
 	}
 
 	public boolean accedi(String username, String password) {
@@ -101,6 +101,35 @@ public class Controller {
 		docente.visualizzaOrario(elencoLezioni);
 	}
 
+    public void addInsegnamentoDocente(String materia){
+        for(Insegnamento insegnamento:insegnamentiRegistrati){
+            if(insegnamento.Nome.equalsIgnoreCase(materia)){
+                docente.addInsegnamento(insegnamento);
+                break;
+            }
+        }
+    }
+    public List<String> getInsegnamentiRegistrati(){
+        List<String> data= new ArrayList<>();
+        List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
+        List<Insegnamento> b= docente.getInsegnamenti();
+        a.removeAll(b);
+        for(Insegnamento insegnamento:a){
+            data.add(insegnamento.Nome);
+        }
+        return data;
+    };
+    public Object[][] getInsegnamentiDocente(){
+        List<Insegnamento> insegnamenti= docente.getInsegnamenti();
+        if(insegnamenti.isEmpty()){ return new Object[0][0];}
+        Object[][] data=new Object[insegnamenti.size()][3];
+        for(int i=0; i<insegnamenti.size(); i++){
+         data[i][0]=insegnamenti.get(i).Nome;
+         data[i][1]=insegnamenti.get(i).NumeroCFU;
+         data[i][2]=insegnamenti.get(i).AnnoCorso;
+        }
+        return data;
+    };
 	//Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
 	public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
 		docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
@@ -113,6 +142,7 @@ public class Controller {
 	//return vincoli
 	public Object[][] ottieniVincoli() {
 		List<Vincolo> v = docente.getVincoli();
+
 		Object[][] data = new Object[v.size()][1];
 		for (int i = 0; i < v.size(); i++) {
 			data[i][0] = v.get(i).orario.giorno + " " + v.get(i).orario.getOrarioCompleto();

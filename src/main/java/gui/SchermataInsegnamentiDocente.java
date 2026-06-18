@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
+import java.util.Objects;
 
 public class SchermataInsegnamentiDocente {
     JFrame frame;
@@ -14,10 +16,10 @@ public class SchermataInsegnamentiDocente {
     private JPanel panelButtons;
     private JButton aggiungiButton;
     private JButton indietroButton;
-    private JComboBox insegnamentiBox;
+    private JComboBox<String> insegnamentiBox;
     private JPanel panel1;
-    private Controller controller;
-    private JFrame frameChiamante;
+   final private Controller controller;
+   final private JFrame frameChiamante;
     public SchermataInsegnamentiDocente(Controller c, JFrame f) {
         controller=c;
         frameChiamante=f;
@@ -27,6 +29,7 @@ public class SchermataInsegnamentiDocente {
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
         caricaEvents();
+        caricaInsegnamentiBox();
         creaTable();
 
     }
@@ -44,19 +47,49 @@ public class SchermataInsegnamentiDocente {
         if(aggiungiButton!=null){
         aggiungiButton.addActionListener(e->{
             if(insegnamentiBox.getSelectedIndex()==0){
-                JOptionPane.showMessageDialog(frame,"Non hai selezionato un'insegnamento.");
+                JOptionPane.showMessageDialog(frame,"Non hai selezionato nessun insegnamento.","Attenzione",JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
-            insegnamentiBox.setSelectedIndex(0);
-            JOptionPane.showMessageDialog(frame,"Insegnamento aggiunto.");
+            try{
+                controller.addInsegnamentoDocente(Objects.requireNonNull(insegnamentiBox.getSelectedItem()).toString());
+            }
+            catch(Exception ex){
+                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
+            caricaInsegnamentiBox();
+            creaTable();
 
         });
         }
 
+        tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e->{
+            int riga= tabellaInsegnamenti.getSelectedRow();
+            if(riga==-1|| !e.getValueIsAdjusting()) return;
+            String motivo="Vuoi rimuovere come materia che insegni "+tabellaInsegnamenti.getValueAt(riga,0).toString()+"?";
+            JTextArea textArea = new JTextArea(motivo);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setEditable(false);
+            //textArea.setBackground(new Color(255, 255, 255, 0) );
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(120, 100));
+            JOptionPane.showConfirmDialog(frame,scrollPane,"Rimozione Insegnamento",JOptionPane.YES_NO_OPTION);
+            tabellaInsegnamenti.getSelectionModel().clearSelection();
+        });
     }
+
+    private void caricaInsegnamentiBox(){
+        insegnamentiBox.removeAllItems();
+        insegnamentiBox.addItem("none");
+        List<String> data= controller.getInsegnamentiRegistrati();
+        for(String insegnamento:data){
+            insegnamentiBox.addItem(insegnamento);
+        }
+        insegnamentiBox.setSelectedIndex(0);
+    };
     private void creaTable(){
-        Object[][] data=null;
+        Object[][] data=controller.getInsegnamentiDocente();
         tabellaInsegnamenti.setModel(new DefaultTableModel(data,
                 new String[]{"Nome","Cfu","Anno"} ) );
         //Per centrare il testo delle righe

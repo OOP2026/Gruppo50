@@ -49,9 +49,6 @@
             <properties>
               <model>
                 <item value="None"/>
-                <item value="Matematica"/>
-                <item value="Informatica"/>
-                <item value="Italiano"/>
               </model>
             </properties>
           </component>

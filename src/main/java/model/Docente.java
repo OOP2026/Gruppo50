@@ -14,11 +14,13 @@ public class Docente extends Utente {
         insegnamenti=new ArrayList<>();
     }
 
-    public void inserisci_insegnamenti(Insegnamento insegnamento){
+    public void addInsegnamento(Insegnamento insegnamento){
        this.insegnamenti.add(insegnamento);
-       System.out.println(insegnamento.Nome+" è stato aggiunto a "+insegnamento.docente.nome);
+       System.out.println(insegnamento.Nome+" è stato aggiunto a "+this.nome+" "+this.cognome);
     }
-
+public List<Insegnamento> getInsegnamenti(){
+        return new ArrayList<>(insegnamenti);
+}
     public void saluto() {
 System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
 

@@ -12,6 +12,13 @@ public class Insegnamento {
         this.AnnoCorso=AnnoCorso;
         this.docente=docente;
     }
+    public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso){
+        this.Nome=Nome;
+        this.NumeroCFU=NumeroCFU;
+        this.AnnoCorso=AnnoCorso;
+
+    }
+
 
     @Override
     public boolean equals(Object obj) {
