@@ -9,7 +9,7 @@ import javax.swing.*;
 public class SchermataResponsabile {
     JFrame frame;
     private JPanel panel1;
-    private JButton VIsualizzaRichiesteButton;
+    private JButton visualizzaRichiesteButton;
     private JButton creaLezioneButton;
     private JButton insegnamentiAttiviButton;
     private JButton logoutButton;
@@ -40,6 +40,12 @@ public class SchermataResponsabile {
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);
                 frame.dispose();
+            });
+        }
+        if(visualizzaRichiesteButton != null) {
+            visualizzaRichiesteButton.addActionListener(e -> {
+               VisualizzaRichiestaDialog d= new VisualizzaRichiestaDialog(controller,frame);
+
             });
         }
     }

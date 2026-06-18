@@ -11,6 +11,7 @@ public class SchermataDocente {
     private JButton visualizzaOrarioButton;
     private JButton gestioneVincoliButton;
     private JButton insegnamentiButton;
+    private JButton logoutButton;
     private Controller controller;
     private JFrame frameChiamante;
     public SchermataDocente(Controller c,JFrame f) {
@@ -29,33 +30,40 @@ public class SchermataDocente {
         //Controllo che il bottone invia richieste sia inizializzato corettamente
         if (schermataRichiesteButton != null) {
             schermataRichiesteButton.addActionListener(e -> {
-                SchermataRichiesta r = new SchermataRichiesta(controller, this.frame);
+                SchermataRichiesta r = new SchermataRichiesta(controller, frame);
                 r.frame.setVisible(true);
-                this.frame.setVisible(false);
+                frame.setVisible(false);
             });
         }
         //Controllo che il bottone per gestire i vincoli sia creato
         if (gestioneVincoliButton != null) {
             gestioneVincoliButton.addActionListener(e -> {
-                SchermataVincoli v = new SchermataVincoli(controller, this.frame);
+                SchermataVincoli v = new SchermataVincoli(controller, frame);
                 v.frame.setVisible(true);
-                this.frame.setVisible(false);
+                frame.setVisible(false);
             });
         }
         //Controllo che il bottone per visualizzare l'orario sia creato
         if (visualizzaOrarioButton != null) {
             visualizzaOrarioButton.addActionListener(e -> {
-                OrarioDocente o = new OrarioDocente(controller, this.frame);
+                OrarioDocente o = new OrarioDocente(controller, frame);
                 o.frame.setVisible(true);
-                this.frame.setVisible(false);
+                frame.setVisible(false);
+            });
+        }
+        if(logoutButton != null) {
+            logoutButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
             });
         }
 
         if (insegnamentiButton != null) {
             insegnamentiButton.addActionListener(e -> {
-                SchermataInsegnamentiDocente i = new SchermataInsegnamentiDocente(controller, this.frame);
+                SchermataInsegnamentiDocente i = new SchermataInsegnamentiDocente(controller, frame);
                 i.frame.setVisible(true);
-                this.frame.setVisible(false);
+                frame.setVisible(false);
             });
         }
 
