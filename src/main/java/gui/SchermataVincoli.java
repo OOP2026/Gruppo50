@@ -60,10 +60,9 @@ public class SchermataVincoli {
             int oraInizio=Integer.parseInt( oraInizioText.getText());
             int minutiInizio=Integer.parseInt( minutiInizioText.getText());
             String giorno=giorniBox.getSelectedItem().toString();
-            try{
-                controller.aggiungiVincolo(giorno,oraInizio,minutiInizio,oraFine,minutiFine);
-            }catch(Exception ex){
-                JOptionPane.showMessageDialog(frame,ex.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
+            String ex=controller.aggiungiVincolo(giorno,oraInizio,minutiInizio,oraFine,minutiFine);
+            if(ex!=null){
+                JOptionPane.showMessageDialog(frame,ex,"Errore",JOptionPane.ERROR_MESSAGE);
                 return;
             }
             resetCampi();
@@ -76,13 +75,12 @@ public class SchermataVincoli {
                 JOptionPane.showMessageDialog(frame,"Seleziona un vincolo da rimuovere","Errore",JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            String ex=controller.rimuoviVincolo(indice);
+                if(ex!=null){
+                    JOptionPane.showMessageDialog(frame,ex,"Errore",JOptionPane.ERROR_MESSAGE);
+                    return;
+                };
 
-            try{
-                controller.rimuoviVincolo(indice);
-            }catch(Exception ex){
-                JOptionPane.showMessageDialog(frame,ex.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
 
                 creaTable();
         });

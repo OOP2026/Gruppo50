@@ -118,11 +118,11 @@
         </constraints>
         <properties>
           <model>
-            <item value="Lunedi"/>
-            <item value="Martedi"/>
-            <item value="Mercoledi"/>
-            <item value="Giovedi"/>
-            <item value="Venerdi"/>
+            <item value="Lunedì"/>
+            <item value="Martedì"/>
+            <item value="Mercoledì"/>
+            <item value="Giovedì"/>
+            <item value="Venerdì"/>
           </model>
         </properties>
       </component>

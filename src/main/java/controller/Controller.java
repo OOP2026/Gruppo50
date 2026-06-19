@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class Controller {
 	private Studente studente;
 	private Responsabile responsabile;
+	private Responsabile responsabileTemp;
 	private Docente docente;
 	private Utente utente;
 	private List<Utente> utentiRegistrati;
@@ -36,6 +37,7 @@ public class Controller {
 					this.responsabile = (Responsabile) u;
 				} else if (u instanceof Docente) {
 					this.docente = (Docente) u;
+					putResponsabile();
 				} else if (u instanceof Studente) {
 					this.studente = (Studente) u;
 				}
@@ -51,6 +53,17 @@ public class Controller {
 		if (docente != null) return "DOCENTE";
 		if (studente != null) return "STUDENTE";
 		return null;
+	}
+	///Imposta il responsabileTemp che serve per mandare le richieste al responsabile
+	public void putResponsabile(){
+		for (Utente u : utentiRegistrati) {
+				this.utente = u;
+
+				if (u instanceof Responsabile) {
+					this.responsabileTemp = (Responsabile) u;
+				}
+			}
+
 	}
 
 	public void visualizzaRichiesteSpostamento() {
@@ -131,12 +144,22 @@ public class Controller {
         return data;
     };
 	//Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
-		docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
+	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
+        try{
+            docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
+        }catch(Exception e){
+            return e.getMessage();
+        }
+        return null;
 	}
 
-	public void rimuoviVincolo(int ind) {
-		docente.rimuoviVincolo(ind);
+	public String rimuoviVincolo(int ind) {
+        try{
+		docente.rimuoviVincolo(ind);}
+        catch (Exception e){
+            return e.getMessage();
+        }
+        return null;
 	}
 
 	//return vincoli
@@ -153,7 +176,7 @@ public class Controller {
 	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
-		docente.richiestaSpostamentoLezione(motivo, new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio), new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
+		docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio), new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
 	}
 
 	public Object[][] ottieniRichiesteInviate() {
@@ -167,37 +190,41 @@ public class Controller {
 		}
 		return data;
 	}
-
+///il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
 	public Object[][] getLezioniDocente() {
-		List<Lezione> l = docente.ottieniLezioni(orarioLezioni);
-		if(l.isEmpty()) return new Object[0][0];
+		List<Lezione> l = docente.getLezioni(orarioLezioni);
+
+		if(l.isEmpty()){
+            System.out.println("è empty brochaco");
+
+            return new Object[0][0]; }
 		List<List<Lezione>> lezioniPerGiorno = new ArrayList<>();
 		List<Object[]> data = new ArrayList<>();
 		String[] giorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"};
 		// raggruppa le lezione per giorno.
 		for (String giorno:giorni) {
+            ///crea un list con lezioni per ogni giorno dentro un'altra list
 			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.orario.giorno.equalsIgnoreCase(giorno)).collect(Collectors.toList()));
-		}
+
+        }
 		while(true) {
 		Object[] row = new Object[5];
 		boolean hasLezioni=false;
-		// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
+		/// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
 			for(int g=0; g<giorni.length; g++){
 				row[g]=lezioniPerGiorno.get(g).isEmpty()? "":lezioniPerGiorno.get(g).get(0).infoLezione();
 			}
-			// rimuovi la prima lezione di ogni giorno, se non ci sono lezioni per quel giorno non fa nulla
+			/// rimuove la prima lezione di ogni giorno, se non ci sono lezioni per quel giorno non fa nulla
 			for(int j=0; j<giorni.length; j++){
 				if(!lezioniPerGiorno.get(j).isEmpty()){
 					lezioniPerGiorno.get(j).remove(0);
 					hasLezioni=true;
 				}
 			}
+            ///Se non ci sono piu lezioni in nessuna lista ferma il loop
 			if(!hasLezioni) break;
 			data.add(row);
 		}
-		Object [][] m=data.toArray(new Object[0][]);
-		System.out.println("risultato riga 0 di 0: "+m[0][0]);
-		System.out.println("risultato riga 0 di 2: "+m[0][1]);
 
 		return data.toArray(new Object[0][]);
 	}
@@ -315,7 +342,6 @@ public class Controller {
 		}
 		return righe;
 	}
-
 	/// Metodo che utilizza il get richieste di responsabile
 	/// Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
 	public Object[][] getRichiesteSpostamento() {

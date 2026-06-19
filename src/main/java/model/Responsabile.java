@@ -57,11 +57,11 @@ return;
 }
 System.out.println("Lezione aggiunta con successo responsabile"); 
     }
-//La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
-            System.out.println("Il docente non è disponibile in questo orario");
-            return;
+        throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");
+
         }
         //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = l;
@@ -179,18 +179,21 @@ richiesta.nuovoOrarioLezione= orarioNuovo;
 //cioe controlla se il docente è disponibile in quella fascia oraria
 private boolean verificaDisponibilita(List<Vincolo> vincoli, Orario orario){
     if(vincoli.isEmpty()) return true;
-for(Vincolo vincolo:vincoli){
-int orarioInizioVincolo= vincolo.orario.getOrarioInizioInMinuti();
-int orarioFineVincolo= vincolo.orario.getOrarioFineInMinuti();
-int orarioInizioLezione= vincolo.orario.getOrarioInizioInMinuti();
-int orarioFineLezione= vincolo.orario.getOrarioFineInMinuti();
+for(Vincolo vincolo:vincoli) {
+    int orarioInizioVincolo = vincolo.orario.getOrarioInizioInMinuti();
+    int orarioFineVincolo = vincolo.orario.getOrarioFineInMinuti();
+    int orarioInizioLezione = orario.getOrarioInizioInMinuti();
+    int orarioFineLezione = orario.getOrarioFineInMinuti();
+    System.out.println("Sto confrontando i giorni");
+    if (!vincolo.orario.giorno.equals(orario.giorno)) {
+        System.out.println("Giorni diversi");
+        continue;
+    }
+    System.out.println("Sto confrontando l'orario");
 
-if(!vincolo.orario.giorno.equals(orario.giorno))continue;
-
-if(orarioInizioLezione<orarioFineVincolo && orarioFineLezione>orarioInizioVincolo)
+    if (orarioInizioLezione < orarioFineVincolo && orarioFineLezione > orarioInizioVincolo)
     return false;
 
- 
 }
 return true;
 }

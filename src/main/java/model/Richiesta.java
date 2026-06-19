@@ -17,4 +17,10 @@ public class Richiesta{
     this.orarioLezioneDaSpostare = orarioLezioneDaSpostare;
     this.nuovoOrarioLezione = nuovoOrarioLezione;
    }
+   ///Questo metodo a come scopo quello di individuare la lezione a cui si riferisce la richiesta
+   public boolean equalsLezione(Lezione l){
+       return this.docenteRichiedente.email.equals(l.insegnamento.docente.email) &&
+        this.orarioLezioneDaSpostare.equals(l.orario);
+   }
+
 }

@@ -79,6 +79,7 @@ private boolean checkCampi() {
 
         return true;
     }
+    /// Carica tutti Action Listener
     private void caricaEvents() {
         indietroButton.addActionListener(e -> {
             frame.setVisible(false);
@@ -128,7 +129,7 @@ private boolean checkCampi() {
            table.getSelectionModel().clearSelection();
         });
     }
-
+///Reseta i campi
     private void resetCampi() {
         oraIniziaLezioneText.setText("");
         minutiIniziaLezioneText.setText("");
@@ -143,7 +144,7 @@ private boolean checkCampi() {
         giorniNuoviBox.setSelectedIndex(0);
     }
 
-    //Fare il codice per limitare il motivo a 200 caratteri
+  ///Imposta il limite massimo di caratteri che si possono scrivere nel panel motivo
     private void impostaLimiteCaratteri(JTextArea areaText,int limiteCaratteri) {
         //ottiene il documento di motivoText per applicare il filtro
         AbstractDocument doc = (AbstractDocument) areaText.getDocument();
@@ -173,7 +174,7 @@ private boolean checkCampi() {
 
         });
     }
-
+///Genera le colonne della tabella e la riempie con i dati
     private void creaTableRichiesta(){
         Object[][] data=controller.ottieniRichiesteInviate();
         table.setModel(new DefaultTableModel(data,

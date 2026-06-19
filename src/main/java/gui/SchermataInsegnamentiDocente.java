@@ -28,6 +28,7 @@ public class SchermataInsegnamentiDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+        insegnamentiBox.setMaximumRowCount(4);
         caricaEvents();
         caricaInsegnamentiBox();
         creaTable();

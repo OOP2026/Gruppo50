@@ -13,11 +13,12 @@ public class Docente extends Utente {
         vincoli= new ArrayList<>();
         insegnamenti=new ArrayList<>();
     }
-
+///Permette di aggiungere un insegnamento al docente
     public void addInsegnamento(Insegnamento insegnamento){
        this.insegnamenti.add(insegnamento);
        System.out.println(insegnamento.Nome+" è stato aggiunto a "+this.nome+" "+this.cognome);
     }
+    ///Ritorna gli insegnamenti del docente
 public List<Insegnamento> getInsegnamenti(){
         return new ArrayList<>(insegnamenti);
 }
@@ -25,21 +26,20 @@ public List<Insegnamento> getInsegnamenti(){
 System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
 
     }
-    public List<Lezione> ottieniLezioni(OrarioLezioni o){
-      List<Lezione> lista= o.getDocenteLezioni(this);
-      //Devi ritornare una lista ordinata per giorno e orario, altrimenti quando visualizzi l'orario completo non è ordinato
-
-      return lista;
+    ///Ritorna le lezioni del docente
+    public List<Lezione> getLezioni(OrarioLezioni o){
+      return o.getDocenteLezioni(this);
     }
-    //questa funzione invia una richiesta di spostamento al responsabile
-    public void richiestaSpostamentoLezione(String motivo, Orario orarioVecchio, Orario orarioProposto) {
+    ///questa funzione invia una richiesta di spostamento al responsabile
+    public void richiestaSpostamentoLezione(OrarioLezioni orario,Responsabile responsabile,String motivo, Orario orarioVecchio, Orario orarioProposto) {
       //creazione della richiesta
     Richiesta richiesta = new Richiesta(this, motivo, orarioVecchio, orarioProposto);
-   // responsabile.richiesteSpostamento.add(richiesta);
+    if(!checkRichiestaLezione(richiesta,orario))throw new IllegalArgumentException("La lezione riferita dalla richiesta non è esistente");
+   responsabile.richiesteSpostamento.add(richiesta);
     this.richiesteSpostamentoInviate.add(richiesta);
     
 }
-//Vede le proprie richieste che ha inviato
+///Permette di vedere le richieste inviate del docente nel terminale
 protected void visualizzaRichiesteInviate(){
      int numeroRichiesta=1;
      int numeroRichieste=richiesteSpostamentoInviate.size();
@@ -65,15 +65,18 @@ numeroRichiesta++;
     }
 
 }
+///Ritorna una lista che contiene le richieste inviate
 public List<Richiesta> getRichiesteInviate(){
     return new ArrayList<>(richiesteSpostamentoInviate);
 }
 
+///Permette di visualizzare l'orario del docente nel terminale
 public void visualizzaOrario(OrarioLezioni elencoLezioni){
 elencoLezioni.visualizzaOrarioCompleto(this);
 }
 
 //Gestione dei vincoli
+/// Permette di aggiungere un vincolo, massimo fino a 3 vincoli
 public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio,int oraFIne,int minutoFine){
     if(vincoli.size()==3){
         throw new IllegalStateException("Hai già raggiunto il numero massimo di vincoli (3)");
@@ -82,7 +85,7 @@ vincoli.add(new Vincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine));
 System.out.println("Vincolo aggiunto con successo");
 
 }
-//funzione che restituisce i vincoli del docente, utile per verificare se il docente è disponibile in un certo orario
+///Metodo che restituisce i vincoli del docente, utile per verificare se il docente è disponibile in un certo orario
 public List<Vincolo> getVincoli(){
 return new ArrayList<>(vincoli);
 }
@@ -94,7 +97,7 @@ public void rimuoviVincolo(int indice){
     vincoli.remove(indice);
     System.out.println("Vincolo rimosso con successo");
 }
-//Mostra i vincoli
+///Mostra i vincoli nel terminale
 public void mostraVincoli(){
         if(vincoli.isEmpty()){
             System.out.println("Non hai vincoli");
@@ -111,6 +114,15 @@ public void mostraVincoli(){
         }
 
     }
+    ///Controlla se la richiesta si riferisce a una lezione esistente
+    public boolean checkRichiestaLezione(Richiesta r,OrarioLezioni orario){
+        boolean lezioneTrovata=false;
+        for(Lezione l:getLezioni(orario)){
+         if(lezioneTrovata=r.equalsLezione(l)) break;
+        }
+        return lezioneTrovata;
+
+    };
 
 
 

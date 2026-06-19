@@ -11,7 +11,7 @@ public class Home {
 
 
 		Controller controller = new Controller(new ArrayList<>());
-		PrimoFrame primoFrame = new PrimoFrame(controller);
+	PrimoFrame primoFrame = new PrimoFrame(controller);
 		primoFrame.frame.setVisible(true);
 
 	}
