@@ -30,7 +30,7 @@ luca.inserisciLezione(l6,orario);
 		luca.inserisciLezione(l2,orario);
 		luca.inserisciLezione(l1,orario);
 		luca.inserisciLezione(l3,orario);
-List<Lezione> lezioniDocente=d1.ottieniLezioni(orario);
+List<Lezione> lezioniDocente=d1.getLezioni(orario);
 for(Lezione l : lezioniDocente){
 	System.out.println(l.insegnamento.Nome+"  "+l.orario.giorno+": "+l.orario.getOrarioCompleto());
 	}

@@ -14,7 +14,7 @@ public class Lezione implements Comparable<Lezione> {
         this.orario=o;
         
     }
-
+///Ritorna le informazione della lezione come l'orario completo, la materia, l'aula e il docente che la fa.
    public String infoLezione(){
      return "Insegnamento: "+this.insegnamento.Nome+" Docente: "+this.insegnamento.docente.nome+" "+this.insegnamento.docente.cognome+" Aula: "+this.aula.Nome+" Orario: "+this.orario.getOrarioCompleto();
    }

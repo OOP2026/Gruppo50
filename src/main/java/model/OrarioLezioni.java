@@ -17,7 +17,7 @@ public class OrarioLezioni {
 orariolezioni=new ArrayList<>();
     }
 
-
+///Restituisce le lezioni del docente
 public List<Lezione> getDocenteLezioni(Docente docente){
         List<Lezione> lista=new ArrayList<Lezione>();
         for(Lezione l : orariolezioni){
@@ -34,6 +34,7 @@ public List<Lezione> getDocenteLezioni(Docente docente){
     return lista2;
 
     };
+    ///Il metodo permette di aggiungere una lezione nell'orario
     public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    //Solo il responsabile puo usare questo metodo
     if(token==null){ throw new NullPointerException("Non hai il permesso");}
@@ -42,16 +43,15 @@ public List<Lezione> getDocenteLezioni(Docente docente){
         throw new NullPointerException("Questa lezione è vuota");
     }
 
-
     if(controlloConflittoLezione(l)){ 
       throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
      }
 orariolezioni.add(l);
 return true;
-
     }
 
-
+/// Permette di vedere l'orario completo del corso
+/// solamente il responsabile può farlo
 public void visualizzaOrarioCompleto(Token token){
     if(token==null){
         System.out.println("Non hai il permesso");

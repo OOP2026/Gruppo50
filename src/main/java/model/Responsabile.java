@@ -14,7 +14,7 @@ private final Token token;
     public void saluto() {
         System.out.println("Ciao, sono il responsabile " + this.nome + " " + this.cognome);
     }
-   
+   /// Permette di visualizzare le richieste di spostamento nel terminale
     public void visualizzaRichiesteSpostamento() {
         int numeroRichiesta=0;
         int numeroRichieste=richiesteSpostamento.size();
@@ -41,7 +41,7 @@ private final Token token;
 
 
     }
-//La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
     protected void inserisciLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni elencoLezioni) {
         //Implementazione del metodo per creare una nuova lezione
         if(!(verificaDisponibilita(insegnamento.docente.getVincoli(), orario))){
@@ -74,7 +74,7 @@ return;
 
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
-
+///Questo metodo approva una richiesta di spostamento
 public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni){
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
@@ -132,7 +132,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
         }
   
  } 
-
+///Questo metodo rifiuta una richiesta
  public void rifiutaRichiesta(int numeroRichiesta){
 //get(); ottiene la richiesta usando numeroRichiesta. cosi trova la posizione della richiesta
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
@@ -151,6 +151,7 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
     richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
     System.out.println("La richiesta è stata rifiutata");
  }
+ ///Questo metodo permette di cambiare l'orario della richiesta
  public void cambiaOrarioRichiesta(int numeroRichiesta,Orario orarioNuovo){
 Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
 if(richiesta==null){
@@ -169,14 +170,15 @@ if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
 richiesta.nuovoOrarioLezione= orarioNuovo;
 
  }
+ ///Permette di visualizzare l'orario completo di utte le lezioni dle corso nel terminale
  public void visualizzaOrarioCompleto(OrarioLezioni elencoLezioni){
 
     elencoLezioni.visualizzaOrarioCompleto(this.token);
  }
  
 
-//permette di verificare se l'orario viola uno dei vincoli del docente
-//cioe controlla se il docente è disponibile in quella fascia oraria
+///permette di verificare se l'orario viola uno dei vincoli del docente
+///cioe controlla se il docente è disponibile in quella fascia oraria
 private boolean verificaDisponibilita(List<Vincolo> vincoli, Orario orario){
     if(vincoli.isEmpty()) return true;
 for(Vincolo vincolo:vincoli) {
@@ -197,13 +199,10 @@ for(Vincolo vincolo:vincoli) {
 }
 return true;
 }
+///Serve per trovare la lezione che si vuole spostare
 private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni){
           for(Lezione lezione : elencoLezioni.getOrarioLezioni(this.token)) {
-        if(!lezione.insegnamento.docente.email.equals(r.docenteRichiedente.email)||!lezione.orario.giorno.equals(r.orarioLezioneDaSpostare.giorno)){
-            continue;
-        }
-        
-        if(lezione.orario.getOrarioInizioInMinuti()==r.orarioLezioneDaSpostare.getOrarioInizioInMinuti() && lezione.orario.getOrarioFineInMinuti()==r.orarioLezioneDaSpostare.getOrarioFineInMinuti()) 
+        if( r.equalsLezione(lezione))
              return lezione;
     }
     return null;
@@ -231,9 +230,8 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
         return richiesteSpostamento.get(numeroRichiesta).statoRichiesta == StatoRichiesta.IN_ATTESA;
     }
 
-    // Il token serve per usare alcuni metodi che solo il responsabile puo usare
+    /// Il token serve per usare alcuni metodi che solo il responsabile puo usare
 public class Token {
-
     private Token() {
 
     }

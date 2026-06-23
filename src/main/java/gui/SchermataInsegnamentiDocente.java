@@ -67,7 +67,8 @@ public class SchermataInsegnamentiDocente {
         tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e->{
             int riga= tabellaInsegnamenti.getSelectedRow();
             if(riga==-1|| !e.getValueIsAdjusting()) return;
-            String motivo="Vuoi rimuovere come materia che insegni "+tabellaInsegnamenti.getValueAt(riga,0).toString()+"?";
+            String materia=tabellaInsegnamenti.getValueAt(riga,0).toString();
+            String motivo="Vuoi rimuovere come materia che insegni "+materia+"?";
             JTextArea textArea = new JTextArea(motivo);
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
@@ -75,7 +76,16 @@ public class SchermataInsegnamentiDocente {
             //textArea.setBackground(new Color(255, 255, 255, 0) );
             JScrollPane scrollPane = new JScrollPane(textArea);
             scrollPane.setPreferredSize(new Dimension(120, 100));
-            JOptionPane.showConfirmDialog(frame,scrollPane,"Rimozione Insegnamento",JOptionPane.YES_NO_OPTION);
+            int risposta=JOptionPane.showConfirmDialog(frame,scrollPane,"Rimozione Insegnamento",JOptionPane.YES_NO_OPTION);
+            if(risposta==JOptionPane.YES_OPTION){
+                String action=controller.removeInsegnamentoDocente(materia);
+                if(action!= null){
+                    JOptionPane.showMessageDialog(frame, action, "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                    caricaInsegnamentiBox();
+                    creaTable();
+            }
+
             tabellaInsegnamenti.getSelectionModel().clearSelection();
         });
     }

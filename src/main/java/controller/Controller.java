@@ -19,6 +19,7 @@ public class Controller {
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
 
+
 	}
 
 	public boolean accedi(String username, String password) {
@@ -115,12 +116,26 @@ public class Controller {
 	}
 
     public void addInsegnamentoDocente(String materia){
+
+                docente.addInsegnamento(stringToInsegnamento(materia));
+
+    }
+    public String removeInsegnamentoDocente(String materia){
+		try{
+			docente.removeInsegnamento(stringToInsegnamento(materia));
+		}catch(Exception ex){
+			return ex.getMessage();
+		}
+		return null;
+    }
+    ///Ritorna un insegnamento solo se esiste nell'elenco degli insegnamenti attivi
+    private Insegnamento stringToInsegnamento(String materia){
         for(Insegnamento insegnamento:insegnamentiRegistrati){
             if(insegnamento.Nome.equalsIgnoreCase(materia)){
-                docente.addInsegnamento(insegnamento);
-                break;
+                 return insegnamento;
             }
         }
+        return null;
     }
     public List<String> getInsegnamentiRegistrati(){
         List<String> data= new ArrayList<>();

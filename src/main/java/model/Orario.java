@@ -38,17 +38,19 @@ if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw 
         this.oraFine = oraFine;
         this.minutoFine = minutoFine;
     }
-    
+    ///Ritorna l'orario di inizio in minuti
 public int getOrarioInizioInMinuti() {
     return (this.oraInizio * 60) + this.minutoInizio;
 }
+///Ritorna l'orario di fine in minuti
 public int getOrarioFineInMinuti() {
     return (this.oraFine * 60) + this.minutoFine;
 }
-
+///Restituisce l'orario completo
 public String getOrarioCompleto() {
         return String.format("%d:%02d - %d:%02d", this.oraInizio, this.minutoInizio, this.oraFine, this.minutoFine);
     }
+    ///Ritorna il valore in int del giorno
     protected int giornoToInt() {
         switch (this.giorno.toLowerCase()) {
             case "lunedì":

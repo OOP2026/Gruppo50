@@ -15,8 +15,18 @@ public class Docente extends Utente {
     }
 ///Permette di aggiungere un insegnamento al docente
     public void addInsegnamento(Insegnamento insegnamento){
+        if(insegnamento==null){
+             throw new NullPointerException("Il valore è null non puo essere aggiunto!");
+        }
        this.insegnamenti.add(insegnamento);
        System.out.println(insegnamento.Nome+" è stato aggiunto a "+this.nome+" "+this.cognome);
+    }
+    ///Rimuove un materia che insegna o che puo insegnare il docente
+    public void removeInsegnamento(Insegnamento insegnamento){
+        if(insegnamento==null){
+            throw new NullPointerException("Il valore è null non puo essere aggiunto!");
+        }
+        this.insegnamenti.remove(insegnamento);
     }
     ///Ritorna gli insegnamenti del docente
 public List<Insegnamento> getInsegnamenti(){
@@ -89,7 +99,7 @@ System.out.println("Vincolo aggiunto con successo");
 public List<Vincolo> getVincoli(){
 return new ArrayList<>(vincoli);
 }
-//rimuove un vincolo in base all'indice.
+///rimuove un vincolo in base all'indice.
 public void rimuoviVincolo(int indice){
     if(indice<0 || indice>=vincoli.size()){
       throw new IllegalArgumentException("Non esiste il vincolo che vuoi rimuovere");
