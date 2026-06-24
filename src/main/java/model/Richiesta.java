@@ -16,6 +16,9 @@ public class Richiesta{
     this.motivoRichiesta = motivoRichiesta;
     this.orarioLezioneDaSpostare = orarioLezioneDaSpostare;
     this.nuovoOrarioLezione = nuovoOrarioLezione;
+    if (orarioLezioneDaSpostare.equals(nuovoOrarioLezione)){
+        throw new IllegalArgumentException("La richiesta non può avere il nuovo orario uguale a quello vecchio");
+    }
    }
    ///Questo metodo a come scopo quello di individuare la lezione a cui si riferisce la richiesta
    public boolean equalsLezione(Lezione l){

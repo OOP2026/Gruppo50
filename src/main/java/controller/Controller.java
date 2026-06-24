@@ -12,6 +12,7 @@ public class Controller {
 	private Responsabile responsabileTemp;
 	private Docente docente;
 	private Utente utente;
+    ///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
 	private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
@@ -62,10 +63,18 @@ public class Controller {
 
 				if (u instanceof Responsabile) {
 					this.responsabileTemp = (Responsabile) u;
+                    return;
 				}
 			}
-
+responsabileTemp=null;
 	}
+    ///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
+    /// @exception NullPointerException
+    public void checkResponsabileTemp(){
+        if(responsabileTemp==null){
+            throw new NullPointerException("Non è presente ancora un responsabile");
+        }
+    }
 
 	public void visualizzaRichiesteSpostamento() {
 		responsabile.visualizzaRichiesteSpostamento();
@@ -114,12 +123,15 @@ public class Controller {
 	public void visualizzaLezione(OrarioLezioni elencoLezioni) {
 		docente.visualizzaOrario(elencoLezioni);
 	}
-
+///Permette al docente di aggiungere un Insegnamento che può insegnare
     public void addInsegnamentoDocente(String materia){
 
                 docente.addInsegnamento(stringToInsegnamento(materia));
 
     }
+    ///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
+    /// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
+    ///@return Restituisce una {@code String} o {@code null}
     public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
@@ -128,7 +140,8 @@ public class Controller {
 		}
 		return null;
     }
-    ///Ritorna un insegnamento solo se esiste nell'elenco degli insegnamenti attivi
+    ///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
+    /// @return Restituisce un oggetto di tipo {@link Insegnamento}
     private Insegnamento stringToInsegnamento(String materia){
         for(Insegnamento insegnamento:insegnamentiRegistrati){
             if(insegnamento.Nome.equalsIgnoreCase(materia)){
@@ -137,6 +150,8 @@ public class Controller {
         }
         return null;
     }
+    ///Ritorna gli insegnamenti registrati però solo il nome
+    ///@return Restituisce una lista di tipo {@code String}
     public List<String> getInsegnamentiRegistrati(){
         List<String> data= new ArrayList<>();
         List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
@@ -147,6 +162,8 @@ public class Controller {
         }
         return data;
     };
+    ///Ritorna gli insegnamenti del docente
+    ///@return Restituisce un array di tipo {@code Object[][]}
     public Object[][] getInsegnamentiDocente(){
         List<Insegnamento> insegnamenti= docente.getInsegnamenti();
         if(insegnamenti.isEmpty()){ return new Object[0][0];}
@@ -158,7 +175,9 @@ public class Controller {
         }
         return data;
     };
-	//Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+    ///Permette al docente di aggiungere un {@link Vincolo} max 3.
+	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+    ///@return Restituisce una {@code String} o {@code null}
 	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
         try{
             docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
@@ -167,7 +186,8 @@ public class Controller {
         }
         return null;
 	}
-
+///Permette di rimuovere un {@link Vincolo vincolo} usando l'indice del vincolo che si vuole rimuovere
+/// @return Restituisce una {@code String} o {@code null}
 	public String rimuoviVincolo(int ind) {
         try{
 		docente.rimuoviVincolo(ind);}
@@ -177,7 +197,8 @@ public class Controller {
         return null;
 	}
 
-	//return vincoli
+	///Un metodo che permette di ottenere i {@link Vincolo vincoli} del docente
+    /// @return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] ottieniVincoli() {
 		List<Vincolo> v = docente.getVincoli();
 
@@ -188,12 +209,14 @@ public class Controller {
 		return data;
 	}
 
-	//Docente richiede di spostare la lezione indicando il nuovo e il vechio orario)
+	///Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
+        checkResponsabileTemp();
 		docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio), new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
 	}
-
+/// Restituisce un array che contiene le richieste inviate dal docente
+/// @return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] ottieniRichiesteInviate() {
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
@@ -205,12 +228,12 @@ public class Controller {
 		}
 		return data;
 	}
-///il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
+///Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
+/// @return Ritorna una array di tipo {@code Object[][]}
 	public Object[][] getLezioniDocente() {
 		List<Lezione> l = docente.getLezioni(orarioLezioni);
 
 		if(l.isEmpty()){
-            System.out.println("è empty brochaco");
 
             return new Object[0][0]; }
 		List<List<Lezione>> lezioniPerGiorno = new ArrayList<>();
@@ -218,25 +241,25 @@ public class Controller {
 		String[] giorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"};
 		// raggruppa le lezione per giorno.
 		for (String giorno:giorni) {
-            ///crea un list con lezioni per ogni giorno dentro un'altra list
+            //crea un list con lezioni per ogni giorno dentro un'altra list
 			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.orario.giorno.equalsIgnoreCase(giorno)).collect(Collectors.toList()));
 
         }
 		while(true) {
 		Object[] row = new Object[5];
 		boolean hasLezioni=false;
-		/// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
+		// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
 			for(int g=0; g<giorni.length; g++){
 				row[g]=lezioniPerGiorno.get(g).isEmpty()? "":lezioniPerGiorno.get(g).get(0).infoLezione();
 			}
-			/// rimuove la prima lezione di ogni giorno, se non ci sono lezioni per quel giorno non fa nulla
+			// rimuove la prima lezione di ogni giorno, se non ci sono lezioni per quel giorno non fa nulla
 			for(int j=0; j<giorni.length; j++){
 				if(!lezioniPerGiorno.get(j).isEmpty()){
 					lezioniPerGiorno.get(j).remove(0);
 					hasLezioni=true;
 				}
 			}
-            ///Se non ci sono piu lezioni in nessuna lista ferma il loop
+            //Se non ci sono piu lezioni in nessuna lista ferma il loop
 			if(!hasLezioni) break;
 			data.add(row);
 		}
