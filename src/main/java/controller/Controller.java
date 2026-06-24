@@ -1,4 +1,7 @@
 package controller;
+import dao.LezioneDAO;
+import database_connection.ConnessioneDatabase;
+import implementazioneDao.LezionePostgresDao;
 import model.*;
 
 import java.util.ArrayList;
@@ -21,6 +24,9 @@ public class Controller {
 		this.utentiRegistrati = utentiRegistrati;
 
 
+	}
+	public void apriConnessioneDatabase() throws Exception {
+		ConnessioneDatabase.getInstance();
 	}
 
 	public boolean accedi(String username, String password) {
@@ -112,9 +118,23 @@ responsabileTemp=null;
 			Aula aula = new Aula(nomeAula, capienza);
 			Orario orario = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 			Lezione lezione = new Lezione(insegnamento, aula, orario);
+			// 1) Salva la lezione in memoria nel Model (valida orario e disponibilità del docente)
 			responsabile.inserisciLezione(lezione, orarioLezioni);
+
+			// 2) Rende persistente la lezione sul database tramite il DAO (pattern BCE + DAO)
+			LezioneDAO lezioneDAO = new LezionePostgresDao();
+			lezioneDAO.salvaLezioneDB(
+					nomeInsegnamento, annoCorso,
+					emailDocente,
+					nomeAula, capienza,
+					giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+
 			return null;
 		} catch (IllegalArgumentException e) {
+			// Errore di validazione del Model (es. orario non valido, docente non disponibile)
+			return e.getMessage();
+		} catch (Exception e) {
+			// Errore proveniente dal database (rilanciato dal DAO)
 			return e.getMessage();
 		}
 	}

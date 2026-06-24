@@ -41,22 +41,7 @@ private final Token token;
 
 
     }
-///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
-    protected void inserisciLezione(Insegnamento insegnamento, Aula aula, Orario orario, OrarioLezioni elencoLezioni) {
-        //Implementazione del metodo per creare una nuova lezione
-        if(!(verificaDisponibilita(insegnamento.docente.getVincoli(), orario))){
-            System.out.println("Il docente non è disponibile in questo orario");
-            return;
-        }
-Lezione nuovaLezione = new Lezione(insegnamento, aula, orario);
-try{
-    elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
-}catch(Exception e){
-    System.out.println("Errore nell'inserimento della lezione: " + e.getMessage());
-return;
-}
-System.out.println("Lezione aggiunta con successo responsabile"); 
-    }
+
 ///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
