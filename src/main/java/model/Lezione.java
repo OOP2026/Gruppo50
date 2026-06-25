@@ -1,25 +1,65 @@
 package model;
-
+/**
+ * Rappresenta una singola lezione collocata nell'orario settimanale.
+ * <p>
+ * Una lezione associa un {@link Insegnamento} (e quindi un docente),
+ * un'{@link Aula} e un {@link Orario}. La classe implementa
+ * {@link Comparable} per consentire l'ordinamento delle lezioni
+ * prima per giorno e poi per orario di inizio.
+ * </p>
+ *
+ * @see Insegnamento
+ * @see Aula
+ * @see Orario
+ * @see OrarioLezioni
+ */
 
 public class Lezione implements Comparable<Lezione> {
+    /** Insegnamento associato alla lezione, da cui si ricava anche il docente. */
     public Insegnamento insegnamento;
+
+    /** Aula fisica in cui si svolge la lezione. */
     public Aula aula;
+
+    /** Giorno e fascia oraria in cui si svolge la lezione. */
     public Orario orario;
-    //se volete potete aggiungere il campo token cosi solo il responsabile può creare le lezioni
-    //però penso non sia necessario visto che la funzione inserisciLezione è presente solo nella classe responsabile
-    // Ed è l'unico metodo per inserire la lezione nella classe OrarioLezioni, quindi se non è presente il token non si può inserire la lezione nell'orario
+
+    /**
+     * Crea una nuova lezione associando insegnamento, aula e orario.
+     *
+     * @param i l'{@link Insegnamento} della lezione (include il docente)
+     * @param a l'{@link Aula} in cui si svolge la lezione
+     * @param o l'{@link Orario} (giorno e fascia oraria) della lezione
+     */
     public Lezione(Insegnamento i ,Aula a , Orario o){
         this.insegnamento=i;
         this.aula=a;
         this.orario=o;
-        
-    }
-///Ritorna le informazione della lezione come l'orario completo, la materia, l'aula e il docente che la fa.
-   public String infoLezione(){
-     return "Insegnamento: "+this.insegnamento.Nome+" Docente: "+this.insegnamento.docente.nome+" "+this.insegnamento.docente.cognome+" Aula: "+this.aula.Nome+" Orario: "+this.orario.getOrarioCompleto();
-   }
- //permette di confrontare due lezioni e vedere se sono uguali o meno, utile per verificare se una lezione è già presente nell'orario o per verificare se una richiesta di spostamento riguarda la stessa lezione
 
+    }
+
+    /**
+     * Restituisce una descrizione testuale della lezione, comprensiva di
+     * insegnamento, docente, aula e orario completo.
+     *
+     * @return una stringa con le informazioni principali della lezione
+     */
+    public String infoLezione(){
+     return "Insegnamento: "+this.insegnamento.Nome+" Docente: "+this.insegnamento.docente.nome+" "+this.insegnamento.docente.cognome+" Aula: "+this.aula.Nome+" Orario: "+this.orario.getOrarioCompleto();
+    }
+
+    /**
+     * Confronta questa lezione con un altro oggetto per verificarne l'uguaglianza.
+     * <p>
+     * Due lezioni sono considerate uguali se hanno lo stesso insegnamento,
+     * lo stesso orario e si svolgono nella stessa aula (confrontata per nome).
+     * Utile per individuare se una lezione è già presente nell'orario o se
+     * una richiesta di spostamento si riferisce alla stessa lezione.
+     * </p>
+     *
+     * @param obj l'oggetto da confrontare con questa lezione
+     * @return {@code true} se le due lezioni sono equivalenti, {@code false} altrimenti
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -30,12 +70,31 @@ public class Lezione implements Comparable<Lezione> {
                 && this.aula.Nome.equals(lezione.aula.Nome);
     }
 
+    /**
+     * Restituisce l'hash code della lezione, coerente con {@link #equals(Object)}.
+     * <p>
+     * È calcolato a partire da insegnamento, orario e nome dell'aula, ovvero
+     * gli stessi campi usati nel confronto di uguaglianza.
+     * </p>
+     *
+     * @return l'hash code della lezione
+     */
     @Override
     public int hashCode() {
         return java.util.Objects.hash(this.insegnamento, this.orario, this.aula.Nome);
     }
 
-    //Ordina le lezioni per giorno e orario!
+    /**
+     * Confronta due lezioni per stabilirne l'ordine cronologico.
+     * <p>
+     * L'ordinamento avviene prima per giorno della settimana e, a parità
+     * di giorno, per orario di inizio.
+     * </p>
+     *
+     * @param l la lezione da confrontare con questa
+     * @return un valore negativo, zero o positivo se questa lezione precede,
+     *         coincide o segue {@code l} nell'ordine cronologico
+     */
     @Override
     public int compareTo(Lezione l) {
         int giorno1 = this.orario.giornoToInt();
