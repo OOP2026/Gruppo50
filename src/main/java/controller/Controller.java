@@ -206,8 +206,9 @@ responsabileTemp=null;
         }
         return null;
 	}
-///Permette di rimuovere un {@link Vincolo vincolo} usando l'indice del vincolo che si vuole rimuovere
+///Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere
 /// @return Restituisce una {@code String} o {@code null}
+/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
 	public String rimuoviVincolo(int ind) {
         try{
 		docente.rimuoviVincolo(ind);}
