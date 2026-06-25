@@ -46,18 +46,13 @@ private final Token token;
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
         throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");
-
-        }
-        //Implementazione del metodo per creare una nuova lezione
-Lezione nuovaLezione = l;
-try{
-    elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
-}catch(Exception e){
-    System.out.println("Errore nell'inserimento della lezione: " + e.getMessage());
-return;
-}
-
-System.out.println("Lezione aggiunta con successo responsabile"); 
+    }
+    // Aggiunge la lezione all'orario in memoria. Se c'è un conflitto,
+    // aggiungiLezione lancia IllegalArgumentException: NON la intercettiamo qui,
+    // così si propaga al Controller, che la mostra nella GUI e NON salva la
+    // lezione sul database.
+    elencoLezioni.aggiungiLezione(l, this.token);
+    System.out.println("Lezione aggiunta con successo responsabile");
 }
 ///Questo metodo approva una richiesta di spostamento
 ///Questo metodo gestisce una richiesta di spostamento: se approva è true esegue
