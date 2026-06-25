@@ -82,18 +82,10 @@ responsabileTemp=null;
         }
     }
 
-	public void visualizzaRichiesteSpostamento() {
-		responsabile.visualizzaRichiesteSpostamento();
-	}
 
-	public void approvaRichiesta(int numeroRichiesta, OrarioLezioni elencoLezioni) {
-		responsabile.spostamentoLezione(numeroRichiesta, elencoLezioni);
-	}
 
 	//Responsabile rifiuta lo spostamento
-	public void rifiutarichiesta(int numeroRichiesta) {
-		responsabile.rifiutaRichiesta(numeroRichiesta);
-	}
+
 
 	//Responsabile crea una lezione
 	public String creaLezione(
@@ -428,7 +420,7 @@ responsabileTemp=null;
 					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.");
 		}
 
-		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni);
+		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni, true);   // <-- true
 
 		// spostamentoLezione imposta RIFIUTATA automaticamente in caso di conflitto
 		if (!responsabile.getStatoRichiesta(numeroRichiesta).equals("APPROVATA")) {
@@ -444,6 +436,6 @@ responsabileTemp=null;
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			return; // già processata o indice non valido
 		}
-		responsabile.rifiutaRichiesta(numeroRichiesta);
+		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni, false);   // <-- false
 	}
 }

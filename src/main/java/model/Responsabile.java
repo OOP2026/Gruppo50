@@ -60,82 +60,70 @@ return;
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
 ///Questo metodo approva una richiesta di spostamento
-public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni){
+///Questo metodo gestisce una richiesta di spostamento: se approva è true esegue
+///effettivamente lo spostamento, altrimenti rifiuta la richiesta.
+public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni, boolean approva){
 
-    Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
-    Lezione lezioneDaSpostare = null;
-if(richiesta==null){
-    System.out.println("La richiesta non esiste");
-    return;
-}
-if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
-    System.out.println("La richiesta è già stata approvata");
-    return;
-}
-if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
-    System.out.println("La richiesta è già stata rifiutata");
-    return;
-}
-     if(richiesta.statoRichiesta==StatoRichiesta.IN_ATTESA){
-
-         lezioneDaSpostare = cercaLezioneDaSpostare(richiesta, elencoLezioni);
-         if(lezioneDaSpostare == null){
-             System.out.println("La lezione da spostare non è stata trovata");
-             return;
-         }
-
-          try{
-                elencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
-            }
-            
-            catch(Exception e){
-                System.out.println("Errore nello spostamento della lezione: " + e.getMessage());
-                return;
-            }
-               Lezione nuovaLezione = new Lezione(lezioneDaSpostare.insegnamento, lezioneDaSpostare.aula, richiesta.nuovoOrarioLezione);
-               
-                try {
-                     elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
-                    
-                } catch (IllegalArgumentException e1) {
-                    System.out.println("Errore nello spostamento della lezione: " + e1.getMessage());
-                    richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
-                    System.out.println("La richiesta è stata rifiutata");
-                    System.out.println("Tentativo di ripristinare la lezione originale...");
-                    try {
-                        elencoLezioni.aggiungiLezione(lezioneDaSpostare,this.token);
-                    } catch (Exception e2) {
-                        System.out.println("Errore nel ripristino della lezione originale: " + e2.getMessage());
-                    }
-                    return;
-                }
-
-         richiesta.statoRichiesta=StatoRichiesta.APPROVATA;
-                System.out.println("La richiesta è stata approvata");
-                
-
-        }
-  
- } 
-///Questo metodo rifiuta una richiesta
- public void rifiutaRichiesta(int numeroRichiesta){
-//get(); ottiene la richiesta usando numeroRichiesta. cosi trova la posizione della richiesta
-    Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
-    if(richiesta==null){
+    // Controllo che l'indice sia valido (get() lancerebbe un'eccezione, non restituisce mai null)
+    if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
         System.out.println("La richiesta non esiste");
         return;
     }
-    if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
-        System.out.println("La richiesta è stata gia approvata non puo essere rifiutata");
+
+    Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
+
+    if(richiesta.statoRichiesta == StatoRichiesta.APPROVATA){
+        System.out.println("La richiesta è già stata approvata");
         return;
     }
-     if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
-        System.out.println("La richiesta è stata gia rifiutata");
+    if(richiesta.statoRichiesta == StatoRichiesta.RIFIUTATA){
+        System.out.println("La richiesta è già stata rifiutata");
         return;
     }
-    richiesta.statoRichiesta=StatoRichiesta.RIFIUTATA;
-    System.out.println("La richiesta è stata rifiutata");
- }
+
+    // Da qui in poi la richiesta è sicuramente IN_ATTESA
+
+    // --- Caso RIFIUTO ---
+    if(!approva){
+        richiesta.statoRichiesta = StatoRichiesta.RIFIUTATA;
+        System.out.println("La richiesta è stata rifiutata");
+        return;
+    }
+
+    // --- Caso APPROVAZIONE: eseguo lo spostamento ---
+    Lezione lezioneDaSpostare = cercaLezioneDaSpostare(richiesta, elencoLezioni);
+    if(lezioneDaSpostare == null){
+        System.out.println("La lezione da spostare non è stata trovata");
+        return;
+    }
+
+    try{
+        elencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
+    } catch(Exception e){
+        System.out.println("Errore nello spostamento della lezione: " + e.getMessage());
+        return;
+    }
+
+    Lezione nuovaLezione = new Lezione(lezioneDaSpostare.insegnamento, lezioneDaSpostare.aula, richiesta.nuovoOrarioLezione);
+
+    try {
+        elencoLezioni.aggiungiLezione(nuovaLezione, this.token);
+    } catch (IllegalArgumentException e1) {
+        System.out.println("Errore nello spostamento della lezione: " + e1.getMessage());
+        richiesta.statoRichiesta = StatoRichiesta.RIFIUTATA;
+        System.out.println("La richiesta è stata rifiutata");
+        System.out.println("Tentativo di ripristinare la lezione originale...");
+        try {
+            elencoLezioni.aggiungiLezione(lezioneDaSpostare, this.token);
+        } catch (Exception e2) {
+            System.out.println("Errore nel ripristino della lezione originale: " + e2.getMessage());
+        }
+        return;
+    }
+
+    richiesta.statoRichiesta = StatoRichiesta.APPROVATA;
+    System.out.println("La richiesta è stata approvata");
+}
  ///Questo metodo permette di cambiare l'orario della richiesta
  public void cambiaOrarioRichiesta(int numeroRichiesta,Orario orarioNuovo){
 Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
