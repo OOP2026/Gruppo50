@@ -43,19 +43,16 @@ private final Token token;
     }
 
 ///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+/// @param l è la lezione che deve essere inserita
+/// @param elencoLezioni è dove viene inserito
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
         throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");
 
         }
-        //Implementazione del metodo per creare una nuova lezione
 Lezione nuovaLezione = l;
-try{
+
     elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
-}catch(Exception e){
-    System.out.println("Errore nell'inserimento della lezione: " + e.getMessage());
-return;
-}
 
 System.out.println("Lezione aggiunta con successo responsabile"); 
 }
@@ -116,7 +113,7 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
         try {
             elencoLezioni.aggiungiLezione(lezioneDaSpostare, this.token);
         } catch (Exception e2) {
-            System.out.println("Errore nel ripristino della lezione originale: " + e2.getMessage());
+            throw new IllegalArgumentException("Errore nel ripristino della lezione originale: " + e2.getMessage());
         }
         return;
     }
@@ -126,18 +123,20 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
 }
  ///Questo metodo permette di cambiare l'orario della richiesta
  public void cambiaOrarioRichiesta(int numeroRichiesta,Orario orarioNuovo){
-Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
+     if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
+     throw new IllegalArgumentException("Numero richiesta non compatibile");
+     }
+     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
 if(richiesta==null){
-    System.out.println("La richiesta non esiste");
-    return;
+    throw new NullPointerException("La richiesta non esiste");
 }
 if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
-    System.out.println("La richiesta è già stata approvata");
-    return;
+   throw new IllegalArgumentException("La richiesta è gia stata approvata");
+
 }
 if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
-    System.out.println("La richiesta è già stata rifiutata");
-    return;
+throw new IllegalArgumentException("La richiesta è gia stata rifiutata");
+
 }
 
 richiesta.nuovoOrarioLezione= orarioNuovo;

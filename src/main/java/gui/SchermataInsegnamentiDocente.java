@@ -93,7 +93,7 @@ public class SchermataInsegnamentiDocente {
     private void caricaInsegnamentiBox(){
         insegnamentiBox.removeAllItems();
         insegnamentiBox.addItem("none");
-        List<String> data= controller.getInsegnamentiRegistrati();
+        List<String> data= controller.getInsegnamentiRegistratiDocente();
         for(String insegnamento:data){
             insegnamentiBox.addItem(insegnamento);
         }

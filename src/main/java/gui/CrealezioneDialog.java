@@ -1,14 +1,21 @@
 package gui;
 import controller.Controller;
 import javax.swing.*;
+import javax.swing.JComboBox;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.List;
+import java.util.Objects;
 
 public class CrealezioneDialog {
     JDialog dialog;
     private JPanel panel1;
     private JButton annullaButton;
     private JButton confermaButton;
-    private JComboBox giornoCombo;
-    private JTextField nomeInsField;
+    private JComboBox<String> giornoCombo;
+    private JComboBox<String> nomeInsField;
     private JLabel labelErrore;
     private JTextField cfuField;
     private JTextField annoField;
@@ -19,13 +26,19 @@ public class CrealezioneDialog {
     private JTextField minIField;
     private JTextField oraFField;
     private JTextField minFField;
+    final private JTextField textComboBox;
+    final private Controller controller;
 
     public CrealezioneDialog(Controller controller, JFrame frameChiamante) {
         dialog = new JDialog(frameChiamante, "Crea Nuova Lezione", true);
+        this.controller = controller;
         dialog.setContentPane(panel1);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.pack();
         dialog.setLocationRelativeTo(frameChiamante);
+        textComboBox=textFieldComboBox();
+        caricaInsegnamentiBox("");
+        caricaEvents();
         //Controllo che il bottone si crei correttamente.
         if(annullaButton != null) {
             annullaButton.addActionListener(e -> dialog.dispose());
@@ -34,7 +47,7 @@ public class CrealezioneDialog {
             confermaButton.addActionListener(e -> {
                 labelErrore.setText("");
 
-                String nomeIns = nomeInsField.getText().trim();
+                String nomeIns = Objects.requireNonNull(nomeInsField.getSelectedItem()).toString();
                 String emailDoc = emailDocField.getText().trim();
                 String nomeAula = nomeAulaField.getText().trim();
                 String giorno = (String) giornoCombo.getSelectedItem();
@@ -79,5 +92,48 @@ public class CrealezioneDialog {
                 }
             });
         }
+    }
+
+    private void caricaInsegnamentiBox(String materia){
+        nomeInsField.removeAllItems();
+        List<String> data= controller.getInsegnamentiRegistrati(materia.toLowerCase());
+        for(String insegnamento:data){
+            nomeInsField.addItem(insegnamento);
+        }
+
+        nomeInsField.setMaximumRowCount(4);
+        nomeInsField.setSelectedIndex(-1);
+        nomeInsField.revalidate();
+        nomeInsField.repaint();
+        if(nomeInsField.isPopupVisible()){
+            nomeInsField.setPopupVisible(false);
+            System.out.println(nomeInsField.getItemCount());
+            if(nomeInsField.getItemCount()>0)
+                nomeInsField.setPopupVisible(true);
+        }else{
+        if(nomeInsField.getItemCount()>0 && !materia.equalsIgnoreCase(""))
+            nomeInsField.setPopupVisible(true);
+        }
+        textComboBox.setText(materia);
+    }
+public JTextField textFieldComboBox(){
+    Component editor= nomeInsField.getEditor().getEditorComponent();
+    JTextField  textField=null;
+    if(editor instanceof JTextField) textField= (JTextField) editor;
+    return textField;
+}
+
+
+    private void caricaEvents() {
+            textComboBox.addKeyListener(new KeyAdapter(){
+                @Override
+                public void keyReleased(KeyEvent e){
+                    String testoAttuale= textComboBox.getText();
+                    caricaInsegnamentiBox(testoAttuale);
+                }
+
+            });
+
+
     }
 }
