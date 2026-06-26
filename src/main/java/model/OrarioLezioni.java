@@ -21,7 +21,7 @@ orariolezioni=new ArrayList<>();
 public List<Lezione> getDocenteLezioni(Docente docente){
         List<Lezione> lista=new ArrayList<Lezione>();
         for(Lezione l : orariolezioni){
-            if(l.insegnamento.docente.email==docente.email){
+            if(l.insegnamento.docente.email.equals(docente.email)){
                 lista.add(l);
             }
         }

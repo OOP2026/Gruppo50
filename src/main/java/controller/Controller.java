@@ -421,13 +421,14 @@ responsabileTemp=null;
 					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.");
 		}
 
-		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni, true);   // <-- true
-
+		   // <-- true
+		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni, true);
 		// spostamentoLezione imposta RIFIUTATA automaticamente in caso di conflitto
 		if (!responsabile.getStatoRichiesta(numeroRichiesta).equals("APPROVATA")) {
 			return "Impossibile spostare la lezione: conflitto di orario. "
 					+ "La richiesta è stata rifiutata automaticamente.";
 		}
+
 
 		return null; // successo
 	}
