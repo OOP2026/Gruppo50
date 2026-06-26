@@ -1,19 +1,47 @@
 package model;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * La classe Docente rappresenta un professore universitario.
+ * <p>
+ * Il ddocente viene salvato come un Utente nel sistema ed egli può
+ * visualizzare le proprie lezioni, richiedere di spostarle a un responsabile inoltre
+ * può indicare anche dei vincoli(max 3) dove non è reperibile.
+ * </p>
+ *
+ * @see Utente
+ * @see Insegnamento
+ * @see Vincolo
+ * @see Richiesta
+ * @see Lezione
+ */
 public class Docente extends Utente {
+    /**l'elenco degli insegnamenti abilitati al docente.*/
    List<Insegnamento> insegnamenti;
+   /**Registro delle richieste IN_ATTESA inoltrate dal docente.*/
    private ArrayList<Richiesta> richiesteSpostamentoInviate;
+   /** Elenco dei vincoli indicati dal docente indicati come fascia oraria. */
    private ArrayList<Vincolo> vincoli;
 
 
+    /**
+     * Crea una nuova lezione associando insegnamento, aula e orario.
+     *
+     * @param nome primo nome di battesimo del docente.
+     * @param cognome secondo nome di battesimo del docente.
+     * @param email   email ad uso universitario del docente tipicamente(nome.cognome@dominio.estensione).
+     * @param login   username utilizzato dal docente per accedere.
+     */
     public Docente(String nome, String cognome, String email, String login, String password) {
         super(nome,cognome,email,login,password);
         richiesteSpostamentoInviate= new ArrayList<>();
         vincoli= new ArrayList<>();
         insegnamenti=new ArrayList<>();
     }
-///Permette di aggiungere un insegnamento al docente
+/**Permette di aggiungere un insegnamento al docente
+ * @param insegnamento è proprio l'insegnamento che vogliamo aggiugere al docente es(se il professore è abilitato
+ * a insegnare 'Matematica, statistica ecc..'.
+ */
     public void addInsegnamento(Insegnamento insegnamento){
         if(insegnamento==null){
              throw new NullPointerException("Il valore è null non puo essere aggiunto!");

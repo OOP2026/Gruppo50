@@ -42,19 +42,19 @@ private final Token token;
 
     }
 
-///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
-/// @param l è la lezione che deve essere inserita
-/// @param elencoLezioni è dove viene inserito
+    ///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+    /// @param l è la lezione che deve essere inserita
+    /// @param elencoLezioni è dove viene inserito
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
         throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");
-
-        }
-Lezione nuovaLezione = l;
-
-    elencoLezioni.aggiungiLezione(nuovaLezione,this.token);
-
-System.out.println("Lezione aggiunta con successo responsabile"); 
+    }
+    // Aggiunge la lezione all'orario in memoria. Se c'è un conflitto,
+    // aggiungiLezione lancia IllegalArgumentException: NON la intercettiamo qui,
+    // così si propaga al Controller, che la mostra nella GUI e NON salva la
+    // lezione sul database.
+    elencoLezioni.aggiungiLezione(l, this.token);
+    System.out.println("Lezione aggiunta con successo responsabile");
 }
 ///Questo metodo approva una richiesta di spostamento
 ///Questo metodo gestisce una richiesta di spostamento: se approva è true esegue
@@ -113,7 +113,7 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
         try {
             elencoLezioni.aggiungiLezione(lezioneDaSpostare, this.token);
         } catch (Exception e2) {
-            throw new IllegalArgumentException("Errore nel ripristino della lezione originale: " + e2.getMessage());
+            System.out.println("Errore nel ripristino della lezione originale: " + e2.getMessage());
         }
         return;
     }
@@ -123,20 +123,18 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
 }
  ///Questo metodo permette di cambiare l'orario della richiesta
  public void cambiaOrarioRichiesta(int numeroRichiesta,Orario orarioNuovo){
-     if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
-     throw new IllegalArgumentException("Numero richiesta non compatibile");
-     }
-     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
+Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
 if(richiesta==null){
-    throw new NullPointerException("La richiesta non esiste");
+    System.out.println("La richiesta non esiste");
+    return;
 }
 if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
-   throw new IllegalArgumentException("La richiesta è gia stata approvata");
-
+    System.out.println("La richiesta è già stata approvata");
+    return;
 }
 if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
-throw new IllegalArgumentException("La richiesta è gia stata rifiutata");
-
+    System.out.println("La richiesta è già stata rifiutata");
+    return;
 }
 
 richiesta.nuovoOrarioLezione= orarioNuovo;
