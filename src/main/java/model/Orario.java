@@ -3,12 +3,21 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+/**Questa classe rappresenta una fascia oraria
+ * viene usata nelle classe{@link Lezione},{@link Richiesta} e {@link Vincolo}
+ * */
 public class Orario {
+    ///Indica un giorno della settimana
     public String giorno;
+    ///È l'ora dell'orario di inizio
     public int oraInizio;
+    /// Sono i minuti dell'orario di inizio
     public int minutoInizio;
+    ///È l'ora dell'orario di fine
     public int oraFine;
+    ///Sono i minuti dell'orario fine
     public int minutoFine;
+    ///È la lista dei giorni possibili
     private static final List<String> giorni = new ArrayList<>(Arrays.asList(
             "lunedì", "martedì", "mercoledì", "giovedì", "venerdì",
             "lunedi", "martedi", "mercoledi", "giovedi", "venerdi"

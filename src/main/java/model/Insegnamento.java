@@ -1,9 +1,16 @@
 package model;
-
+/**Questa classe rappresenta un insegnamento universitario
+ * Viene usata per assegnare insegnamenti ai docenti
+ * @see Docente
+ * */
 public class Insegnamento {
+    ///E' il nome dell'insegnamento
     public String Nome;
+    ///Sono i numeri di cfu che vengono dati se si supera l'esame di questo insegnamento
     public int NumeroCFU;
+    ///Anno in cui l'insegnamento viene insegnato
     public int AnnoCorso;
+    ///Indica chi è il docente titolare
     public Docente docente;
 
     public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso, Docente docente){
