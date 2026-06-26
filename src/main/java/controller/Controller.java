@@ -439,4 +439,22 @@ responsabileTemp=null;
 		}
 		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni, false);   // <-- false
 	}
+	public String modificaOrarioRichiesta(
+			int numeroRichiesta, String giorno, int oraInizio, int minutoInizio,  int oraFine, int minutoFine){
+
+		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
+			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
+			if (stato == null) return "Numero richiesta non valido.";
+			return "La richiesta è già stata " +
+					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.") +
+					" L'orario non è più modificabile.";
+		}
+		try {
+			Orario nuovoOrario = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+			responsabile.cambiaOrarioRichiesta(numeroRichiesta, nuovoOrario);
+			return null; // successo
+		} catch (IllegalArgumentException e) {
+			return e.getMessage();
+		}
+	}
 }

@@ -5,7 +5,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
-
+/** La schermta visualizzaRichiesta si differenzia dalla
+ * schermata richista di docente, poichè il responsabile deve
+ * poter vedere tutte le richieste in attesa di qualsiasi docente,
+ * per poter deicidere se approvare, rifiutare o modificare l'orario
+ * della richiesta di spostamento.
+ * */
 public class VisualizzaRichiestaDialog {
     JDialog dialog;
 
@@ -18,8 +23,11 @@ public class VisualizzaRichiestaDialog {
     private JLabel labelOrari;
     private JButton approvaButton;
     private JButton rifiutaButton;
+    /**Bottone che permette di modificare l'orario della richiesta selezionata.*/
+    private JButton modificaOrarioButton;
     private JLabel labelMotivo;
     private JButton tornaIndietroButton;
+
 
     /* --- Stato interno --- */
     private DefaultTableModel tableModel;
@@ -86,6 +94,7 @@ public class VisualizzaRichiestaDialog {
         rigaSelezionata = -1;
         approvaButton.setEnabled(false);
         rifiutaButton.setEnabled(false);
+        modificaOrarioButton.setEnabled(false);
     }
 
     // ---------------------------------------------------------------
@@ -102,6 +111,7 @@ public class VisualizzaRichiestaDialog {
                 azzeraDettaglio();
                 approvaButton.setEnabled(false);
                 rifiutaButton.setEnabled(false);
+                modificaOrarioButton.setEnabled(false);
                 rigaSelezionata = -1;
                 return;
             }
@@ -113,6 +123,7 @@ public class VisualizzaRichiestaDialog {
             boolean attesa = "IN_ATTESA".equalsIgnoreCase(stato);
             approvaButton.setEnabled(attesa);
             rifiutaButton.setEnabled(attesa);
+            modificaOrarioButton.setEnabled(attesa);
         });
 
         // Approva
@@ -149,6 +160,28 @@ public class VisualizzaRichiestaDialog {
             controller.rifiutaRichiestaSpostamento(rigaSelezionata);
             JOptionPane.showMessageDialog(dialog, "Richiesta rifiutata.");
             aggiornaTabella(controller);
+        });
+        modificaOrarioButton.addActionListener(e -> {
+            if (rigaSelezionata < 0) return;
+            String giorno = JOptionPane.showInputDialog(dialog, "Nuovo giorno (es. Lunedì):");
+            try {
+                int oraInizio    = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Ora inizio (08-17):"));
+                int minutoInizio = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Minuto inizio:"));
+                int oraFine      = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Ora fine (8-17):"));
+                int minutoFine   = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Minuto fine:"));
+
+                String errore = controller.modificaOrarioRichiesta(rigaSelezionata, giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+
+                if (errore != null) {
+                    JOptionPane.showMessageDialog(dialog, errore, "Errore", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Orario della richiesta modificato.");
+                }
+                aggiornaTabella(controller);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Valori orario non validi.", "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+
         });
     }
 
