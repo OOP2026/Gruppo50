@@ -42,7 +42,9 @@ private final Token token;
 
     }
 
-///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+    ///La funzione inserisce una lezione nell'orario, controllando che non ci siano conflitti con altre lezioni e che il docente sia disponibile in quell'orario
+    /// @param l è la lezione che deve essere inserita
+    /// @param elencoLezioni è dove viene inserito
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
         throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");

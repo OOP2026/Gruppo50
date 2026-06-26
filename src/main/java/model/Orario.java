@@ -3,18 +3,27 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+/**Questa classe rappresenta una fascia oraria
+ * viene usata nelle classe{@link Lezione},{@link Richiesta} e {@link Vincolo}
+ * */
 public class Orario {
+    ///Indica un giorno della settimana
     public String giorno;
+    ///È l'ora dell'orario di inizio
     public int oraInizio;
+    /// Sono i minuti dell'orario di inizio
     public int minutoInizio;
+    ///È l'ora dell'orario di fine
     public int oraFine;
+    ///Sono i minuti dell'orario fine
     public int minutoFine;
+    ///È la lista dei giorni possibili
     private static final List<String> giorni = new ArrayList<>(Arrays.asList(
             "lunedì", "martedì", "mercoledì", "giovedì", "venerdì",
             "lunedi", "martedi", "mercoledi", "giovedi", "venerdi"
     ));
     public Orario(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
-      try {
+
         //controlli se il giorno è scritto bene ed fa parte dei giorni della settimana
 if( giorno==null ||!giorni.contains(giorno.toLowerCase())){throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti: " + giorni);}
 //Controlla se le ore sono compresi negli intervalli validi e se l'orario di fine è successivo a quello di inizio
@@ -28,9 +37,7 @@ if(oraFine == 18 && minutoFine > 0) {
 
 
 if(oraFine<oraInizio || (oraFine==oraInizio && minutoFine<=minutoInizio)){throw new IllegalArgumentException("L'orario di fine deve essere successivo all'orario di inizio");}      
-      } catch (IllegalArgumentException e) {
-        throw  e;
-    }
+
 
         this.giorno = giorno.toLowerCase();
         this.oraInizio = oraInizio;

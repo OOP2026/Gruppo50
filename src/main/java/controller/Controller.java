@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 
 public class Controller {
+
 	private Studente studente;
 	private Responsabile responsabile;
 	private Responsabile responsabileTemp;
@@ -22,7 +23,6 @@ public class Controller {
 
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
-
 
 	}
 	public void apriConnessioneDatabase() throws Exception {
@@ -154,6 +154,7 @@ responsabileTemp=null;
     }
     ///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
     /// @return Restituisce un oggetto di tipo {@link Insegnamento}
+    /// @param materia è il nome dell'insegnamento
     private Insegnamento stringToInsegnamento(String materia){
         for(Insegnamento insegnamento:insegnamentiRegistrati){
             if(insegnamento.Nome.equalsIgnoreCase(materia)){
@@ -162,14 +163,27 @@ responsabileTemp=null;
         }
         return null;
     }
-    ///Ritorna gli insegnamenti registrati però solo il nome
+    ///Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
     ///@return Restituisce una lista di tipo {@code String}
-    public List<String> getInsegnamentiRegistrati(){
+    public List<String> getInsegnamentiRegistratiDocente(){
         List<String> data= new ArrayList<>();
         List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
         List<Insegnamento> b= docente.getInsegnamenti();
         a.removeAll(b);
         for(Insegnamento insegnamento:a){
+            data.add(insegnamento.Nome);
+        }
+        return data;
+    };
+    ///Ritorna gli insegnamenti registrati  però solo il nome
+    /// @param materia Se materia è {@code ""} il metodo ritorna tutte le materie registrate, se no ritorna le materie che iniziano con la stringa dentro materia
+    /// @return Restituisce una lista di tipo {@code String}
+    public List<String> getInsegnamentiRegistrati(String materia){
+        List<String> data= new ArrayList<>();
+        List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
+
+        for(Insegnamento insegnamento:a){
+            if(insegnamento.Nome.toLowerCase().startsWith(materia))
             data.add(insegnamento.Nome);
         }
         return data;

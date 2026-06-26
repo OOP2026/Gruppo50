@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.function.Predicate;
 import model.Responsabile.Token;
 import java.util.List;
-//se non funziona la funzione ler vedere le lezione è perche
-// il giorno probabilmente conclude con una i differente!
+///Rappresenta l'orario delle lezioni, all'interno ci sono tutti le lezioni create
 public class OrarioLezioni {
+    ///Una {@code List} che contiene tutte le {@link Lezione Lezioni}
     private ArrayList<Lezione> orariolezioni;
+    ///Un elenco con i giorni validi
     private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"};
 
 
@@ -35,6 +36,8 @@ public List<Lezione> getDocenteLezioni(Docente docente){
 
     };
     ///Il metodo permette di aggiungere una lezione nell'orario
+    ///@param l È un oggetto di tipo {@link Lezione}
+    ///@param token è un oggetto che ha solo un responsabile
     public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
    //Solo il responsabile puo usare questo metodo
     if(token==null){ throw new NullPointerException("Non hai il permesso");}
@@ -50,7 +53,7 @@ orariolezioni.add(l);
 return true;
     }
 
-/// Permette di vedere l'orario completo del corso
+/// Permette di vedere l'orario completo del corso dentro il terminale
 /// solamente il responsabile può farlo
 public void visualizzaOrarioCompleto(Token token){
     if(token==null){
