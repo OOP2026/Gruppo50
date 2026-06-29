@@ -49,7 +49,6 @@ public interface LezioneDAO {
      * @param nomiInsegnamento lista in cui inserire i nomi degli insegnamenti
      * @param emailDocente     lista in cui inserire le email dei docenti
      * @param nomeAula         lista in cui inserire i nomi delle aule
-     * @param capienza         lista in cui inserire le capienze
      * @param giorno           lista in cui inserire i giorni
      * @param oraInizio        lista in cui inserire le ore di inizio
      * @param minutoInizio     lista in cui inserire i minuti di inizio
@@ -60,7 +59,7 @@ public interface LezioneDAO {
     void leggiLezioniDB(int annoCorso,
                         ArrayList<String> nomiInsegnamento,
                         ArrayList<String> emailDocente,
-                        ArrayList<String> nomeAula, ArrayList<Integer> capienza,
+                        ArrayList<String> nomeAula,
                         ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
                         ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception;
-}
+    }

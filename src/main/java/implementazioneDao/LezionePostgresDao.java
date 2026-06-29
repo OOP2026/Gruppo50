@@ -62,10 +62,10 @@ public class LezionePostgresDao implements LezioneDAO {
     public void leggiLezioniDB(int annoCorso,
                                ArrayList<String> nomiInsegnamento,
                                ArrayList<String> emailDocente,
-                               ArrayList<String> nomeAula, ArrayList<Integer> capienza,
+                               ArrayList<String> nomeAula,
                                ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
                                ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception {
-        String sql = "SELECT nomecorso, annocorso, emaildocente, nomeaula, capienza, " +
+        String sql = "SELECT nomecorso, annocorso, emaildocente, nomeaula, " +
                 "giorno, orainizio, minutoinizio, orafine, minutofine " +
                 "FROM lezione WHERE annocorso = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -75,7 +75,6 @@ public class LezionePostgresDao implements LezioneDAO {
                     nomiInsegnamento.add(rs.getString("nomecorso"));
                     emailDocente.add(rs.getString("emaildocente"));
                     nomeAula.add(rs.getString("nomeaula"));
-                    capienza.add(rs.getInt("capienza"));
                     giorno.add(rs.getString("giorno"));
                     oraInizio.add(rs.getInt("orainizio"));
                     minutoInizio.add(rs.getInt("minutoinizio"));

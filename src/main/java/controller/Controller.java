@@ -1,6 +1,7 @@
 package controller;
-import dao.LezioneDAO;
+import dao.*;
 import database_connection.ConnessioneDatabase;
+import implementazioneDao.DocentePostgresDao;
 import implementazioneDao.LezionePostgresDao;
 import model.*;
 
@@ -35,6 +36,10 @@ public class Controller {
 		this.docente = null;
 		this.responsabile = null;
 		this.utente = null;
+
+		// Carica dal database i docenti registrati, così è possibile accedere
+		// anche a docenti salvati in sessioni precedenti (pattern BCE + DAO).
+		caricaDocentiDaDB();
 
 		for (Utente u : utentiRegistrati) {
 			if (u.login(username, password)) {
@@ -175,9 +180,11 @@ responsabileTemp=null;
         }
         return data;
     };
-    ///Ritorna gli insegnamenti registrati  però solo il nome
-    /// @param materia Se materia è {@code ""} il metodo ritorna tutte le materie registrate, se no ritorna le materie che iniziano con la stringa dentro materia
-    /// @return Restituisce una lista di tipo {@code String}
+    /**Ritorna gli insegnamenti registrati  però solo il nome
+	 *@param materia <p>Se materia è {@code ""} il metodo ritorna tutte le materie registrate,
+	 *se no ritorna le materie che iniziano con la stringa dentro materia.
+     *@return Restituisce una lista di tipo {@code String}
+	 */
     public List<String> getInsegnamentiRegistrati(String materia){
         List<String> data= new ArrayList<>();
         List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
@@ -301,7 +308,16 @@ responsabileTemp=null;
 		studente.visualizzaOrarioLezioni(elencoLezioni);
 	}
 
-	//Utente
+	/**
+	 * Metodo che permette all'utente di registrarsi come Studente o Docente o Responsabile.
+	 * @param name Nome di battesimo del utente registrato.
+	 * @param cogn Cognome di battesimo del utente registrato
+	 * @param email l'email utilizzata in fase di registrazione.
+	 * @param login l'username con cui l'Utente accede.
+	 * @param pass la password con cui l'Utente accede.
+	 * @param ruolo indica che ruolo svolgi all'interno dell'università.
+	 * @return nel caso in cui l'inserimento nel DB fallisce e restituisce FALSE altrimenti torna TRUE.
+	 */
 	public boolean registra(String name,String cogn, String email,String login, String pass,String ruolo){
 		for (Utente u : utentiRegistrati) {
 			if (u.getmail().equals(email)) {
@@ -315,6 +331,14 @@ responsabileTemp=null;
 				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
 				break;
 			case "DOCENTE":
+
+				try{
+					DocenteDAO docenteDAO = new DocentePostgresDao();
+					docenteDAO.salvaDocDB(name,cogn,email,login,pass);
+				}catch(Exception e){
+					System.out.println("Errore nel salvataggio del docente sul database: " + e.getMessage());
+					return false;
+				}
 				nuovoUtente = new Docente(name, cogn, email, login, pass);
 				break;
 			case "STUDENTE":
@@ -472,4 +496,38 @@ responsabileTemp=null;
 			return e.getMessage();
 		}
 	}
+
+	/** <p>Legge i docenti dal database tramite il DAO e li aggiunge alla lista
+	* {@code utentiRegistrati}, evitando duplicati (confronto per email).
+	* Eventuali errori del database vengono segnalati a console senza
+	* interrompere il login degli utenti già presenti in memoria.</p>
+	*/
+	private void caricaDocentiDaDB() {
+		try {
+			DocenteDAO docenteDAO = new DocentePostgresDao();
+			ArrayList<String> nomi = new ArrayList<>();
+			ArrayList<String> cognomi = new ArrayList<>();
+			ArrayList<String> emails = new ArrayList<>();
+			ArrayList<String> logins = new ArrayList<>();
+			ArrayList<String> passwords = new ArrayList<>();
+			docenteDAO.leggiDocenteDB(nomi, cognomi, emails, logins, passwords);
+
+			for (int i = 0; i < emails.size(); i++) {
+				boolean giaPresente = false;
+				for (Utente u : utentiRegistrati) {
+					if (u.getmail().equals(emails.get(i))) {
+						giaPresente = true;
+						break;
+					}
+				}
+				if (!giaPresente) {
+					utentiRegistrati.add(new Docente(nomi.get(i), cognomi.get(i),
+							emails.get(i), logins.get(i), passwords.get(i)));
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Errore nel caricamento dei docenti dal database: " + e.getMessage());
+		}
+	}
+
 }

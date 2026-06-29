@@ -11,6 +11,7 @@ public class RegisterPage {
     private JTextField emailText;
     private JTextField usernameText;
     private JPasswordField passwordText;
+    /** Il bottone di conferma per finalizzare la registrazione dell'Utente. */
     private JButton confermaButton;
     private JButton annullaButton;
     private JComboBox comboBox1;
@@ -47,7 +48,7 @@ public class RegisterPage {
                     return;
                 }
 
-                // Delega al controller
+
                 if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
                     JOptionPane.showMessageDialog(frame, "Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
                     return;
