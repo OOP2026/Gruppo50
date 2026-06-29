@@ -91,7 +91,7 @@ responsabileTemp=null;
 	public String creaLezione(
 			String nomeInsegnamento, int cfu, int annoCorso,
 			String emailDocente,
-			String nomeAula, int capienza,
+			String nomeAula,
 			String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 
 		Docente docenteTrovato = null;
@@ -107,7 +107,7 @@ responsabileTemp=null;
 
 		try {
 			Insegnamento insegnamento = new Insegnamento(nomeInsegnamento, cfu, annoCorso, docenteTrovato);
-			Aula aula = new Aula(nomeAula, capienza);
+			Aula aula = new Aula(nomeAula, 200);
 			Orario orario = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 			Lezione lezione = new Lezione(insegnamento, aula, orario);
 			// 1) Salva la lezione in memoria nel Model (valida orario e disponibilità del docente)
@@ -118,8 +118,8 @@ responsabileTemp=null;
 			lezioneDAO.salvaLezioneDB(
 					nomeInsegnamento, annoCorso,
 					emailDocente,
-					nomeAula, capienza,
-					giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+					nomeAula, giorno,
+					oraInizio, minutoInizio, oraFine, minutoFine);
 
 			return null;
 		} catch (IllegalArgumentException e) {

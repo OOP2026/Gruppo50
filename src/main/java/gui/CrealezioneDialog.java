@@ -21,7 +21,6 @@ public class CrealezioneDialog {
     private JTextField annoField;
     private JTextField emailDocField;
     private JTextField nomeAulaField;
-    private JTextField capienzaField;
     private JTextField oraIField;
     private JTextField minIField;
     private JTextField oraFField;
@@ -55,7 +54,6 @@ public class CrealezioneDialog {
                 if (nomeIns.isEmpty() || emailDoc.isEmpty() || nomeAula.isEmpty()
                         || cfuField.getText().trim().isEmpty()
                         || annoField.getText().trim().isEmpty()
-                        || capienzaField.getText().trim().isEmpty()
                         || oraIField.getText().trim().isEmpty()
                         || minIField.getText().trim().isEmpty()
                         || oraFField.getText().trim().isEmpty()
@@ -67,7 +65,6 @@ public class CrealezioneDialog {
                 try {
                     int cfu = Integer.parseInt(cfuField.getText().trim());
                     int anno = Integer.parseInt(annoField.getText().trim());
-                    int capienza = Integer.parseInt(capienzaField.getText().trim());
                     int oraI = Integer.parseInt(oraIField.getText().trim());
                     int minI = Integer.parseInt(minIField.getText().trim());
                     int oraF = Integer.parseInt(oraFField.getText().trim());
@@ -76,7 +73,7 @@ public class CrealezioneDialog {
                     String errore = controller.creaLezione(
                             nomeIns, cfu, anno,
                             emailDoc,
-                            nomeAula, capienza,
+                            nomeAula,
                             giorno, oraI, minI, oraF, minF);
 
                     if (errore != null) {

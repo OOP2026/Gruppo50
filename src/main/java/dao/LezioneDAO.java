@@ -25,7 +25,6 @@ public interface LezioneDAO {
      * @param annoCorso        anno di corso
      * @param emailDocente     email del docente
      * @param nomeAula         nome dell'aula
-     * @param capienza         capienza dell'aula
      * @param giorno           giorno della settimana
      * @param oraInizio        ora di inizio
      * @param minutoInizio     minuto di inizio
@@ -36,7 +35,7 @@ public interface LezioneDAO {
      */
     void salvaLezioneDB(String nomeInsegnamento, int annoCorso,
                         String emailDocente,
-                        String nomeAula, int capienza,
+                        String nomeAula,
                         String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws Exception;
 
     /**
