@@ -44,6 +44,10 @@ public class Controller {
 		// anche ai responsabili salvati in sessioni precedenti (pattern BCE + DAO).
 		caricaResponsabiliDaDB();
 
+		// Carica dal database gli studenti registrati, così è possibile accedere
+		// anche agli studenti salvati in sessioni precedenti (pattern BCE + DAO).
+		caricaStudenteDB();
+
 		for (Utente u : utentiRegistrati) {
 			if (u.login(username, password)) {
 				this.utente = u;
@@ -353,11 +357,17 @@ responsabileTemp=null;
 				break;
 			case "STUDENTE":
 			default:
-				String matricola = "DE"+String.format("%08d",utentiRegistrati.size()+1);
-				Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
-				nuovoUtente = nuovoStudente;
-				this.studente = nuovoStudente;
-				break;
+				try {
+					StudenteDAO studenteDAO = new StudentePostgresDao();
+					String matricola = studenteDAO.generaMatricolaDB();
+					studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
+					Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
+					nuovoUtente = nuovoStudente;
+					this.studente = nuovoStudente;
+				} catch (Exception e) {
+					System.out.println("Errore nel salvataggio dello studente sul database: " + e.getMessage());
+					return false;
+				}
 		}
 		utentiRegistrati.add(nuovoUtente);
 		return true;
@@ -573,4 +583,33 @@ responsabileTemp=null;
 		}
 	}
 
+	private void caricaStudenteDB(){
+		try {
+			StudenteDAO studenteDAO=new StudentePostgresDao();
+			ArrayList<String> nomi = new ArrayList<>();
+			ArrayList<String> cognomi = new ArrayList<>();
+			ArrayList<String> emails = new ArrayList<>();
+			ArrayList<String> logins = new ArrayList<>();
+			ArrayList<String> passwords = new ArrayList<>();
+			ArrayList<String> matricole= new ArrayList<>();
+			ArrayList<Integer> annoCorso = new ArrayList<>();
+			studenteDAO.leggiStudenteDB(nomi, cognomi, emails, logins, passwords, matricole, annoCorso);
+
+			for(int i=0;i<emails.size();i++){
+				boolean giaPresente = false;
+				for (Utente u : utentiRegistrati) {
+					if (u.getmail().equals(emails.get(i))) {
+						giaPresente = true;
+						break;
+					}
+				}
+				if (!giaPresente) {
+					utentiRegistrati.add(new Studente(nomi.get(i),cognomi.get(i),emails.get(i),
+							logins.get(i),passwords.get(i),matricole.get(i),annoCorso.get(i)));
+				}
+			}
+		}catch (Exception e){
+			System.out.println("Errore nel caricamento dei studente dal database: " + e.getMessage());
+		}
+	}
 }

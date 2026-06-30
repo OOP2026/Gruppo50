@@ -69,10 +69,18 @@ elencoLezioni.visualizzaOrarioCompleto(this);
 
     /**
      * Restituisce la matricola assegnata a questo studente.
-     * * @return la matricola dello studente come stringa
+     * @return la matricola dello studente come stringa
      */
     public String getmatricola(){
         return matricola;
+    }
+
+    /**
+     * Restituisce l'anno di corso dello studente.
+     * @return l'anno di corso (1-3)
+     */
+    public int getAnnoCorso(){
+        return annoCorso;
     }
 
 
