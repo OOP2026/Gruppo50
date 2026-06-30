@@ -11,12 +11,11 @@ import java.util.List;
  * tutte le lezioni create all'interno del sistema.
  */
 public class OrarioLezioni {
-    ///Una {@code List} che contiene tutte le {@link Lezione Lezioni}
+
     /** Una lista che contiene tutte le {@link Lezione Lezioni} programmate  */
     private ArrayList<Lezione> orariolezioni;
-    ///Un elenco con i giorni validi
     /** Un elenco con i giorni validi          */
-    private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"}
+    private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"};
 
 
     /**
