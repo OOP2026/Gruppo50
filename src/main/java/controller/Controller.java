@@ -1,8 +1,7 @@
 package controller;
 import dao.*;
 import database_connection.ConnessioneDatabase;
-import implementazioneDao.DocentePostgresDao;
-import implementazioneDao.LezionePostgresDao;
+import implementazioneDao.*;
 import model.*;
 
 import java.util.ArrayList;
@@ -40,6 +39,10 @@ public class Controller {
 		// Carica dal database i docenti registrati, così è possibile accedere
 		// anche a docenti salvati in sessioni precedenti (pattern BCE + DAO).
 		caricaDocentiDaDB();
+
+		// Carica dal database i responsabili registrati, così è possibile accedere
+		// anche ai responsabili salvati in sessioni precedenti (pattern BCE + DAO).
+		caricaResponsabiliDaDB();
 
 		for (Utente u : utentiRegistrati) {
 			if (u.login(username, password)) {
@@ -328,6 +331,13 @@ responsabileTemp=null;
 
 		switch (ruolo.toUpperCase()) {
 			case "RESPONSABILE":
+				try{
+					ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
+					responsabileDAO.salvaResponsabileDB(name,cogn,email,login,pass);
+				}catch(Exception e){
+					System.out.println("Errore nel salvataggio del docente sul database: " + e.getMessage());
+					return false;
+				}
 				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
 				break;
 			case "DOCENTE":
@@ -527,6 +537,39 @@ responsabileTemp=null;
 			}
 		} catch (Exception e) {
 			System.out.println("Errore nel caricamento dei docenti dal database: " + e.getMessage());
+		}
+	}
+
+	/** <p>Legge i responsabili dal database tramite il DAO e li aggiunge alla lista
+	 * {@code utentiRegistrati}, evitando duplicati (confronto per email).
+	 * Eventuali errori del database vengono segnalati a console senza
+	 * interrompere il login degli utenti già presenti in memoria.</p>
+	 */
+	private void caricaResponsabiliDaDB() {
+		try {
+			ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
+			ArrayList<String> nomi = new ArrayList<>();
+			ArrayList<String> cognomi = new ArrayList<>();
+			ArrayList<String> emails = new ArrayList<>();
+			ArrayList<String> logins = new ArrayList<>();
+			ArrayList<String> passwords = new ArrayList<>();
+			responsabileDAO.leggiResponsabileDB(nomi, cognomi, emails, logins, passwords);
+
+			for (int i = 0; i < emails.size(); i++) {
+				boolean giaPresente = false;
+				for (Utente u : utentiRegistrati) {
+					if (u.getmail().equals(emails.get(i))) {
+						giaPresente = true;
+						break;
+					}
+				}
+				if (!giaPresente) {
+					utentiRegistrati.add(new Responsabile(nomi.get(i), cognomi.get(i),
+							emails.get(i), logins.get(i), passwords.get(i)));
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Errore nel caricamento dei responsabili dal database: " + e.getMessage());
 		}
 	}
 

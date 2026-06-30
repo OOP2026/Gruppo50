@@ -1,5 +1,6 @@
 package implementazioneDao;
-import dao.DocenteDAO;
+
+import dao.ResponsabileDAO;
 import database_connection.ConnessioneDatabase;
 
 import java.sql.Connection;
@@ -8,30 +9,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DocentePostgresDao implements DocenteDAO {
-
+public class ResponsabilePostgresDao implements ResponsabileDAO {
     private final Connection connection;
-
     /**
      * Nel costruttore si ottiene la connessione dal singleton.
      *
      * @throws Exception se la connessione al database fallisce
      */
-    public DocentePostgresDao() throws Exception {
+    public ResponsabilePostgresDao() throws Exception {
         connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
     /**
-     * @param nome     Nome di battesimo del docente.
-     * @param cognome  cognome di battesimo del docente.
-     * @param email    l'email con cui si registra il docente al sistema.
-     * @param login    login con cui accede il docente al sistema.
-     * @param password password segreta del docente per accedere.
-     * @throws Exception quando si inseriscono dati sbagliati.
+     * @param nome     Nome di battesimo del Responsabile.
+     * @param cognome  cognome di battesimo del Responsabile.
+     * @param email    l'email del Responsabile.
+     * @param login    username con cui accede il Responsabile al sistema.
+     * @param password password segreta del Responsabile per accedere.
+     * @throws Exception Throws exception quando la scrittura nel database non va a buon fine.
      */
     @Override
-    public void salvaDocDB(String nome, String cognome, String email, String login, String password) throws Exception {
-        String sql = "INSERT INTO docente (nome, cognome, email, username, password) " +
+    public void salvaResponsabileDB(String nome, String cognome, String email, String login, String password) throws Exception {
+        String sql = "INSERT INTO responsabile (nome, cognome, email, username, password) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nome);
@@ -46,18 +45,17 @@ public class DocentePostgresDao implements DocenteDAO {
         }
     }
 
-
     /**
      * @param nome la lista dei nomi dei docenti presenti nel db.
      * @param cognome la lista dei  cognomi dei docenti presenti nel db.
      * @param email la lista dei nomi dei docenti presenti nel db.
      * @param login la lista dei nomi dei docenti presenti nel db.
      * @param password la lista dei nomi dei docenti presenti nel db.
-     * @throws Exception quando la lettura nel database falisce.
+     * @throws Exception Throws exception quando la lettura nel database non va a buon fine.
      */
     @Override
-    public void leggiDocenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws Exception {
-        String sql = "SELECT nome, cognome, email, username, password FROM docente";
+    public void leggiResponsabileDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws Exception {
+        String sql = "SELECT nome, cognome, email, username, password FROM responsabile";
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -72,4 +70,3 @@ public class DocentePostgresDao implements DocenteDAO {
         }
     }
 }
-

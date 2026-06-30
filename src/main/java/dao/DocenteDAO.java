@@ -20,7 +20,7 @@ public interface DocenteDAO {
      * @param cognome cognome di battesimo del docente.
      * @param email l'email con cui si registra il docente al sistema.
      * @param login login con cui accede il docente al sistema.
-     * @param password password segreta del docente per accedere
+     * @param password password segreta del docente per accedere.
      */
     void salvaDocDB(String nome, String cognome, String email,
                     String login, String password)throws Exception;
