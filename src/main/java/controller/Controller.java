@@ -100,6 +100,7 @@ responsabileTemp=null;
 
 
 	//Responsabile crea una lezione
+	//Responsabile crea una lezione
 	public String creaLezione(
 			String nomeInsegnamento, int cfu, int annoCorso,
 			String emailDocente,
@@ -117,31 +118,34 @@ responsabileTemp=null;
 			return "Nessun docente registrato con questa email.";
 		}
 
+		// 1) Inserimento in memoria nel Model (valida orario e disponibilità del docente).
+		//    Se questa parte fallisce è un errore vero: si interrompe e si mostra il messaggio.
 		try {
 			Insegnamento insegnamento = new Insegnamento(nomeInsegnamento, cfu, annoCorso, docenteTrovato);
 			Aula aula = new Aula(nomeAula, 200);
 			Orario orario = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 			Lezione lezione = new Lezione(insegnamento, aula, orario);
-			// 1) Salva la lezione in memoria nel Model (valida orario e disponibilità del docente)
 			responsabile.inserisciLezione(lezione, orarioLezioni);
+		} catch (IllegalArgumentException e) {
+			// Errore di validazione del Model (es. orario non valido, docente non disponibile)
+			return e.getMessage();
+		}
 
-			// 2) Rende persistente la lezione sul database tramite il DAO (pattern BCE + DAO)
+		// 2) Persistenza best-effort: se il DB non è disponibile la lezione resta solo in memoria.
+		try {
 			LezioneDAO lezioneDAO = new LezionePostgresDao();
 			lezioneDAO.salvaLezioneDB(
 					nomeInsegnamento, annoCorso,
 					emailDocente,
 					nomeAula, giorno,
 					oraInizio, minutoInizio, oraFine, minutoFine);
-
-			return null;
-		} catch (IllegalArgumentException e) {
-			// Errore di validazione del Model (es. orario non valido, docente non disponibile)
-			return e.getMessage();
 		} catch (Exception e) {
-			// Errore proveniente dal database (rilanciato dal DAO)
-			return e.getMessage();
+			System.out.println("DB non disponibile, lezione creata solo in memoria: " + e.getMessage());
 		}
+
+		return null;
 	}
+
 
 	//Docente visualizza l'orario delle proprie lezionoùi
 	public void visualizzaLezione(OrarioLezioni elencoLezioni) {
@@ -335,39 +339,39 @@ responsabileTemp=null;
 
 		switch (ruolo.toUpperCase()) {
 			case "RESPONSABILE":
-				try{
+				try {
 					ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
-					responsabileDAO.salvaResponsabileDB(name,cogn,email,login,pass);
-				}catch(Exception e){
-					System.out.println("Errore nel salvataggio del docente sul database: " + e.getMessage());
-					return false;
+					responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
+				} catch (Exception e) {
+					System.out.println("DB non disponibile, registrazione responsabile solo in memoria: " + e.getMessage());
 				}
 				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
 				break;
 			case "DOCENTE":
-
-				try{
+				try {
 					DocenteDAO docenteDAO = new DocentePostgresDao();
-					docenteDAO.salvaDocDB(name,cogn,email,login,pass);
-				}catch(Exception e){
-					System.out.println("Errore nel salvataggio del docente sul database: " + e.getMessage());
-					return false;
+					docenteDAO.salvaDocDB(name, cogn, email, login, pass);
+				} catch (Exception e) {
+					System.out.println("DB non disponibile, registrazione docente solo in memoria: " + e.getMessage());
 				}
 				nuovoUtente = new Docente(name, cogn, email, login, pass);
 				break;
 			case "STUDENTE":
 			default:
+				String matricola;
 				try {
 					StudenteDAO studenteDAO = new StudentePostgresDao();
-					String matricola = studenteDAO.generaMatricolaDB();
+					matricola = studenteDAO.generaMatricolaDB();
 					studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
-					Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
-					nuovoUtente = nuovoStudente;
-					this.studente = nuovoStudente;
 				} catch (Exception e) {
-					System.out.println("Errore nel salvataggio dello studente sul database: " + e.getMessage());
-					return false;
+					System.out.println("DB non disponibile, registrazione studente solo in memoria: " + e.getMessage());
+					long numStudenti = utentiRegistrati.stream().filter(u -> u instanceof Studente).count();
+					matricola = "DE" + String.format("%08d", numStudenti + 1);
 				}
+				Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
+				nuovoUtente = nuovoStudente;
+				this.studente = nuovoStudente;
+				break;
 		}
 		utentiRegistrati.add(nuovoUtente);
 		return true;

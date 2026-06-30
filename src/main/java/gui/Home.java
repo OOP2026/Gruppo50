@@ -12,14 +12,13 @@ public class Home {
 			controller.apriConnessioneDatabase();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
-					"Impossibile connettersi al database:\n" + e.getMessage(),
-					"Errore di connessione", JOptionPane.ERROR_MESSAGE);
-			return; // senza database non avviamo l'applicazione
+			"Impossibile connettersi al database.\n" +
+					"L'applicazione funzionerà solo in memoria: i dati non verranno salvati.\n\n" + e.getMessage(),
+					"Database non disponibile", JOptionPane.WARNING_MESSAGE);
 		}
 
 
-		Controller controller = new Controller(new ArrayList<>());
-	PrimoFrame primoFrame = new PrimoFrame(controller);
+		PrimoFrame primoFrame = new PrimoFrame(controller);
 		primoFrame.frame.setVisible(true);
 
 	}
