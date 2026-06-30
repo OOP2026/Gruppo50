@@ -1,9 +1,34 @@
 package model;
 import java.util.ArrayList;
+
+/**
+ * Rappresenta uno studente all'interno del sistema.
+ * Estende la classe Utente e gestisce informazioni specifiche come
+ * la matricola (che é unica per studente) e l'anno di corso.
+ */
 public class Studente extends Utente  {
     private final String matricola;
     protected int annoCorso;
+
+    /**
+     * Lista per tenere traccia delle matricole già assegnate
+     * e garantire che ognuna sia unica in fase di creazione di un nuovo studente.
+     */
     private static ArrayList<String> matricole= new ArrayList<>();
+
+
+    /**
+     * Crea un nuovo oggetto Studente, dandogli dei valori.
+     * * @param nome il nome dello studente
+     * @param cognome il cognome dello studente
+     * @param email l'indirizzo email dello studente
+     * @param login l'username per l'accesso al sistema
+     * @param password la password per l'accesso
+     * @param matricola il numero di matricola dello studente
+     * @param annoCorso l'anno di corso frequentato (deve essere compreso tra 1 e 3)
+     * @throws IllegalArgumentException se la matricola è vuota, nulla, o già esistente,
+     * oppure se l'anno di corso non è compreso tra 1 e 3
+     */
 
 
     public Studente(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) {
@@ -25,14 +50,27 @@ public class Studente extends Utente  {
  
     }
 
+    /**
+     * Stampa un messaggio di saluto nel terminale dicendo nome, cognome e matricola.
+     */
     public void saluto() {
         System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
     }
+
+    /**
+     * Permette allo studente di visualizzare l'orario completo delle lezioni nel terminale.
+     * * @param elencoLezioni la struttura dati contenente l'orario del corso
+     */
     public void visualizzaOrarioLezioni(OrarioLezioni elencoLezioni) {
         // Implementazione del metodo per visualizzare l'orario delle lezioni
 elencoLezioni.visualizzaOrarioCompleto(this);
 
     }
+
+    /**
+     * Restituisce la matricola assegnata a questo studente.
+     * * @return la matricola dello studente come stringa
+     */
     public String getmatricola(){
         return matricola;
     }
