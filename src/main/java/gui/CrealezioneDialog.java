@@ -5,7 +5,6 @@ import javax.swing.JComboBox;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.Objects;
 
@@ -113,12 +112,17 @@ public class CrealezioneDialog {
         }
         textComboBox.setText(materia);
     }
-public JTextField textFieldComboBox(){
-    Component editor= nomeInsField.getEditor().getEditorComponent();
-    JTextField  textField=null;
-    if(editor instanceof JTextField) textField= (JTextField) editor;
-    return textField;
-}
+    public JTextField textFieldComboBox() {
+        Component editor = nomeInsField.getEditor().getEditorComponent();
+
+        if (editor instanceof JTextField) {
+            return (JTextField) editor;
+        }
+
+        // Se non è un JTextField, interrompiamo con un messaggio d'errore chiaro
+        // invece di passare un null che causerebbe danni più avanti.
+        throw new IllegalStateException("L'editor della JComboBox 'nomeInsField' non è un JTextField. Assicurati che sia editabile.");
+    }
 
 
     private void caricaEvents() {
