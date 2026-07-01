@@ -33,7 +33,12 @@ public class CrealezioneDialog {
         dialog.setContentPane(panel1);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.pack();
-        dialog.setLocationRelativeTo(frameChiamante);
+
+        //verifico che il frame chiamante non sia null
+        if (frameChiamante != null) {
+            dialog.setLocationRelativeTo(frameChiamante);
+        }
+
         textComboBox=textFieldComboBox();
         caricaInsegnamentiBox("");
         caricaEvents();
