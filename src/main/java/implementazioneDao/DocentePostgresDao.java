@@ -34,10 +34,10 @@ public class DocentePostgresDao implements DocenteDAO {
     }
 
     /**
-     * Salva il docente nella tabella {@code utente} con ruolo {@code "DOCENTE"}.
-     * La matricola viene generata automaticamente con prefisso {@code "DA"}
-     * (per il momento non è visualizzata a schermo); l'anno di corso viene
-     * salvato a {@code NULL}.
+     * Salva il docente nella tabella {@code utente}. La matricola viene
+     * generata automaticamente con prefisso {@code "DA"}, da cui il database
+     * ricava il ruolo {@code "DOCENTE"} (per il momento la matricola non è
+     * visualizzata a schermo); l'anno di corso viene salvato a {@code NULL}.
      *
      * @param nome     Nome di battesimo del docente.
      * @param cognome  cognome di battesimo del docente.
@@ -49,7 +49,7 @@ public class DocentePostgresDao implements DocenteDAO {
     @Override
     public void salvaDocDB(String nome, String cognome, String email, String login, String password) throws Exception {
         String matricola = utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
-        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null, RUOLO);
+        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null);
     }
 
     /**

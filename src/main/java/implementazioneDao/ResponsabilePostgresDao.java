@@ -35,10 +35,10 @@ public class ResponsabilePostgresDao implements ResponsabileDAO {
     }
 
     /**
-     * Salva il responsabile nella tabella {@code utente} con ruolo
-     * {@code "RESPONSABILE"}. La matricola viene generata automaticamente
-     * con prefisso {@code "RE"} (per il momento non è visualizzata a schermo);
-     * l'anno di corso viene salvato a {@code NULL}.
+     * Salva il responsabile nella tabella {@code utente}. La matricola viene
+     * generata automaticamente con prefisso {@code "RE"}, da cui il database
+     * ricava il ruolo {@code "RESPONSABILE"} (per il momento la matricola non
+     * è visualizzata a schermo); l'anno di corso viene salvato a {@code NULL}.
      *
      * @param nome     Nome di battesimo del Responsabile.
      * @param cognome  cognome di battesimo del Responsabile.
@@ -50,7 +50,7 @@ public class ResponsabilePostgresDao implements ResponsabileDAO {
     @Override
     public void salvaResponsabileDB(String nome, String cognome, String email, String login, String password) throws Exception {
         String matricola = utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
-        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null, RUOLO);
+        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null);
     }
 
     /**

@@ -31,8 +31,9 @@ public class StudentePostgresDao implements StudenteDAO {
     }
 
     /**
-     * Salva lo studente nella tabella {@code utente} con ruolo {@code "STUDENTE"},
-     * delegando a {@link UtenteDAO#salvaUtenteDB}.
+     * Salva lo studente nella tabella {@code utente} delegando a
+     * {@link UtenteDAO#salvaUtenteDB}: dal prefisso {@code "DE"} della
+     * matricola il database ricava il ruolo {@code "STUDENTE"}.
      *
      * @param nome      Nome di battesimo dello studente.
      * @param cognome   cognome di battesimo dello studente.
@@ -45,7 +46,7 @@ public class StudentePostgresDao implements StudenteDAO {
      */
     @Override
     public void salvaStudenteDB(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) throws Exception {
-        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, annoCorso, RUOLO);
+        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, annoCorso);
     }
 
     /**

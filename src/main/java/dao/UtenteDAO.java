@@ -17,6 +17,10 @@ public interface UtenteDAO {
 
     /**Salva i dati grezzi (non gli oggetti) di un utente nella tabella utente.
      *
+     * <p>Il ruolo non viene inserito: nella tabella {@code utente} è una
+     * colonna {@code GENERATED}, calcolata dal database in base al prefisso
+     * della matricola.</p>
+     *
      * @param nome      Nome di battesimo dell'utente.
      * @param cognome   cognome di battesimo dell'utente.
      * @param email     l'email con cui si registra l'utente al sistema.
@@ -26,14 +30,12 @@ public interface UtenteDAO {
      *                  al ruolo: {@code "DE"} studenti, {@code "DA"} docenti,
      *                  {@code "RE"} responsabili (per il momento docenti e
      *                  responsabili non la visualizzano a schermo).
-     * @param annoCorso l'anno di corso (1-3); può essere {@code null}
-     *                  (valorizzato solo per gli studenti).
-     * @param ruolo     il ruolo dell'utente: {@code "STUDENTE"},
-     *                  {@code "DOCENTE"} o {@code "RESPONSABILE"}.
+     * @param annoCorso l'anno di corso (1-3); deve essere {@code null}
+     *                  per docenti e responsabili.
      */
     void salvaUtenteDB(String nome, String cognome, String email,
                        String login, String password,
-                       String matricola, Integer annoCorso, String ruolo) throws Exception;
+                       String matricola, Integer annoCorso) throws Exception;
 
     /**Recupera i dati di tutti gli utenti registrati, di qualunque ruolo.
      * Le liste passate come parametro vengono riempite in modo parallelo

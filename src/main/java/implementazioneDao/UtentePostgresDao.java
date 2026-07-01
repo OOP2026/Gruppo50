@@ -35,15 +35,17 @@ public class UtentePostgresDao implements UtenteDAO {
 
     /**
      * Salva un utente nella tabella {@code utente}.
+     * La colonna {@code ruolo} non viene inserita perché è {@code GENERATED}:
+     * il database la calcola dal prefisso della matricola (DE/DA/RE).
      * Per docenti e responsabili {@code annoCorso} viene passato
      * {@code null} e salvato come {@code NULL}.
      */
     @Override
     public void salvaUtenteDB(String nome, String cognome, String email,
                               String login, String password,
-                              String matricola, Integer annoCorso, String ruolo) throws Exception {
-        String sql = "INSERT INTO utente (nome, cognome, email, username, password, matricola, annocorso, ruolo) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                              String matricola, Integer annoCorso) throws Exception {
+        String sql = "INSERT INTO utente (nome, cognome, email, username, password, matricola, annocorso) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nome);
             ps.setString(2, cognome);
@@ -56,10 +58,9 @@ public class UtentePostgresDao implements UtenteDAO {
             } else {
                 ps.setNull(7, Types.INTEGER);
             }
-            ps.setString(8, ruolo);
             ps.executeUpdate();
         } catch (SQLException e) {
-            // Es. violazione della primary key: utente con questa email già presente.
+            // Es. violazione di un vincolo: email, username o matricola già presenti.
             throw new Exception("Impossibile salvare l'utente sul database: " + e.getMessage());
         }
     }
