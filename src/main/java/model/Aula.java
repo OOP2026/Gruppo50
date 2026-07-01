@@ -9,6 +9,8 @@ public class Aula {
     /** Capienza fisica associata all'aula espressa con un valore intero. */
     public int Capienza;
 
+
+
     /**
      * Crea una nuova aula, aula e orario.
      *
