@@ -34,6 +34,9 @@ public class InsegnamentiDialog {
             @Override
             public boolean isCellEditable(int row, int col) { return false; }
         };
+        // Assicura a SonarQube che il componente non sia null
+        java.util.Objects.requireNonNull(tabellaInsegnamenti, "Errore GUI: tabellaInsegnamenti non inizializzata dal designer");
+
         tabellaInsegnamenti.setModel(tableModel);
         tabellaInsegnamenti.getTableHeader().setReorderingAllowed(false);
         tabellaInsegnamenti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
