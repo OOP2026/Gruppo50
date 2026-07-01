@@ -124,7 +124,10 @@ public class Controller {
 			return e.getMessage();
 		}
 
-		// 2) Persistenza best-effort: se il DB non è disponibile la lezione resta solo in memoria.
+		// 2) Persistenza: la lezione viene salvata nella tabella lezione.
+		//    Se il salvataggio fallisce (DB non disponibile, aula inesistente nella
+		//    tabella aula, conflitto rilevato dal trigger del DB) la lezione resta
+		//    solo in memoria e l'errore viene segnalato a console.
 		try {
 			LezioneDAO lezioneDAO = new LezionePostgresDao();
 			lezioneDAO.salvaLezioneDB(
@@ -133,7 +136,7 @@ public class Controller {
 					nomeAula, giorno,
 					oraInizio, minutoInizio, oraFine, minutoFine);
 		} catch (Exception e) {
-			System.out.println("DB non disponibile, lezione creata solo in memoria: " + e.getMessage());
+			System.out.println("Lezione NON salvata sul database (resta solo in memoria): " + e.getMessage());
 		}
 
 		return null;
@@ -199,8 +202,9 @@ public class Controller {
 		}
 		return data;
 	};
-	///Ritorna gli insegnamenti del docente
-	///@return Restituisce un array di tipo {@code Object[][]}
+	/**Ritorna gli insegnamenti del docente
+	 *@return Restituisce un array di tipo {@code Object[][]}
+	 */
 	public Object[][] getInsegnamentiDocente(){
 		List<Insegnamento> insegnamenti= docente.getInsegnamenti();
 		if(insegnamenti.isEmpty()){ return new Object[0][0];}
@@ -212,9 +216,10 @@ public class Controller {
 		}
 		return data;
 	};
-	///Permette al docente di aggiungere un {@link Vincolo} max 3.
-	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	///@return Restituisce una {@code String} o {@code null}
+	/**Permette al docente di aggiungere un {@link Vincolo} max 3.
+	 *Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+	 *@return Restituisce una {@code String} o {@code null}
+	 */
 	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
 		try{
 			docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);

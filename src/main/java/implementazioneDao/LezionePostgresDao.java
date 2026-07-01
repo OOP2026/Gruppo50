@@ -40,7 +40,7 @@ public class LezionePostgresDao implements LezioneDAO {
         String sql = "INSERT INTO lezione " +
                 "(nomecorso, annocorso, emaildocente, nomeaula, " +
                 " giorno, orainizio, minutoinizio, orafine, minutofine) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nomeInsegnamento);
             ps.setInt(2, annoCorso);
