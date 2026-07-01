@@ -16,7 +16,7 @@ public class Controller {
 	private Responsabile responsabileTemp;
 	private Docente docente;
 	private Utente utente;
-    ///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
+	///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
 	private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
@@ -36,17 +36,10 @@ public class Controller {
 		this.responsabile = null;
 		this.utente = null;
 
-		// Carica dal database i docenti registrati, così è possibile accedere
-		// anche a docenti salvati in sessioni precedenti (pattern BCE + DAO).
-		caricaDocentiDaDB();
-
-		// Carica dal database i responsabili registrati, così è possibile accedere
-		// anche ai responsabili salvati in sessioni precedenti (pattern BCE + DAO).
-		caricaResponsabiliDaDB();
-
-		// Carica dal database gli studenti registrati, così è possibile accedere
-		// anche agli studenti salvati in sessioni precedenti (pattern BCE + DAO).
-		caricaStudenteDB();
+		// Carica dal database tutti gli utenti registrati (studenti, docenti e
+		// responsabili), così è possibile accedere anche a utenti salvati in
+		// sessioni precedenti (pattern BCE + DAO).
+		caricaUtentiDaDB();
 
 		for (Utente u : utentiRegistrati) {
 			if (u.login(username, password)) {
@@ -77,22 +70,22 @@ public class Controller {
 	///Imposta il responsabileTemp che serve per mandare le richieste al responsabile
 	public void putResponsabile(){
 		for (Utente u : utentiRegistrati) {
-				this.utente = u;
+			this.utente = u;
 
-				if (u instanceof Responsabile) {
-					this.responsabileTemp = (Responsabile) u;
-                    return;
-				}
+			if (u instanceof Responsabile) {
+				this.responsabileTemp = (Responsabile) u;
+				return;
 			}
-responsabileTemp=null;
+		}
+		responsabileTemp=null;
 	}
-    ///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
-    /// @exception NullPointerException
-    public void checkResponsabileTemp(){
-        if(responsabileTemp==null){
-            throw new NullPointerException("Non è presente ancora un responsabile");
-        }
-    }
+	///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
+	/// @exception NullPointerException
+	public void checkResponsabileTemp(){
+		if(responsabileTemp==null){
+			throw new NullPointerException("Non è presente ancora un responsabile");
+		}
+	}
 
 
 
@@ -151,99 +144,99 @@ responsabileTemp=null;
 	public void visualizzaLezione(OrarioLezioni elencoLezioni) {
 		docente.visualizzaOrario(elencoLezioni);
 	}
-///Permette al docente di aggiungere un Insegnamento che può insegnare
-    public void addInsegnamentoDocente(String materia){
+	///Permette al docente di aggiungere un Insegnamento che può insegnare
+	public void addInsegnamentoDocente(String materia){
 
-                docente.addInsegnamento(stringToInsegnamento(materia));
+		docente.addInsegnamento(stringToInsegnamento(materia));
 
-    }
-    ///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
-    /// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-    ///@return Restituisce una {@code String} o {@code null}
-    public String removeInsegnamentoDocente(String materia){
+	}
+	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
+	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
+	///@return Restituisce una {@code String} o {@code null}
+	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
 		}catch(Exception ex){
 			return ex.getMessage();
 		}
 		return null;
-    }
-    ///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
-    /// @return Restituisce un oggetto di tipo {@link Insegnamento}
-    /// @param materia è il nome dell'insegnamento
-    private Insegnamento stringToInsegnamento(String materia){
-        for(Insegnamento insegnamento:insegnamentiRegistrati){
-            if(insegnamento.Nome.equalsIgnoreCase(materia)){
-                 return insegnamento;
-            }
-        }
-        return null;
-    }
-    ///Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
-    ///@return Restituisce una lista di tipo {@code String}
-    public List<String> getInsegnamentiRegistratiDocente(){
-        List<String> data= new ArrayList<>();
-        List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
-        List<Insegnamento> b= docente.getInsegnamenti();
-        a.removeAll(b);
-        for(Insegnamento insegnamento:a){
-            data.add(insegnamento.Nome);
-        }
-        return data;
-    };
-    /**Ritorna gli insegnamenti registrati  però solo il nome
+	}
+	///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
+	/// @return Restituisce un oggetto di tipo {@link Insegnamento}
+	/// @param materia è il nome dell'insegnamento
+	private Insegnamento stringToInsegnamento(String materia){
+		for(Insegnamento insegnamento:insegnamentiRegistrati){
+			if(insegnamento.Nome.equalsIgnoreCase(materia)){
+				return insegnamento;
+			}
+		}
+		return null;
+	}
+	///Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
+	///@return Restituisce una lista di tipo {@code String}
+	public List<String> getInsegnamentiRegistratiDocente(){
+		List<String> data= new ArrayList<>();
+		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
+		List<Insegnamento> b= docente.getInsegnamenti();
+		a.removeAll(b);
+		for(Insegnamento insegnamento:a){
+			data.add(insegnamento.Nome);
+		}
+		return data;
+	};
+	/**Ritorna gli insegnamenti registrati  però solo il nome
 	 *@param materia <p>Se materia è {@code ""} il metodo ritorna tutte le materie registrate,
 	 *se no ritorna le materie che iniziano con la stringa dentro materia.
-     *@return Restituisce una lista di tipo {@code String}
+	 *@return Restituisce una lista di tipo {@code String}
 	 */
-    public List<String> getInsegnamentiRegistrati(String materia){
-        List<String> data= new ArrayList<>();
-        List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
+	public List<String> getInsegnamentiRegistrati(String materia){
+		List<String> data= new ArrayList<>();
+		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
 
-        for(Insegnamento insegnamento:a){
-            if(insegnamento.Nome.toLowerCase().startsWith(materia))
-            data.add(insegnamento.Nome);
-        }
-        return data;
-    };
-    ///Ritorna gli insegnamenti del docente
-    ///@return Restituisce un array di tipo {@code Object[][]}
-    public Object[][] getInsegnamentiDocente(){
-        List<Insegnamento> insegnamenti= docente.getInsegnamenti();
-        if(insegnamenti.isEmpty()){ return new Object[0][0];}
-        Object[][] data=new Object[insegnamenti.size()][3];
-        for(int i=0; i<insegnamenti.size(); i++){
-         data[i][0]=insegnamenti.get(i).Nome;
-         data[i][1]=insegnamenti.get(i).NumeroCFU;
-         data[i][2]=insegnamenti.get(i).AnnoCorso;
-        }
-        return data;
-    };
-    ///Permette al docente di aggiungere un {@link Vincolo} max 3.
+		for(Insegnamento insegnamento:a){
+			if(insegnamento.Nome.toLowerCase().startsWith(materia))
+				data.add(insegnamento.Nome);
+		}
+		return data;
+	};
+	///Ritorna gli insegnamenti del docente
+	///@return Restituisce un array di tipo {@code Object[][]}
+	public Object[][] getInsegnamentiDocente(){
+		List<Insegnamento> insegnamenti= docente.getInsegnamenti();
+		if(insegnamenti.isEmpty()){ return new Object[0][0];}
+		Object[][] data=new Object[insegnamenti.size()][3];
+		for(int i=0; i<insegnamenti.size(); i++){
+			data[i][0]=insegnamenti.get(i).Nome;
+			data[i][1]=insegnamenti.get(i).NumeroCFU;
+			data[i][2]=insegnamenti.get(i).AnnoCorso;
+		}
+		return data;
+	};
+	///Permette al docente di aggiungere un {@link Vincolo} max 3.
 	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-    ///@return Restituisce una {@code String} o {@code null}
+	///@return Restituisce una {@code String} o {@code null}
 	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
-        try{
-            docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
-        }catch(Exception e){
-            return e.getMessage();
-        }
-        return null;
+		try{
+			docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
+		}catch(Exception e){
+			return e.getMessage();
+		}
+		return null;
 	}
-///Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere
-/// @return Restituisce una {@code String} o {@code null}
-/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
+	///Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere
+	/// @return Restituisce una {@code String} o {@code null}
+	/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
 	public String rimuoviVincolo(int ind) {
-        try{
-		docente.rimuoviVincolo(ind);}
-        catch (Exception e){
-            return e.getMessage();
-        }
-        return null;
+		try{
+			docente.rimuoviVincolo(ind);}
+		catch (Exception e){
+			return e.getMessage();
+		}
+		return null;
 	}
 
 	///Un metodo che permette di ottenere i {@link Vincolo vincoli} del docente
-    /// @return Restituisce un array di tipo {@code Object[][]}
+	/// @return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] ottieniVincoli() {
 		List<Vincolo> v = docente.getVincoli();
 
@@ -257,11 +250,11 @@ responsabileTemp=null;
 	///Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
-        checkResponsabileTemp();
+		checkResponsabileTemp();
 		docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio), new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
 	}
-/// Restituisce un array che contiene le richieste inviate dal docente
-/// @return Restituisce un array di tipo {@code Object[][]}
+	/// Restituisce un array che contiene le richieste inviate dal docente
+	/// @return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] ottieniRichiesteInviate() {
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
@@ -273,27 +266,27 @@ responsabileTemp=null;
 		}
 		return data;
 	}
-///Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
-/// @return Ritorna una array di tipo {@code Object[][]}
+	///Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
+	/// @return Ritorna una array di tipo {@code Object[][]}
 	public Object[][] getLezioniDocente() {
 		List<Lezione> l = docente.getLezioni(orarioLezioni);
 
 		if(l.isEmpty()){
 
-            return new Object[0][0]; }
+			return new Object[0][0]; }
 		List<List<Lezione>> lezioniPerGiorno = new ArrayList<>();
 		List<Object[]> data = new ArrayList<>();
 		String[] giorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"};
 		// raggruppa le lezione per giorno.
 		for (String giorno:giorni) {
-            //crea un list con lezioni per ogni giorno dentro un'altra list
+			//crea un list con lezioni per ogni giorno dentro un'altra list
 			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.orario.giorno.equalsIgnoreCase(giorno)).collect(Collectors.toList()));
 
-        }
+		}
 		while(true) {
-		Object[] row = new Object[5];
-		boolean hasLezioni=false;
-		// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
+			Object[] row = new Object[5];
+			boolean hasLezioni=false;
+			// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
 			for(int g=0; g<giorni.length; g++){
 				row[g]=lezioniPerGiorno.get(g).isEmpty()? "":lezioniPerGiorno.get(g).get(0).infoLezione();
 			}
@@ -304,7 +297,7 @@ responsabileTemp=null;
 					hasLezioni=true;
 				}
 			}
-            //Se non ci sono piu lezioni in nessuna lista ferma il loop
+			//Se non ci sono piu lezioni in nessuna lista ferma il loop
 			if(!hasLezioni) break;
 			data.add(row);
 		}
@@ -313,7 +306,7 @@ responsabileTemp=null;
 	}
 
 
-	
+
 	//Studente visualizza l'orario delle lezioni del corso.
 	public void visualizzaOrarioLezioni(OrarioLezioni elencoLezioni){
 		studente.visualizzaOrarioLezioni(elencoLezioni);
@@ -483,7 +476,7 @@ responsabileTemp=null;
 					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.");
 		}
 
-		   // <-- true
+		// <-- true
 		responsabile.spostamentoLezione(numeroRichiesta, orarioLezioni, true);
 		// spostamentoLezione imposta RIFIUTATA automaticamente in caso di conflitto
 		if (!responsabile.getStatoRichiesta(numeroRichiesta).equals("APPROVATA")) {
@@ -521,53 +514,27 @@ responsabileTemp=null;
 		}
 	}
 
-	/** <p>Legge i docenti dal database tramite il DAO e li aggiunge alla lista
-	* {@code utentiRegistrati}, evitando duplicati (confronto per email).
-	* Eventuali errori del database vengono segnalati a console senza
-	* interrompere il login degli utenti già presenti in memoria.</p>
-	*/
-	private void caricaDocentiDaDB() {
-		try {
-			DocenteDAO docenteDAO = new DocentePostgresDao();
-			ArrayList<String> nomi = new ArrayList<>();
-			ArrayList<String> cognomi = new ArrayList<>();
-			ArrayList<String> emails = new ArrayList<>();
-			ArrayList<String> logins = new ArrayList<>();
-			ArrayList<String> passwords = new ArrayList<>();
-			docenteDAO.leggiDocenteDB(nomi, cognomi, emails, logins, passwords);
-
-			for (int i = 0; i < emails.size(); i++) {
-				boolean giaPresente = false;
-				for (Utente u : utentiRegistrati) {
-					if (u.getmail().equals(emails.get(i))) {
-						giaPresente = true;
-						break;
-					}
-				}
-				if (!giaPresente) {
-					utentiRegistrati.add(new Docente(nomi.get(i), cognomi.get(i),
-							emails.get(i), logins.get(i), passwords.get(i)));
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Errore nel caricamento dei docenti dal database: " + e.getMessage());
-		}
-	}
-
-	/** <p>Legge i responsabili dal database tramite il DAO e li aggiunge alla lista
-	 * {@code utentiRegistrati}, evitando duplicati (confronto per email).
-	 * Eventuali errori del database vengono segnalati a console senza
-	 * interrompere il login degli utenti già presenti in memoria.</p>
+	/** <p>Legge tutti gli utenti dal database tramite {@link UtenteDAO} (unico
+	 * metodo di caricamento: la tabella {@code utente} contiene studenti, docenti
+	 * e responsabili) e li aggiunge alla lista {@code utentiRegistrati}, evitando
+	 * duplicati (confronto per email). In base alla colonna {@code ruolo} viene
+	 * istanziata la classe corretta del Model. Per docenti e responsabili la
+	 * matricola letta dal database viene ignorata: per il momento non viene
+	 * visualizzata a schermo. Eventuali errori del database vengono segnalati a
+	 * console senza interrompere il login degli utenti già presenti in memoria.</p>
 	 */
-	private void caricaResponsabiliDaDB() {
+	private void caricaUtentiDaDB() {
 		try {
-			ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
+			UtenteDAO utenteDAO = new UtentePostgresDao();
 			ArrayList<String> nomi = new ArrayList<>();
 			ArrayList<String> cognomi = new ArrayList<>();
 			ArrayList<String> emails = new ArrayList<>();
 			ArrayList<String> logins = new ArrayList<>();
 			ArrayList<String> passwords = new ArrayList<>();
-			responsabileDAO.leggiResponsabileDB(nomi, cognomi, emails, logins, passwords);
+			ArrayList<String> matricole = new ArrayList<>();
+			ArrayList<Integer> anniCorso = new ArrayList<>();
+			ArrayList<String> ruoli = new ArrayList<>();
+			utenteDAO.leggiUtentiDB(nomi, cognomi, emails, logins, passwords, matricole, anniCorso, ruoli);
 
 			for (int i = 0; i < emails.size(); i++) {
 				boolean giaPresente = false;
@@ -577,43 +544,28 @@ responsabileTemp=null;
 						break;
 					}
 				}
-				if (!giaPresente) {
-					utentiRegistrati.add(new Responsabile(nomi.get(i), cognomi.get(i),
-							emails.get(i), logins.get(i), passwords.get(i)));
+				if (giaPresente) continue;
+
+				switch (ruoli.get(i).toUpperCase()) {
+					case "RESPONSABILE":
+						utentiRegistrati.add(new Responsabile(nomi.get(i), cognomi.get(i),
+								emails.get(i), logins.get(i), passwords.get(i)));
+						break;
+					case "DOCENTE":
+						utentiRegistrati.add(new Docente(nomi.get(i), cognomi.get(i),
+								emails.get(i), logins.get(i), passwords.get(i)));
+						break;
+					case "STUDENTE":
+					default:
+						Integer anno = anniCorso.get(i);
+						utentiRegistrati.add(new Studente(nomi.get(i), cognomi.get(i),
+								emails.get(i), logins.get(i), passwords.get(i),
+								matricole.get(i), anno != null ? anno : 1));
+						break;
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Errore nel caricamento dei responsabili dal database: " + e.getMessage());
-		}
-	}
-
-	private void caricaStudenteDB(){
-		try {
-			StudenteDAO studenteDAO=new StudentePostgresDao();
-			ArrayList<String> nomi = new ArrayList<>();
-			ArrayList<String> cognomi = new ArrayList<>();
-			ArrayList<String> emails = new ArrayList<>();
-			ArrayList<String> logins = new ArrayList<>();
-			ArrayList<String> passwords = new ArrayList<>();
-			ArrayList<String> matricole= new ArrayList<>();
-			ArrayList<Integer> annoCorso = new ArrayList<>();
-			studenteDAO.leggiStudenteDB(nomi, cognomi, emails, logins, passwords, matricole, annoCorso);
-
-			for(int i=0;i<emails.size();i++){
-				boolean giaPresente = false;
-				for (Utente u : utentiRegistrati) {
-					if (u.getmail().equals(emails.get(i))) {
-						giaPresente = true;
-						break;
-					}
-				}
-				if (!giaPresente) {
-					utentiRegistrati.add(new Studente(nomi.get(i),cognomi.get(i),emails.get(i),
-							logins.get(i),passwords.get(i),matricole.get(i),annoCorso.get(i)));
-				}
-			}
-		}catch (Exception e){
-			System.out.println("Errore nel caricamento dei studente dal database: " + e.getMessage());
+			System.out.println("Errore nel caricamento degli utenti dal database: " + e.getMessage());
 		}
 	}
 }

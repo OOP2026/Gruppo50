@@ -1,27 +1,44 @@
 package implementazioneDao;
 import dao.DocenteDAO;
-import database_connection.ConnessioneDatabase;
+import dao.UtenteDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Implementazione PostgreSQL dell'interfaccia {@link DocenteDAO}.
+ *
+ * <p>Dopo l'unificazione delle tabelle in {@code utente}, questa classe
+ * delega la lettura e la scrittura a {@link UtentePostgresDao} e filtra
+ * i risultati con ruolo {@code "DOCENTE"}. Alla registrazione viene
+ * generata e salvata una matricola con prefisso {@code "DA"}, ma per il
+ * momento il docente non la visualizza a schermo.</p>
+ */
 public class DocentePostgresDao implements DocenteDAO {
 
-    private final Connection connection;
+    /** Ruolo con cui i docenti sono salvati nella tabella utente. */
+    private static final String RUOLO = "DOCENTE";
+    /** Prefisso delle matricole dei docenti. */
+    private static final String PREFISSO_MATRICOLA = "DA";
+
+    /** DAO della tabella unica utente a cui vengono delegate lettura e scrittura. */
+    private final UtenteDAO utenteDao;
 
     /**
-     * Nel costruttore si ottiene la connessione dal singleton.
+     * Nel costruttore si crea il DAO della tabella utente a cui delegare
+     * le operazioni (che a sua volta ottiene la connessione dal singleton).
      *
      * @throws Exception se la connessione al database fallisce
      */
     public DocentePostgresDao() throws Exception {
-        connection = ConnessioneDatabase.getInstance().getConnection();
+        utenteDao = new UtentePostgresDao();
     }
 
     /**
+     * Salva il docente nella tabella {@code utente} con ruolo {@code "DOCENTE"}.
+     * La matricola viene generata automaticamente con prefisso {@code "DA"}
+     * (per il momento non è visualizzata a schermo); l'anno di corso viene
+     * salvato a {@code NULL}.
+     *
      * @param nome     Nome di battesimo del docente.
      * @param cognome  cognome di battesimo del docente.
      * @param email    l'email con cui si registra il docente al sistema.
@@ -31,45 +48,42 @@ public class DocentePostgresDao implements DocenteDAO {
      */
     @Override
     public void salvaDocDB(String nome, String cognome, String email, String login, String password) throws Exception {
-        String sql = "INSERT INTO docente (nome, cognome, email, username, password) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, nome);
-            ps.setString(2, cognome);
-            ps.setString(3, email);
-            ps.setString(4, login);
-            ps.setString(5, password);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            // Es. violazione della primary key: docente con questa email già presente.
-            throw new Exception("Impossibile salvare il docente sul database: " + e.getMessage());
-        }
+        String matricola = utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
+        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null, RUOLO);
     }
 
-
     /**
+     * Recupera tutti i docenti: legge tutti gli utenti tramite
+     * {@link UtenteDAO#leggiUtentiDB} e filtra le righe con ruolo {@code "DOCENTE"}.
+     *
      * @param nome la lista dei nomi dei docenti presenti nel db.
      * @param cognome la lista dei  cognomi dei docenti presenti nel db.
-     * @param email la lista dei nomi dei docenti presenti nel db.
-     * @param login la lista dei nomi dei docenti presenti nel db.
-     * @param password la lista dei nomi dei docenti presenti nel db.
-     * @throws Exception quando la lettura nel database falisce.
+     * @param email la lista delle email dei docenti presenti nel db.
+     * @param login la lista degli username dei docenti presenti nel db.
+     * @param password la lista delle password dei docenti presenti nel db.
+     * @throws Exception quando la lettura nel database fallisce.
      */
     @Override
     public void leggiDocenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws Exception {
-        String sql = "SELECT nome, cognome, email, username, password FROM docente";
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                nome.add(rs.getString("nome"));
-                cognome.add(rs.getString("cognome"));
-                email.add(rs.getString("email"));
-                login.add(rs.getString("username"));
-                password.add(rs.getString("password"));
+        ArrayList<String> nomi = new ArrayList<>();
+        ArrayList<String> cognomi = new ArrayList<>();
+        ArrayList<String> emails = new ArrayList<>();
+        ArrayList<String> logins = new ArrayList<>();
+        ArrayList<String> passwords = new ArrayList<>();
+        ArrayList<String> matricole = new ArrayList<>();
+        ArrayList<Integer> anniCorso = new ArrayList<>();
+        ArrayList<String> ruoli = new ArrayList<>();
+        utenteDao.leggiUtentiDB(nomi, cognomi, emails, logins, passwords, matricole, anniCorso, ruoli);
+
+        for (int i = 0; i < ruoli.size(); i++) {
+            if (RUOLO.equalsIgnoreCase(ruoli.get(i))) {
+                nome.add(nomi.get(i));
+                cognome.add(cognomi.get(i));
+                email.add(emails.get(i));
+                login.add(logins.get(i));
+                password.add(passwords.get(i));
+                // matricola e annoCorso vengono ignorati: per ora il docente non li visualizza.
             }
-        } catch (SQLException e) {
-            throw new Exception("Impossibile leggere i docenti dal database: " + e.getMessage());
         }
     }
 }
-

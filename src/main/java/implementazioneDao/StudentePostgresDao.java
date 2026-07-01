@@ -1,26 +1,39 @@
 package implementazioneDao;
 
 import dao.StudenteDAO;
-import database_connection.ConnessioneDatabase;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import dao.UtenteDAO;
 import java.util.ArrayList;
 
+/**
+ * Implementazione PostgreSQL dell'interfaccia {@link StudenteDAO}.
+ *
+ * <p>Dopo l'unificazione delle tabelle in {@code utente}, questa classe
+ * delega la lettura e la scrittura a {@link UtentePostgresDao} e filtra
+ * i risultati con ruolo {@code "STUDENTE"}.</p>
+ */
 public class StudentePostgresDao implements StudenteDAO {
-    private final Connection connection;
+    /** Ruolo con cui gli studenti sono salvati nella tabella utente. */
+    private static final String RUOLO = "STUDENTE";
+    /** Prefisso delle matricole degli studenti. */
+    private static final String PREFISSO_MATRICOLA = "DE";
+
+    /** DAO della tabella unica utente a cui vengono delegate lettura e scrittura. */
+    private final UtenteDAO utenteDao;
 
     /**
-     * Nel costruttore si ottiene la connessione dal singleton.
+     * Nel costruttore si crea il DAO della tabella utente a cui delegare
+     * le operazioni (che a sua volta ottiene la connessione dal singleton).
      *
      * @throws Exception se la connessione al database fallisce
      */
     public StudentePostgresDao() throws Exception {
-        connection = ConnessioneDatabase.getInstance().getConnection();
+        utenteDao = new UtentePostgresDao();
     }
 
     /**
+     * Salva lo studente nella tabella {@code utente} con ruolo {@code "STUDENTE"},
+     * delegando a {@link UtenteDAO#salvaUtenteDB}.
+     *
      * @param nome      Nome di battesimo dello studente.
      * @param cognome   cognome di battesimo dello studente.
      * @param email     l'email con cui si registra lo studente al sistema.
@@ -32,30 +45,13 @@ public class StudentePostgresDao implements StudenteDAO {
      */
     @Override
     public void salvaStudenteDB(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) throws Exception {
-        String sql = "INSERT INTO studente(nome,cognome,email,username,password,matricola,annoCorso)" +
-                "VALUES (?,?,?,?,?,?,?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, nome);
-            ps.setString(2, cognome);
-            ps.setString(3, email);
-            ps.setString(4, login);
-            ps.setString(5, password);
-            ps.setString(6, matricola);
-            ps.setInt(7, annoCorso);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            // Es. violazione della primary key: studente con questa email/matricola già presente.
-            throw new Exception("Impossibile salvare lo studente sul database: " + e.getMessage());
-        }
+        utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, annoCorso, RUOLO);
     }
 
     /**
-     * Recupera tutti i dati degli studenti presenti nel database e li inserisce
-     * all'interno delle rispettive liste passate come parametro.
-     * <p>
-     * Il metodo esegue una query di selezione sulla tabella "studente" e popola
-     * in modo posizionale le liste fornite.
-     * </p>
+     * Recupera tutti gli studenti: legge tutti gli utenti tramite
+     * {@link UtenteDAO#leggiUtentiDB} e filtra le righe con ruolo
+     * {@code "STUDENTE"}, popolando in modo posizionale le liste fornite.
      *
      * @param nome      la lista in cui verranno aggiunti i nomi degli studenti recuperati.
      * @param cognome   la lista in cui verranno aggiunti i cognomi degli studenti recuperati.
@@ -68,53 +64,41 @@ public class StudentePostgresDao implements StudenteDAO {
      */
     @Override
     public void leggiStudenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password, ArrayList<String> matricola, ArrayList<Integer> annoCorso) throws Exception {
-        String sql = "SELECT nome ,cognome,email,username,password," +
-                "matricola,annoCorso FROM studente";
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                nome.add(rs.getString("nome"));
-                cognome.add(rs.getString("cognome"));
-                email.add(rs.getString("email"));
-                login.add(rs.getString("username"));
-                password.add(rs.getString("password"));
-                matricola.add(rs.getString("matricola"));
-                annoCorso.add(rs.getInt("annoCorso"));
+        ArrayList<String> nomi = new ArrayList<>();
+        ArrayList<String> cognomi = new ArrayList<>();
+        ArrayList<String> emails = new ArrayList<>();
+        ArrayList<String> logins = new ArrayList<>();
+        ArrayList<String> passwords = new ArrayList<>();
+        ArrayList<String> matricole = new ArrayList<>();
+        ArrayList<Integer> anniCorso = new ArrayList<>();
+        ArrayList<String> ruoli = new ArrayList<>();
+        utenteDao.leggiUtentiDB(nomi, cognomi, emails, logins, passwords, matricole, anniCorso, ruoli);
+
+        for (int i = 0; i < ruoli.size(); i++) {
+            if (RUOLO.equalsIgnoreCase(ruoli.get(i))) {
+                nome.add(nomi.get(i));
+                cognome.add(cognomi.get(i));
+                email.add(emails.get(i));
+                login.add(logins.get(i));
+                password.add(passwords.get(i));
+                matricola.add(matricole.get(i));
+                Integer anno = anniCorso.get(i);
+                annoCorso.add(anno != null ? anno : 1);
             }
-        } catch (SQLException e) {
-            throw new Exception("Impossibile leggi studente sul database: " + e.getMessage());
         }
     }
 
     /**
-     * Genera una nuova matricola univoca interrogando il database.
-     * <p>
-     * Il metodo cerca il valore massimo attualmente presente nella colonna "matricola"
-     * della tabella "studente" tramite l'operatore SQL {@code MAX()}. Se trova un risultato,
-     * estrae la parte numerica successiva al prefisso "DE", la incrementa di uno e la
-     * formatta nuovamente. Se la tabella è vuota o non ci sono matricole valide,
-     * il conteggio parte dal valore predefinito 1.
-     * </p>
+     * Genera una nuova matricola univoca per gli studenti delegando a
+     * {@link UtenteDAO#generaMatricolaDB} con il prefisso {@code "DE"}:
+     * viene cercata la matricola massima con quel prefisso nella tabella
+     * "utente" e incrementata di uno.
      *
      * @return la nuova matricola generata nel formato con prefisso "DE" e 8 cifre numeriche (es. {@code "DE00000001"}).
      * @throws Exception se si verifica un errore SQL durante la lettura del valore massimo o l'accesso al database.
      */
     @Override
     public String generaMatricolaDB() throws Exception {
-        String sql = "SELECT MAX(matricola) AS maxmat FROM studente";
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            long prossimo = 1;
-            if (rs.next()) {
-                String maxMat = rs.getString("maxmat");
-                if (maxMat != null && maxMat.length() > 2) {
-                    // Estrae la parte numerica dopo il prefisso "DE" e incrementa.
-                    prossimo = Long.parseLong(maxMat.substring(2)) + 1;
-                }
-            }
-            return "DE" + String.format("%08d", prossimo);
-        } catch (SQLException e) {
-            throw new Exception("Impossibile generare la matricola dal database: " + e.getMessage());
-        }
+        return utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
     }
 }

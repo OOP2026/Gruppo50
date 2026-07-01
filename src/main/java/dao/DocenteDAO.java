@@ -1,11 +1,13 @@
 package dao;
 import java.util.ArrayList;
 /**
- * Interfaccia DAO per la tabella {@code Docente}.
+ * Interfaccia DAO per i docenti, memorizzati nella tabella unica
+ * {@code utente} con ruolo {@code "DOCENTE"}.
  *
  * <p>Pattern BCE + DAO: questo package contiene solo la descrizione dei metodi
  * di accesso ai dati persistenti. L'implementazione concreta per PostgreSQL si
- * trova in {@code implementazioneDao.DocentePostgresDao}.</p>
+ * trova in {@code implementazioneDao.DocentePostgresDao}, che delega a
+ * {@code UtenteDAO} e filtra i risultati in base al ruolo.</p>
  *
  * <p>Nota: i metodi ricevono e restituiscono solo dati (String, int,
  * ArrayList), mai oggetti del Model. In questo modo il package di accesso al DB

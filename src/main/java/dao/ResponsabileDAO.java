@@ -1,11 +1,13 @@
 package dao;
 import java.util.ArrayList;
 /**
- * Interfaccia DAO per la tabella {@code Responsabile}.
+ * Interfaccia DAO per i responsabili, memorizzati nella tabella unica
+ * {@code utente} con ruolo {@code "RESPONSABILE"}.
  *
  * <p>Pattern BCE + DAO: questo package contiene solo la descrizione dei metodi
  * di accesso ai dati persistenti. L'implementazione concreta per PostgreSQL si
- * trova in {@code implementazioneDao.ResponsabilePostgresDao}.</p>
+ * trova in {@code implementazioneDao.ResponsabilePostgresDao}, che delega a
+ * {@code UtenteDAO} e filtra i risultati in base al ruolo.</p>
  *
  * <p>Nota: i metodi ricevono e restituiscono solo dati (String, int,
  * ArrayList), mai oggetti del Model. In questo modo il package di accesso al DB
@@ -22,7 +24,7 @@ public interface ResponsabileDAO {
      * @param password password segreta del Responsabile per accedere.
      */
     void salvaResponsabileDB(String nome, String cognome, String email,
-                    String login, String password)throws Exception;
+                             String login, String password)throws Exception;
 
     /**Metodo da implementare in ResponsabilePostgreDao per recuperare i dati di un Responsabile registrato.
      *
@@ -33,6 +35,6 @@ public interface ResponsabileDAO {
      * @param password password segreta del Responsabile per accedere.
      */
     void leggiResponsabileDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
-                        ArrayList<String> login, ArrayList<String> password)throws Exception;
+                             ArrayList<String> login, ArrayList<String> password)throws Exception;
 
 }
