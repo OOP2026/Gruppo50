@@ -123,6 +123,9 @@ vincoli.add(new Vincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine));
 System.out.println("Vincolo aggiunto con successo");
 
 }
+public void caricaVincoliInDocente(List<Vincolo> vincoliDaCaricare){
+        vincoli= new ArrayList<>(vincoliDaCaricare);
+    }
 ///Metodo che restituisce i vincoli del docente, utile per verificare se il docente è disponibile in un certo orario
 public List<Vincolo> getVincoli(){
 return new ArrayList<>(vincoli);

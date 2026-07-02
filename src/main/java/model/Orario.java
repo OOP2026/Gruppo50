@@ -45,7 +45,9 @@ public class Orario {
     public Orario(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 
         //controlli se il giorno è scritto bene ed fa parte dei giorni della settimana
-if( giorno==null ||!giorni.contains(giorno.toLowerCase())){throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti: " + giorni);}
+if( giorno==null ||!giorni.contains(giorno.toLowerCase())){
+    System.out.println("Giorno errato: "+giorno);
+    throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti:" + giorni);}
 //Controlla se le ore sono compresi negli intervalli validi e se l'orario di fine è successivo a quello di inizio
 if(oraInizio<8 || oraInizio>17){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 8 e 17");}
 if(oraFine<8 || oraFine>18){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 8 e 18");}

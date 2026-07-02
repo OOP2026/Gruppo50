@@ -36,7 +36,7 @@ public class ConnessioneDatabase {
      * Formato: jdbc:postgresql://<host>:<porta>/<nome_database>
      * Il database si chiama "orariolezione" come da schema SQL fornito.
      */
-    private String url = "jdbc:postgresql://localhost:5432/orariolezione";
+    private String url = "jdbc:postgresql://localhost:5432/orariolezioni";
 
     /** Nome del driver JDBC per PostgreSQL */
     private String driver = "org.postgresql.Driver";
@@ -50,7 +50,7 @@ public class ConnessioneDatabase {
      *
      * @throws SQLException se la connessione al database fallisce
      */
-    private ConnessioneDatabase() throws SQLException {
+    public ConnessioneDatabase() throws SQLException {
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, nome, password);
