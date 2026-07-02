@@ -45,7 +45,12 @@ public class SchermataRichiesta {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        Scroller.setPreferredSize(new Dimension(1000,-1));
+        //Controllo che il pannello per scrollare le richieste si generi corettamente
+        JScrollPane scroller = Scroller;
+        if (scroller != null) {
+            scroller.setPreferredSize(new Dimension(1000, -1));
+        }
+
         caricaEvents();
         creaTableRichiesta();
         impostaLimiteCaratteri(motivoText, 200);
