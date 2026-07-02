@@ -185,7 +185,7 @@ public class SchermataRichiesta {
 
             JTextArea textArea = new JTextArea(motivo);
             textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true); // <--- Ora SonarQube non segnerà più l'errore qui
+            textArea.setWrapStyleWord(true);
             textArea.setEditable(false);
 
             JScrollPane scrollPane = new JScrollPane(textArea);

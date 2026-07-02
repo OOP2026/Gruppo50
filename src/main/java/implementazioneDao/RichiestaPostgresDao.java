@@ -1,118 +1,238 @@
 package implementazioneDao;
 
 import dao.RichiestaDAO;
+import database_connection.ConnessioneDatabase;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * Implementazione PostgreSQL dell'interfaccia {@link RichiestaDAO}.
+ *
+ * <p>Realizza la persistenza delle richieste di spostamento sulla tabella
+ * {@code richiesta}. La connessione è ottenuta dal singleton
+ * {@link ConnessioneDatabase}; le query parametriche usano
+ * {@link PreparedStatement} con i segnaposto {@code ?}; le {@link SQLException}
+ * vengono rilanciate come {@link Exception} con un messaggio leggibile, così il
+ * Controller può gestirle e mostrarle alla GUI.</p>
+ *
+ * <p>Sul database gli orari sono memorizzati in colonne di tipo
+ * {@code time without time zone} (una colonna per l'inizio e una per la fine,
+ * sia della fascia iniziale sia di quella proposta). L'interfaccia invece
+ * scompone ogni orario in ora e minuto (int): la conversione tra i due formati
+ * avviene tramite {@link LocalTime}, mappato dal driver JDBC PostgreSQL sul tipo
+ * {@code time}. I secondi non sono significativi e valgono sempre {@code 0}.</p>
+ */
 public class RichiestaPostgresDao implements RichiestaDAO {
+
+    /** Connessione JDBC verso il database PostgreSQL. */
+    private final Connection connection;
+
     /**
-     * @param emailDocente         email del docente richiedente (FK docente)
-     * @param emailResponsabile    email del responsabile destinatario (FK responsabile)
-     * @param motivo               motivo della richiesta
-     * @param giornoIniziale       giorno della lezione da spostare
-     * @param oraInizioIniziale    ora di inizio della lezione da spostare
-     * @param minutoInizioIniziale minuto di inizio della lezione da spostare
-     * @param oraFineIniziale      ora di fine della lezione da spostare
-     * @param minutoFineIniziale   minuto di fine della lezione da spostare
-     * @param giornoProposto       giorno del nuovo orario proposto
-     * @param oraInizioProposto    ora di inizio del nuovo orario proposto
-     * @param minutoInizioProposto minuto di inizio del nuovo orario proposto
-     * @param oraFineProposto      ora di fine del nuovo orario proposto
-     * @param minutoFineProposto   minuto di fine del nuovo orario proposto
-     * @return
-     * @throws Exception
+     * Nel costruttore si ottiene la connessione dal singleton.
+     *
+     * @throws Exception se la connessione al database fallisce
      */
-    @Override
-    public int salvaRichiestaDB(String emailDocente, String emailResponsabile, String motivo, String giornoIniziale, int oraInizioIniziale, int minutoInizioIniziale, int oraFineIniziale, int minutoFineIniziale, String giornoProposto, int oraInizioProposto, int minutoInizioProposto, int oraFineProposto, int minutoFineProposto) throws Exception {
-        return 0;
+    public RichiestaPostgresDao() throws Exception {
+        connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
     /**
-     * @param emailDocente         email del docente di cui leggere le richieste
-     * @param id                   lista in cui inserire gli id delle richieste
-     * @param emailResponsabile    lista in cui inserire le email dei responsabili
-     * @param motivo               lista in cui inserire i motivi
-     * @param giornoIniziale       lista in cui inserire i giorni iniziali
-     * @param oraInizioIniziale    lista in cui inserire le ore di inizio iniziali
-     * @param minutoInizioIniziale lista in cui inserire i minuti di inizio iniziali
-     * @param oraFineIniziale      lista in cui inserire le ore di fine iniziali
-     * @param minutoFineIniziale   lista in cui inserire i minuti di fine iniziali
-     * @param giornoProposto       lista in cui inserire i giorni proposti
-     * @param oraInizioProposto    lista in cui inserire le ore di inizio proposte
-     * @param minutoInizioProposto lista in cui inserire i minuti di inizio proposti
-     * @param oraFineProposto      lista in cui inserire le ore di fine proposte
-     * @param minutoFineProposto   lista in cui inserire i minuti di fine proposti
-     * @param stato                lista in cui inserire gli stati delle richieste
-     * @throws Exception
+     * {@inheritDoc}
+     *
+     * <p>Esegue un {@code INSERT} sulla tabella {@code richiesta} senza
+     * specificare né {@code id} (generato dalla sequenza) né {@code stato} (che
+     * assume il valore di default {@code 'IN_ATTESA'}). Ora e minuto di ciascun
+     * estremo vengono ricomposti in un {@link LocalTime} prima di essere scritti
+     * nelle colonne {@code time}. La clausola {@code RETURNING id} restituisce la
+     * chiave primaria generata, che viene letta dal {@link ResultSet} e
+     * restituita al chiamante.</p>
      */
     @Override
-    public void leggiRichiesteDocenteDB(String emailDocente, ArrayList<Integer> id, ArrayList<String> emailResponsabile, ArrayList<String> motivo, ArrayList<String> giornoIniziale, ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale, ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale, ArrayList<String> giornoProposto, ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto, ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto, ArrayList<String> stato) throws Exception {
-
+    public int salvaRichiestaDB(String emailDocente, String emailResponsabile, String motivo,
+                                String giornoIniziale, int oraInizioIniziale, int minutoInizioIniziale,
+                                int oraFineIniziale, int minutoFineIniziale,
+                                String giornoProposto, int oraInizioProposto, int minutoInizioProposto,
+                                int oraFineProposto, int minutoFineProposto) throws Exception {
+        String sql = "INSERT INTO richiesta " +
+                "(email_docente, email_responsabile, motivo, " +
+                " giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
+                " giorno_proposto, ora_inizio_proposto, ora_fine_proposto) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, emailDocente);
+            ps.setString(2, emailResponsabile);
+            ps.setString(3, motivo);
+            ps.setString(4, giornoIniziale);
+            ps.setObject(5, LocalTime.of(oraInizioIniziale, minutoInizioIniziale));
+            ps.setObject(6, LocalTime.of(oraFineIniziale, minutoFineIniziale));
+            ps.setString(7, giornoProposto);
+            ps.setObject(8, LocalTime.of(oraInizioProposto, minutoInizioProposto));
+            ps.setObject(9, LocalTime.of(oraFineProposto, minutoFineProposto));
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            // Es. FK inesistente (docente/responsabile) o violazione di un CHECK sugli orari.
+            throw new Exception("Impossibile salvare la richiesta sul database: " + e.getMessage());
+        }
     }
 
     /**
-     * @param emailResponsabile    email del responsabile di cui leggere le richieste
-     * @param id                   lista in cui inserire gli id delle richieste
-     * @param emailDocente         lista in cui inserire le email dei docenti richiedenti
-     * @param motivo               lista in cui inserire i motivi
-     * @param giornoIniziale       lista in cui inserire i giorni iniziali
-     * @param oraInizioIniziale    lista in cui inserire le ore di inizio iniziali
-     * @param minutoInizioIniziale lista in cui inserire i minuti di inizio iniziali
-     * @param oraFineIniziale      lista in cui inserire le ore di fine iniziali
-     * @param minutoFineIniziale   lista in cui inserire i minuti di fine iniziali
-     * @param giornoProposto       lista in cui inserire i giorni proposti
-     * @param oraInizioProposto    lista in cui inserire le ore di inizio proposte
-     * @param minutoInizioProposto lista in cui inserire i minuti di inizio proposti
-     * @param oraFineProposto      lista in cui inserire le ore di fine proposte
-     * @param minutoFineProposto   lista in cui inserire i minuti di fine proposti
-     * @param stato                lista in cui inserire gli stati delle richieste
-     * @throws Exception
-     */
-
-
-    /**
-     * @param id                   lista in cui inserire gli id delle richieste
-     * @param emailDocente         lista in cui inserire le email dei docenti richiedenti
-     * @param emailResponsabile    lista in cui inserire le email dei responsabili destinatari
-     * @param motivo               lista in cui inserire i motivi
-     * @param giornoIniziale       lista in cui inserire i giorni iniziali
-     * @param oraInizioIniziale    lista in cui inserire le ore di inizio iniziali
-     * @param minutoInizioIniziale lista in cui inserire i minuti di inizio iniziali
-     * @param oraFineIniziale      lista in cui inserire le ore di fine iniziali
-     * @param minutoFineIniziale   lista in cui inserire i minuti di fine iniziali
-     * @param giornoProposto       lista in cui inserire i giorni proposti
-     * @param oraInizioProposto    lista in cui inserire le ore di inizio proposte
-     * @param minutoInizioProposto lista in cui inserire i minuti di inizio proposti
-     * @param oraFineProposto      lista in cui inserire le ore di fine proposte
-     * @param minutoFineProposto   lista in cui inserire i minuti di fine proposti
-     * @throws Exception
+     * {@inheritDoc}
+     *
+     * <p>Seleziona tutte le righe della tabella {@code richiesta} il cui
+     * {@code email_docente} coincide con quello passato, ordinate per {@code id}.
+     * Per ogni riga i valori vengono aggiunti in coda alle liste parallele: le
+     * colonne {@code time} sono scomposte in ora e minuto tramite
+     * {@link #aggiungiOra}.</p>
      */
     @Override
-    public void leggiRichiesteInAttesaDB(ArrayList<Integer> id, ArrayList<String> emailDocente, ArrayList<String> emailResponsabile, ArrayList<String> motivo, ArrayList<String> giornoIniziale, ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale, ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale, ArrayList<String> giornoProposto, ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto, ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws Exception {
-
+    public void leggiRichiesteDocenteDB(String emailDocente,
+                                        ArrayList<Integer> id,
+                                        ArrayList<String> emailResponsabile,
+                                        ArrayList<String> motivo,
+                                        ArrayList<String> giornoIniziale,
+                                        ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale,
+                                        ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
+                                        ArrayList<String> giornoProposto,
+                                        ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
+                                        ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
+                                        ArrayList<String> stato) throws Exception {
+        String sql = "SELECT id, email_responsabile, motivo, " +
+                "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
+                "giorno_proposto, ora_inizio_proposto, ora_fine_proposto, stato " +
+                "FROM richiesta WHERE email_docente = ? ORDER BY id";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, emailDocente);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    id.add(rs.getInt("id"));
+                    emailResponsabile.add(rs.getString("email_responsabile"));
+                    motivo.add(rs.getString("motivo"));
+                    giornoIniziale.add(rs.getString("giorno_iniziale"));
+                    aggiungiOra(rs, "ora_inizio_iniziale", oraInizioIniziale, minutoInizioIniziale);
+                    aggiungiOra(rs, "ora_fine_iniziale", oraFineIniziale, minutoFineIniziale);
+                    giornoProposto.add(rs.getString("giorno_proposto"));
+                    aggiungiOra(rs, "ora_inizio_proposto", oraInizioProposto, minutoInizioProposto);
+                    aggiungiOra(rs, "ora_fine_proposto", oraFineProposto, minutoFineProposto);
+                    stato.add(rs.getString("stato"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Impossibile leggere le richieste del docente dal database: " + e.getMessage());
+        }
     }
 
     /**
-     * @param idRichiesta id della richiesta da aggiornare
-     * @param nuovoStato  nuovo stato: {@code 'IN_ATTESA'}, {@code 'APPROVATA'} o {@code 'RIFIUTATA'}
-     * @throws Exception
+     * {@inheritDoc}
+     *
+     * <p>Seleziona tutte le righe ancora in stato {@code 'IN_ATTESA'},
+     * indipendentemente dal responsabile destinatario, ordinate per {@code id}.
+     * Lo stato non viene restituito perché è implicitamente {@code 'IN_ATTESA'}
+     * per tutte le righe estratte.</p>
+     */
+    @Override
+    public void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
+                                         ArrayList<String> emailDocente,
+                                         ArrayList<String> emailResponsabile,
+                                         ArrayList<String> motivo,
+                                         ArrayList<String> giornoIniziale,
+                                         ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale,
+                                         ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
+                                         ArrayList<String> giornoProposto,
+                                         ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
+                                         ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws Exception {
+        String sql = "SELECT id, email_docente, email_responsabile, motivo, " +
+                "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
+                "giorno_proposto, ora_inizio_proposto, ora_fine_proposto " +
+                "FROM richiesta WHERE stato = 'IN_ATTESA' ORDER BY id";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    id.add(rs.getInt("id"));
+                    emailDocente.add(rs.getString("email_docente"));
+                    emailResponsabile.add(rs.getString("email_responsabile"));
+                    motivo.add(rs.getString("motivo"));
+                    giornoIniziale.add(rs.getString("giorno_iniziale"));
+                    aggiungiOra(rs, "ora_inizio_iniziale", oraInizioIniziale, minutoInizioIniziale);
+                    aggiungiOra(rs, "ora_fine_iniziale", oraFineIniziale, minutoFineIniziale);
+                    giornoProposto.add(rs.getString("giorno_proposto"));
+                    aggiungiOra(rs, "ora_inizio_proposto", oraInizioProposto, minutoInizioProposto);
+                    aggiungiOra(rs, "ora_fine_proposto", oraFineProposto, minutoFineProposto);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Impossibile leggere le richieste in attesa dal database: " + e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Esegue un {@code UPDATE} della sola colonna {@code stato} sulla riga
+     * identificata da {@code idRichiesta}. Il valore ammesso è controllato dal
+     * vincolo {@code richiesta_stato_check} sul database.</p>
      */
     @Override
     public void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws Exception {
-
+        String sql = "UPDATE richiesta SET stato = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nuovoStato);
+            ps.setInt(2, idRichiesta);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            // Es. violazione del CHECK sullo stato (valore non ammesso).
+            throw new Exception("Impossibile aggiornare lo stato della richiesta sul database: " + e.getMessage());
+        }
     }
 
     /**
-     * @param idRichiesta          id della richiesta da aggiornare
-     * @param giornoProposto       nuovo giorno proposto
-     * @param oraInizioProposto    nuova ora di inizio proposta
-     * @param minutoInizioProposto nuovo minuto di inizio proposto
-     * @param oraFineProposto      nuova ora di fine proposta
-     * @param minutoFineProposto   nuovo minuto di fine proposto
-     * @throws Exception
+     * {@inheritDoc}
+     *
+     * <p>Esegue un {@code UPDATE} del giorno e degli orari proposti sulla riga
+     * identificata da {@code idRichiesta}. Ora e minuto vengono ricomposti in un
+     * {@link LocalTime} prima di essere scritti nelle colonne {@code time}.</p>
      */
     @Override
-    public void aggiornaOrarioPropostoDB(int idRichiesta, String giornoProposto, int oraInizioProposto, int minutoInizioProposto, int oraFineProposto, int minutoFineProposto) throws Exception {
+    public void aggiornaOrarioPropostoDB(int idRichiesta, String giornoProposto,
+                                         int oraInizioProposto, int minutoInizioProposto,
+                                         int oraFineProposto, int minutoFineProposto) throws Exception {
+        String sql = "UPDATE richiesta SET giorno_proposto = ?, " +
+                "ora_inizio_proposto = ?, ora_fine_proposto = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, giornoProposto);
+            ps.setObject(2, LocalTime.of(oraInizioProposto, minutoInizioProposto));
+            ps.setObject(3, LocalTime.of(oraFineProposto, minutoFineProposto));
+            ps.setInt(4, idRichiesta);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            // Es. violazione del CHECK sugli orari proposti o del CHECK "proposto != iniziale".
+            throw new Exception("Impossibile aggiornare l'orario proposto della richiesta sul database: " + e.getMessage());
+        }
+    }
 
+    /**
+     * Legge una colonna di tipo {@code time} dalla riga corrente del
+     * {@link ResultSet} e ne aggiunge ora e minuto, come interi separati, in
+     * coda alle due liste passate. Metodo di utilità usato dai metodi di lettura
+     * per evitare duplicazione nella conversione {@code time} → (ora, minuto).
+     *
+     * @param rs      result set posizionato sulla riga da leggere
+     * @param colonna nome della colonna {@code time} da estrarre
+     * @param ore     lista in cui inserire l'ora (0-23)
+     * @param minuti  lista in cui inserire il minuto (0-59)
+     * @throws SQLException se la lettura della colonna fallisce
+     */
+    private void aggiungiOra(ResultSet rs, String colonna,
+                             ArrayList<Integer> ore, ArrayList<Integer> minuti) throws SQLException {
+        LocalTime orario = rs.getObject(colonna, LocalTime.class);
+        ore.add(orario.getHour());
+        minuti.add(orario.getMinute());
     }
 }
