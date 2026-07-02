@@ -57,44 +57,62 @@ public class SchermataRichiesta {
     }
     //Controlla i campi
     private boolean checkCampi() {
-        JTextField oraIniziaLezione = oraIniziaLezioneText;
-        JTextField minutiIniziaLezione = minutiIniziaLezioneText;
-        JTextField oraFineLezione = oraFineLezioneText;
-        JTextField minutiFineLezione = minutiFineLezioneText;
-        JTextField oraIniziaNuova = oraIniziaNuovaText;
-        JTextField minutiIniziaNuova = minutiIniziaNuovaText;
-        JTextField oraFineNuova = oraFineNuovaText;
-        JTextField minutiFineNuova = minutiFineNuovaText;
-        JTextArea motivo = motivoText;
-
-        if (oraIniziaLezione == null || minutiIniziaLezione == null || oraFineLezione == null || minutiFineLezione == null
-                || oraIniziaNuova == null || minutiIniziaNuova == null || oraFineNuova == null || minutiFineNuova == null
-                || motivo == null) {
+        // 1. Controllo che i componenti della GUI siano stati inizializzati
+        if (oraIniziaLezioneText == null || minutiIniziaLezioneText == null || oraFineLezioneText == null || minutiFineLezioneText == null
+                || oraIniziaNuovaText == null || minutiIniziaNuovaText == null || oraFineNuovaText == null || minutiFineNuovaText == null
+                || motivoText == null || giorniBox == null || giorniNuoviBox == null) {
             return false;
         }
 
-        if(oraIniziaLezione.getText().trim().isEmpty() || minutiIniziaLezione.getText().trim().isEmpty() ||
-                oraFineLezione.getText().trim().isEmpty() || minutiFineLezione.getText().trim().isEmpty() ||
-                oraIniziaNuova.getText().trim().isEmpty() || minutiIniziaNuova.getText().trim().isEmpty() ||
-                oraFineNuova.getText().trim().isEmpty() || minutiFineNuova.getText().trim().isEmpty()) {
+        // 2. Controllo sulle ComboBox (FONDAMENTALE per evitare NPE in caricaEvents)
+        if (giorniBox.getSelectedItem() == null || giorniNuoviBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(frame, "Seleziona i giorni per entrambe le lezioni.", "Errore", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // 3. Estrazione sicura dei testi per evitare chiamate a catena pericolose
+        String oraInizio = oraIniziaLezioneText.getText();
+        String minInizio = minutiIniziaLezioneText.getText();
+        String oraFine = oraFineLezioneText.getText();
+        String minFine = minutiFineLezioneText.getText();
+        String oraInizioN = oraIniziaNuovaText.getText();
+        String minInizioN = minutiIniziaNuovaText.getText();
+        String oraFineN = oraFineNuovaText.getText();
+        String minFineN = minutiFineNuovaText.getText();
+        String motivo = motivoText.getText();
+
+        // 4. Controllo campi vuoti (con protezione da eventuali stringhe null)
+        if (oraInizio == null || oraInizio.trim().isEmpty() ||
+                minInizio == null || minInizio.trim().isEmpty() ||
+                oraFine == null || oraFine.trim().isEmpty() ||
+                minFine == null || minFine.trim().isEmpty() ||
+                oraInizioN == null || oraInizioN.trim().isEmpty() ||
+                minInizioN == null || minInizioN.trim().isEmpty() ||
+                oraFineN == null || oraFineN.trim().isEmpty() ||
+                minFineN == null || minFineN.trim().isEmpty()) {
+
             JOptionPane.showMessageDialog(frame, "Tutti i campi degli orari devono essere compilati.", "Errore", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        try {
-            int oraInizioLezione = Integer.parseInt(oraIniziaLezione.getText());
-            int minutoInizioLezione = Integer.parseInt(minutiIniziaLezione.getText());
-            int oraFineLezioneVal = Integer.parseInt(oraFineLezione.getText());
-            int minutoFineLezione = Integer.parseInt(minutiFineLezione.getText());
-            int oraInizioNuovo = Integer.parseInt(oraIniziaNuova.getText());
-            int minutoInizioNuovo = Integer.parseInt(minutiIniziaNuova.getText());
-            int oraFineNuovo = Integer.parseInt(oraFineNuova.getText());
-            int minutoFineNuovo = Integer.parseInt(minutiFineNuova.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(frame, "Inserisci valori numerici validi per orari e minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
+
+        if (motivo == null || motivo.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Il campo motivo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (motivo.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Il campo motivo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+
+        // 5. Controllo del formato numerico
+        try {
+            // Applichiamo il trim() anche qui per evitare eccezioni causate da spazi accidentali (" 12 ")
+            Integer.parseInt(oraInizio.trim());
+            Integer.parseInt(minInizio.trim());
+            Integer.parseInt(oraFine.trim());
+            Integer.parseInt(minFine.trim());
+            Integer.parseInt(oraInizioN.trim());
+            Integer.parseInt(minInizioN.trim());
+            Integer.parseInt(oraFineN.trim());
+            Integer.parseInt(minFineN.trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frame, "Inserisci valori numerici validi per orari e minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
