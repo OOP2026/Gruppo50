@@ -51,6 +51,10 @@ public class SchermataRichiesta {
             scroller.setPreferredSize(new Dimension(1000, -1));
         }
 
+        // Diciamo a SonarQube in modo esplicito che i componenti esistono
+        java.util.Objects.requireNonNull(Scroller, "Lo Scroller deve essere inizializzato dal designer").setPreferredSize(new Dimension(1000, -1));
+        java.util.Objects.requireNonNull(table, "La tabella deve essere inizializzata dal designer");
+
         caricaEvents();
         creaTableRichiesta();
         impostaLimiteCaratteri(motivoText, 200);
@@ -124,8 +128,8 @@ public class SchermataRichiesta {
             frame.setVisible(false);
             frameChiamante.setVisible(true);
             frame.dispose();
-
         });
+
         inviaButton.addActionListener(e -> {
             if(!checkCampi()) return;
 
@@ -166,6 +170,29 @@ public class SchermataRichiesta {
             resetCampi();
             creaTableRichiesta();
             JOptionPane.showMessageDialog(frame, "Richiesta inviata con successo!");
+        });
+
+        // 3. QUESTO È IL BLOCCO CHE MANCAVA E CHE RISOLVE L'ERRORE SULLA TEXTAREA
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
+
+            int riga = table.getSelectedRow();
+            if (riga == -1) return;
+
+            // Estrazione sicura che previene il NullPointerException
+            Object valoreCella = table.getValueAt(riga, 2);
+            String motivo = (valoreCella != null) ? valoreCella.toString() : "Nessun motivo specificato";
+
+            JTextArea textArea = new JTextArea(motivo);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true); // <--- Ora SonarQube non segnerà più l'errore qui
+            textArea.setEditable(false);
+
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(120, 100));
+            JOptionPane.showMessageDialog(frame, scrollPane, "Motivo della richiesta: ", JOptionPane.INFORMATION_MESSAGE);
+
+            table.getSelectionModel().clearSelection();
         });
     }
 ///Reseta i campi
