@@ -86,4 +86,32 @@ public class LezionePostgresDao implements LezioneDAO {
             throw new Exception("Impossibile leggere le lezioni dal database: " + e.getMessage());
         }
     }
+
+    @Override
+    public void leggiTutteLezioniDB(ArrayList<String> nomiInsegnamento,
+                                    ArrayList<Integer> annoCorso,
+                                    ArrayList<String> emailDocente,
+                                    ArrayList<String> nomeAula,
+                                    ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
+                                    ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception {
+        String sql = "SELECT nomecorso, annocorso, emaildocente, nomeaula, " +
+                "giorno, orainizio, minutoinizio, orafine, minutofine " +
+                "FROM lezione";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                nomiInsegnamento.add(rs.getString("nomecorso"));
+                annoCorso.add(rs.getInt("annocorso"));
+                emailDocente.add(rs.getString("emaildocente"));
+                nomeAula.add(rs.getString("nomeaula"));
+                giorno.add(rs.getString("giorno"));
+                oraInizio.add(rs.getInt("orainizio"));
+                minutoInizio.add(rs.getInt("minutoinizio"));
+                oraFine.add(rs.getInt("orafine"));
+                minutoFine.add(rs.getInt("minutofine"));
+            }
+        } catch (SQLException e) {
+            throw new Exception("Impossibile leggere tutte le lezioni dal database: " + e.getMessage());
+        }
+    }
 }

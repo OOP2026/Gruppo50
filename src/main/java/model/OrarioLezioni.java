@@ -22,7 +22,7 @@ public class OrarioLezioni {
      * Costruisce un nuovo oggetto OrarioLezioni, controllando l'arraylist */
 
     public OrarioLezioni(){
-orariolezioni=new ArrayList<>();
+        orariolezioni=new ArrayList<>();
     }
 
 ///Restituisce le lezioni del docente
@@ -31,20 +31,20 @@ orariolezioni=new ArrayList<>();
      * @param docente il docente di cui si vogliono cercare le lezioni
      * @return una lista di {@link Lezione} associate al docente, vuota se non ha lezioni assegnate
      */
-public List<Lezione> getDocenteLezioni(Docente docente){
+    public List<Lezione> getDocenteLezioni(Docente docente){
         List<Lezione> lista=new ArrayList<Lezione>();
         for(Lezione l : orariolezioni){
             if(l.insegnamento.docente.email.equals(docente.email)){
                 lista.add(l);
             }
         }
-    if(lista.isEmpty()){
-        System.out.println("Non hai lezioni assegnate");
-        return new ArrayList<>();
-    }
-    List<Lezione> lista2 = new ArrayList<>(lista);
-    Collections.sort(lista2);
-    return lista2;
+        if(lista.isEmpty()){
+            System.out.println("Non hai lezioni assegnate");
+            return new ArrayList<>();
+        }
+        List<Lezione> lista2 = new ArrayList<>(lista);
+        Collections.sort(lista2);
+        return lista2;
 
     };
     ///Il metodo permette di aggiungere una lezione nell'orario
@@ -60,18 +60,38 @@ public List<Lezione> getDocenteLezioni(Docente docente){
      * @throws NullPointerException se la lezione passata è nulla o se il token è nullo (permesso negato)
      */
     public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
-   //Solo il responsabile puo usare questo metodo
-    if(token==null){ throw new NullPointerException("Non hai il permesso");}
-   
-     if (l == null){
-        throw new NullPointerException("Questa lezione è vuota");
+        //Solo il responsabile puo usare questo metodo
+        if(token==null){ throw new NullPointerException("Non hai il permesso");}
+
+        if (l == null){
+            throw new NullPointerException("Questa lezione è vuota");
+        }
+
+        if(controlloConflittoLezione(l)){
+            throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
+        }
+        orariolezioni.add(l);
+        return true;
     }
 
-    if(controlloConflittoLezione(l)){ 
-      throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
-     }
-orariolezioni.add(l);
-return true;
+    /**
+     * Carica in memoria una lezione letta dal database.
+     * <p>
+     * A differenza di {@link #aggiungiLezione(Lezione, Token)}, questo metodo non
+     * richiede il Token del Responsabile né esegue il controllo dei conflitti:
+     * si tratta infatti di un'operazione di sistema che ricostruisce l'orario a
+     * partire da dati già validati e salvati in precedenza sul database (usata
+     * dal Controller al login). Serve a rendere visibili le lezioni persistite,
+     * ad esempio ai docenti che accedono in una nuova sessione.
+     * </p>
+     *
+     * @param l la {@link Lezione} ricostruita dai dati letti dal database
+     */
+    public void caricaLezioneDaDB(Lezione l) {
+        if (l == null) {
+            return;
+        }
+        orariolezioni.add(l);
     }
 
 /// Permette di vedere l'orario completo del corso dentro il terminale
@@ -81,21 +101,21 @@ return true;
      * Operazione che solo il Responsabile puó fare.
      * @param token l'oggetto Token che da i permessi al responsabile
      */
-public void visualizzaOrarioCompleto(Token token){
-    if(token==null){
-        System.out.println("Non hai il permesso");
-        return;
+    public void visualizzaOrarioCompleto(Token token){
+        if(token==null){
+            System.out.println("Non hai il permesso");
+            return;
+        }
+
+        System.out.println("Orario completo delle lezioni:");
+
+        giornoLezioni(giorni[0],  orariolezioni, l -> true);
+        giornoLezioni(giorni[1],  orariolezioni, l -> true);
+        giornoLezioni(giorni[2],  orariolezioni, l -> true);
+        giornoLezioni(giorni[3],  orariolezioni, l -> true);
+        giornoLezioni(giorni[4],  orariolezioni, l -> true);
+
     }
-
-    System.out.println("Orario completo delle lezioni:");
-
-    giornoLezioni(giorni[0],  orariolezioni, l -> true);
-    giornoLezioni(giorni[1],  orariolezioni, l -> true);
-    giornoLezioni(giorni[2],  orariolezioni, l -> true);
-    giornoLezioni(giorni[3],  orariolezioni, l -> true);
-    giornoLezioni(giorni[4],  orariolezioni, l -> true);
-
-}
 
 
     /**
@@ -109,12 +129,12 @@ public void visualizzaOrarioCompleto(Token token){
         boolean trovata = false;
         for (Lezione l : elenco) {
             if (!giorno.equalsIgnoreCase(l.orario.giorno) || !filtro.test(l)) continue;
-        
+
             System.out.println("Docente: "+l.insegnamento.docente.nome+" "+l.insegnamento.docente.cognome);
             System.out.println("Insegamento: "+l.insegnamento.Nome);
             System.out.println("Orario: "+l.orario.getOrarioCompleto());
             System.out.println("Aula: "+l.aula.Nome);
-            
+
             // stampa campi comuni...
             trovata = true;
         }
@@ -131,16 +151,16 @@ public void visualizzaOrarioCompleto(Token token){
      * Stampa l'orario delle lezioni filtrate per l'anno di corso dello studente
      * @param studente lo studente che richiede di visualizzare il proprio orario
      */
-public void visualizzaOrarioCompleto(Studente studente){
+    public void visualizzaOrarioCompleto(Studente studente){
 
-    System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
-    giornoLezioni(giorni[0],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    giornoLezioni(giorni[1],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    giornoLezioni(giorni[2],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    giornoLezioni(giorni[3],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-    giornoLezioni(giorni[4],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+        System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
+        giornoLezioni(giorni[0],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+        giornoLezioni(giorni[1],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+        giornoLezioni(giorni[2],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+        giornoLezioni(giorni[3],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+        giornoLezioni(giorni[4],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
 
-}
+    }
 
 
 
@@ -149,15 +169,15 @@ public void visualizzaOrarioCompleto(Studente studente){
      * Stampa l'orario delle lezioni assegnate a un docente specifico
      * @param docente il docente che richiede di visualizzare il proprio orario
      */
-public void visualizzaOrarioCompleto(Docente docente){
- 
-    System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
-    giornoLezioni(giorni[0], orariolezioni, l -> l.insegnamento.docente == docente);
-    giornoLezioni(giorni[1], orariolezioni, l -> l.insegnamento.docente == docente);
-    giornoLezioni(giorni[2], orariolezioni, l -> l.insegnamento.docente == docente);
-    giornoLezioni(giorni[3], orariolezioni, l -> l.insegnamento.docente == docente);
-    giornoLezioni(giorni[4], orariolezioni, l -> l.insegnamento.docente == docente);
-}
+    public void visualizzaOrarioCompleto(Docente docente){
+
+        System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
+        giornoLezioni(giorni[0], orariolezioni, l -> l.insegnamento.docente == docente);
+        giornoLezioni(giorni[1], orariolezioni, l -> l.insegnamento.docente == docente);
+        giornoLezioni(giorni[2], orariolezioni, l -> l.insegnamento.docente == docente);
+        giornoLezioni(giorni[3], orariolezioni, l -> l.insegnamento.docente == docente);
+        giornoLezioni(giorni[4], orariolezioni, l -> l.insegnamento.docente == docente);
+    }
 
 
 
@@ -167,13 +187,13 @@ public void visualizzaOrarioCompleto(Docente docente){
      * @return la lista completa delle lezioni, oppure una lista vuota se il permesso è negato
      */
 
-public List<Lezione> getOrarioLezioni(Token token) {
-    if(token==null){
-        System.out.println("Non hai il permesso");
-        return new ArrayList<>();
+    public List<Lezione> getOrarioLezioni(Token token) {
+        if(token==null){
+            System.out.println("Non hai il permesso");
+            return new ArrayList<>();
+        }
+        return orariolezioni;
     }
-    return orariolezioni;
-}
 
     /**
      * Controlla se le fasce orarie di due lezioni si scontrino
@@ -181,35 +201,35 @@ public List<Lezione> getOrarioLezioni(Token token) {
      * @param lezioneGiaPresente una lezione già presente nell'orario
      * @return true se c'è uno scontro di orario, false altrimenti
      */
-private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente){
-    int inizioNuovo = l.orario.getOrarioInizioInMinuti();
-    int fineNuovo = l.orario.getOrarioFineInMinuti();
-           
-   int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
- int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
+    private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente){
+        int inizioNuovo = l.orario.getOrarioInizioInMinuti();
+        int fineNuovo = l.orario.getOrarioFineInMinuti();
 
-return (inizioNuovo<fineEsistente && fineNuovo>inizioEsistente);
-}
+        int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
+        int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
+
+        return (inizioNuovo<fineEsistente && fineNuovo>inizioEsistente);
+    }
 
     /**
      * Controlla se la nuova lezione entra in conflitto con lezioni già esistenti
      * @param l la lezione da controllare
      * @return true se viene rilevato un conflitto di risorse, false se può essere inserita
      */
-private boolean controlloConflittoLezione(Lezione l){
-    for (Lezione lf : orariolezioni) {
-               boolean conflittoOrario= controlloConflittoOrario(l,lf); 
-                if ((lf.orario.giorno.equals(l.orario.giorno))) {
-                     if(conflittoOrario){
-                     if(l.aula.Nome.equals(lf.aula.Nome)) return true;
-                     if(l.insegnamento.docente.equals(lf.insegnamento.docente)) return true;
-                          
+    private boolean controlloConflittoLezione(Lezione l){
+        for (Lezione lf : orariolezioni) {
+            boolean conflittoOrario= controlloConflittoOrario(l,lf);
+            if ((lf.orario.giorno.equals(l.orario.giorno))) {
+                if(conflittoOrario){
+                    if(l.aula.Nome.equals(lf.aula.Nome)) return true;
+                    if(l.insegnamento.docente.equals(lf.insegnamento.docente)) return true;
+
                 }
 
-               }
-         }
-         return false;
-}
+            }
+        }
+        return false;
+    }
 
     /**
      * Restituisce le lezioni filtrate per anno di corso dello studente.

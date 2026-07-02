@@ -22,8 +22,8 @@ public class SchermataRichiesteInviate {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-       caricaEvents();
-       creaTable();
+        caricaEvents();
+        creaTable();
     }
 
     private void caricaEvents(){
@@ -50,12 +50,12 @@ public class SchermataRichiesteInviate {
         });
     }
     private void creaTable(){
-       Object[][] data=controller.ottieniRichiesteInviate();
+        Object[][] data=controller.ottieniRichiesteInviate();
         richiestaTable.setModel(new DefaultTableModel(data,
                 new String[]{"Orario Lezione","Orario Nuovo","Motivo","Stato"} ) );
-       //non rende editable la tabella
+        //non rende editable la tabella
         richiestaTable.setDefaultEditor(Object.class, null);
-    //
+        //
         richiestaTable.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
