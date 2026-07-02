@@ -43,11 +43,13 @@ public class CrealezioneDialog {
         caricaInsegnamentiBox("");
         caricaEvents();
         //Controllo che il bottone si crei correttamente.
-        if(annullaButton != null) {
-            annullaButton.addActionListener(e -> dialog.dispose());
+        JButton annulla = annullaButton;
+        if (annulla != null) {
+            annulla.addActionListener(e -> dialog.dispose());
         }
-        if(confermaButton != null) {
-            confermaButton.addActionListener(e -> {
+        JButton conferma = confermaButton;
+        if(conferma != null) {
+            conferma.addActionListener(e -> {
                 labelErrore.setText("");
 
                 String nomeIns = Objects.requireNonNull(nomeInsField.getSelectedItem()).toString();
