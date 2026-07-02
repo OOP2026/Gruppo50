@@ -56,28 +56,44 @@ public class SchermataRichiesta {
         impostaLimiteCaratteri(motivoText, 200);
     }
     //Controlla i campi
-private boolean checkCampi() {
-    if(oraIniziaLezioneText.getText().trim().isEmpty() || minutiIniziaLezioneText.getText().trim().isEmpty() ||
-            oraFineLezioneText.getText().trim().isEmpty() || minutiFineLezioneText.getText().trim().isEmpty() ||
-            oraIniziaNuovaText.getText().trim().isEmpty() || minutiIniziaNuovaText.getText().trim().isEmpty() ||
-            oraFineNuovaText.getText().trim().isEmpty() || minutiFineNuovaText.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(frame, "Tutti i campi degli orari devono essere compilati.", "Errore", JOptionPane.WARNING_MESSAGE);
-        return false;
-    }
+    private boolean checkCampi() {
+        JTextField oraIniziaLezione = oraIniziaLezioneText;
+        JTextField minutiIniziaLezione = minutiIniziaLezioneText;
+        JTextField oraFineLezione = oraFineLezioneText;
+        JTextField minutiFineLezione = minutiFineLezioneText;
+        JTextField oraIniziaNuova = oraIniziaNuovaText;
+        JTextField minutiIniziaNuova = minutiIniziaNuovaText;
+        JTextField oraFineNuova = oraFineNuovaText;
+        JTextField minutiFineNuova = minutiFineNuovaText;
+        JTextArea motivo = motivoText;
+
+        if (oraIniziaLezione == null || minutiIniziaLezione == null || oraFineLezione == null || minutiFineLezione == null
+                || oraIniziaNuova == null || minutiIniziaNuova == null || oraFineNuova == null || minutiFineNuova == null
+                || motivo == null) {
+            return false;
+        }
+
+        if(oraIniziaLezione.getText().trim().isEmpty() || minutiIniziaLezione.getText().trim().isEmpty() ||
+                oraFineLezione.getText().trim().isEmpty() || minutiFineLezione.getText().trim().isEmpty() ||
+                oraIniziaNuova.getText().trim().isEmpty() || minutiIniziaNuova.getText().trim().isEmpty() ||
+                oraFineNuova.getText().trim().isEmpty() || minutiFineNuova.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Tutti i campi degli orari devono essere compilati.", "Errore", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         try {
-            int oraInizioLezione = Integer.parseInt(oraIniziaLezioneText.getText());
-            int minutoInizioLezione = Integer.parseInt(minutiIniziaLezioneText.getText());
-            int oraFineLezione = Integer.parseInt(oraFineLezioneText.getText());
-            int minutoFineLezione = Integer.parseInt(minutiFineLezioneText.getText());
-            int oraInizioNuovo = Integer.parseInt(oraIniziaNuovaText.getText());
-            int minutoInizioNuovo = Integer.parseInt(minutiIniziaNuovaText.getText());
-            int oraFineNuovo = Integer.parseInt(oraFineNuovaText.getText());
-            int minutoFineNuovo = Integer.parseInt(minutiFineNuovaText.getText());
+            int oraInizioLezione = Integer.parseInt(oraIniziaLezione.getText());
+            int minutoInizioLezione = Integer.parseInt(minutiIniziaLezione.getText());
+            int oraFineLezioneVal = Integer.parseInt(oraFineLezione.getText());
+            int minutoFineLezione = Integer.parseInt(minutiFineLezione.getText());
+            int oraInizioNuovo = Integer.parseInt(oraIniziaNuova.getText());
+            int minutoInizioNuovo = Integer.parseInt(minutiIniziaNuova.getText());
+            int oraFineNuovo = Integer.parseInt(oraFineNuova.getText());
+            int minutoFineNuovo = Integer.parseInt(minutiFineNuova.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame, "Inserisci valori numerici validi per orari e minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (motivoText.getText().trim().isEmpty()) {
+        if (motivo.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Il campo motivo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
             return false;
         }
