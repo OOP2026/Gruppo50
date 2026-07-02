@@ -61,10 +61,6 @@ public class VincoloPostgresDao implements VincoloDAO {
         }
         return vincoli.toArray(new Object[0][]);
 
-
-
-
-
     }
 
     @Override

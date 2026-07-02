@@ -148,8 +148,8 @@ public void mostraVincoli(){
         int numeroVincolo=0;
         for(Vincolo vincolo : vincoli){
             System.out.println("Numero vincolo: "+numeroVincolo);
-            System.out.println("Giorno: "+vincolo.orario.giorno);
-            System.out.println("Orario: "+vincolo.orario.oraInizio+":"+vincolo.orario.minutoInizio+" - "+vincolo.orario.oraFine+":"+vincolo.orario.minutoFine);
+            System.out.println("Giorno: "+vincolo.orario.getGiorno());
+            System.out.println("Orario: "+vincolo.orario.getOrarioCompleto());
             System.out.println("-----------------------------------");
             numeroVincolo++;
         }

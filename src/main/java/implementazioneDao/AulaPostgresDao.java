@@ -52,7 +52,7 @@ rs.close();
             System.out.println("Errore nel prendere le aule dal database: "+e.getMessage());
         }
 if(!haRighe){
-    return new Object[][]{{"Nessuna aula presente",0}};
+    return new Object[0][0];
 }
         return aule.toArray(new Object[0][]);
     }

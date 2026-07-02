@@ -272,7 +272,7 @@ public void logout(){
             List<Vincolo> vincoli= new ArrayList<>(docente.getVincoli());
             Vincolo v= vincoli.get(ind);
             //rimozioni attraverso db
-            vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.orario.giorno,v.orario.oraInizio,v.orario.minutoInizio,v.orario.oraFine,v.orario.minutoFine);
+            vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.orario.getGiorno(),v.orario.getOraInizio(),v.orario.getMinutoInizio(),v.orario.getOraFine(),v.orario.getMinutoFine());
 			docente.rimuoviVincolo(ind);
 
         }
@@ -289,7 +289,7 @@ public void logout(){
 
 		Object[][] data = new Object[v.size()][1];
 		for (int i = 0; i < v.size(); i++) {
-			data[i][0] = v.get(i).orario.giorno + " " + v.get(i).orario.getOrarioCompleto();
+			data[i][0] = v.get(i).orario.getGiorno() + " " + v.get(i).orario.getOrarioCompleto();
 		}
 		return data;
 	}
@@ -306,8 +306,8 @@ public void logout(){
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
 		for (int i = 0; i < r.size(); i++) {
-			data[i][0] = r.get(i).orarioLezioneDaSpostare.giorno + " " + r.get(i).orarioLezioneDaSpostare.getOrarioCompleto();
-			data[i][1] = r.get(i).nuovoOrarioLezione.giorno + " " + r.get(i).nuovoOrarioLezione.getOrarioCompleto();
+			data[i][0] = r.get(i).orarioLezioneDaSpostare.getGiorno() + " " + r.get(i).orarioLezioneDaSpostare.getOrarioCompleto();
+			data[i][1] = r.get(i).nuovoOrarioLezione.getGiorno() + " " + r.get(i).nuovoOrarioLezione.getOrarioCompleto();
 			data[i][2] = r.get(i).motivoRichiesta;
 			data[i][3] = r.get(i).statoRichiesta;
 		}
@@ -327,7 +327,7 @@ public void logout(){
 		// raggruppa le lezione per giorno.
 		for (String giorno:giorni) {
 			//crea un list con lezioni per ogni giorno dentro un'altra list
-			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.orario.giorno.equalsIgnoreCase(giorno)).collect(Collectors.toList()));
+			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.orario.getGiorno().equalsIgnoreCase(giorno)).collect(Collectors.toList()));
 
 		}
 		while(true) {
@@ -452,10 +452,10 @@ public void logout(){
 		for (String g : giorni) mappa.put(g, new java.util.ArrayList<>());
 
 		for (model.Lezione l : orarioLezioni.getLezioniStudente(studente)) {
-			String giorno = l.orario.giorno;
+			String giorno = l.orario.getGiorno();
 			String testo  = String.format("%02d:%02d - %02d:%02d  |  %s",
-					l.orario.oraInizio, l.orario.minutoInizio,
-					l.orario.oraFine,   l.orario.minutoFine,
+					l.orario.getOraInizio(), l.orario.getMinutoInizio(),
+					l.orario.getOraFine(), l.orario.getMinutoFine(),
 					l.insegnamento.Nome);
 			mappa.getOrDefault(giorno, new java.util.ArrayList<>()).add(testo);
 		}
@@ -504,9 +504,9 @@ public void logout(){
 			model.Richiesta r = lista.get(i);
 			data[i][0] = i;
 			data[i][1] = r.docenteRichiedente.nome + " " + r.docenteRichiedente.cognome;
-			data[i][2] = r.orarioLezioneDaSpostare.giorno + " "
+			data[i][2] = r.orarioLezioneDaSpostare.getGiorno() + " "
 					+ r.orarioLezioneDaSpostare.getOrarioCompleto();
-			data[i][3] = r.nuovoOrarioLezione.giorno + " "
+			data[i][3] = r.nuovoOrarioLezione.getGiorno() + " "
 					+ r.nuovoOrarioLezione.getOrarioCompleto();
 			data[i][4] = r.motivoRichiesta;
 			data[i][5] = responsabile.getStatoRichiesta(i);
