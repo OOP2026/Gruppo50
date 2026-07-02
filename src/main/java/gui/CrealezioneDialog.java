@@ -19,12 +19,13 @@ public class CrealezioneDialog {
     private JTextField cfuField;
     private JTextField annoField;
     private JTextField emailDocField;
-    private JTextField nomeAulaField;
+    private JComboBox<String> nomeAulaField;
     private JTextField oraIField;
     private JTextField minIField;
     private JTextField oraFField;
     private JTextField minFField;
-    final private JTextField textComboBox;
+    final private JTextField textComboBoxIns;
+    final private JTextField textComboBoxAula;
     final private Controller controller;
 
     public CrealezioneDialog(Controller controller, JFrame frameChiamante) {
@@ -39,8 +40,10 @@ public class CrealezioneDialog {
             dialog.setLocationRelativeTo(frameChiamante);
         }
 
-        textComboBox=textFieldComboBox();
+        textComboBoxIns=textFieldComboBoxIns();
+        textComboBoxAula=textFieldComboBoxAula();
         caricaInsegnamentiBox("");
+        caricaAuleBox("");
         caricaEvents();
         //Controllo che il bottone si crei correttamente.
         JButton annulla = annullaButton;
@@ -54,7 +57,7 @@ public class CrealezioneDialog {
 
                 String nomeIns = Objects.requireNonNull(nomeInsField.getSelectedItem()).toString();
                 String emailDoc = emailDocField.getText().trim();
-                String nomeAula = nomeAulaField.getText().trim();
+                String nomeAula = Objects.requireNonNull(nomeAulaField.getSelectedItem()).toString();
                 String giorno = (String) giornoCombo.getSelectedItem();
 
                 if (nomeIns.isEmpty() || emailDoc.isEmpty() || nomeAula.isEmpty()
@@ -98,7 +101,9 @@ public class CrealezioneDialog {
     }
 
     private void caricaInsegnamentiBox(String materia){
+        //Rimuove tutti gli items precedenti
         nomeInsField.removeAllItems();
+        //richiede gli insegnamenti in base alla string materia
         List<String> data= controller.getInsegnamentiRegistrati(materia.toLowerCase());
         for(String insegnamento:data){
             nomeInsField.addItem(insegnamento);
@@ -106,38 +111,93 @@ public class CrealezioneDialog {
 
         nomeInsField.setMaximumRowCount(4);
         nomeInsField.setSelectedIndex(-1);
+        // revalidate e repaint servono per ricalibrare la JComboBox dopo aver rimosso e aggiunto items
         nomeInsField.revalidate();
         nomeInsField.repaint();
+        //Questo if ha lo scopo di chiudere il popup della JComboBox se è aperto
+        // e poi riaprirlo solo se ci sono items da mostrare. Questo evita che il popup rimanga aperto con una lista vuota.
         if(nomeInsField.isPopupVisible()){
             nomeInsField.setPopupVisible(false);
             System.out.println(nomeInsField.getItemCount());
             if(nomeInsField.getItemCount()>0)
                 nomeInsField.setPopupVisible(true);
-        }else{
-        if(nomeInsField.getItemCount()>0 && !materia.equalsIgnoreCase(""))
+        }else if(nomeInsField.getItemCount()>0 && !materia.equalsIgnoreCase(""))
+        {
             nomeInsField.setPopupVisible(true);
         }
-        textComboBox.setText(materia);
+        //rimette il testo scritto dall'utente nella textfield della combobox
+        textComboBoxIns.setText(materia);
     }
-    public JTextField textFieldComboBox() {
+    /// Restituisce la JTextField dell'editor della JComboBox 'nomeInsField'.
+    /// @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
+    public JTextField textFieldComboBoxIns() {
         Component editor = nomeInsField.getEditor().getEditorComponent();
 
         if (editor instanceof JTextField) {
             return (JTextField) editor;
         }
-
         // Se non è un JTextField, interrompiamo con un messaggio d'errore chiaro
         // invece di passare un null che causerebbe danni più avanti.
         throw new IllegalStateException("L'editor della JComboBox 'nomeInsField' non è un JTextField. Assicurati che sia editabile.");
     }
+    private void caricaAuleBox(String nomeAula){
+        //rimuove tutti gli items precedenti
+        nomeAulaField.removeAllItems();
+        //richiede le aule in base alla stringa nomeAula
+        List<String> data= controller.getAule(nomeAula.toLowerCase());
+        for(String aula:data){
+            nomeAulaField.addItem(aula);
+        }
+
+        nomeAulaField.setMaximumRowCount(4);
+        nomeAulaField.setSelectedIndex(-1);
+        //revalidate e repaint servono per ricalibrare la JComboBox dopo aver rimosso e aggiunto items
+        nomeAulaField.revalidate();
+        nomeAulaField.repaint();
+        //Questo if ha lo scopo di chiudere il popup della JComboBox se è aperto
+        // e poi riaprirlo solo se ci sono items da mostrare.
+        // Questo evita che il popup rimanga aperto con una lista vuota.
+        if(nomeAulaField.isPopupVisible()){
+            nomeAulaField.setPopupVisible(false);
+            System.out.println(nomeAulaField.getItemCount());
+            if(nomeAulaField.getItemCount()>0)
+                nomeAulaField.setPopupVisible(true);
+        }else{
+            if(nomeAulaField.getItemCount()>0 && !nomeAula.equalsIgnoreCase(""))
+                nomeAulaField.setPopupVisible(true);
+        }
+        //Rimette il testo digitato dall'utente nella textfield della ComboBox
+        textComboBoxAula.setText(nomeAula);
+    }
+    /// Restituisce la JTextField dell'editor della JComboBox 'nomeAulaField'.
+    /// @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
+    public JTextField textFieldComboBoxAula() {
+        Component editor = nomeAulaField.getEditor().getEditorComponent();
+
+        if (editor instanceof JTextField) {
+            return (JTextField) editor;
+        }
+        // Se non è un JTextField, interrompiamo con un messaggio d'errore chiaro
+        // invece di passare un null che causerebbe danni più avanti.
+        throw new IllegalStateException("L'editor della JComboBox 'nomeAulaField' non è un JTextField. Assicurati che sia editabile.");
+
+    }
 
 
     private void caricaEvents() {
-            textComboBox.addKeyListener(new KeyAdapter(){
+            textComboBoxIns.addKeyListener(new KeyAdapter(){
                 @Override
                 public void keyReleased(KeyEvent e){
-                    String testoAttuale= textComboBox.getText();
+                    String testoAttuale= textComboBoxIns.getText();
                     caricaInsegnamentiBox(testoAttuale);
+                }
+
+            });
+            textComboBoxAula.addKeyListener(new KeyAdapter(){
+                @Override
+                public void keyReleased(KeyEvent e){
+                    String testoAttuale= textComboBoxAula.getText();
+                    caricaAuleBox(testoAttuale);
                 }
 
             });

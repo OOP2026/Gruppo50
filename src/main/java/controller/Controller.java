@@ -20,15 +20,31 @@ public class Controller {
 	private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
-
+	private List<Aula> aule=new ArrayList<>();
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
+		Insegnamento i1= new Insegnamento("Matematica",2,3);
+		Insegnamento i2= new Insegnamento("Fisica",6,1);
+		Insegnamento i3= new Insegnamento("Chimica",8,2);
+		Insegnamento i4= new Insegnamento("Informatica",6,1);
+		Insegnamento i5= new Insegnamento("Storia",4,3);
+		insegnamentiRegistrati.add(i1);
+		insegnamentiRegistrati.add(i2);
+		insegnamentiRegistrati.add(i3);
+		insegnamentiRegistrati.add(i4);
+		insegnamentiRegistrati.add(i5);
 
 	}
 	public void apriConnessioneDatabase() throws Exception {
 		ConnessioneDatabase.getInstance();
 	}
-
+public void logout(){
+        //Logout
+    this.studente=null;
+    this.docente=null;
+    this.responsabile=null;
+    this.responsabileTemp=null;
+}
 	public boolean accedi(String username, String password) {
 		// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
 		this.studente = null;
@@ -48,6 +64,8 @@ public class Controller {
 				// Identifica il tipo di istanza
 				if (u instanceof Responsabile) {
 					this.responsabile = (Responsabile) u;
+					try{caricaAuleDaDB();}catch(Exception e){
+						System.out.println("Errore caricamento aule: "+e.getMessage());}
 				} else if (u instanceof Docente) {
 					this.docente = (Docente) u;
 					putResponsabile();
@@ -216,13 +234,30 @@ public class Controller {
 		}
 		return data;
 	};
+    // Metodo per i vincoli
 	/**Permette al docente di aggiungere un {@link Vincolo} max 3.
 	 *Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
 	 *@return Restituisce una {@code String} o {@code null}
 	 */
-	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
+    public String caricaVincoliDaDB(){
+        try{
+			VincoloDAO vincoloDAO = new VincoloPostgresDao();
+			List<Vincolo> vs=new ArrayList<>();
+			Object[][] vincoli = vincoloDAO.caricaVincoliDB(docente.getmail());
+			for (Object[] vincolo : vincoli) {
+				vs.add(new Vincolo((String)vincolo[0],(int)vincolo[1],(int)vincolo[2],(int)vincolo[3],(int)vincolo[4]));
+			}
+			docente.caricaVincoliInDocente(vs);
+		}catch(Exception e){
+			return e.getMessage();
+		}
+        return null;
+    }
+	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) {
 		try{
-			docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
+            VincoloDAO vincoloDAO = new VincoloPostgresDao();
+            vincoloDAO.salvaVincoloDB(docente.getmail(),giorno,oraInzio,minutoInzio,oraFine,minutoFine);
+			docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFine, minutoFine);
 		}catch(Exception e){
 			return e.getMessage();
 		}
@@ -233,7 +268,14 @@ public class Controller {
 	/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
 	public String rimuoviVincolo(int ind) {
 		try{
-			docente.rimuoviVincolo(ind);}
+            VincoloDAO vincoloDAO= new VincoloPostgresDao();
+            List<Vincolo> vincoli= new ArrayList<>(docente.getVincoli());
+            Vincolo v= vincoli.get(ind);
+            //rimozioni attraverso db
+            vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.orario.giorno,v.orario.oraInizio,v.orario.minutoInizio,v.orario.oraFine,v.orario.minutoFine);
+			docente.rimuoviVincolo(ind);
+
+        }
 		catch (Exception e){
 			return e.getMessage();
 		}
@@ -573,4 +615,31 @@ public class Controller {
 			System.out.println("Errore nel caricamento degli utenti dal database: " + e.getMessage());
 		}
 	}
+//Metodi sulle Aule
+	public void caricaAuleDaDB() throws Exception {
+		AulaPostgresDao aulaDao= new AulaPostgresDao();
+        List<Aula> a=new ArrayList<>();
+		Object[][] dati = aulaDao.caricaAulaDB();
+		for (Object[] aula : dati) {
+			String nome = (String) aula[0];
+			int capienza = (int) aula[1];
+			a.add(new Aula(nome, capienza));
+		}
+        aule=new ArrayList<>(a);
+	};
+	/**Ritorna le aule  però solo il nome
+	 *@param nomeAula <p>Se nomeAula è {@code ""} il metodo ritorna tutte le aule,
+	 *se non è vuota ritorna le aule che iniziano con la stringa dentro nomeAula.
+	 *@return Restituisce una lista di tipo {@code String}
+	 */
+	public List<String> getAule(String nomeAula){
+		List<String> data= new ArrayList<>();
+		List<Aula> a= new ArrayList<>(aule);
+
+		for(Aula aula:a){
+			if(aula.Nome.toLowerCase().startsWith(nomeAula.trim()))
+				data.add(aula.Nome);
+		}
+		return data;
+	};
 }

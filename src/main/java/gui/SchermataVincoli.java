@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.Controller;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class SchermataVincoli {
     JFrame frame;
@@ -22,9 +23,9 @@ public class SchermataVincoli {
     private JTextField minutiInizioText;
     private JPanel panelButtons;
     private JPanel panelOrarioInizio;
-    private JComboBox giorniBox;
-    private Controller controller;
-    private JFrame frameChiamante;
+    private JComboBox<String> giorniBox;
+    final private Controller controller;
+   final private JFrame frameChiamante;
 
     public SchermataVincoli(Controller c,JFrame f){
         controller=c;
@@ -34,6 +35,7 @@ public class SchermataVincoli {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
+
         if (indietroButton != null) {
             caricaEvents();
         }
@@ -59,7 +61,7 @@ public class SchermataVincoli {
             int minutiFine=Integer.parseInt( minutiFineText.getText());
             int oraInizio=Integer.parseInt( oraInizioText.getText());
             int minutiInizio=Integer.parseInt( minutiInizioText.getText());
-            String giorno=giorniBox.getSelectedItem().toString();
+            String giorno= Objects.requireNonNull(giorniBox.getSelectedItem()).toString().toLowerCase();
             String ex=controller.aggiungiVincolo(giorno,oraInizio,minutiInizio,oraFine,minutiFine);
             if(ex!=null){
                 JOptionPane.showMessageDialog(frame,ex,"Errore",JOptionPane.ERROR_MESSAGE);

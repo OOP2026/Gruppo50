@@ -17,11 +17,11 @@ public class SchermataRichiesta {
     private JTextField minutiIniziaLezioneText;
     private JTextField oraFineLezioneText;
     private JTextField minutiFineLezioneText;
-    private JComboBox giorniBox;
+    private JComboBox<String> giorniBox;
     private JTextField minutiIniziaNuovaText;
     private JTextField minutiFineNuovaText;
     private JTextField oraFineNuovaText;
-    private JComboBox giorniNuoviBox;
+    private JComboBox<String> giorniNuoviBox;
     private JPanel panel1;
     private JPanel panelRichiesta;
     private JPanel panelLezioneDaSpostare;

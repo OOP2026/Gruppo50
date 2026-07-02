@@ -2,6 +2,8 @@ package implementazioneDao;
 
 
 import dao.AulaDAO;
+import database_connection.ConnessioneDatabase;
+
 import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +14,8 @@ import java.util.ArrayList;
 public class AulaPostgresDao implements AulaDAO {
     private final Connection connection;
 
-    public AulaPostgresDao(Connection connection) {
-        this.connection = connection;
+    public AulaPostgresDao() throws Exception {
+        this.connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
     @Override
@@ -41,7 +43,7 @@ public class AulaPostgresDao implements AulaDAO {
 
           while(rs.next()){
               haRighe=true;
-              String nome= rs.getString("Aula");
+              String nome= rs.getString("nome");
               int capienza= rs.getInt("capienza");
               aule.add(new Object[]{nome,capienza});
           }

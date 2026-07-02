@@ -22,6 +22,10 @@ public class SchermataDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+        String mess=controller.caricaVincoliDaDB();
+        if(mess!=null){
+            JOptionPane.showMessageDialog(frame,mess,"Errore",JOptionPane.ERROR_MESSAGE);
+        }
     caricaEvents();
 
     }
@@ -53,6 +57,7 @@ public class SchermataDocente {
         }
         if(logoutButton != null) {
             logoutButton.addActionListener(e -> {
+                controller.logout();
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);
                 frame.dispose();

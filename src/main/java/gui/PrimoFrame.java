@@ -17,6 +17,7 @@ public class PrimoFrame {
         frame.pack();
         frame.setLocationRelativeTo(null);
 
+
         if(loginButton!=null) {
             loginButton.addActionListener(e -> {
                 LoginPage loginPage = new LoginPage(controller, frame);
