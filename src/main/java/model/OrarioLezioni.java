@@ -1,6 +1,5 @@
 package model;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Predicate;
 import model.Responsabile.Token;
@@ -32,9 +31,9 @@ public class OrarioLezioni {
      * @return una lista di {@link Lezione} associate al docente, vuota se non ha lezioni assegnate
      */
     public List<Lezione> getDocenteLezioni(Docente docente){
-        List<Lezione> lista=new ArrayList<Lezione>();
+        List<Lezione> lista=new ArrayList<>();
         for(Lezione l : orariolezioni){
-            if(l.insegnamento.docente.email.equals(docente.email)){
+            if(l.getInsegnamento().getDocente().email.equals(docente.email)){
                 lista.add(l);
             }
         }
@@ -46,7 +45,7 @@ public class OrarioLezioni {
         Collections.sort(lista2);
         return lista2;
 
-    };
+    }
     ///Il metodo permette di aggiungere una lezione nell'orario
     ///@param l È un oggetto di tipo {@link Lezione}
     ///@param token è un oggetto che ha solo un responsabile
@@ -128,12 +127,12 @@ public class OrarioLezioni {
         System.out.println(giorno);
         boolean trovata = false;
         for (Lezione l : elenco) {
-            if (!giorno.equalsIgnoreCase(l.orario.giorno) || !filtro.test(l)) continue;
+            if (!giorno.equalsIgnoreCase(l.getOrario().getGiorno()) || !filtro.test(l)) continue;
 
-            System.out.println("Docente: "+l.insegnamento.docente.nome+" "+l.insegnamento.docente.cognome);
-            System.out.println("Insegamento: "+l.insegnamento.Nome);
-            System.out.println("Orario: "+l.orario.getOrarioCompleto());
-            System.out.println("Aula: "+l.aula.Nome);
+            System.out.println("Docente: "+l.getInsegnamento().getDocente().nome+" "+l.getInsegnamento().getDocente().cognome);
+            System.out.println("Insegamento: "+l.getInsegnamento().getNome());
+            System.out.println("Orario: "+l.getOrario().getOrarioCompleto());
+            System.out.println("Aula: "+l.getAula().getNome());
 
             // stampa campi comuni...
             trovata = true;
@@ -154,11 +153,11 @@ public class OrarioLezioni {
     public void visualizzaOrarioCompleto(Studente studente){
 
         System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
-        giornoLezioni(giorni[0],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-        giornoLezioni(giorni[1],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-        giornoLezioni(giorni[2],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-        giornoLezioni(giorni[3],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
-        giornoLezioni(giorni[4],    orariolezioni, l -> l.insegnamento.AnnoCorso == studente.annoCorso);
+        giornoLezioni(giorni[0],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[1],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[2],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[3],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[4],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
 
     }
 
@@ -172,11 +171,11 @@ public class OrarioLezioni {
     public void visualizzaOrarioCompleto(Docente docente){
 
         System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
-        giornoLezioni(giorni[0], orariolezioni, l -> l.insegnamento.docente == docente);
-        giornoLezioni(giorni[1], orariolezioni, l -> l.insegnamento.docente == docente);
-        giornoLezioni(giorni[2], orariolezioni, l -> l.insegnamento.docente == docente);
-        giornoLezioni(giorni[3], orariolezioni, l -> l.insegnamento.docente == docente);
-        giornoLezioni(giorni[4], orariolezioni, l -> l.insegnamento.docente == docente);
+        giornoLezioni(giorni[0], orariolezioni, l -> l.getInsegnamento().getDocente().equals(docente));
+        giornoLezioni(giorni[1], orariolezioni, l -> l.getInsegnamento().getDocente()== docente);
+        giornoLezioni(giorni[2], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
+        giornoLezioni(giorni[3], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
+        giornoLezioni(giorni[4], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
     }
 
 
@@ -202,11 +201,11 @@ public class OrarioLezioni {
      * @return true se c'è uno scontro di orario, false altrimenti
      */
     private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente){
-        int inizioNuovo = l.orario.getOrarioInizioInMinuti();
-        int fineNuovo = l.orario.getOrarioFineInMinuti();
+        int inizioNuovo = l.getOrario().getOrarioInizioInMinuti();
+        int fineNuovo = l.getOrario().getOrarioFineInMinuti();
 
-        int inizioEsistente = lezioneGiaPresente.orario.getOrarioInizioInMinuti();
-        int fineEsistente = lezioneGiaPresente.orario.getOrarioFineInMinuti();
+        int inizioEsistente = lezioneGiaPresente.getOrario().getOrarioInizioInMinuti();
+        int fineEsistente = lezioneGiaPresente.getOrario().getOrarioFineInMinuti();
 
         return (inizioNuovo<fineEsistente && fineNuovo>inizioEsistente);
     }
@@ -219,10 +218,10 @@ public class OrarioLezioni {
     private boolean controlloConflittoLezione(Lezione l){
         for (Lezione lf : orariolezioni) {
             boolean conflittoOrario= controlloConflittoOrario(l,lf);
-            if ((lf.orario.giorno.equals(l.orario.giorno))) {
+            if ((lf.getOrario().getGiorno().equals(l.getOrario().getGiorno()))) {
                 if(conflittoOrario){
-                    if(l.aula.Nome.equals(lf.aula.Nome)) return true;
-                    if(l.insegnamento.docente.equals(lf.insegnamento.docente)) return true;
+                    if(l.getAula().getNome().equals(lf.getAula().getNome())) return true;
+                    if(l.getInsegnamento().getDocente().equals(lf.getInsegnamento().getDocente())) return true;
 
                 }
 
@@ -240,7 +239,7 @@ public class OrarioLezioni {
     public List<Lezione> getLezioniStudente(Studente studente) {
         List<Lezione> risultato = new ArrayList<>();
         for (Lezione l : orariolezioni) {
-            if (l.insegnamento.AnnoCorso == studente.annoCorso) {
+            if (l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso()) {
                 risultato.add(l);
             }
         }

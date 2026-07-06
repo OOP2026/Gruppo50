@@ -4,14 +4,14 @@ package model;
  * @see Docente
  * */
 public class Insegnamento {
-    ///E' il nome dell'insegnamento
-    public String Nome;
+    ///È il nome dell'insegnamento
+   final private String Nome;
     ///Sono i numeri di cfu che vengono dati se si supera l'esame di questo insegnamento
-    public int NumeroCFU;
+    final private int NumeroCFU;
     ///Anno in cui l'insegnamento viene insegnato
-    public int AnnoCorso;
+   final private int AnnoCorso;
     ///Indica chi è il docente titolare
-    public Docente docente;
+    private Docente docente;
 
     public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso, Docente docente){
         this.Nome=Nome;
@@ -25,8 +25,25 @@ public class Insegnamento {
         this.AnnoCorso=AnnoCorso;
 
     }
-
-
+    public Insegnamento(Insegnamento i){
+        this.Nome=i.Nome;
+        this.NumeroCFU=i.NumeroCFU;
+        this.AnnoCorso=i.AnnoCorso;
+        this.docente= new Docente(i.docente);
+    }
+//getter and setter
+    public String getNome() {
+        return Nome;
+    }
+    public int getNumeroCFU() {
+        return NumeroCFU;
+    }
+    public int getAnnoCorso() {
+        return AnnoCorso;
+    }
+    public Docente getDocente() {
+        return new Docente(docente);
+    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

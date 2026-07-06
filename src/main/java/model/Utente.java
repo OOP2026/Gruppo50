@@ -16,14 +16,19 @@ public class Utente {
         this.username = login;
         this.password = password;
     }
+    public Utente (Utente u){
+        this.nome=u.nome;
+        this.cognome=u.cognome;
+        this.email=u.email;
+        this.username = u.username;
+        this.password = u.password;
+    }
 
     public boolean login(String username, String password) {
         return ( username.equals(this.username) && password.equals(this.password));
     }
     
-    public void saluto(){
-  System.out.println("ciao mi chiamo " + this.nome+" "+this.cognome);
-    }
+
 
     public String getmail(){
         return this.email;

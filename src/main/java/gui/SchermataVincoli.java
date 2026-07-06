@@ -57,7 +57,7 @@ public class SchermataVincoli {
         }
         aggiungiButton.addActionListener(e->{
     if(!checkCampi()) return;
-            int oraFine=Integer.parseInt( oraFineText.getText());
+    int oraFine=Integer.parseInt( oraFineText.getText());
             int minutiFine=Integer.parseInt( minutiFineText.getText());
             int oraInizio=Integer.parseInt( oraInizioText.getText());
             int minutiInizio=Integer.parseInt( minutiInizioText.getText());
@@ -81,7 +81,7 @@ public class SchermataVincoli {
                 if(ex!=null){
                     JOptionPane.showMessageDialog(frame,ex,"Errore",JOptionPane.ERROR_MESSAGE);
                     return;
-                };
+                }
 
 
                 creaTable();
@@ -96,10 +96,10 @@ private boolean checkCampi(){
         return false;
     }
     try{
-        int oraFine=Integer.parseInt( oraFineText.getText());
-        int minutiFine=Integer.parseInt( minutiFineText.getText());
-        int oraInizio=Integer.parseInt( oraInizioText.getText());
-        int minutiInizio=Integer.parseInt( minutiInizioText.getText());
+        Integer.parseInt( oraFineText.getText());
+        Integer.parseInt( minutiFineText.getText());
+        Integer.parseInt( oraInizioText.getText());
+        Integer.parseInt( minutiInizioText.getText());
     }catch(NumberFormatException ex){
         JOptionPane.showMessageDialog(frame,"Inserisci valori numerici validi per orari e minuti","Errore",JOptionPane.WARNING_MESSAGE);
         return false;

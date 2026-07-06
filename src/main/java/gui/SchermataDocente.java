@@ -5,15 +5,14 @@ import javax.swing.*;
 
 public class SchermataDocente {
    static JFrame frame;
-    JMenuBar barraStrumenti;
     private JPanel panel1;
     private JButton schermataRichiesteButton;
     private JButton visualizzaOrarioButton;
     private JButton gestioneVincoliButton;
     private JButton insegnamentiButton;
     private JButton logoutButton;
-    private Controller controller;
-    private JFrame frameChiamante;
+    final private Controller controller;
+    final private JFrame frameChiamante;
     public SchermataDocente(Controller c,JFrame f) {
         controller=c;
         frameChiamante=f;

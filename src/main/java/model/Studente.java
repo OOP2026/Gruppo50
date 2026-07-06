@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Studente extends Utente  {
     private final String matricola;
-    protected int annoCorso;
+    final private int annoCorso;
 
     /**
      * Lista per tenere traccia delle matricole già assegnate

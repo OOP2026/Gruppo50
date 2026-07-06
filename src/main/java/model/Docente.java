@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * La classe Docente rappresenta un professore universitario.
  * <p>
- * Il ddocente viene salvato come un Utente nel sistema ed egli può
+ * Il docente viene salvato come un Utente nel sistema ed egli può
  * visualizzare le proprie lezioni, richiedere di spostarle a un responsabile inoltre
  * può indicare anche dei vincoli(max 3) dove non è reperibile.
  * </p>
@@ -16,7 +16,7 @@ import java.util.List;
  * @see Lezione
  */
 public class Docente extends Utente {
-    /**l'elenco degli insegnamenti abilitati al docente.*/
+    /**L'elenco degli insegnamenti abilitati al docente.*/
     List<Insegnamento> insegnamenti;
     /**Registro delle richieste IN_ATTESA inoltrate dal docente.*/
     private ArrayList<Richiesta> richiesteSpostamentoInviate;
@@ -29,7 +29,7 @@ public class Docente extends Utente {
      *
      * @param nome primo nome di battesimo del docente.
      * @param cognome secondo nome di battesimo del docente.
-     * @param email   email ad uso universitario del docente tipicamente(nome.cognome@dominio.estensione).
+     * @param email   email a uso universitario del docente tipicamente(nome.cognome@dominio.estensione).
      * @param login   username utilizzato dal docente per accedere.
      */
     public Docente(String nome, String cognome, String email, String login, String password) {
@@ -38,16 +38,24 @@ public class Docente extends Utente {
         vincoli= new ArrayList<>();
         insegnamenti=new ArrayList<>();
     }
+
+    public Docente(Docente d){
+        super(d);
+
+        this.richiesteSpostamentoInviate = new ArrayList<>(d.richiesteSpostamentoInviate);
+        this.vincoli = new ArrayList<>(d.vincoli);
+        this.insegnamenti = new ArrayList<>(d.insegnamenti);
+    }
     /**Permette di aggiungere un insegnamento al docente
-     * @param insegnamento è proprio l'insegnamento che vogliamo aggiugere al docente es(se il professore è abilitato
-     * a insegnare 'Matematica, statistica ecc..'.
+     * @param insegnamento è proprio l'insegnamento che vogliamo aggiugere al docente es(se il professore è abilitato)
+     * a insegnare 'Matematica, statistica ecc...'.
      */
     public void addInsegnamento(Insegnamento insegnamento){
         if(insegnamento==null){
             throw new NullPointerException("Il valore è null non puo essere aggiunto!");
         }
         this.insegnamenti.add(insegnamento);
-        System.out.println(insegnamento.Nome+" è stato aggiunto a "+this.nome+" "+this.cognome);
+        System.out.println(insegnamento.getNome()+" è stato aggiunto a "+this.nome+" "+this.cognome);
     }
     ///Rimuove un materia che insegna o che puo insegnare il docente
     public void removeInsegnamento(Insegnamento insegnamento){
@@ -60,15 +68,12 @@ public class Docente extends Utente {
     public List<Insegnamento> getInsegnamenti(){
         return new ArrayList<>(insegnamenti);
     }
-    public void saluto() {
-        System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono un docente");
 
-    }
     ///Ritorna le lezioni del docente
     public List<Lezione> getLezioni(OrarioLezioni o){
         return o.getDocenteLezioni(this);
     }
-    ///questa funzione invia una richiesta di spostamento al responsabile
+    ///Questa funzione invia una richiesta di spostamento al responsabile
     public void richiestaSpostamentoLezione(OrarioLezioni orario,Responsabile responsabile,String motivo, Orario orarioVecchio, Orario orarioProposto) {
         //creazione della richiesta
         Richiesta richiesta = new Richiesta(this, motivo, orarioVecchio, orarioProposto);
@@ -89,11 +94,11 @@ public class Docente extends Utente {
         }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
         for(Richiesta richiesta : richiesteSpostamentoInviate) {
-            System.out.println("Docente richiedente: " + richiesta.docenteRichiedente.nome + " " + richiesta.docenteRichiedente.cognome);
-            System.out.println("Orario lezione da spostare: " + richiesta.orarioLezioneDaSpostare.getOrarioCompleto());
-            System.out.println("Orario lezione proposto: " + richiesta.nuovoOrarioLezione.getOrarioCompleto());
-            System.out.println("Motivo della richiesta: " + richiesta.motivoRichiesta);
-            System.out.println("Stato Richiesta: "+richiesta.statoRichiesta);
+            System.out.println("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
+            System.out.println("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
+            System.out.println("Orario lezione proposto: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
+            System.out.println("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
+            System.out.println("Stato Richiesta: "+ richiesta.getStatoRichiesta());
             if(numeroRichieste==numeroRichiesta){
                 System.out.println("-----Fine-----");
                 return; }
@@ -134,7 +139,7 @@ public class Docente extends Utente {
     public List<Vincolo> getVincoli(){
         return new ArrayList<>(vincoli);
     }
-    ///rimuove un vincolo in base all'indice.
+    ///Rimuove un vincolo in base all'indice.
     public void rimuoviVincolo(int indice){
         if(indice<0 || indice>=vincoli.size()){
             throw new IllegalArgumentException("Non esiste il vincolo che vuoi rimuovere");
@@ -163,11 +168,12 @@ public class Docente extends Utente {
     public boolean checkRichiestaLezione(Richiesta r,OrarioLezioni orario){
         boolean lezioneTrovata=false;
         for(Lezione l:getLezioni(orario)){
-            if(lezioneTrovata=r.equalsLezione(l)) break;
+            lezioneTrovata=r.equalsLezione(l);
+            if(lezioneTrovata) break;
         }
         return lezioneTrovata;
 
-    };
+    }
 
 
 

@@ -98,7 +98,7 @@ public class Controller {
 		responsabileTemp=null;
 	}
 	///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
-	/// @exception NullPointerException
+	/// @throws NullPointerException
 	public void checkResponsabileTemp(){
 		if(responsabileTemp==null){
 			throw new NullPointerException("Non è presente ancora un responsabile");
@@ -159,12 +159,6 @@ public class Controller {
 
 		return null;
 	}
-
-
-	//Docente visualizza l'orario delle proprie lezionoùi
-	public void visualizzaLezione(OrarioLezioni elencoLezioni) {
-		docente.visualizzaOrario(elencoLezioni);
-	}
 	///Permette al docente di aggiungere un Insegnamento che può insegnare
 	public void addInsegnamentoDocente(String materia){
 
@@ -187,7 +181,7 @@ public class Controller {
 	/// @param materia è il nome dell'insegnamento
 	private Insegnamento stringToInsegnamento(String materia){
 		for(Insegnamento insegnamento:insegnamentiRegistrati){
-			if(insegnamento.Nome.equalsIgnoreCase(materia)){
+			if(insegnamento.getNome().equalsIgnoreCase(materia)){
 				return insegnamento;
 			}
 		}
@@ -201,10 +195,10 @@ public class Controller {
 		List<Insegnamento> b= docente.getInsegnamenti();
 		a.removeAll(b);
 		for(Insegnamento insegnamento:a){
-			data.add(insegnamento.Nome);
+			data.add(insegnamento.getNome());
 		}
 		return data;
-	};
+	}
 	/**Ritorna gli insegnamenti registrati  però solo il nome
 	 *@param materia <p>Se materia è {@code ""} il metodo ritorna tutte le materie registrate,
 	 *se no ritorna le materie che iniziano con la stringa dentro materia.
@@ -215,11 +209,11 @@ public class Controller {
 		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
 
 		for(Insegnamento insegnamento:a){
-			if(insegnamento.Nome.toLowerCase().startsWith(materia))
-				data.add(insegnamento.Nome);
+			if(insegnamento.getNome().toLowerCase().startsWith(materia))
+				data.add(insegnamento.getNome());
 		}
 		return data;
-	};
+	}
 	///Ritorna gli insegnamenti del docente
 	///@return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] getInsegnamentiDocente(){
@@ -227,18 +221,20 @@ public class Controller {
 		if(insegnamenti.isEmpty()){ return new Object[0][0];}
 		Object[][] data=new Object[insegnamenti.size()][3];
 		for(int i=0; i<insegnamenti.size(); i++){
-			data[i][0]=insegnamenti.get(i).Nome;
-			data[i][1]=insegnamenti.get(i).NumeroCFU;
-			data[i][2]=insegnamenti.get(i).AnnoCorso;
+			data[i][0]=insegnamenti.get(i).getNome();
+			data[i][1]=insegnamenti.get(i).getNumeroCFU();
+			data[i][2]=insegnamenti.get(i).getAnnoCorso();
 		}
 		return data;
-	};
+	}
 	///Permette al docente di aggiungere un {@link Vincolo} max 3.
 	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
 	///@return Restituisce una {@code String} o {@code null}
-	public String aggiungiVincolo(String giorno, int oraInzio, int minutoInzio, int oraFIne, int minutoFine) {
+	public String aggiungiVincolo(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 		try{
-			docente.aggiungiVincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine);
+            VincoloDAO vincoloDAO= new VincoloPostgresDao();
+            vincoloDAO.salvaVincoloDB(this.docente.getmail(),giorno,oraInizio,minutoInizio,oraFine,minutoFine);
+			docente.aggiungiVincolo(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 		}catch(Exception e){
 			return e.getMessage();
 		}
@@ -253,7 +249,7 @@ public class Controller {
 			List<Vincolo> vincoli= new ArrayList<>(docente.getVincoli());
 			Vincolo v= vincoli.get(ind);
 			//rimozioni attraverso db
-			vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.orario.giorno,v.orario.oraInizio,v.orario.minutoInizio,v.orario.oraFine,v.orario.minutoFine);
+			vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.orario.getGiorno(),v.orario.getOraInizio(),v.orario.getMinutoInizio(),v.orario.getOraFine(),v.orario.getMinutoFine());
 			docente.rimuoviVincolo(ind);}
 		catch (Exception e){
 			return e.getMessage();
@@ -310,7 +306,7 @@ public class Controller {
 					giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio,
 					giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
 			List<Richiesta> inviate = docente.getRichiesteInviate();
-			inviate.get(inviate.size() - 1).id = idGenerato;
+			inviate.get(inviate.size() - 1).setId(idGenerato);
 		} catch (Exception e) {
 			System.out.println("Richiesta NON salvata sul database (resta solo in memoria): " + e.getMessage());
 		}
@@ -353,7 +349,7 @@ public class Controller {
 								oraFineIniziale.get(i), minutoFineIniziale.get(i)),
 						new Orario(giornoProposto.get(i), oraInizioProposto.get(i), minutoInizioProposto.get(i),
 								oraFineProposto.get(i), minutoFineProposto.get(i)));
-				r.id = id.get(i);
+				r.setId(id.get(i));
 				r.caricaStatoDaDB(stato.get(i));
 				richieste.add(r);
 			}
@@ -401,7 +397,7 @@ public class Controller {
 								oraFineIniziale.get(i), minutoFineIniziale.get(i)),
 						new Orario(giornoProposto.get(i), oraInizioProposto.get(i), minutoInizioProposto.get(i),
 								oraFineProposto.get(i), minutoFineProposto.get(i)));
-				r.id = id.get(i);
+				r.setId(id.get(i));
 				// lo stato non viene letto: le richieste estratte sono tutte IN_ATTESA (default)
 				richieste.add(r);
 			}
@@ -421,9 +417,9 @@ public class Controller {
 	private void aggiornaStatoRichiestaSuDB(int numeroRichiesta) {
 		try {
 			Richiesta r = responsabile.getRichiesteSpostamento().get(numeroRichiesta);
-			if (r.id < 0) return; // richiesta mai salvata sul database
+			if (r.getId() < 0) return; // richiesta mai salvata sul database
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
-			richiestaDAO.aggiornaStatoRichiestaDB(r.id, responsabile.getStatoRichiesta(numeroRichiesta));
+			richiestaDAO.aggiornaStatoRichiestaDB(r.getId(), responsabile.getStatoRichiesta(numeroRichiesta));
 		} catch (Exception e) {
 			System.out.println("Stato richiesta NON aggiornato sul database: " + e.getMessage());
 		}
@@ -434,10 +430,10 @@ public class Controller {
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
 		for (int i = 0; i < r.size(); i++) {
-			data[i][0] = r.get(i).orarioLezioneDaSpostare.giorno + " " + r.get(i).orarioLezioneDaSpostare.getOrarioCompleto();
-			data[i][1] = r.get(i).nuovoOrarioLezione.giorno + " " + r.get(i).nuovoOrarioLezione.getOrarioCompleto();
-			data[i][2] = r.get(i).motivoRichiesta;
-			data[i][3] = r.get(i).statoRichiesta;
+			data[i][0] = r.get(i).getOrarioLezioneDaSpostare().getGiorno() + " " + r.get(i).getOrarioLezioneDaSpostare().getOrarioCompleto();
+			data[i][1] = r.get(i).getNuovoOrarioLezione().getGiorno() + " " + r.get(i).getNuovoOrarioLezione().getOrarioCompleto();
+			data[i][2] = r.get(i).getMotivoRichiesta();
+			data[i][3] = r.get(i).getStatoRichiesta();
 		}
 		return data;
 	}
@@ -455,7 +451,7 @@ public class Controller {
 		// raggruppa le lezione per giorno.
 		for (String giorno:giorni) {
 			//crea un list con lezioni per ogni giorno dentro un'altra list
-			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.orario.giorno.equalsIgnoreCase(giorno)).collect(Collectors.toList()));
+			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.getOrario().getGiorno().equalsIgnoreCase(giorno)).collect(Collectors.toList()));
 
 		}
 		while(true) {
@@ -478,13 +474,6 @@ public class Controller {
 		}
 
 		return data.toArray(new Object[0][]);
-	}
-
-
-
-	//Studente visualizza l'orario delle lezioni del corso.
-	public void visualizzaOrarioLezioni(OrarioLezioni elencoLezioni){
-		studente.visualizzaOrarioLezioni(elencoLezioni);
 	}
 
 	/**
@@ -580,11 +569,11 @@ public class Controller {
 		for (String g : giorni) mappa.put(g, new java.util.ArrayList<>());
 
 		for (model.Lezione l : orarioLezioni.getLezioniStudente(studente)) {
-			String giorno = l.orario.giorno;
+			String giorno = l.getOrario().getGiorno();
 			String testo  = String.format("%02d:%02d - %02d:%02d  |  %s",
-					l.orario.getOraInizio(), l.orario.minutoInizio,
-					l.orario.oraFine,   l.orario.minutoFine,
-					l.insegnamento.Nome);
+					l.getOrario().getOraInizio(), l.getOrario().getMinutoInizio(),
+					l.getOrario().getOraFine(),   l.getOrario().getMinutoFine(),
+					l.getInsegnamento().getNome());
 			mappa.getOrDefault(giorno, new java.util.ArrayList<>()).add(testo);
 		}
 		return mappa;
@@ -615,10 +604,10 @@ public class Controller {
 		List<Object[]> righe = new ArrayList<>();
 		for (Insegnamento ins : insegnamentiRegistrati) {
 			righe.add(new Object[]{
-					ins.Nome,
-					ins.NumeroCFU,
-					ins.AnnoCorso,
-					ins.docente.getmail()
+					ins.getNome(),
+					ins.getNumeroCFU(),
+					ins.getAnnoCorso(),
+					ins.getDocente().getmail()
 			});
 		}
 		return righe;
@@ -631,12 +620,12 @@ public class Controller {
 		for (int i = 0; i < lista.size(); i++) {
 			model.Richiesta r = lista.get(i);
 			data[i][0] = i;
-			data[i][1] = r.docenteRichiedente.nome + " " + r.docenteRichiedente.cognome;
-			data[i][2] = r.orarioLezioneDaSpostare.getGiorno() + " "
-					+ r.orarioLezioneDaSpostare.getOrarioCompleto();
-			data[i][3] = r.nuovoOrarioLezione.getGiorno() + " "
-					+ r.nuovoOrarioLezione.getOrarioCompleto();
-			data[i][4] = r.motivoRichiesta;
+			data[i][1] = r.getDocenteRichiedente().nome + " " + r.getDocenteRichiedente().cognome;
+			data[i][2] = r.getOrarioLezioneDaSpostare().getGiorno() + " "
+					+ r.getOrarioLezioneDaSpostare().getOrarioCompleto();
+			data[i][3] = r.getNuovoOrarioLezione().getGiorno() + " "
+					+ r.getNuovoOrarioLezione().getOrarioCompleto();
+			data[i][4] = r.getMotivoRichiesta();
 			data[i][5] = responsabile.getStatoRichiesta(i);
 		}
 		return data;
@@ -690,9 +679,9 @@ public class Controller {
 			// Persiste il nuovo orario proposto sul database (best-effort)
 			try {
 				Richiesta r = responsabile.getRichiesteSpostamento().get(numeroRichiesta);
-				if (r.id >= 0) {
+				if (r.getId() >= 0) {
 					RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
-					richiestaDAO.aggiornaOrarioPropostoDB(r.id, giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+					richiestaDAO.aggiornaOrarioPropostoDB(r.getId(), giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 				}
 			} catch (Exception e) {
 				System.out.println("Orario proposto NON aggiornato sul database: " + e.getMessage());
@@ -830,7 +819,7 @@ public class Controller {
 			a.add(new Aula(nome, capienza));
 		}
 		aule=new ArrayList<>(a);
-	};
+	}
 	/**Ritorna le aule  però solo il nome
 	 *@param nomeAula <p>Se nomeAula è {@code ""} il metodo ritorna tutte le aule,
 	 *se non è vuota ritorna le aule che iniziano con la stringa dentro nomeAula.
@@ -841,9 +830,9 @@ public class Controller {
 		List<Aula> a= new ArrayList<>(aule);
 
 		for(Aula aula:a){
-			if(aula.Nome.toLowerCase().startsWith(nomeAula.trim()))
-				data.add(aula.Nome);
+			if(aula.getNome().toLowerCase().startsWith(nomeAula.trim()))
+				data.add(aula.getNome());
 		}
 		return data;
-	};
+	}
 }

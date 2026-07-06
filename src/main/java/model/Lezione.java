@@ -16,13 +16,13 @@ package model;
 
 public class Lezione implements Comparable<Lezione> {
     /** Insegnamento associato alla lezione, da cui si ricava anche il docente. */
-    public Insegnamento insegnamento;
+   private Insegnamento insegnamento;
 
     /** Aula fisica in cui si svolge la lezione. */
-    public Aula aula;
+   private Aula aula;
 
     /** Giorno e fascia oraria in cui si svolge la lezione. */
-    public Orario orario;
+   private Orario orario;
 
     /**
      * Crea una nuova lezione associando insegnamento, aula e orario.
@@ -45,8 +45,28 @@ public class Lezione implements Comparable<Lezione> {
      * @return una stringa con le informazioni principali della lezione
      */
     public String infoLezione(){
-     return "Insegnamento: "+this.insegnamento.Nome+" Docente: "+this.insegnamento.docente.nome+" "+this.insegnamento.docente.cognome+" Aula: "+this.aula.Nome+" Orario: "+this.orario.getOrarioCompleto();
+     return "Insegnamento: "+this.insegnamento.getNome()+" Docente: "+this.insegnamento.getDocente().nome+" "+this.insegnamento.getDocente().cognome+" Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
     }
+    //Getter and setter
+    public Insegnamento getInsegnamento () {
+        return new Insegnamento(this.insegnamento);
+    }
+public void setInsegnamento(Insegnamento i){
+        this.insegnamento=i;
+}
+    public Aula getAula () {
+        return new Aula(this.aula);
+    }
+    public void setAula(Aula a){
+        this.aula=a;
+    }
+
+    public Orario getOrario () {
+        return new Orario(this.orario);
+    }
+    public void setOrario(Orario o){
+        this.orario=o;}
+
 
     /**
      * Confronta questa lezione con un altro oggetto per verificarne l'uguaglianza.
@@ -67,7 +87,7 @@ public class Lezione implements Comparable<Lezione> {
         Lezione lezione = (Lezione) obj;
         return this.insegnamento.equals(lezione.insegnamento)
                 && this.orario.equals(lezione.orario)
-                && this.aula.Nome.equals(lezione.aula.Nome);
+                && this.aula.getNome().equals(lezione.aula.getNome());
     }
 
     /**
@@ -81,7 +101,7 @@ public class Lezione implements Comparable<Lezione> {
      */
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(this.insegnamento, this.orario, this.aula.Nome);
+        return java.util.Objects.hash(this.insegnamento, this.orario, this.aula.getNome());
     }
 
     /**

@@ -27,11 +27,11 @@ private final Token token;
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
   for(Richiesta richiesta : richiesteSpostamento) {
     System.out.println("Numero richiesta: " + (numeroRichiesta));
-    System.out.println("Docente richiedente: " + richiesta.docenteRichiedente.nome + " " + richiesta.docenteRichiedente.cognome);
-    System.out.println("Motivo della richiesta: " + richiesta.motivoRichiesta);
-    System.out.println("Orario lezione da spostare: " + richiesta.orarioLezioneDaSpostare.getOrarioCompleto());
-    System.out.println("Orario lezione nuovo: " + richiesta.nuovoOrarioLezione.getOrarioCompleto());
-    System.out.println("Stato Richiesta: "+richiesta.statoRichiesta);
+    System.out.println("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
+    System.out.println("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
+    System.out.println("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
+    System.out.println("Orario lezione nuovo: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
+    System.out.println("Stato Richiesta: "+ richiesta.getStatoRichiesta());
     if(numeroRichieste==numeroRichiesta+1){
         System.out.println("-----Fine-----");
    return; }
@@ -46,7 +46,7 @@ private final Token token;
     /// @param l è la lezione che deve essere inserita
     /// @param elencoLezioni è dove viene inserito
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
-    if(!(verificaDisponibilita(l.insegnamento.docente.getVincoli(), l.orario))){
+    if(!(verificaDisponibilita(l.getInsegnamento().getDocente().getVincoli(), l.getOrario()))){
         throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");
     }
     // Aggiunge la lezione all'orario in memoria. Se c'è un conflitto,
@@ -69,11 +69,11 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
 
-    if(richiesta.statoRichiesta == StatoRichiesta.APPROVATA){
+    if(richiesta.getStatoRichiesta() == StatoRichiesta.APPROVATA){
         System.out.println("La richiesta è già stata approvata");
         return;
     }
-    if(richiesta.statoRichiesta == StatoRichiesta.RIFIUTATA){
+    if(richiesta.getStatoRichiesta() == StatoRichiesta.RIFIUTATA){
         System.out.println("La richiesta è già stata rifiutata");
         return;
     }
@@ -82,7 +82,7 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
 
     // --- Caso RIFIUTO ---
     if(!approva){
-        richiesta.statoRichiesta = StatoRichiesta.RIFIUTATA;
+        richiesta.setStatoRichiesta(StatoRichiesta.RIFIUTATA);
         System.out.println("La richiesta è stata rifiutata");
         return;
     }
@@ -101,13 +101,13 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
         return;
     }
 
-    Lezione nuovaLezione = new Lezione(lezioneDaSpostare.insegnamento, lezioneDaSpostare.aula, richiesta.nuovoOrarioLezione);
+    Lezione nuovaLezione = new Lezione(lezioneDaSpostare.getInsegnamento(), lezioneDaSpostare.getAula(), richiesta.getNuovoOrarioLezione());
 
     try {
         elencoLezioni.aggiungiLezione(nuovaLezione, this.token);
     } catch (IllegalArgumentException e1) {
         System.out.println("Errore nello spostamento della lezione: " + e1.getMessage());
-        richiesta.statoRichiesta = StatoRichiesta.RIFIUTATA;
+        richiesta.setStatoRichiesta(StatoRichiesta.RIFIUTATA);
         System.out.println("La richiesta è stata rifiutata");
         System.out.println("Tentativo di ripristinare la lezione originale...");
         try {
@@ -118,7 +118,7 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
         return;
     }
 
-    richiesta.statoRichiesta = StatoRichiesta.APPROVATA;
+    richiesta.setStatoRichiesta(StatoRichiesta.APPROVATA);
     System.out.println("La richiesta è stata approvata");
 }
  ///Questo metodo permette di cambiare l'orario della richiesta
@@ -128,16 +128,16 @@ if(richiesta==null){
     System.out.println("La richiesta non esiste");
     return;
 }
-if(richiesta.statoRichiesta==StatoRichiesta.APPROVATA){
+if(richiesta.getStatoRichiesta() ==StatoRichiesta.APPROVATA){
     System.out.println("La richiesta è già stata approvata");
     return;
 }
-if(richiesta.statoRichiesta==StatoRichiesta.RIFIUTATA){
+if(richiesta.getStatoRichiesta() ==StatoRichiesta.RIFIUTATA){
     System.out.println("La richiesta è già stata rifiutata");
     return;
 }
 
-richiesta.nuovoOrarioLezione= orarioNuovo;
+richiesta.setNuovoOrarioLezione(orarioNuovo);
 
  }
  ///Permette di visualizzare l'orario completo di utte le lezioni dle corso nel terminale
@@ -157,14 +157,13 @@ for(Vincolo vincolo:vincoli) {
     int orarioInizioLezione = orario.getOrarioInizioInMinuti();
     int orarioFineLezione = orario.getOrarioFineInMinuti();
     System.out.println("Sto confrontando i giorni");
-    if (!vincolo.orario.giorno.equals(orario.giorno)) {
+    if (!vincolo.orario.getGiorno().equals(orario.getGiorno())) {
         System.out.println("Giorni diversi");
         continue;
     }
     System.out.println("Sto confrontando l'orario");
 
-    if (orarioInizioLezione < orarioFineVincolo && orarioFineLezione > orarioInizioVincolo)
-    return false;
+    if (orarioInizioLezione < orarioFineVincolo && orarioFineLezione > orarioInizioVincolo) return false;
 
 }
 return true;
@@ -177,8 +176,14 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
     }
     return null;
  }
+    ///Carica nel responsabile le richieste di spostamento lette dal database,
+    ///sostituendo quelle in memoria
+    public void caricaRichiesteSpostamento(List<Richiesta> richiesteDaCaricare){
+        richiesteSpostamento = new ArrayList<>(richiesteDaCaricare);
+    }
 
-     /// Restituisce la lista non modificabile delle richieste di spostamento
+
+    /// Restituisce la lista non modificabile delle richieste di spostamento
      /// ricevute da questo responsabile.
      public java.util.List<Richiesta> getRichiesteSpostamento() {
         return java.util.Collections.unmodifiableList(richiesteSpostamento);
@@ -189,7 +194,7 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
         if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
             return null;
         }
-        return richiesteSpostamento.get(numeroRichiesta).statoRichiesta.name();
+        return richiesteSpostamento.get(numeroRichiesta).getStatoRichiesta().name();
     }
 
     ///Verifica che una richiesta sia ancora in attesa utilizzato dal controller
@@ -197,7 +202,7 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
         if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
             return false;
         }
-        return richiesteSpostamento.get(numeroRichiesta).statoRichiesta == StatoRichiesta.IN_ATTESA;
+        return richiesteSpostamento.get(numeroRichiesta).getStatoRichiesta() == StatoRichiesta.IN_ATTESA;
     }
 
     /// Il token serve per usare alcuni metodi che solo il responsabile puo usare

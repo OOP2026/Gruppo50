@@ -98,7 +98,7 @@ public class SchermataInsegnamentiDocente {
             insegnamentiBox.addItem(insegnamento);
         }
         insegnamentiBox.setSelectedIndex(0);
-    };
+    }
     private void creaTable(){
         Object[][] data=controller.getInsegnamentiDocente();
         tabellaInsegnamenti.setModel(new DefaultTableModel(data,

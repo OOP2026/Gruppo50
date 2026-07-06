@@ -53,19 +53,26 @@ public class Orario {
         this.oraFine = oraFine;
         this.minutoFine = minutoFine;
     }
+    public Orario (Orario o){
+        this.giorno = o.giorno;
+        this.oraInizio = o.oraInizio;
+        this.minutoInizio = o.minutoInizio;
+        this.oraFine = o.oraFine;
+        this.minutoFine = o.minutoFine;
+    }
     ///Controlla che l'orario di inizio sia compreso tra le 8 e le 17 e che i minuti siano compresi tra 0 e 59
     /// @param oraInizio l'ora di inizio da controllare
-    /// @param minutiInizio i minuti di inizio da controllare
+    /// @param minutoInizio i minuti di inizio da controllare
     /// @throws IllegalArgumentException se l'orario di inizio non è valido
-    private void checkThisOrarioInizio(int oraInizio,int minutiInizio){
+    private void checkThisOrarioInizio(int oraInizio,int minutoInizio){
         if(oraInizio<8 || oraInizio>17){throw new IllegalArgumentException("L'ora di inizio deve essere compresa tra 8 e 17");}
         if(minutoInizio<0 || minutoInizio>59){throw new IllegalArgumentException("Il minuto di inizio deve essere compreso tra 0 e 59");}
     }
     ///Controlla che l'orario di fine sia compreso tra le 8 e le 18 e che i minuti siano compresi tra 0 e 59
     /// @param oraFine l'ora di fine da controllare
-    /// @param minutiFine i minuti di fine da controllare
+    /// @param minutoFine i minuti di fine da controllare
     /// @throws IllegalArgumentException se l'orario di fine non è valido
-    private void checkThisOrarioFine(int oraFine,int minutiFine){
+    private void checkThisOrarioFine(int oraFine,int minutoFine){
         if(oraFine<8 || oraFine>18){throw new IllegalArgumentException("L'ora di fine deve essere compresa tra 8 e 18");}
         if(minutoFine<0 || minutoFine>59){throw new IllegalArgumentException("Il minuto di fine deve essere compreso tra 0 e 59");}
         if(oraFine >= 18 && minutoFine > 0) {
@@ -163,7 +170,7 @@ public int getOrarioFineInMinuti() {
         checkConfrontoOrario();
         this.oraInizio = oraInizio;
         this.minutoInizio = minutoInizio;
-    };
+    }
     private String getOrarioInizio(){
         return String.format("%d:%02d", this.oraInizio, this.minutoInizio);
     }
