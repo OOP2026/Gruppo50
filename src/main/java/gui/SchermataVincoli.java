@@ -7,7 +7,7 @@ import controller.Controller;
 
 import java.awt.*;
 import java.util.Objects;
-
+@SuppressWarnings("unused")
 public class SchermataVincoli {
     JFrame frame;
     private JPanel panel1;

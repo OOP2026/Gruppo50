@@ -17,7 +17,7 @@ public class Controller {
 	private Docente docente;
 	private Utente utente;
 	///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
-	private List<Utente> utentiRegistrati;
+	final private List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
 	private List<Aula> aule=new ArrayList<>();

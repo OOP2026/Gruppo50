@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
  * per poter deicidere se approvare, rifiutare o modificare l'orario
  * della richiesta di spostamento.
  * */
+@SuppressWarnings("unused")
 public class VisualizzaRichiestaDialog {
     JDialog dialog;
 
@@ -67,18 +68,20 @@ public class VisualizzaRichiestaDialog {
             @Override
             public boolean isCellEditable(int row, int col) { return false; }
         };
-        table1.setModel(tableModel);
-        table1.getTableHeader().setReorderingAllowed(false);
-        table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if(table1!=null) {
+            table1.setModel(tableModel);
+            table1.getTableHeader().setReorderingAllowed(false);
+            table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // Larghezze colonne
-        table1.getColumnModel().getColumn(0).setMaxWidth(30);
-        table1.getColumnModel().getColumn(1).setPreferredWidth(130);
-        table1.getColumnModel().getColumn(2).setPreferredWidth(150);
-        table1.getColumnModel().getColumn(3).setPreferredWidth(150);
-        table1.getColumnModel().getColumn(4).setPreferredWidth(180);
-        table1.getColumnModel().getColumn(5).setPreferredWidth(80);
-    }
+            // Larghezze colonne
+            table1.getColumnModel().getColumn(0).setMaxWidth(30);
+            table1.getColumnModel().getColumn(1).setPreferredWidth(130);
+            table1.getColumnModel().getColumn(2).setPreferredWidth(150);
+            table1.getColumnModel().getColumn(3).setPreferredWidth(150);
+            table1.getColumnModel().getColumn(4).setPreferredWidth(180);
+            table1.getColumnModel().getColumn(5).setPreferredWidth(80);
+        }
+        }
 
     // ---------------------------------------------------------------
     // Carica / aggiorna dati dalla lista richieste del controller

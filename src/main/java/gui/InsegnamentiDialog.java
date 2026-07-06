@@ -4,7 +4,7 @@ import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
+@SuppressWarnings("unused")
 public class InsegnamentiDialog {
     JDialog dialog;
     private JPanel panel1;

@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
-
+@SuppressWarnings("unused")
 public class SchermataInsegnamentiDocente {
     JFrame frame;
     private JPanel panelAddInsegnamenti;
@@ -28,7 +28,7 @@ public class SchermataInsegnamentiDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        insegnamentiBox.setMaximumRowCount(4);
+        if(insegnamentiBox!=null) insegnamentiBox.setMaximumRowCount(4);
         caricaEvents();
         caricaInsegnamentiBox();
         creaTable();
@@ -113,5 +113,9 @@ public class SchermataInsegnamentiDocente {
         tabellaInsegnamenti.setDefaultEditor(Object.class, null);
         //quando le righe vengono cliccati diventano grigio chiaro
         tabellaInsegnamenti.setSelectionBackground(Color.LIGHT_GRAY);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

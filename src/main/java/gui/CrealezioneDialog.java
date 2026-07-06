@@ -40,7 +40,7 @@ public class CrealezioneDialog {
             dialog.setLocationRelativeTo(frameChiamante);
         }
 
-        textComboBoxIns=textFieldComboBoxIns();
+        textComboBoxIns=  textFieldComboBoxIns();
         textComboBoxAula=textFieldComboBoxAula();
         caricaInsegnamentiBox("");
         caricaAuleBox("");
@@ -131,7 +131,12 @@ public class CrealezioneDialog {
     /// Restituisce la JTextField dell'editor della JComboBox 'nomeInsField'.
     /// @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
     public JTextField textFieldComboBoxIns() {
+        if(nomeInsField == null) {
+            throw new NullPointerException("nomeInsField è null");
+        }
         Component editor = nomeInsField.getEditor().getEditorComponent();
+
+
 
         if (editor instanceof JTextField) {
             return (JTextField) editor;
@@ -172,6 +177,9 @@ public class CrealezioneDialog {
     /// Restituisce la JTextField dell'editor della JComboBox 'nomeAulaField'.
     /// @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
     public JTextField textFieldComboBoxAula() {
+        if(nomeAulaField == null) {
+            throw new NullPointerException("nomeAulaField è null");
+        }
         Component editor = nomeAulaField.getEditor().getEditorComponent();
 
         if (editor instanceof JTextField) {

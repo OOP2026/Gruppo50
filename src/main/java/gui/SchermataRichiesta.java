@@ -10,7 +10,7 @@ import javax.swing.text.DocumentFilter;
 import controller.Controller;
 
 import java.awt.*;
-
+@SuppressWarnings("unused")
 public class SchermataRichiesta {
     JFrame frame;
     private JTextField oraIniziaLezioneText;

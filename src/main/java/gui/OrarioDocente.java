@@ -9,15 +9,13 @@ import java.awt.*;
 
 public class OrarioDocente {
     JFrame frame;
-    private Controller controller;
-     private JFrame frameChiamante;
+    final private JFrame frameChiamante;
     private JPanel panel1;
     private JTable tabellaOrario;
     private JButton indietroButton;
 
     public OrarioDocente(Controller c, JFrame f){
         frameChiamante=f;
-        controller=c;
         frame = new JFrame("Schermata Orario Docente");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,7 +27,7 @@ public class OrarioDocente {
 
         //Passa la tabella solo se è stata inizializzata
         if (tabellaOrario != null) {
-            creaTable(tabellaOrario, controller.getLezioniDocente());
+            creaTable(tabellaOrario, c.getLezioniDocente());
         }
     }
 
@@ -72,7 +70,7 @@ public class OrarioDocente {
         //ogni colonna della tabella viene configurata con il render creato in precedenza
         //cosi ogni cella avrà una text are
         for(int i=0;i<table.getColumnCount();i++){
-            table.getColumnModel().getColumn(i).setCellRenderer(orarioRender);;
+            table.getColumnModel().getColumn(i).setCellRenderer(orarioRender);
         }
         table.setRowHeight(50);
     }
