@@ -3,14 +3,15 @@ import dao.*;
 import database_connection.ConnessioneDatabase;
 import implementazioneDao.*;
 import model.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class Controller {
-
+   private static final String RESPONSABILE_RUOLO= "RESPONSABILE";
+   private static final String STUDENTE_RUOLO="STUDENTE";
+   private static final String DOCENTE_RUOLO="DOCENTE";
 	private Studente studente;
 	private Responsabile responsabile;
 	private Responsabile responsabileTemp;
@@ -28,21 +29,17 @@ public class Controller {
 	public void apriConnessioneDatabase() throws Exception {
 		ConnessioneDatabase.getInstance();
 	}
-
+/// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
 	public void logout(){
 		//Logout
 		this.studente=null;
 		this.docente=null;
 		this.responsabile=null;
 		this.responsabileTemp=null;
+		this.utente= null;
 	}
 	public boolean accedi(String username, String password) {
-		// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
-		this.studente = null;
-		this.docente = null;
-		this.responsabile = null;
-		this.utente = null;
-
+		
 		// Carica dal database tutti gli utenti registrati (studenti, docenti e
 		// responsabili), così è possibile accedere anche a utenti salvati in
 		// sessioni precedenti (pattern BCE + DAO).
@@ -80,9 +77,9 @@ public class Controller {
 
 
 	public String getRuolo() {
-		if (responsabile != null) return "RESPONSABILE";
-		if (docente != null) return "DOCENTE";
-		if (studente != null) return "STUDENTE";
+		if (responsabile != null) return RESPONSABILE_RUOLO;
+		if (docente != null) return DOCENTE_RUOLO;
+		if (studente != null) return STUDENTE_RUOLO;
 		return null;
 	}
 	///Imposta il responsabileTemp che serve per mandare le richieste al responsabile
@@ -495,7 +492,7 @@ public class Controller {
 		Utente nuovoUtente;
 
 		switch (ruolo.toUpperCase()) {
-			case "RESPONSABILE":
+			case RESPONSABILE_RUOLO:
 				try {
 					ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
 					responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
@@ -504,7 +501,7 @@ public class Controller {
 				}
 				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
 				break;
-			case "DOCENTE":
+			case DOCENTE_RUOLO:
 				try {
 					DocenteDAO docenteDAO = new DocentePostgresDao();
 					docenteDAO.salvaDocDB(name, cogn, email, login, pass);
@@ -513,7 +510,7 @@ public class Controller {
 				}
 				nuovoUtente = new Docente(name, cogn, email, login, pass);
 				break;
-			case "STUDENTE":
+			case STUDENTE_RUOLO:
 			default:
 				String matricola;
 				try {
@@ -637,7 +634,7 @@ public class Controller {
 			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
 			if (stato == null) return "Numero richiesta non valido.";
 			return "La richiesta è già stata " +
-					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.");
+					(stato.equals(StatoRichiesta.APPROVATA.name()) ? "approvata." : "rifiutata.");
 		}
 
 		// <-- true
@@ -645,7 +642,7 @@ public class Controller {
 		// Persiste il nuovo stato (APPROVATA o RIFIUTATA in caso di conflitto)
 		aggiornaStatoRichiestaSuDB(numeroRichiesta);
 		// spostamentoLezione imposta RIFIUTATA automaticamente in caso di conflitto
-		if (!responsabile.getStatoRichiesta(numeroRichiesta).equals("APPROVATA")) {
+		if (!responsabile.getStatoRichiesta(numeroRichiesta).equals(StatoRichiesta.APPROVATA.name())) {
 			return "Impossibile spostare la lezione: conflitto di orario. "
 					+ "La richiesta è stata rifiutata automaticamente.";
 		}
@@ -670,7 +667,7 @@ public class Controller {
 			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
 			if (stato == null) return "Numero richiesta non valido.";
 			return "La richiesta è già stata " +
-					(stato.equals("APPROVATA") ? "approvata." : "rifiutata.") +
+					(stato.equals(StatoRichiesta.APPROVATA.name()) ? "approvata." : "rifiutata.") +
 					" L'orario non è più modificabile.";
 		}
 		try {
@@ -786,15 +783,15 @@ public class Controller {
 				if (giaPresente) continue;
 
 				switch (ruoli.get(i).toUpperCase()) {
-					case "RESPONSABILE":
+					case RESPONSABILE_RUOLO:
 						utentiRegistrati.add(new Responsabile(nomi.get(i), cognomi.get(i),
 								emails.get(i), logins.get(i), passwords.get(i)));
 						break;
-					case "DOCENTE":
+					case DOCENTE_RUOLO:
 						utentiRegistrati.add(new Docente(nomi.get(i), cognomi.get(i),
 								emails.get(i), logins.get(i), passwords.get(i)));
 						break;
-					case "STUDENTE":
+					case STUDENTE_RUOLO:
 					default:
 						Integer anno = anniCorso.get(i);
 						utentiRegistrati.add(new Studente(nomi.get(i), cognomi.get(i),

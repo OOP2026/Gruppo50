@@ -1,9 +1,5 @@
 package model;
-enum StatoRichiesta {
-    IN_ATTESA,
-    APPROVATA,
-    RIFIUTATA
-}
+
 public class Richiesta{
     ///Id della richiesta sul database, vale -1 se la richiesta non è (ancora) salvata sul DB
    private int id = -1;
