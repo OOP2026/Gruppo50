@@ -30,8 +30,9 @@ public class SchermataInsegnamentiDocente {
         frame.setLocationRelativeTo(frameChiamante);
         if(insegnamentiBox!=null) {insegnamentiBox.setMaximumRowCount(4);}
         caricaEvents();
+
         caricaInsegnamentiBox();
-        creaTable();
+        if(tabellaInsegnamenti!=null) creaTable();
 
     }
 
