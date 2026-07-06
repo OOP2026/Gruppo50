@@ -92,6 +92,10 @@ if(tabellaInsegnamenti != null) {
     }
 
     private void caricaInsegnamentiBox(){
+        if(insegnamentiBox==null){
+            JOptionPane.showMessageDialog(frame,"Errore GUI: insegnamentiBox non inizializzato dal designer, riavvia il programma",
+                    "Errore",JOptionPane.ERROR_MESSAGE);
+        return;}
         insegnamentiBox.removeAllItems();
         insegnamentiBox.addItem("none");
         List<String> data= controller.getInsegnamentiRegistratiDocente();
