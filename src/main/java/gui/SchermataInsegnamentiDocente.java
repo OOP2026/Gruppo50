@@ -28,7 +28,7 @@ public class SchermataInsegnamentiDocente {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
-        if(insegnamentiBox!=null) insegnamentiBox.setMaximumRowCount(4);
+        if(insegnamentiBox!=null) {insegnamentiBox.setMaximumRowCount(4);}
         caricaEvents();
         caricaInsegnamentiBox();
         creaTable();
@@ -63,31 +63,32 @@ public class SchermataInsegnamentiDocente {
 
         });
         }
-
-        tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e->{
-            int riga= tabellaInsegnamenti.getSelectedRow();
-            if(riga==-1|| !e.getValueIsAdjusting()) return;
-            String materia=tabellaInsegnamenti.getValueAt(riga,0).toString();
-            String motivo="Vuoi rimuovere come materia che insegni "+materia+"?";
-            JTextArea textArea = new JTextArea(motivo);
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            textArea.setEditable(false);
-            //textArea.setBackground(new Color(255, 255, 255, 0) );
-            JScrollPane scrollPane = new JScrollPane(textArea);
-            scrollPane.setPreferredSize(new Dimension(120, 100));
-            int risposta=JOptionPane.showConfirmDialog(frame,scrollPane,"Rimozione Insegnamento",JOptionPane.YES_NO_OPTION);
-            if(risposta==JOptionPane.YES_OPTION){
-                String action=controller.removeInsegnamentoDocente(materia);
-                if(action!= null){
-                    JOptionPane.showMessageDialog(frame, action, "Errore", JOptionPane.ERROR_MESSAGE);
-                }
-                    caricaInsegnamentiBox();
-                    creaTable();
+if(tabellaInsegnamenti != null) {
+    tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e -> {
+        int riga = tabellaInsegnamenti.getSelectedRow();
+        if (riga == -1 || !e.getValueIsAdjusting()) return;
+        String materia = tabellaInsegnamenti.getValueAt(riga, 0).toString();
+        String motivo = "Vuoi rimuovere come materia che insegni " + materia + "?";
+        JTextArea textArea = new JTextArea(motivo);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        //textArea.setBackground(new Color(255, 255, 255, 0) );
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(120, 100));
+        int risposta = JOptionPane.showConfirmDialog(frame, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
+        if (risposta == JOptionPane.YES_OPTION) {
+            String action = controller.removeInsegnamentoDocente(materia);
+            if (action != null) {
+                JOptionPane.showMessageDialog(frame, action, "Errore", JOptionPane.ERROR_MESSAGE);
             }
+            caricaInsegnamentiBox();
+            creaTable();
+        }
 
-            tabellaInsegnamenti.getSelectionModel().clearSelection();
-        });
+        tabellaInsegnamenti.getSelectionModel().clearSelection();
+    });
+}
     }
 
     private void caricaInsegnamentiBox(){
@@ -115,7 +116,5 @@ public class SchermataInsegnamentiDocente {
         tabellaInsegnamenti.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
+
 }
