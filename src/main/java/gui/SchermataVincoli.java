@@ -32,7 +32,7 @@ public class SchermataVincoli {
         frameChiamante=f;
         frame = new JFrame("Schermata Vincoli");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
 
