@@ -140,6 +140,7 @@ private void resetCampi(){
                 JOptionPane.showMessageDialog(frame,e,"Attenzione",JOptionPane.WARNING_MESSAGE);
                 break;
             }
+            default:{ break; }
         }
 
     }

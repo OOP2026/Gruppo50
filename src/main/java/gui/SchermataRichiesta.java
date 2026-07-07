@@ -260,6 +260,7 @@ dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
                 JOptionPane.showMessageDialog(frame,e,"Attenzione",JOptionPane.WARNING_MESSAGE);
                 break;
             }
+            default:{ break; }
         }
 
     }
