@@ -14,6 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.organization>oop2026</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!-- Sonar properties to locate compiled classes for accurate Java analysis -->
+        <sonar.projectKey>Gruppo50</sonar.projectKey>
+        <sonar.sources>src/main/java</sonar.sources>
+        <sonar.tests>src/test/java</sonar.tests>
+        <sonar.java.binaries>${project.build.outputDirectory}</sonar.java.binaries>
+        <sonar.java.test.binaries>${project.build.testOutputDirectory}</sonar.java.test.binaries>
     </properties>
 
     <dependencies>
