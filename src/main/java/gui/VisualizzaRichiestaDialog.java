@@ -39,7 +39,7 @@ public class VisualizzaRichiestaDialog {
     public VisualizzaRichiestaDialog(Controller controller, JFrame frameChiamante) {
         dialog = new JDialog(frameChiamante, "Gestione Richieste di Spostamento", true);
         dialog.setContentPane(panel1);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setMinimumSize(new java.awt.Dimension(700, 520));
         dialog.pack();
         dialog.setLocationRelativeTo(frameChiamante);

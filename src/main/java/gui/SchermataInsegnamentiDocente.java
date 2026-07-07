@@ -25,7 +25,7 @@ public class SchermataInsegnamentiDocente {
         frameChiamante=f;
         frame = new JFrame("Schermata Insegnamenti");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
         if(insegnamentiBox!=null) {insegnamentiBox.setMaximumRowCount(4);}

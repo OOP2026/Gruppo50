@@ -24,7 +24,7 @@ public class InsegnamentiDialog {
     public InsegnamentiDialog(Controller controller, JFrame frameChiamante) {
         dialog = new JDialog(frameChiamante, "Insegnamenti Attivi", true);
         dialog.setContentPane(panel1);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.pack();
         dialog.setLocationRelativeTo(frameChiamante);
 

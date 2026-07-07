@@ -32,7 +32,7 @@ public class CrealezioneDialog {
         dialog = new JDialog(frameChiamante, "Crea Nuova Lezione", true);
         this.controller = controller;
         dialog.setContentPane(panel1);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.pack();
 
         //verifico che il frame chiamante non sia null

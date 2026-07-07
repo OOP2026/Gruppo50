@@ -14,7 +14,7 @@ public class LoginPage {
     public LoginPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Login");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
 
@@ -33,20 +33,20 @@ public class LoginPage {
 
                 // Solo controllo input
                 if (username.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore nel login", JOptionPane.ERROR_MESSAGE);
+                   erroreLogin("Compila tutti i campi");
                     return;
                 }
 
                 // Delega al controller
                 if (!controller.accedi(username, password)) {
-                    JOptionPane.showMessageDialog(frame, "Credenziali non valide.", "Errore nel login", JOptionPane.ERROR_MESSAGE);
+              erroreLogin("Credenziali non valide.");
                     return;
                 }
 
                 // Apri la schermata giusta in base al ruolo
                 String ruolo = controller.getRuolo();
                 if (ruolo == null) {
-                    JOptionPane.showMessageDialog(frame, "Errore: ruolo non riconosciuto.", "Errore nel login", JOptionPane.ERROR_MESSAGE);
+                    erroreLogin("ruolo non riconosciuto.");
                     return;
                 }
                 switch (ruolo) {
@@ -64,10 +64,16 @@ public class LoginPage {
                         SchermataStudente s = new SchermataStudente(controller, frame);
                         s.frame.setVisible(true);
                         break;
+
                     }
+                    default:{ break; }
                 }
                 frame.setVisible(false);
             });
         }
     }
+
+    public void erroreLogin(String e){
+        JOptionPane.showMessageDialog(frame, "Errore: "+e, "Errore nel login", JOptionPane.ERROR_MESSAGE);
+    };
 }

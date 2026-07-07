@@ -42,7 +42,7 @@ public class SchermataRichiesta {
         controller = c;
         frame = new JFrame("Schermata Richiesta");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
         //Controllo che il pannello per scrollare le richieste si generi corettamente

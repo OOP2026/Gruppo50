@@ -17,7 +17,7 @@ public class SchermataResponsabile {
     public SchermataResponsabile(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Responsabile");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
 

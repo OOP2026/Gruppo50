@@ -50,7 +50,7 @@ public class SchermataStudente {
     public SchermataStudente(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Studente");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
 

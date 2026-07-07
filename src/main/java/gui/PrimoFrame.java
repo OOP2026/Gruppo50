@@ -13,7 +13,7 @@ public class PrimoFrame {
     public PrimoFrame(Controller controller) {
         frame = new JFrame("Schermata di Accesso");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
 

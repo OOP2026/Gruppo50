@@ -18,7 +18,7 @@ public class OrarioDocente {
         frameChiamante=f;
         frame = new JFrame("Schermata Orario Docente");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
         if (indietroButton != null) {
