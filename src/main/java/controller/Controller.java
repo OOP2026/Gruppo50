@@ -18,7 +18,7 @@ public class Controller {
 	private Docente docente;
 	private Utente utente;
 	///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
-	final private List<Utente> utentiRegistrati;
+	private final List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
 	private List<Aula> aule=new ArrayList<>();
@@ -38,42 +38,73 @@ public class Controller {
 		this.responsabileTemp=null;
 		this.utente= null;
 	}
-	public boolean accedi(String username, String password) {
-		
-		// Carica dal database tutti gli utenti registrati (studenti, docenti e
-		// responsabili), così è possibile accedere anche a utenti salvati in
-		// sessioni precedenti (pattern BCE + DAO).
-		caricaUtentiDaDB();
-		caricaLezioniDaDB();
+    public boolean accedi(String username, String password) {
 
-		for (Utente u : utentiRegistrati) {
-			if (u.login(username, password)) {
-				this.utente = u;
+        // Carica dal database tutti gli utenti registrati (studenti, docenti e
+        // responsabili), così è possibile accedere anche a utenti salvati in
+        // sessioni precedenti (pattern BCE + DAO).
+        caricaUtentiDaDB();
+        caricaLezioniDaDB();
 
-				// Identifica il tipo di istanza
-				if (u instanceof Responsabile) {
-					this.responsabile = (Responsabile) u;
-					try{caricaAuleDaDB();}catch(Exception e){
-						System.out.println("Errore caricamento aule: "+e.getMessage());}
-					// Carica le richieste in attesa così il responsabile le vede in GUI
-					String erroreRichieste = caricaRichiesteResponsabileDaDB();
-					if (erroreRichieste != null)
-						System.out.println("Errore caricamento richieste: " + erroreRichieste);
-				} else if (u instanceof Docente) {
-					this.docente = (Docente) u;
-					putResponsabile();
-					// Carica le richieste inviate così il docente le vede in GUI
-					String erroreRichieste = caricaRichiesteDocenteDaDB();
-					if (erroreRichieste != null)
-						System.out.println("Errore caricamento richieste: " + erroreRichieste);
-				} else if (u instanceof Studente) {
-					this.studente = (Studente) u;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+        for (Utente u : utentiRegistrati) {
+            if (u.login(username, password)) {
+                this.utente = u;
+
+                // Identifica il tipo di istanza
+                if(isResponsabile(u)){
+                    return true;
+                }
+                if(isDocente(u)){
+                    return true;
+                }
+                if(isStudente(u)){
+                    return true;
+                }
+                break;
+            }
+        }
+        return false;
+    }
+    /// Questo metodo controlla se l'utente è uno studente
+    /// @return Ritorna un valore booleano
+    public boolean isStudente(Utente u){
+        if (u instanceof Studente) {
+            this.studente = (Studente) u;
+            return true;
+        }
+        return false;
+    }
+    ///Questo metodo controlla se l'utente è un responsabile
+    /// @return Ritorna un valore booleano
+    public boolean isResponsabile(Utente u){
+        if (u instanceof Responsabile) {
+            this.responsabile = (Responsabile) u;
+            try{caricaAuleDaDB(); }
+            catch(Exception e){
+                System.out.println("Errore caricamento aule: "+e.getMessage());
+            }
+            // Carica le richieste in attesa così il responsabile le vede in GUI
+            String erroreRichieste = caricaRichiesteResponsabileDaDB();
+            if (erroreRichieste != null)
+                System.out.println("Errore caricamento richieste: " + erroreRichieste);
+            return true;
+        }
+        return false;
+    }
+    ///Questo metodo controlla se l'utente è un docente
+    /// @return Ritorna un valore booleano
+    public boolean isDocente(Utente u){
+        if (u instanceof Docente) {
+            this.docente = (Docente) u;
+            putResponsabile();
+            // Carica le richieste inviate così il docente le vede in GUI
+            String erroreRichieste = caricaRichiesteDocenteDaDB();
+            if (erroreRichieste != null)
+                System.out.println("Errore caricamento richieste: " + erroreRichieste);
+            return true;
+        }
+        return false;
+    }
 
 
 	public String getRuolo() {
