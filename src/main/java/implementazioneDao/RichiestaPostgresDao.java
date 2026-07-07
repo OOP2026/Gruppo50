@@ -175,20 +175,71 @@ public class RichiestaPostgresDao implements RichiestaDAO {
     /**
      * {@inheritDoc}
      *
-     * <p>Esegue un {@code UPDATE} della sola colonna {@code stato} sulla riga
+     * <p>Esegue un {@code UPDATE} della colonna {@code stato} sulla riga
      * identificata da {@code idRichiesta}. Il valore ammesso è controllato dal
      * vincolo {@code richiesta_stato_check} sul database.</p>
+     *
+     * <p>Se il nuovo stato è {@code 'APPROVATA'}, nella stessa transazione viene
+     * anche spostata la lezione esistente: la riga della tabella {@code lezione}
+     * che coincide con docente, giorno e orario iniziali della richiesta viene
+     * aggiornata al giorno e all'orario proposti. Se la lezione non viene
+     * trovata la transazione è annullata e lo stato non cambia.</p>
      */
     @Override
     public void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws Exception {
-        String sql = "UPDATE richiesta SET stato = ? WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, nuovoStato);
-            ps.setInt(2, idRichiesta);
-            ps.executeUpdate();
+        String sqlStato = "UPDATE richiesta SET stato = ? WHERE id = ?";
+        // Sposta la lezione individuata dai dati iniziali della richiesta
+        // (docente + giorno + orario) sul giorno/orario proposti. Le colonne
+        // time della richiesta vengono scomposte in ora e minuto con EXTRACT,
+        // perché lezione memorizza ore e minuti come interi separati.
+        String sqlLezione = "UPDATE lezione l SET " +
+                "giorno = r.giorno_proposto, " +
+                "orainizio = EXTRACT(HOUR FROM r.ora_inizio_proposto), " +
+                "minutoinizio = EXTRACT(MINUTE FROM r.ora_inizio_proposto), " +
+                "orafine = EXTRACT(HOUR FROM r.ora_fine_proposto), " +
+                "minutofine = EXTRACT(MINUTE FROM r.ora_fine_proposto) " +
+                "FROM richiesta r WHERE r.id = ? " +
+                "AND l.emaildocente = r.email_docente " +
+                "AND l.giorno = r.giorno_iniziale " +
+                "AND l.orainizio = EXTRACT(HOUR FROM r.ora_inizio_iniziale) " +
+                "AND l.minutoinizio = EXTRACT(MINUTE FROM r.ora_inizio_iniziale) " +
+                "AND l.orafine = EXTRACT(HOUR FROM r.ora_fine_iniziale) " +
+                "AND l.minutofine = EXTRACT(MINUTE FROM r.ora_fine_iniziale)";
+        try {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement ps = connection.prepareStatement(sqlStato)) {
+                ps.setString(1, nuovoStato);
+                ps.setInt(2, idRichiesta);
+                ps.executeUpdate();
+            }
+
+            if ("APPROVATA".equals(nuovoStato)) {
+                try (PreparedStatement ps = connection.prepareStatement(sqlLezione)) {
+                    ps.setInt(1, idRichiesta);
+                    int righe = ps.executeUpdate();
+                    if (righe == 0) {
+                        throw new SQLException("nessuna lezione corrispondente all'orario iniziale della richiesta");
+                    }
+                }
+            }
+
+            connection.commit();
         } catch (SQLException e) {
-            // Es. violazione del CHECK sullo stato (valore non ammesso).
+            // Es. violazione del CHECK sullo stato, lezione non trovata o
+            // conflitto rilevato dal trigger sul nuovo orario: si annulla tutto.
+            try {
+                connection.rollback();
+            } catch (SQLException ignored) {
+                // il rollback fallisce solo se la connessione è già compromessa
+            }
             throw new Exception("Impossibile aggiornare lo stato della richiesta sul database: " + e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ignored) {
+                // ripristino best-effort della modalità autocommit
+            }
         }
     }
 

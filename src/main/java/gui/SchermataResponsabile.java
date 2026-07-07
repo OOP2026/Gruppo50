@@ -37,6 +37,7 @@ public class SchermataResponsabile {
         }
         if(logoutButton != null) {
             logoutButton.addActionListener(e -> {
+                controller.logout();
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);
                 frame.dispose();
@@ -45,7 +46,7 @@ public class SchermataResponsabile {
         if(visualizzaRichiesteButton != null) {
             visualizzaRichiesteButton.addActionListener(e -> {
                VisualizzaRichiestaDialog d= new VisualizzaRichiestaDialog(controller,frame);
-
+               d.dialog.setVisible(true);
             });
         }
     }

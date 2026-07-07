@@ -93,14 +93,12 @@ public class SchermataStudente {
         matricola.setText("Matricola: " + controller.getMatricola());
         if (indietroButton != null) {
             indietroButton.addActionListener(e -> {
+                controller.logout();
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);
                 frame.dispose();
             });
         }
     }
-
-    public void mostra() {
-        frame.setVisible(true);
-    }
+    
 }
