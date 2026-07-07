@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 /**Questa classe rappresenta una fascia oraria
  * viene usata nelle classe{@link Lezione},{@link Richiesta} e {@link Vincolo}
  * */
@@ -28,6 +29,7 @@ public class Orario {
             "lunedì", "martedì", "mercoledì", "giovedì", "venerdì",
             "lunedi", "martedi", "mercoledi", "giovedi", "venerdi"
     ));
+    private static final Logger logger = Logger.getLogger(Orario.class.getName());
     /**
      * Costruisce un nuovo oggetto Orario assicurandosi che sia corretto
      * @param giorno il giorno della settimana per questo orario
@@ -104,7 +106,7 @@ public class Orario {
             throw new NullPointerException("Il giorno non può essere nullo o vuoto");
         }
         if( !giorni.contains(giorno.toLowerCase())){
-            System.out.println("Giorno errato: "+giorno);
+            logger.info("Giorno errato: "+giorno);
             throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti:" + giorni);}
     }
 

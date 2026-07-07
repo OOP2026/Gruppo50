@@ -3,6 +3,7 @@ package database_connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 /**
  * Classe di utilità per la gestione della connessione al database PostgreSQL.
@@ -40,6 +41,7 @@ public class ConnessioneDatabase {
 
     /** Nome del driver JDBC per PostgreSQL */
     private String driver = "org.postgresql.Driver";
+    private static final Logger logger = Logger.getLogger(ConnessioneDatabase.class.getName());
 
 
     // --- COSTRUTTORE PRIVATO ---
@@ -54,11 +56,11 @@ public class ConnessioneDatabase {
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, nome, password);
-            System.out.println("Connessione al database 'orariolezione' avvenuta con successo.");
+            logger.info("Connessione al database 'orariolezione' avvenuta con successo.");
 
         } catch (ClassNotFoundException ex) {
-            System.out.println("Driver PostgreSQL non trovato: " + ex.getMessage());
-            ex.printStackTrace();
+            logger.info("Driver PostgreSQL non trovato: " + ex.getMessage());
+            logger.log(java.util.logging.Level.SEVERE, "Driver non trovato", ex);
         }
     }
 

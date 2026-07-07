@@ -10,9 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class AulaPostgresDao implements AulaDAO {
     private final Connection connection;
+    private static final Logger logger = Logger.getLogger(AulaPostgresDao.class.getName());
 
     public AulaPostgresDao() throws Exception {
         this.connection = ConnessioneDatabase.getInstance().getConnection();
@@ -49,7 +51,7 @@ public class AulaPostgresDao implements AulaDAO {
           }
 rs.close();
         }catch (SQLException e){
-            System.out.println("Errore nel prendere le aule dal database: "+e.getMessage());
+            logger.info("Errore nel prendere le aule dal database: "+e.getMessage());
         }
 if(!haRighe){
     return new Object[0][0];

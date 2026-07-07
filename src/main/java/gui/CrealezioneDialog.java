@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class CrealezioneDialog {
     JDialog dialog;
@@ -27,6 +28,7 @@ public class CrealezioneDialog {
     final private JTextField textComboBoxIns;
     final private JTextField textComboBoxAula;
     final private Controller controller;
+    private static final Logger logger = Logger.getLogger(CrealezioneDialog.class.getName());
 
     public CrealezioneDialog(Controller controller, JFrame frameChiamante) {
         dialog = new JDialog(frameChiamante, "Crea Nuova Lezione", true);
@@ -116,9 +118,9 @@ public class CrealezioneDialog {
         nomeInsField.repaint();
         //Questo if ha lo scopo di chiudere il popup della JComboBox se è aperto
         // e poi riaprirlo solo se ci sono items da mostrare. Questo evita che il popup rimanga aperto con una lista vuota.
-        if(nomeInsField.isPopupVisible()){
+            if(nomeInsField.isPopupVisible()){
             nomeInsField.setPopupVisible(false);
-            System.out.println(nomeInsField.getItemCount());
+            logger.info(String.valueOf(nomeInsField.getItemCount()));
             if(nomeInsField.getItemCount()>0)
                 nomeInsField.setPopupVisible(true);
         }else if(nomeInsField.getItemCount()>0 && !materia.equalsIgnoreCase(""))
@@ -164,7 +166,7 @@ public class CrealezioneDialog {
         // Questo evita che il popup rimanga aperto con una lista vuota.
         if(nomeAulaField.isPopupVisible()){
             nomeAulaField.setPopupVisible(false);
-            System.out.println(nomeAulaField.getItemCount());
+            logger.info(String.valueOf(nomeAulaField.getItemCount()));
             if(nomeAulaField.getItemCount()>0)
                 nomeAulaField.setPopupVisible(true);
         }else{

@@ -10,9 +10,11 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
     private final Connection connection;
+    private static final Logger logger = Logger.getLogger(InsegnamentoPostgresDAO.class.getName());
 
 
     public InsegnamentoPostgresDAO() throws Exception {
@@ -40,10 +42,10 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
             }
             rs.close();
         }catch (SQLException e){
-            System.out.println("Errore nel prendere gli insegnamenti dal database: "+e.getMessage());
+            logger.info("Errore nel prendere gli insegnamenti dal database: "+e.getMessage());
         }
         if(!haRighe){
-            System.out.println("Non ci sono insegnamenti nel database");
+            logger.info("Non ci sono insegnamenti nel database");
             return new Object[0][0];
         }
         return insegnamenti.toArray(new Object[0][]);

@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 /**
  * La classe Docente rappresenta un professore universitario.
  * <p>
@@ -22,6 +23,7 @@ public class Docente extends Utente {
     private ArrayList<Richiesta> richiesteSpostamentoInviate;
     /** Elenco dei vincoli indicati dal docente indicati come fascia oraria. */
     private ArrayList<Vincolo> vincoli;
+    private static final Logger logger = Logger.getLogger(Docente.class.getName());
 
 
     /**
@@ -55,7 +57,7 @@ public class Docente extends Utente {
             throw new NullPointerException("Il valore è null non puo essere aggiunto!");
         }
         this.insegnamenti.add(insegnamento);
-        System.out.println(insegnamento.getNome()+" è stato aggiunto a "+this.nome+" "+this.cognome);
+        logger.info(insegnamento.getNome()+" è stato aggiunto a "+this.nome+" "+this.cognome);
     }
     ///Rimuove un materia che insegna o che puo insegnare il docente
     public void removeInsegnamento(Insegnamento insegnamento){
@@ -86,23 +88,23 @@ public class Docente extends Utente {
     protected void visualizzaRichiesteInviate(){
         int numeroRichiesta=1;
         int numeroRichieste=richiesteSpostamentoInviate.size();
-        System.out.println("Richieste di spostamento inviate:");
+        logger.info("Richieste di spostamento inviate:");
         if(numeroRichieste==0){
-            System.out.println("Non hai richieste di spostamento inviate");
-            System.out.println("-----Fine-----");
+            logger.info("Non hai richieste di spostamento inviate");
+            logger.info("-----Fine-----");
             return;
         }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
         for(Richiesta richiesta : richiesteSpostamentoInviate) {
-            System.out.println("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
-            System.out.println("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
-            System.out.println("Orario lezione proposto: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
-            System.out.println("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
-            System.out.println("Stato Richiesta: "+ richiesta.getStatoRichiesta());
+            logger.info("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
+            logger.info("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
+            logger.info("Orario lezione proposto: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
+            logger.info("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
+            logger.info("Stato Richiesta: "+ richiesta.getStatoRichiesta());
             if(numeroRichieste==numeroRichiesta){
-                System.out.println("-----Fine-----");
+                logger.info("-----Fine-----");
                 return; }
-            System.out.println("------------------------------------------------");
+            logger.info("------------------------------------------------");
             numeroRichiesta++;
 
         }
@@ -129,7 +131,7 @@ public class Docente extends Utente {
             throw new IllegalStateException("Hai già raggiunto il numero massimo di vincoli (3)");
         }
         vincoli.add(new Vincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine));
-        System.out.println("Vincolo aggiunto con successo");
+        logger.info("Vincolo aggiunto con successo");
 
     }
     public void caricaVincoliInDocente(List<Vincolo> vincoliDaCaricare){
@@ -145,21 +147,21 @@ public class Docente extends Utente {
             throw new IllegalArgumentException("Non esiste il vincolo che vuoi rimuovere");
         }
         vincoli.remove(indice);
-        System.out.println("Vincolo rimosso con successo");
+        logger.info("Vincolo rimosso con successo");
     }
     ///Mostra i vincoli nel terminale
     public void mostraVincoli(){
         if(vincoli.isEmpty()){
-            System.out.println("Non hai vincoli");
+            logger.info("Non hai vincoli");
             return;
         }
-        System.out.println("Vincoli di"+this.nome+" "+this.cognome+":");
+        logger.info("Vincoli di"+this.nome+" "+this.cognome+":");
         int numeroVincolo=0;
         for(Vincolo vincolo : vincoli){
-            System.out.println("Numero vincolo: "+numeroVincolo);
-            System.out.println("Giorno: "+vincolo.orario.getGiorno());
-            System.out.println("Orario: "+vincolo.orario.getOrarioCompleto());
-            System.out.println("-----------------------------------");
+            logger.info("Numero vincolo: "+numeroVincolo);
+            logger.info("Giorno: "+vincolo.orario.getGiorno());
+            logger.info("Orario: "+vincolo.orario.getOrarioCompleto());
+            logger.info("-----------------------------------");
             numeroVincolo++;
         }
 

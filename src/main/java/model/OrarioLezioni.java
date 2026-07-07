@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.function.Predicate;
 import model.Responsabile.Token;
 import java.util.List;
+import java.util.logging.Logger;
 ///Rappresenta l'orario delle lezioni, all'interno ci sono tutti le lezioni create
 /**
  * Rappresenta l'orario delle lezioni; all'interno contiene e gestisce
@@ -15,6 +16,7 @@ public class OrarioLezioni {
     private ArrayList<Lezione> orariolezioni;
     /** Un elenco con i giorni validi          */
     private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"};
+    private static final Logger logger = Logger.getLogger(OrarioLezioni.class.getName());
 
 
     /**
@@ -38,7 +40,7 @@ public class OrarioLezioni {
             }
         }
         if(lista.isEmpty()){
-            System.out.println("Non hai lezioni assegnate");
+            logger.info("Non hai lezioni assegnate");
             return new ArrayList<>();
         }
         List<Lezione> lista2 = new ArrayList<>(lista);
@@ -102,11 +104,11 @@ public class OrarioLezioni {
      */
     public void visualizzaOrarioCompleto(Token token){
         if(token==null){
-            System.out.println("Non hai il permesso");
+            logger.info("Non hai il permesso");
             return;
         }
 
-        System.out.println("Orario completo delle lezioni:");
+        logger.info("Orario completo delle lezioni:");
 
         giornoLezioni(giorni[0],  orariolezioni, l -> true);
         giornoLezioni(giorni[1],  orariolezioni, l -> true);
@@ -124,25 +126,25 @@ public class OrarioLezioni {
      * @param filtro un oggetto usato per filtrare le lezioni da visualizzare
      */
     private void giornoLezioni(String giorno, ArrayList<Lezione> elenco, Predicate<Lezione> filtro) {
-        System.out.println(giorno);
+        logger.info(giorno);
         boolean trovata = false;
         for (Lezione l : elenco) {
             if (!giorno.equalsIgnoreCase(l.getOrario().getGiorno()) || !filtro.test(l)) continue;
 
-            System.out.println("Docente: "+l.getInsegnamento().getDocente().nome+" "+l.getInsegnamento().getDocente().cognome);
-            System.out.println("Insegamento: "+l.getInsegnamento().getNome());
-            System.out.println("Orario: "+l.getOrario().getOrarioCompleto());
-            System.out.println("Aula: "+l.getAula().getNome());
+            logger.info("Docente: "+l.getInsegnamento().getDocente().nome+" "+l.getInsegnamento().getDocente().cognome);
+            logger.info("Insegamento: "+l.getInsegnamento().getNome());
+            logger.info("Orario: "+l.getOrario().getOrarioCompleto());
+            logger.info("Aula: "+l.getAula().getNome());
 
             // stampa campi comuni...
             trovata = true;
         }
-        if (!trovata) System.out.println("Non ci sono lezioni in questo giorno");
+        if (!trovata) logger.info("Non ci sono lezioni in questo giorno");
         if (giorno.equalsIgnoreCase("Venerdi")) {
-            System.out.println("---Fine Orario---");
+            logger.info("---Fine Orario---");
             return;
         }
-        System.out.println("------------------");
+        logger.info("------------------");
     }
 
 //Studente
@@ -152,7 +154,7 @@ public class OrarioLezioni {
      */
     public void visualizzaOrarioCompleto(Studente studente){
 
-        System.out.println("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
+        logger.info("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
         giornoLezioni(giorni[0],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
         giornoLezioni(giorni[1],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
         giornoLezioni(giorni[2],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
@@ -170,7 +172,7 @@ public class OrarioLezioni {
      */
     public void visualizzaOrarioCompleto(Docente docente){
 
-        System.out.println("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
+        logger.info("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
         giornoLezioni(giorni[0], orariolezioni, l -> l.getInsegnamento().getDocente().equals(docente));
         giornoLezioni(giorni[1], orariolezioni, l -> l.getInsegnamento().getDocente()== docente);
         giornoLezioni(giorni[2], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
@@ -188,7 +190,7 @@ public class OrarioLezioni {
 
     public List<Lezione> getOrarioLezioni(Token token) {
         if(token==null){
-            System.out.println("Non hai il permesso");
+            logger.info("Non hai il permesso");
             return new ArrayList<>();
         }
         return orariolezioni;

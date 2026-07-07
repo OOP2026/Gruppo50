@@ -1,43 +1,42 @@
 package model;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Responsabile extends Docente {
   ArrayList<Richiesta> richiesteSpostamento;
 private final Token token;
+    private static final Logger logger = Logger.getLogger(Responsabile.class.getName());
     public Responsabile(String nome, String cognome, String email, String login, String password) {
         super(nome, cognome, email, login, password);
         richiesteSpostamento= new ArrayList<>();
         this.token = new Token();
     }
-    @Override
-    public void saluto() {
-        System.out.println("Ciao, sono il responsabile " + this.nome + " " + this.cognome);
-    }
+
    /// Permette di visualizzare le richieste di spostamento nel terminale
     public void visualizzaRichiesteSpostamento() {
         int numeroRichiesta=0;
         int numeroRichieste=richiesteSpostamento.size();
-            System.out.println("Richieste di spostamento:");
+            logger.info("Richieste di spostamento:");
             if(numeroRichieste==0){
-                System.out.println("Non ci sono richieste di spostamento");
-                 System.out.println("-----Fine-----");
+                logger.info("Non ci sono richieste di spostamento");
+                 logger.info("-----Fine-----");
                 return;
             }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
   for(Richiesta richiesta : richiesteSpostamento) {
-    System.out.println("Numero richiesta: " + (numeroRichiesta));
-    System.out.println("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
-    System.out.println("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
-    System.out.println("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
-    System.out.println("Orario lezione nuovo: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
-    System.out.println("Stato Richiesta: "+ richiesta.getStatoRichiesta());
+    logger.info("Numero richiesta: " + (numeroRichiesta));
+    logger.info("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
+    logger.info("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
+    logger.info("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
+    logger.info("Orario lezione nuovo: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
+    logger.info("Stato Richiesta: "+ richiesta.getStatoRichiesta());
     if(numeroRichieste==numeroRichiesta+1){
-        System.out.println("-----Fine-----");
+        logger.info("-----Fine-----");
    return; }
-    System.out.println("------------------------------------------------");
+    logger.info("------------------------------------------------");
     numeroRichiesta++;
-}
+  }
 
 
     }
@@ -54,7 +53,7 @@ public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
     // così si propaga al Controller, che la mostra nella GUI e NON salva la
     // lezione sul database.
     elencoLezioni.aggiungiLezione(l, this.token);
-    System.out.println("Lezione aggiunta con successo responsabile");
+    logger.info("Lezione aggiunta con successo responsabile");
 }
 ///Questo metodo approva una richiesta di spostamento
 ///Questo metodo gestisce una richiesta di spostamento: se approva è true esegue
@@ -62,42 +61,42 @@ public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
 public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni, boolean approva){
 
     // Controllo che l'indice sia valido (get() lancerebbe un'eccezione, non restituisce mai null)
-    if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
-        System.out.println("La richiesta non esiste");
+        if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
+        logger.info("La richiesta non esiste");
         return;
     }
 
     Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
 
-    if(richiesta.getStatoRichiesta() == StatoRichiesta.APPROVATA){
-        System.out.println("La richiesta è già stata approvata");
+        if(richiesta.getStatoRichiesta() == StatoRichiesta.APPROVATA){
+        logger.info("La richiesta è già stata approvata");
         return;
     }
     if(richiesta.getStatoRichiesta() == StatoRichiesta.RIFIUTATA){
-        System.out.println("La richiesta è già stata rifiutata");
+        logger.info("La richiesta è già stata rifiutata");
         return;
     }
 
     // Da qui in poi la richiesta è sicuramente IN_ATTESA
 
     // --- Caso RIFIUTO ---
-    if(!approva){
+        if(!approva){
         richiesta.setStatoRichiesta(StatoRichiesta.RIFIUTATA);
-        System.out.println("La richiesta è stata rifiutata");
+        logger.info("La richiesta è stata rifiutata");
         return;
     }
 
     // --- Caso APPROVAZIONE: eseguo lo spostamento ---
     Lezione lezioneDaSpostare = cercaLezioneDaSpostare(richiesta, elencoLezioni);
     if(lezioneDaSpostare == null){
-        System.out.println("La lezione da spostare non è stata trovata");
+        logger.info("La lezione da spostare non è stata trovata");
         return;
     }
 
     try{
         elencoLezioni.getOrarioLezioni(this.token).remove(lezioneDaSpostare);
     } catch(Exception e){
-        System.out.println("Errore nello spostamento della lezione: " + e.getMessage());
+        logger.info("Errore nello spostamento della lezione: " + e.getMessage());
         return;
     }
 
@@ -106,36 +105,36 @@ public void spostamentoLezione(int numeroRichiesta, OrarioLezioni elencoLezioni,
     try {
         elencoLezioni.aggiungiLezione(nuovaLezione, this.token);
     } catch (IllegalArgumentException e1) {
-        System.out.println("Errore nello spostamento della lezione: " + e1.getMessage());
+        logger.severe("Errore nello spostamento della lezione: " + e1.getMessage());
         richiesta.setStatoRichiesta(StatoRichiesta.RIFIUTATA);
-        System.out.println("La richiesta è stata rifiutata");
-        System.out.println("Tentativo di ripristinare la lezione originale...");
+        logger.info("La richiesta è stata rifiutata");
+        logger.info("Tentativo di ripristinare la lezione originale...");
         try {
             elencoLezioni.aggiungiLezione(lezioneDaSpostare, this.token);
         } catch (Exception e2) {
-            System.out.println("Errore nel ripristino della lezione originale: " + e2.getMessage());
+            logger.info("Errore nel ripristino della lezione originale: " + e2.getMessage());
         }
         return;
     }
 
     richiesta.setStatoRichiesta(StatoRichiesta.APPROVATA);
-    System.out.println("La richiesta è stata approvata");
+    logger.info("La richiesta è stata approvata");
 }
  ///Questo metodo permette di cambiare l'orario della richiesta
  public void cambiaOrarioRichiesta(int numeroRichiesta,Orario orarioNuovo){
 Richiesta richiesta = richiesteSpostamento.get(numeroRichiesta);
-if(richiesta==null){
-    System.out.println("La richiesta non esiste");
-    return;
-}
-if(richiesta.getStatoRichiesta() ==StatoRichiesta.APPROVATA){
-    System.out.println("La richiesta è già stata approvata");
-    return;
-}
-if(richiesta.getStatoRichiesta() ==StatoRichiesta.RIFIUTATA){
-    System.out.println("La richiesta è già stata rifiutata");
-    return;
-}
+ if(richiesta==null){
+     logger.info("La richiesta non esiste");
+     return;
+ }
+ if(richiesta.getStatoRichiesta() ==StatoRichiesta.APPROVATA){
+     logger.info("La richiesta è già stata approvata");
+     return;
+ }
+ if(richiesta.getStatoRichiesta() ==StatoRichiesta.RIFIUTATA){
+     logger.info("La richiesta è già stata rifiutata");
+     return;
+ }
 
 richiesta.setNuovoOrarioLezione(orarioNuovo);
 
@@ -156,12 +155,12 @@ for(Vincolo vincolo:vincoli) {
     int orarioFineVincolo = vincolo.orario.getOrarioFineInMinuti();
     int orarioInizioLezione = orario.getOrarioInizioInMinuti();
     int orarioFineLezione = orario.getOrarioFineInMinuti();
-    System.out.println("Sto confrontando i giorni");
+    logger.info("Sto confrontando i giorni");
     if (!vincolo.orario.getGiorno().equals(orario.getGiorno())) {
-        System.out.println("Giorni diversi");
+        logger.info("Giorni diversi");
         continue;
     }
-    System.out.println("Sto confrontando l'orario");
+    logger.info("Sto confrontando l'orario");
 
     if (orarioInizioLezione < orarioFineVincolo && orarioFineLezione > orarioInizioVincolo) return false;
 

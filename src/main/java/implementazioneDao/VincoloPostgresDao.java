@@ -10,9 +10,11 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class VincoloPostgresDao implements VincoloDAO {
     private final Connection connection;
+    private static final Logger logger = Logger.getLogger(VincoloPostgresDao.class.getName());
     public VincoloPostgresDao() throws Exception {
         new ConnessioneDatabase();
         this.connection = ConnessioneDatabase.getInstance().getConnection();
@@ -57,7 +59,7 @@ public class VincoloPostgresDao implements VincoloDAO {
             throw new SQLException("Errore nel prendere i vincoli dal database: "+e.getMessage());
         }
         if(!haRighe){
-            System.out.println("Non ci sono vincoli per il docente");
+            logger.info("Non ci sono vincoli per il docente");
         }
         return vincoli.toArray(new Object[0][]);
 

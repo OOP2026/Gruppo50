@@ -6,9 +6,11 @@ import model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 
 public class Controller {
+	private static final Logger logger = Logger.getLogger(Controller.class.getName());
    private static final String RESPONSABILE_RUOLO= "RESPONSABILE";
    private static final String STUDENTE_RUOLO="STUDENTE";
    private static final String DOCENTE_RUOLO="DOCENTE";
@@ -81,12 +83,12 @@ public class Controller {
             this.responsabile = (Responsabile) u;
             try{caricaAuleDaDB(); }
             catch(Exception e){
-                System.out.println("Errore caricamento aule: "+e.getMessage());
+                logger.info("Errore caricamento aule: "+e.getMessage());
             }
             // Carica le richieste in attesa così il responsabile le vede in GUI
             String erroreRichieste = caricaRichiesteResponsabileDaDB();
             if (erroreRichieste != null)
-                System.out.println("Errore caricamento richieste: " + erroreRichieste);
+                logger.info("Errore caricamento richieste: " + erroreRichieste);
             return true;
         }
         return false;
@@ -100,7 +102,7 @@ public class Controller {
             // Carica le richieste inviate così il docente le vede in GUI
             String erroreRichieste = caricaRichiesteDocenteDaDB();
             if (erroreRichieste != null)
-                System.out.println("Errore caricamento richieste: " + erroreRichieste);
+                logger.info("Errore caricamento richieste: " + erroreRichieste);
             return true;
         }
         return false;
@@ -182,7 +184,7 @@ public class Controller {
 					nomeAula, giorno,
 					oraInizio, minutoInizio, oraFine, minutoFine);
 		} catch (Exception e) {
-			System.out.println("Lezione NON salvata sul database (resta solo in memoria): " + e.getMessage());
+			logger.info("Lezione NON salvata sul database (resta solo in memoria): " + e.getMessage());
 		}
 
 		return null;
@@ -336,7 +338,7 @@ public class Controller {
 			List<Richiesta> inviate = docente.getRichiesteInviate();
 			inviate.get(inviate.size() - 1).setId(idGenerato);
 		} catch (Exception e) {
-			System.out.println("Richiesta NON salvata sul database (resta solo in memoria): " + e.getMessage());
+			logger.info("Richiesta NON salvata sul database (resta solo in memoria): " + e.getMessage());
 		}
 	}
 
@@ -449,7 +451,7 @@ public class Controller {
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
 			richiestaDAO.aggiornaStatoRichiestaDB(r.getId(), responsabile.getStatoRichiesta(numeroRichiesta));
 		} catch (Exception e) {
-			System.out.println("Stato richiesta NON aggiornato sul database: " + e.getMessage());
+			logger.info("Stato richiesta NON aggiornato sul database: " + e.getMessage());
 		}
 	}
 	/// Restituisce un array che contiene le richieste inviate dal docente
@@ -528,7 +530,7 @@ public class Controller {
 					ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
 					responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
 				} catch (Exception e) {
-					System.out.println("DB non disponibile, registrazione responsabile solo in memoria: " + e.getMessage());
+					logger.info("DB non disponibile, registrazione responsabile solo in memoria: " + e.getMessage());
 				}
 				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
 				break;
@@ -537,7 +539,7 @@ public class Controller {
 					DocenteDAO docenteDAO = new DocentePostgresDao();
 					docenteDAO.salvaDocDB(name, cogn, email, login, pass);
 				} catch (Exception e) {
-					System.out.println("DB non disponibile, registrazione docente solo in memoria: " + e.getMessage());
+					logger.info("DB non disponibile, registrazione docente solo in memoria: " + e.getMessage());
 				}
 				nuovoUtente = new Docente(name, cogn, email, login, pass);
 				break;
@@ -549,7 +551,7 @@ public class Controller {
 					matricola = studenteDAO.generaMatricolaDB();
 					studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
 				} catch (Exception e) {
-					System.out.println("DB non disponibile, registrazione studente solo in memoria: " + e.getMessage());
+					logger.info("DB non disponibile, registrazione studente solo in memoria: " + e.getMessage());
 					long numStudenti = utentiRegistrati.stream().filter(u -> u instanceof Studente).count();
 					matricola = "DE" + String.format("%08d", numStudenti + 1);
 				}
@@ -712,7 +714,7 @@ public class Controller {
 					richiestaDAO.aggiornaOrarioPropostoDB(r.getId(), giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 				}
 			} catch (Exception e) {
-				System.out.println("Orario proposto NON aggiornato sul database: " + e.getMessage());
+				logger.info("Orario proposto NON aggiornato sul database: " + e.getMessage());
 			}
 			return null; // successo
 		} catch (IllegalArgumentException e) {
@@ -768,7 +770,7 @@ public class Controller {
 			}
 			this.orarioLezioni = orarioCaricato;
 		} catch (Exception e) {
-			System.out.println("Errore nel caricamento delle lezioni dal database: " + e.getMessage());
+			logger.info("Errore nel caricamento delle lezioni dal database: " + e.getMessage());
 		}
 	}
 
@@ -832,7 +834,7 @@ public class Controller {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Errore nel caricamento degli utenti dal database: " + e.getMessage());
+			logger.info("Errore nel caricamento degli utenti dal database: " + e.getMessage());
 		}
 	}
 
@@ -864,3 +866,4 @@ public class Controller {
 		return data;
 	}
 }
+

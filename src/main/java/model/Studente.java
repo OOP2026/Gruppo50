@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * Rappresenta uno studente all'interno del sistema.
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 public class Studente extends Utente  {
     private final String matricola;
     final private int annoCorso;
+
+    private static final Logger logger = Logger.getLogger(Studente.class.getName());
 
     /**
      * Lista per tenere traccia delle matricole già assegnate
@@ -54,7 +57,7 @@ public class Studente extends Utente  {
      * Stampa un messaggio di saluto nel terminale dicendo nome, cognome e matricola.
      */
     public void saluto() {
-        System.out.println("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
+        logger.info("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
     }
 
     /**

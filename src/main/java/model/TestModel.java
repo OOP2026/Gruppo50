@@ -1,8 +1,10 @@
 package model;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class TestModel {
+	private static final Logger logger = Logger.getLogger(TestModel.class.getName());
 
 	public static void main(String[] args) {
 		//Testiamo se funziona la funzione che mostra in modo ordinato le lezioni di un docente, se funziona vuol dire che la funzione di ordinamento funziona correttamente
@@ -31,9 +33,9 @@ luca.inserisciLezione(l6,orario);
 		luca.inserisciLezione(l1,orario);
 		luca.inserisciLezione(l3,orario);
 List<Lezione> lezioniDocente=d1.getLezioni(orario);
-for(Lezione l : lezioniDocente){
-	System.out.println(l.getInsegnamento().getNome()+"  "+l.getOrario().getGiorno()+": "+l.getOrario().getOrarioCompleto());
-	}
+ for(Lezione l : lezioniDocente){
+ 	logger.info(l.infoLezione());
+ 	}
 
 }
 }
