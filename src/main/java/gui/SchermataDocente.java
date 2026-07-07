@@ -29,7 +29,7 @@ public class SchermataDocente {
 
     }
 
-    public void caricaEvents(){
+    private void caricaEvents(){
         //Controllo che il bottone invia richieste sia inizializzato correttamente
         if (schermataRichiesteButton != null) {
             schermataRichiesteButton.addActionListener(e -> {

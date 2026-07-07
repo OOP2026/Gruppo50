@@ -64,7 +64,7 @@ public class SchermataVincoli {
             String giorno= Objects.requireNonNull(giorniBox.getSelectedItem()).toString().toLowerCase();
             String ex=controller.aggiungiVincolo(giorno,oraInizio,minutiInizio,oraFine,minutiFine);
             if(ex!=null){
-                JOptionPane.showMessageDialog(frame,ex,"Errore",JOptionPane.ERROR_MESSAGE);
+             dialogErrore_Warning(ex,0);
                 return;
             }
             resetCampi();
@@ -74,12 +74,12 @@ public class SchermataVincoli {
         rimuoviButton.addActionListener(e->{
             int indice=tabellaVincoli.getSelectedRow();
             if(indice==-1){
-                JOptionPane.showMessageDialog(frame,"Seleziona un vincolo da rimuovere","Errore",JOptionPane.ERROR_MESSAGE);
+             dialogErrore_Warning("Seleziona un vincolo da rimuovere",1);
                 return;
             }
             String ex=controller.rimuoviVincolo(indice);
                 if(ex!=null){
-                    JOptionPane.showMessageDialog(frame,ex,"Errore",JOptionPane.ERROR_MESSAGE);
+                    dialogErrore_Warning(ex,0);
                     return;
                 }
 
@@ -92,7 +92,7 @@ public class SchermataVincoli {
 private boolean checkCampi(){
     //controlla se tutti i campi sono stati compilati
     if(oraFineText.getText().isEmpty() || minutiFineText.getText().isEmpty() || oraInizioText.getText().isEmpty() || minutiInizioText.getText().isEmpty()){
-        JOptionPane.showMessageDialog(frame,"Compila tutti i campi","Errore",JOptionPane.WARNING_MESSAGE);
+dialogErrore_Warning("Compila tutti i campi",1);
         return false;
     }
     try{
@@ -101,7 +101,7 @@ private boolean checkCampi(){
         Integer.parseInt( oraInizioText.getText());
         Integer.parseInt( minutiInizioText.getText());
     }catch(NumberFormatException ex){
-        JOptionPane.showMessageDialog(frame,"Inserisci valori numerici validi per orari e minuti","Errore",JOptionPane.WARNING_MESSAGE);
+        dialogErrore_Warning("Inserisci valori numerici validi per orari e minuti",1);
         return false;
     }
 
@@ -120,7 +120,7 @@ private void resetCampi(){
                 new String[]{"Vincoli"} ) );
         //Per centrare il testo delle righe
         DefaultTableCellRenderer centerRender= new DefaultTableCellRenderer();
-        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        centerRender.setHorizontalAlignment(SwingConstants.CENTER);
         for(int i=0; i<tabellaVincoli.getColumnCount();i++){
             tabellaVincoli.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
@@ -128,6 +128,20 @@ private void resetCampi(){
         tabellaVincoli.setDefaultEditor(Object.class, null);
         //quando le righe vengono cliccati diventano grigio chiaro
         tabellaVincoli.setSelectionBackground(Color.LIGHT_GRAY);
+    }
+
+    private void dialogErrore_Warning(String e,int tipo){
+        switch (tipo){
+            case 0:{
+                JOptionPane.showMessageDialog(frame,e,"Errore",JOptionPane.ERROR_MESSAGE);
+                break;
+            }
+            case 1:{
+                JOptionPane.showMessageDialog(frame,e,"Attenzione",JOptionPane.WARNING_MESSAGE);
+                break;
+            }
+        }
+
     }
 
 

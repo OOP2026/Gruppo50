@@ -142,7 +142,7 @@ public class VisualizzaRichiestaDialog {
 
             String errore = controller.approvaRichiestaSpostamento(rigaSelezionata);
             if (errore != null) {
-                JOptionPane.showMessageDialog(dialog, errore, "Errore", JOptionPane.ERROR_MESSAGE);
+                dialogErrore(errore);
             } else {
                 JOptionPane.showMessageDialog(dialog, "Richiesta approvata con successo.");
             }
@@ -176,13 +176,13 @@ public class VisualizzaRichiestaDialog {
                 String errore = controller.modificaOrarioRichiesta(rigaSelezionata, giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 
                 if (errore != null) {
-                    JOptionPane.showMessageDialog(dialog, errore, "Errore", JOptionPane.ERROR_MESSAGE);
+                   dialogErrore(errore);
                 } else {
                     JOptionPane.showMessageDialog(dialog, "Orario della richiesta modificato.");
                 }
                 aggiornaTabella(controller);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialog, "Valori orario non validi.", "Errore", JOptionPane.ERROR_MESSAGE);
+              dialogErrore("Orari e minuti devono essere numeri interi.");
             }
 
         });
@@ -208,7 +208,9 @@ public class VisualizzaRichiestaDialog {
         if (labelOrari   != null) labelOrari.setText("—");
         if (labelMotivo  != null) labelMotivo.setText("—");
     }
-
+    private void dialogErrore(String e){
+        JOptionPane.showMessageDialog(dialog, e, "Errore", JOptionPane.ERROR_MESSAGE);
+    }
 
 }
 

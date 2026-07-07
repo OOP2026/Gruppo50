@@ -56,7 +56,7 @@ public class SchermataInsegnamentiDocente {
                 controller.addInsegnamentoDocente(Objects.requireNonNull(insegnamentiBox.getSelectedItem()).toString());
             }
             catch(Exception ex){
-                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                dialogErrore(ex.getMessage());
             return;
             }
             caricaInsegnamentiBox();
@@ -78,14 +78,7 @@ if(tabellaInsegnamenti != null) {
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setPreferredSize(new Dimension(120, 100));
         int risposta = JOptionPane.showConfirmDialog(frame, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
-        if (risposta == JOptionPane.YES_OPTION) {
-            String action = controller.removeInsegnamentoDocente(materia);
-            if (action != null) {
-                JOptionPane.showMessageDialog(frame, action, "Errore", JOptionPane.ERROR_MESSAGE);
-            }
-            caricaInsegnamentiBox();
-            creaTable();
-        }
+        eliminaInsegnamento(risposta, materia);
 
         tabellaInsegnamenti.getSelectionModel().clearSelection();
     });
@@ -94,8 +87,7 @@ if(tabellaInsegnamenti != null) {
 
     private void caricaInsegnamentiBox(){
         if(insegnamentiBox==null){
-            JOptionPane.showMessageDialog(frame,"Errore GUI: insegnamentiBox non inizializzato dal designer, riavvia il programma",
-                    "Errore",JOptionPane.ERROR_MESSAGE);
+dialogErrore("Errore GUI: insegnamentiBox non inizializzato dal designer, riavvia il programma");
         return;}
         insegnamentiBox.removeAllItems();
         insegnamentiBox.addItem("none");
@@ -111,7 +103,7 @@ if(tabellaInsegnamenti != null) {
                 new String[]{"Nome","Cfu","Anno"} ) );
         //Per centrare il testo delle righe
         DefaultTableCellRenderer centerRender= new DefaultTableCellRenderer();
-        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        centerRender.setHorizontalAlignment(SwingConstants.CENTER);
         for(int i=0; i<tabellaInsegnamenti.getColumnCount();i++){
             tabellaInsegnamenti.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
@@ -119,6 +111,20 @@ if(tabellaInsegnamenti != null) {
         tabellaInsegnamenti.setDefaultEditor(Object.class, null);
         //quando le righe vengono cliccati diventano grigio chiaro
         tabellaInsegnamenti.setSelectionBackground(Color.LIGHT_GRAY);
+    }
+
+    private void eliminaInsegnamento(int risposta, String materia){
+        if (risposta == JOptionPane.YES_OPTION) {
+            String action = controller.removeInsegnamentoDocente(materia);
+            if (action != null) {
+                dialogErrore(action);
+            }
+            caricaInsegnamentiBox();
+            creaTable();
+        }
+    }
+    private void dialogErrore(String e){
+        JOptionPane.showMessageDialog(frame, e, "Errore", JOptionPane.ERROR_MESSAGE);
     }
 
 

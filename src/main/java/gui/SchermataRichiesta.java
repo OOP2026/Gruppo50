@@ -70,7 +70,7 @@ public class SchermataRichiesta {
 
         // 2. Controllo sulle ComboBox (FONDAMENTALE per evitare NPE in caricaEvents)
         if (giorniBox.getSelectedItem() == null || giorniNuoviBox.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(frame, "Seleziona i giorni per entrambe le lezioni.", "Errore", JOptionPane.WARNING_MESSAGE);
+dialogErrore_Warning("Seleziona un giorno valido per entrambe le lezioni.", 1);
             return false;
         }
 
@@ -95,12 +95,12 @@ public class SchermataRichiesta {
                 oraFineN == null || oraFineN.trim().isEmpty() ||
                 minFineN == null || minFineN.trim().isEmpty()) {
 
-            JOptionPane.showMessageDialog(frame, "Tutti i campi degli orari devono essere compilati.", "Errore", JOptionPane.WARNING_MESSAGE);
+dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
             return false;
         }
 
         if (motivo == null || motivo.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Il campo motivo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+        dialogErrore_Warning("Il campo motivo non può essere vuoto.",1);
             return false;
         }
 
@@ -116,7 +116,7 @@ public class SchermataRichiesta {
             Integer.parseInt(oraFineN.trim());
             Integer.parseInt(minFineN.trim());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(frame, "Inserisci valori numerici validi per orari e minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
+       dialogErrore_Warning("Inserisci valori numerici validi per orari e minuti.",1);
             return false;
         }
 
@@ -163,7 +163,7 @@ public class SchermataRichiesta {
                         oraInizioLezione, minutoInizioLezione, oraFineLezione, minutoFineLezione,
                         giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+              dialogErrore_Warning(ex.getMessage(),0);
                 return;
             }
 
@@ -248,6 +248,20 @@ public class SchermataRichiesta {
         //non rende editable la tabella
         table.setDefaultEditor(Object.class, null);
         table.setSelectionBackground(Color.LIGHT_GRAY);
+    }
+
+    private void dialogErrore_Warning(String e,int tipo){
+        switch (tipo){
+            case 0:{
+                JOptionPane.showMessageDialog(frame,e,"Errore",JOptionPane.ERROR_MESSAGE);
+                break;
+            }
+            case 1:{
+                JOptionPane.showMessageDialog(frame,e,"Attenzione",JOptionPane.WARNING_MESSAGE);
+                break;
+            }
+        }
+
     }
 
 }
