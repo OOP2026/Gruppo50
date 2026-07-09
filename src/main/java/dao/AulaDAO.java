@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.SQLException;
+
 public interface AulaDAO {
     /**
      * Permette di salvare un aula nel database
@@ -7,7 +9,7 @@ public interface AulaDAO {
      * @param capienza la capienza dell'aula
      * @throws Exception se si verifica un errore durante il salvataggio dell'aula
      */
-    void salvaAulaDB(String nome,int capienza) throws Exception;
+    void salvaAulaDB(String nome,int capienza) throws SQLException;
 
     /**
      * Restituisce un array che contiene le aule all'interno del database

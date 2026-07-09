@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +37,7 @@ public interface LezioneDAO {
     void salvaLezioneDB(String nomeInsegnamento, int annoCorso,
                         String emailDocente,
                         String nomeAula,
-                        String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws Exception;
+                        String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws SQLException;
 
     /**
      * Legge dal database tutte le lezioni di un dato anno di corso (quelle che
@@ -61,7 +62,7 @@ public interface LezioneDAO {
                         ArrayList<String> emailDocente,
                         ArrayList<String> nomeAula,
                         ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                        ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception;
+                        ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException;
 
     /**
      * Legge dal database tutte le lezioni presenti, senza filtrare per anno di
@@ -89,5 +90,5 @@ public interface LezioneDAO {
                              ArrayList<String> emailDocente,
                              ArrayList<String> nomeAula,
                              ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                             ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception;
+                             ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException;
 }
