@@ -60,7 +60,7 @@ public class OrarioLezioni {
      * @throws IllegalArgumentException se c'è un conflitto di orario, aula o docente con un'altra lezione
      * @throws NullPointerException se la lezione passata è nulla o se il token è nullo (permesso negato)
      */
-    public boolean aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
+    public void aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
         //Solo il responsabile puo usare questo metodo
         if(token==null){ throw new NullPointerException("Non hai il permesso");}
 
@@ -72,7 +72,6 @@ public class OrarioLezioni {
             throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
         }
         orariolezioni.add(l);
-        return true;
     }
 
     /**
