@@ -16,29 +16,29 @@ public class SchermataStudente {
     private JPanel panel1;
 
     // — Lunedì —
-    private JTextArea PrimaLezioneLunedi;
-    private JTextArea SecondaLezioneLunedi;
-    private JTextArea TerzaLezioneLunedi;
+    private JTextArea primaLezioneLunedi;
+    private JTextArea secondaLezioneLunedi;
+    private JTextArea terzaLezioneLunedi;
 
     // — Martedì —
-    private JTextArea PrimaLezioneMartedi;
-    private JTextArea SecondaLezioneMartedi;
-    private JTextArea TerzaLezioneMartedi;
+    private JTextArea primaLezioneMartedi;
+    private JTextArea secondaLezioneMartedi;
+    private JTextArea terzaLezioneMartedi;
 
     // — Mercoledì —
-    private JTextArea PrimaLezioneMercoledi;
-    private JTextArea SecondaLezioneMercoledi;
-    private JTextArea TerzaLezioneMercoledi;
+    private JTextArea primaLezioneMercoledi;
+    private JTextArea secondaLezioneMercoledi;
+    private JTextArea terzaLezioneMercoledi;
 
     // — Giovedì —
-    private JTextArea PrimaLezioneGiovedi;
-    private JTextArea SecondaLezioneGiovedi;
-    private JTextArea TerzaLezioneGiovedi;
+    private JTextArea primaLezioneGiovedi;
+    private JTextArea secondaLezioneGiovedi;
+    private JTextArea terzaLezioneGiovedi;
 
     // — Venerdì —
-    private JTextArea PrimaLezioneVenerdi;
-    private JTextArea SecondaLezioneVenerdi;
-    private JTextArea TerzaLezioneVenerdi;
+    private JTextArea primaLezioneVenerdi;
+    private JTextArea secondaLezioneVenerdi;
+    private JTextArea terzaLezioneVenerdi;
 
     private JLabel matricola;
     private JButton indietroButton;
@@ -56,11 +56,11 @@ public class SchermataStudente {
 
         // Slot per giorno, in ordine: prima, seconda, terza lezione
         JTextArea[][] slotPerGiorno = {
-                { PrimaLezioneLunedi,    SecondaLezioneLunedi,    TerzaLezioneLunedi    },
-                { PrimaLezioneMartedi,   SecondaLezioneMartedi,   TerzaLezioneMartedi   },
-                { PrimaLezioneMercoledi, SecondaLezioneMercoledi, TerzaLezioneMercoledi },
-                { PrimaLezioneGiovedi,   SecondaLezioneGiovedi,   TerzaLezioneGiovedi   },
-                { PrimaLezioneVenerdi,   SecondaLezioneVenerdi,   TerzaLezioneVenerdi   }
+                {primaLezioneLunedi, secondaLezioneLunedi, terzaLezioneLunedi},
+                {primaLezioneMartedi, secondaLezioneMartedi, terzaLezioneMartedi},
+                {primaLezioneMercoledi, secondaLezioneMercoledi, terzaLezioneMercoledi},
+                {primaLezioneGiovedi, secondaLezioneGiovedi, terzaLezioneGiovedi},
+                {primaLezioneVenerdi, secondaLezioneVenerdi, terzaLezioneVenerdi}
         };
 
         // Rendi non editabili e pulisci i placeholder statici del form

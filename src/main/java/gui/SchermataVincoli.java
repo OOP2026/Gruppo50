@@ -24,8 +24,8 @@ public class SchermataVincoli {
     private JPanel panelButtons;
     private JPanel panelOrarioInizio;
     private JComboBox<String> giorniBox;
-    final private Controller controller;
-   final private JFrame frameChiamante;
+    private final Controller controller;
+   private final JFrame frameChiamante;
 
     public SchermataVincoli(Controller c,JFrame f){
         controller=c;

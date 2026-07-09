@@ -1,4 +1,5 @@
 package dao;
+import java.sql.SQLException;
 import java.util.ArrayList;
 /**
  * Interfaccia DAO per la tabella {@code utente}.
@@ -35,7 +36,7 @@ public interface UtenteDAO {
      */
     void salvaUtenteDB(String nome, String cognome, String email,
                        String login, String password,
-                       String matricola, Integer annoCorso) throws Exception;
+                       String matricola, Integer annoCorso) throws SQLException;
 
     /**Recupera i dati di tutti gli utenti registrati, di qualunque ruolo.
      * Le liste passate come parametro vengono riempite in modo parallelo
@@ -54,7 +55,7 @@ public interface UtenteDAO {
     void leggiUtentiDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
                        ArrayList<String> login, ArrayList<String> password,
                        ArrayList<String> matricola, ArrayList<Integer> annoCorso,
-                       ArrayList<String> ruolo) throws Exception;
+                       ArrayList<String> ruolo) throws SQLException;
 
     /**Genera la prossima matricola univoca per il prefisso indicato,
      * basandosi sui dati presenti nella tabella utente (matricola massima
@@ -68,5 +69,5 @@ public interface UtenteDAO {
      * @return la nuova matricola nel formato prefisso + 8 cifre numeriche
      *         (es. {@code "DA00000001"}).
      */
-    String generaMatricolaDB(String prefisso) throws Exception;
+    String generaMatricolaDB(String prefisso) throws SQLException;
 }

@@ -1,4 +1,4 @@
-package implementazioneDao;
+package implementazionedao;
 
 import dao.UtenteDAO;
 import database_connection.ConnessioneDatabase;
@@ -27,9 +27,9 @@ public class UtentePostgresDao implements UtenteDAO {
     /**
      * Nel costruttore si ottiene la connessione dal singleton.
      *
-     * @throws Exception se la connessione al database fallisce
+     * @throws SQLException se la connessione al database fallisce
      */
-    public UtentePostgresDao() throws Exception {
+    public UtentePostgresDao() throws SQLException {
         connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
@@ -43,7 +43,7 @@ public class UtentePostgresDao implements UtenteDAO {
     @Override
     public void salvaUtenteDB(String nome, String cognome, String email,
                               String login, String password,
-                              String matricola, Integer annoCorso) throws Exception {
+                              String matricola, Integer annoCorso) throws SQLException {
         String sql = "INSERT INTO utente (nome, cognome, email, username, password, matricola, annocorso) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -61,7 +61,7 @@ public class UtentePostgresDao implements UtenteDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             // Es. violazione di un vincolo: email, username o matricola già presenti.
-            throw new Exception("Impossibile salvare l'utente sul database: " + e.getMessage());
+            throw new SQLException("Impossibile salvare l'utente sul database: " + e.getMessage());
         }
     }
 
@@ -73,7 +73,7 @@ public class UtentePostgresDao implements UtenteDAO {
     public void leggiUtentiDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
                               ArrayList<String> login, ArrayList<String> password,
                               ArrayList<String> matricola, ArrayList<Integer> annoCorso,
-                              ArrayList<String> ruolo) throws Exception {
+                               ArrayList<String> ruolo) throws SQLException {
         String sql = "SELECT nome, cognome, email, username, password, matricola, annocorso, ruolo FROM utente";
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -89,7 +89,7 @@ public class UtentePostgresDao implements UtenteDAO {
                 ruolo.add(rs.getString("ruolo"));
             }
         } catch (SQLException e) {
-            throw new Exception("Impossibile leggere gli utenti dal database: " + e.getMessage());
+            throw new SQLException("Impossibile leggere gli utenti dal database: " + e.getMessage());
         }
     }
 
@@ -106,10 +106,10 @@ public class UtentePostgresDao implements UtenteDAO {
      *
      * @param prefisso il prefisso della matricola in base al ruolo.
      * @return la nuova matricola nel formato prefisso + 8 cifre numeriche (es. {@code "DA00000001"}).
-     * @throws Exception se si verifica un errore SQL durante la lettura del valore massimo.
+     * @throws SQLException se si verifica un errore SQL durante la lettura del valore massimo.
      */
     @Override
-    public String generaMatricolaDB(String prefisso) throws Exception {
+    public String generaMatricolaDB(String prefisso) throws SQLException {
         String sql = "SELECT MAX(matricola) AS maxmat FROM utente WHERE matricola LIKE ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, prefisso + "%");
@@ -125,7 +125,7 @@ public class UtentePostgresDao implements UtenteDAO {
                 return prefisso + String.format("%08d", prossimo);
             }
         } catch (SQLException e) {
-            throw new Exception("Impossibile generare la matricola dal database: " + e.getMessage());
+            throw new SQLException("Impossibile generare la matricola dal database: " + e.getMessage());
         }
     }
 }

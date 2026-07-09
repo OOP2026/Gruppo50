@@ -75,5 +75,5 @@ public class LoginPage {
 
     public void erroreLogin(String e){
         JOptionPane.showMessageDialog(frame, "Errore: "+e, "Errore nel login", JOptionPane.ERROR_MESSAGE);
-    };
+    }
 }

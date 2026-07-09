@@ -1,4 +1,5 @@
 package dao;
+import java.sql.SQLException;
 import java.util.ArrayList;
 /**
  * Interfaccia DAO per i responsabili, memorizzati nella tabella unica
@@ -24,7 +25,7 @@ public interface ResponsabileDAO {
      * @param password password segreta del Responsabile per accedere.
      */
     void salvaResponsabileDB(String nome, String cognome, String email,
-                             String login, String password)throws Exception;
+                             String login, String password) throws SQLException;
 
     /**Metodo da implementare in ResponsabilePostgreDao per recuperare i dati di un Responsabile registrato.
      *
@@ -35,6 +36,6 @@ public interface ResponsabileDAO {
      * @param password password segreta del Responsabile per accedere.
      */
     void leggiResponsabileDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
-                             ArrayList<String> login, ArrayList<String> password)throws Exception;
+                             ArrayList<String> login, ArrayList<String> password) throws SQLException;
 
 }

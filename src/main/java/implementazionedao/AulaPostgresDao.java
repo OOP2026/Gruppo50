@@ -1,4 +1,4 @@
-package implementazioneDao;
+package implementazionedao;
 
 
 import dao.AulaDAO;
@@ -16,12 +16,12 @@ public class AulaPostgresDao implements AulaDAO {
     private final Connection connection;
     private static final Logger logger = Logger.getLogger(AulaPostgresDao.class.getName());
 
-    public AulaPostgresDao() throws Exception {
+    public AulaPostgresDao() throws SQLException {
         this.connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
     @Override
-    public void salvaAulaDB(String nome, int capienza) throws Exception {
+    public void salvaAulaDB(String nome, int capienza) throws SQLException {
         String sql = "INSERT INTO aula (nome,capienza) " +
                 "VALUES (?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -30,7 +30,7 @@ public class AulaPostgresDao implements AulaDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new Exception("Impossibile salvare salvare l'aula nel DataBase: " + e.getMessage());
+            throw new SQLException("Impossibile salvare salvare l'aula nel DataBase: " + e.getMessage());
         }
     }
 

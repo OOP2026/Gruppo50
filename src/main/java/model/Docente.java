@@ -160,8 +160,8 @@ public class Docente extends Utente {
         int numeroVincolo=0;
         for(Vincolo vincolo : vincoli){
             logger.info("Numero vincolo: "+numeroVincolo);
-            logger.info("Giorno: "+vincolo.orario.getGiorno());
-            logger.info("Orario: "+vincolo.orario.getOrarioCompleto());
+            logger.info("Giorno: "+vincolo.getOrario().getGiorno());
+            logger.info("Orario: "+vincolo.getOrario().getOrarioCompleto());
             logger.info("-----------------------------------");
             numeroVincolo++;
         }

@@ -1,4 +1,4 @@
-package implementazioneDao;
+package implementazionedao;
 
 import dao.VincoloDAO;
 import database_connection.ConnessioneDatabase;
@@ -15,12 +15,12 @@ import java.util.logging.Logger;
 public class VincoloPostgresDao implements VincoloDAO {
     private final Connection connection;
     private static final Logger logger = Logger.getLogger(VincoloPostgresDao.class.getName());
-    public VincoloPostgresDao() throws Exception {
+    public VincoloPostgresDao() throws SQLException {
         new ConnessioneDatabase();
         this.connection = ConnessioneDatabase.getInstance().getConnection();
     }
     @Override
-    public void salvaVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws Exception {
+    public void salvaVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws SQLException {
         // Implementazione per salvare il vincolo nel database PostgreSQL
         String sql = "INSERT INTO vincolo (docentee,orarioi,orariof,giorno) " +
                 "VALUES (?,?,?,?)";
@@ -34,12 +34,12 @@ public class VincoloPostgresDao implements VincoloDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new Exception("Impossibile salvare salvare l'aula nel DataBase: " + e.getMessage());
+            throw new SQLException("Impossibile salvare salvare l'aula nel DataBase: " + e.getMessage());
         }
     }
 
     @Override
-    public Object[][] caricaVincoliDB(String emailDocente) throws Exception {
+    public Object[][] caricaVincoliDB(String emailDocente) throws SQLException {
         String sql="SELECT * FROM vincolo WHERE docentee = ?";
         List<Object[]> vincoli= new ArrayList<>();
         boolean haRighe=false;
@@ -66,7 +66,7 @@ public class VincoloPostgresDao implements VincoloDAO {
     }
 
     @Override
-    public void rimuoviVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws Exception {
+    public void rimuoviVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws SQLException {
 
         String sql = "DELETE FROM vincolo WHERE docentee = ? AND giorno ILIKE ? AND orarioi = ? AND orariof = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

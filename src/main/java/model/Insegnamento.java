@@ -5,41 +5,41 @@ package model;
  * */
 public class Insegnamento {
     ///È il nome dell'insegnamento
-   final private String Nome;
+   private final String nome;
     ///Sono i numeri di cfu che vengono dati se si supera l'esame di questo insegnamento
-    final private int NumeroCFU;
+    private final int numeroCFU;
     ///Anno in cui l'insegnamento viene insegnato
-   final private int AnnoCorso;
+   private final int annoCorso;
     ///Indica chi è il docente titolare
     private Docente docente;
 
-    public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso, Docente docente){
-        this.Nome=Nome;
-        this.NumeroCFU=NumeroCFU;
-        this.AnnoCorso=AnnoCorso;
+    public Insegnamento(String nome,int numeroCFU,int annoCorso, Docente docente){
+        this.nome=nome;
+        this.numeroCFU=numeroCFU;
+        this.annoCorso=annoCorso;
         this.docente=docente;
     }
-    public Insegnamento(String Nome,int NumeroCFU,int AnnoCorso){
-        this.Nome=Nome;
-        this.NumeroCFU=NumeroCFU;
-        this.AnnoCorso=AnnoCorso;
+    public Insegnamento(String nome,int numeroCFU,int annoCorso){
+        this.nome=nome;
+        this.numeroCFU=numeroCFU;
+        this.annoCorso=annoCorso;
 
     }
     public Insegnamento(Insegnamento i){
-        this.Nome=i.Nome;
-        this.NumeroCFU=i.NumeroCFU;
-        this.AnnoCorso=i.AnnoCorso;
+        this.nome=i.nome;
+        this.numeroCFU=i.numeroCFU;
+        this.annoCorso=i.annoCorso;
         this.docente= new Docente(i.docente);
     }
 //getter and setter
     public String getNome() {
-        return Nome;
+        return nome;
     }
     public int getNumeroCFU() {
-        return NumeroCFU;
+        return numeroCFU;
     }
     public int getAnnoCorso() {
-        return AnnoCorso;
+        return annoCorso;
     }
     public Docente getDocente() {
         return new Docente(docente);
@@ -49,15 +49,15 @@ public class Insegnamento {
         if (this == obj) return true;
         if (!(obj instanceof Insegnamento)) return false;
         Insegnamento insegnamento = (Insegnamento) obj;
-        return this.Nome.equals(insegnamento.Nome)
-                && this.NumeroCFU == insegnamento.NumeroCFU
-                && this.AnnoCorso == insegnamento.AnnoCorso
+        return this.nome.equals(insegnamento.nome)
+                && this.numeroCFU == insegnamento.numeroCFU
+                && this.annoCorso == insegnamento.annoCorso
                 && this.docente.email.equals(insegnamento.docente.email);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(this.Nome, this.NumeroCFU, this.AnnoCorso, this.docente.email);
+        return java.util.Objects.hash(this.nome, this.numeroCFU, this.annoCorso, this.docente.email);
     }
     
 }

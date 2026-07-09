@@ -1,4 +1,4 @@
-package implementazioneDao;
+package implementazionedao;
 
 import dao.RichiestaDAO;
 import database_connection.ConnessioneDatabase;
@@ -35,9 +35,9 @@ public class RichiestaPostgresDao implements RichiestaDAO {
     /**
      * Nel costruttore si ottiene la connessione dal singleton.
      *
-     * @throws Exception se la connessione al database fallisce
+     * @throws SQLException se la connessione al database fallisce
      */
-    public RichiestaPostgresDao() throws Exception {
+    public RichiestaPostgresDao() throws SQLException {
         connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
@@ -57,7 +57,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                                 String giornoIniziale, int oraInizioIniziale, int minutoInizioIniziale,
                                 int oraFineIniziale, int minutoFineIniziale,
                                 String giornoProposto, int oraInizioProposto, int minutoInizioProposto,
-                                int oraFineProposto, int minutoFineProposto) throws Exception {
+                                 int oraFineProposto, int minutoFineProposto) throws SQLException {
         String sql = "INSERT INTO richiesta " +
                 "(email_docente, email_responsabile, motivo, " +
                 " giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
@@ -79,7 +79,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
             }
         } catch (SQLException e) {
             // Es. FK inesistente (docente/responsabile) o violazione di un CHECK sugli orari.
-            throw new Exception("Impossibile salvare la richiesta sul database: " + e.getMessage());
+            throw new SQLException("Impossibile salvare la richiesta sul database: " + e.getMessage());
         }
     }
 
@@ -102,8 +102,8 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                                         ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                         ArrayList<String> giornoProposto,
                                         ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                        ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
-                                        ArrayList<String> stato) throws Exception {
+                                         ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
+                                         ArrayList<String> stato) throws SQLException {
         String sql = "SELECT id, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto, stato " +
@@ -125,7 +125,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new Exception("Impossibile leggere le richieste del docente dal database: " + e.getMessage());
+            throw new SQLException("Impossibile leggere le richieste del docente dal database: " + e.getMessage());
         }
     }
 
@@ -147,7 +147,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                                          ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                          ArrayList<String> giornoProposto,
                                          ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                         ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws Exception {
+                                          ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException {
         String sql = "SELECT id, email_docente, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto " +
@@ -168,7 +168,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new Exception("Impossibile leggere le richieste in attesa dal database: " + e.getMessage());
+            throw new SQLException("Impossibile leggere le richieste in attesa dal database: " + e.getMessage());
         }
     }
 
@@ -186,7 +186,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      * trovata la transazione è annullata e lo stato non cambia.</p>
      */
     @Override
-    public void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws Exception {
+    public void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws SQLException {
         String sqlStato = "UPDATE richiesta SET stato = ? WHERE id = ?";
         // Sposta la lezione individuata dai dati iniziali della richiesta
         // (docente + giorno + orario) sul giorno/orario proposti. Le colonne
@@ -233,7 +233,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
             } catch (SQLException ignored) {
                 // il rollback fallisce solo se la connessione è già compromessa
             }
-            throw new Exception("Impossibile aggiornare lo stato della richiesta sul database: " + e.getMessage());
+            throw new SQLException("Impossibile aggiornare lo stato della richiesta sul database: " + e.getMessage());
         } finally {
             try {
                 connection.setAutoCommit(true);
@@ -253,7 +253,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
     @Override
     public void aggiornaOrarioPropostoDB(int idRichiesta, String giornoProposto,
                                          int oraInizioProposto, int minutoInizioProposto,
-                                         int oraFineProposto, int minutoFineProposto) throws Exception {
+                                         int oraFineProposto, int minutoFineProposto) throws SQLException {
         String sql = "UPDATE richiesta SET giorno_proposto = ?, " +
                 "ora_inizio_proposto = ?, ora_fine_proposto = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -264,7 +264,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             // Es. violazione del CHECK sugli orari proposti o del CHECK "proposto != iniziale".
-            throw new Exception("Impossibile aggiornare l'orario proposto della richiesta sul database: " + e.getMessage());
+            throw new SQLException("Impossibile aggiornare l'orario proposto della richiesta sul database: " + e.getMessage());
         }
     }
 

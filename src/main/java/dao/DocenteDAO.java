@@ -1,4 +1,5 @@
 package dao;
+import java.sql.SQLException;
 import java.util.ArrayList;
 /**
  * Interfaccia DAO per i docenti, memorizzati nella tabella unica
@@ -25,7 +26,7 @@ public interface DocenteDAO {
      * @param password password segreta del docente per accedere.
      */
     void salvaDocDB(String nome, String cognome, String email,
-                    String login, String password)throws Exception;
+                    String login, String password)throws SQLException;
 
     /**Metodo da implementare in DocentePostgreDao per recuperare i dati di un docente registrato.
      *

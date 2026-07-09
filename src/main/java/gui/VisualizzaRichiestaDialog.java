@@ -16,8 +16,8 @@ public class VisualizzaRichiestaDialog {
     JDialog dialog;
 
     private JPanel panel1;
-    private JPanel PannelloRichieste;
-    private JPanel PannelloGestione;
+    private JPanel pannelloRichieste;
+    private JPanel pannelloGestione;
     private JTable table1;
     private JLabel labelTitolo;
     private JLabel labelDocente;
@@ -48,9 +48,8 @@ public class VisualizzaRichiestaDialog {
         aggiornaTabella(controller);
         collegaListener(controller);
         if(tornaIndietroButton != null) {
-            tornaIndietroButton.addActionListener(e -> {
-                dialog.dispose();
-            });
+            tornaIndietroButton.addActionListener(e ->
+                dialog.dispose() );
         }
 
         dialog.setVisible(true);
