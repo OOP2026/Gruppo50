@@ -4,27 +4,42 @@ package model;
  * @see Docente
  * */
 public class Insegnamento {
-    ///È il nome dell'insegnamento
+    /** È il nome dell'insegnamento. */
    private final String nome;
-    ///Sono i numeri di cfu che vengono dati se si supera l'esame di questo insegnamento
+    /** Sono i numeri di cfu che vengono dati se si supera l'esame di questo insegnamento. */
     private final int numeroCFU;
-    ///Anno in cui l'insegnamento viene insegnato
+    /** Anno in cui l'insegnamento viene insegnato. */
    private final int annoCorso;
-    ///Indica chi è il docente titolare
+    /** Indica chi è il docente titolare. */
     private Docente docente;
 
+    /**
+     * Costruisce un nuovo insegnamento con nome, cfu, anno del corso e docente.
+     * @param nome il nome dell'insegnamento.
+     * @param numeroCFU il numero di crediti formativi.
+     * @param annoCorso l'anno del corso dell'insegnamento.
+     * @param docente il docente assegnato all'insegnamento.
+     */
     public Insegnamento(String nome,int numeroCFU,int annoCorso, Docente docente){
         this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;
         this.docente=docente;
     }
+    /** Costruisce un nuovo insegnamento senza assegnare subito un docente.
+     * @param nome il nome dell'insegnamento.
+     * @param numeroCFU il numero di crediti formativi.
+     * @param annoCorso l'anno del corso dell'insegnamento.
+     */
     public Insegnamento(String nome,int numeroCFU,int annoCorso){
         this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;
 
     }
+    /**Costruttore che copia insegnamento clonando tutti i dati in un'altra istanza.
+     * @param i l'insegnamento da cui copiare.
+     */
     public Insegnamento(Insegnamento i){
         this.nome=i.nome;
         this.numeroCFU=i.numeroCFU;
@@ -32,18 +47,38 @@ public class Insegnamento {
         this.docente= new Docente(i.docente);
     }
 //getter and setter
+
+    /** Restituisce il nome dell'insegnamento.
+     * @return il nome dell'insegnamento.
+     */
     public String getNome() {
         return nome;
     }
+    /** Restituisce il numero di crediti formativi.
+     * @return i CFU dell'insegnamento.
+     */
     public int getNumeroCFU() {
         return numeroCFU;
     }
+    /** Restituisce l'anno del corso dell'insegnamento.
+     * @return l'anno di corso.
+     */
     public int getAnnoCorso() {
         return annoCorso;
     }
+    /** Restituisce il docente dell'insegnamento.
+     * @return il docente assegnato all'insegnamento.
+     */
     public Docente getDocente() {
         return new Docente(docente);
     }
+    /**
+     * Confronta questo insegnamento con un altro oggetto per verificare se sono uguali.
+     * Due insegnamenti sono considerati uguali se hanno stesso nome, stessi CFU,
+     * stesso anno di corso e se i docenti assegnati sono gli stessi.
+     * @param obj l'oggetto da confrontare con questo insegnamento
+     * @return true se gli oggetti sono uguali, false altrimenti
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -54,7 +89,10 @@ public class Insegnamento {
                 && this.annoCorso == insegnamento.annoCorso
                 && this.docente.email.equals(insegnamento.docente.email);
     }
-
+    /**
+     * Crea un hash code per questo insegnamento su determinati attributi.
+     * @return l'hash code calcolato.
+     */
     @Override
     public int hashCode() {
         return java.util.Objects.hash(this.nome, this.numeroCFU, this.annoCorso, this.docente.email);
