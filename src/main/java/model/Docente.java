@@ -134,6 +134,7 @@ public class Docente extends Utente {
         logger.info("Vincolo aggiunto con successo");
 
     }
+
     public void caricaVincoliInDocente(List<Vincolo> vincoliDaCaricare){
         vincoli= new ArrayList<>(vincoliDaCaricare);
     }

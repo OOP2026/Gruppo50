@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.logging.Logger;
 
 
-public class Controller {
+public class  Controller {
 	private static final Logger logger = Logger.getLogger(Controller.class.getName());
    private static final String RESPONSABILE_RUOLO= "RESPONSABILE";
    private static final String STUDENTE_RUOLO="STUDENTE";
@@ -147,7 +147,7 @@ public class Controller {
 			String emailDocente,
 			String nomeAula,
 			String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
-
+		//Cerco se il docente a cui il responsabile assegna la lezione esista davvero
 		Docente docenteTrovato = null;
 		for (Utente u : utentiRegistrati) {
 			if (u instanceof Docente && u.getmail().equals(emailDocente)) {
