@@ -57,7 +57,8 @@ public class Docente extends Utente {
             throw new NullPointerException("Il valore è null non puo essere aggiunto!");
         }
         this.insegnamenti.add(insegnamento);
-        logger.info(insegnamento.getNome()+" è stato aggiunto a "+this.nome+" "+this.cognome);
+        String msg=insegnamento.getNome()+" è stato aggiunto a "+this.nome+" "+this.cognome;
+        logger.info(msg);
     }
     ///Rimuove un materia che insegna o che puo insegnare il docente
     public void removeInsegnamento(Insegnamento insegnamento){

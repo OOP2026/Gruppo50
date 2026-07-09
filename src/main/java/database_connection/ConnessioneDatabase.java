@@ -79,9 +79,7 @@ public class ConnessioneDatabase {
      * @throws SQLException se la creazione della connessione fallisce
      */
     public static ConnessioneDatabase getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new ConnessioneDatabase();
-        } else if (instance.connection.isClosed()) {
+        if (instance == null || instance.connection.isClosed()) {
             instance = new ConnessioneDatabase();
         }
         return instance;

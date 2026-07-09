@@ -120,7 +120,6 @@ public class CrealezioneDialog {
         // e poi riaprirlo solo se ci sono items da mostrare. Questo evita che il popup rimanga aperto con una lista vuota.
             if(nomeInsField.isPopupVisible()){
             nomeInsField.setPopupVisible(false);
-            logger.info(String.valueOf(nomeInsField.getItemCount()));
             if(nomeInsField.getItemCount()>0)
                 nomeInsField.setPopupVisible(true);
         }else if(nomeInsField.getItemCount()>0 && !materia.equalsIgnoreCase(""))
@@ -168,7 +167,7 @@ public class CrealezioneDialog {
         // Questo evita che il popup rimanga aperto con una lista vuota.
         if(nomeAulaField.isPopupVisible()){
             nomeAulaField.setPopupVisible(false);
-            logger.info(String.valueOf(nomeAulaField.getItemCount()));
+
             if(nomeAulaField.getItemCount()>0)
                 nomeAulaField.setPopupVisible(true);
         }else{

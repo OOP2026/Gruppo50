@@ -37,5 +37,5 @@ public interface DocenteDAO {
      * @param password password segreta del docente per accedere
      */
     void leggiDocenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
-                        ArrayList<String> login, ArrayList<String> password)throws Exception;
+                        ArrayList<String> login, ArrayList<String> password)throws SQLException;
 }

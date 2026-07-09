@@ -4,7 +4,7 @@ import controller.Controller;
 import javax.swing.*;
 
 public class SchermataDocente {
-   static JFrame frame;
+    JFrame frame;
     private JPanel panel1;
     private JButton schermataRichiesteButton;
     private JButton visualizzaOrarioButton;
@@ -16,7 +16,7 @@ public class SchermataDocente {
     public SchermataDocente(Controller c,JFrame f) {
         controller=c;
         frameChiamante=f;
-        frame = new JFrame("Docente");
+        frame = new JFrame("Schermata Docente");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();

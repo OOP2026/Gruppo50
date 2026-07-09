@@ -173,7 +173,7 @@ public int getOrarioFineInMinuti() {
         this.oraInizio = oraInizio;
         this.minutoInizio = minutoInizio;
     }
-    private String getOrarioInizio(){
+    public String getOrarioInizio(){
         return String.format("%d:%02d", this.oraInizio, this.minutoInizio);
     }
     private void setOrarioFine(int oraFine, int minutoFine){
@@ -182,7 +182,7 @@ public int getOrarioFineInMinuti() {
         this.oraFine = oraFine;
         this.minutoFine = minutoFine;
     }
-    private String getOrarioFine(){
+    public String getOrarioFine(){
         return String.format("%d:%02d", this.oraFine, this.minutoFine);
     }
 

@@ -36,7 +36,7 @@ public class AulaPostgresDao implements AulaDAO {
 
     @Override
     public Object[][] caricaAulaDB() {
-        String sql="SELECT * FROM aula";
+        String sql="SELECT nome, capienza FROM aula";
         List<Object[]> aule= new ArrayList<>();
         boolean haRighe=false;
         try(PreparedStatement ps=connection.prepareStatement(sql)){

@@ -105,8 +105,9 @@ public class Controller {
             putResponsabile();
             // Carica le richieste inviate così il docente le vede in GUI
             String erroreRichieste = caricaRichiesteDocenteDaDB();
-            if (erroreRichieste != null)
-                logger.info("Errore caricamento richieste: " + erroreRichieste);
+            if (erroreRichieste != null) {
+               String errore ="Errore caricamento richieste: " + erroreRichieste;
+                logger.info(errore);}
             return true;
         }
         return false;
@@ -845,7 +846,7 @@ public class Controller {
 	}
 
 	//Metodi sulle Aule
-	public void caricaAuleDaDB() throws Exception {
+	public void caricaAuleDaDB() throws SQLException {
 		AulaPostgresDao aulaDao= new AulaPostgresDao();
 		List<Aula> a=new ArrayList<>();
 		Object[][] dati = aulaDao.caricaAulaDB();
