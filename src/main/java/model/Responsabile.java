@@ -155,12 +155,10 @@ for(Vincolo vincolo:vincoli) {
     int orarioFineVincolo = vincolo.getOrario().getOrarioFineInMinuti();
     int orarioInizioLezione = orario.getOrarioInizioInMinuti();
     int orarioFineLezione = orario.getOrarioFineInMinuti();
-    logger.info("Sto confrontando i giorni");
     if (!vincolo.getOrario().getGiorno().equals(orario.getGiorno())) {
-        logger.info("Giorni diversi");
+
         continue;
     }
-    logger.info("Sto confrontando l'orario");
 
     if (orarioInizioLezione < orarioFineVincolo && orarioFineLezione > orarioInizioVincolo) return false;
 

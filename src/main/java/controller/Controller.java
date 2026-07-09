@@ -3,6 +3,8 @@ import dao.*;
 import database_connection.ConnessioneDatabase;
 import implementazionedao.*;
 import model.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +30,7 @@ public class Controller {
 		this.utentiRegistrati = utentiRegistrati;
 
 	}
-	public void apriConnessioneDatabase() throws Exception {
+	public void apriConnessioneDatabase() throws SQLException {
 		ConnessioneDatabase.getInstance();
 	}
 /// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
@@ -88,7 +90,7 @@ public class Controller {
             // Carica le richieste in attesa così il responsabile le vede in GUI
             String erroreRichieste = caricaRichiesteResponsabileDaDB();
             if (erroreRichieste != null)
-                logger.info("Errore caricamento richieste: " + erroreRichieste);
+                logger.info("Errore caricamento richieste: "+ erroreRichieste);
             return true;
         }
         return false;
@@ -197,7 +199,7 @@ public class Controller {
 	}
 	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
 	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-	///@return Restituisce una {@code String} o {@code null}
+	///@Returns Restituisce una {@code String} o {@code null}
 	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
@@ -279,7 +281,7 @@ public class Controller {
 			List<Vincolo> vincoli= new ArrayList<>(docente.getVincoli());
 			Vincolo v= vincoli.get(ind);
 			//rimozioni attraverso db
-			vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.orario.getGiorno(),v.orario.getOraInizio(),v.orario.getMinutoInizio(),v.orario.getOraFine(),v.orario.getMinutoFine());
+			vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.getOrario().getGiorno(),v.getOrario().getOraInizio(),v.getOrario().getMinutoInizio(),v.getOrario().getOraFine(),v.getOrario().getMinutoFine());
 			docente.rimuoviVincolo(ind);}
 		catch (Exception e){
 			return e.getMessage();
@@ -294,7 +296,7 @@ public class Controller {
 
 		Object[][] data = new Object[v.size()][1];
 		for (int i = 0; i < v.size(); i++) {
-			data[i][0] = v.get(i).orario.getGiorno() + " " + v.get(i).orario.getOrarioCompleto();
+			data[i][0] = v.get(i).getOrario().getGiorno() + " " + v.get(i).getOrario().getOrarioCompleto();
 		}
 		return data;
 	}
