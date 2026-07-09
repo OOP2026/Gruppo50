@@ -181,7 +181,7 @@ public class  Controller {
 		//    tabella aula, conflitto rilevato dal trigger del DB) la lezione resta
 		//    solo in memoria e l'errore viene segnalato a console.
 		try {
-			LezioneDAO lezioneDAO = new LezionePostgresDao();
+			LezioneDAO lezioneDAO= new LezionePostgresDao();
 			lezioneDAO.salvaLezioneDB(
 					nomeInsegnamento, annoCorso,
 					emailDocente,
