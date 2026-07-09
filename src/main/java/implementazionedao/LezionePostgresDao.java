@@ -1,4 +1,4 @@
-package ImplementazioneDao;
+package implementazionedao;
 
 import dao.LezioneDAO;
 import database_connection.ConnessioneDatabase;
