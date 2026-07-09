@@ -199,7 +199,7 @@ public class Controller {
 	}
 	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
 	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-	///@Returns Restituisce una {@code String} o {@code null}
+	///@Returns Restituisce una Strinra o null
 	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
