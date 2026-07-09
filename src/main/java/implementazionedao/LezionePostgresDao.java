@@ -26,9 +26,9 @@ public class LezionePostgresDao implements LezioneDAO {
     /**
      * Nel costruttore si ottiene la connessione dal singleton.
      *
-     * @throws Exception se la connessione al database fallisce
+     * @throws SQLException se la connessione al database fallisce
      */
-    public LezionePostgresDao() throws Exception {
+    public LezionePostgresDao() throws SQLException {
         connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
@@ -36,7 +36,7 @@ public class LezionePostgresDao implements LezioneDAO {
     public void salvaLezioneDB(String nomeInsegnamento, int annoCorso,
                                String emailDocente,
                                String nomeAula,
-                               String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws Exception {
+                               String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws SQLException {
         String sql = "INSERT INTO lezione " +
                 "(nomecorso, annocorso, emaildocente, nomeaula, " +
                 " giorno, orainizio, minutoinizio, orafine, minutofine) " +
@@ -54,7 +54,7 @@ public class LezionePostgresDao implements LezioneDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             // Es. violazione del vincolo UNIQUE: lezione già presente in quello slot/aula.
-            throw new Exception("Impossibile salvare la lezione sul database: " + e.getMessage());
+            throw new SQLException("Impossibile salvare la lezione sul database: " + e.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class LezionePostgresDao implements LezioneDAO {
                                ArrayList<String> emailDocente,
                                ArrayList<String> nomeAula,
                                ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                               ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception {
+                               ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException {
         String sql = "SELECT nomecorso, annocorso, emaildocente, nomeaula, " +
                 "giorno, orainizio, minutoinizio, orafine, minutofine " +
                 "FROM lezione WHERE annocorso = ?";
@@ -83,7 +83,7 @@ public class LezionePostgresDao implements LezioneDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new Exception("Impossibile leggere le lezioni dal database: " + e.getMessage());
+            throw new SQLException("Impossibile leggere le lezioni dal database: " + e.getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ public class LezionePostgresDao implements LezioneDAO {
                                     ArrayList<String> emailDocente,
                                     ArrayList<String> nomeAula,
                                     ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                                    ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws Exception {
+                                    ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException {
         String sql = "SELECT nomecorso, annocorso, emaildocente, nomeaula, " +
                 "giorno, orainizio, minutoinizio, orafine, minutofine " +
                 "FROM lezione";
@@ -111,7 +111,7 @@ public class LezionePostgresDao implements LezioneDAO {
                 minutoFine.add(rs.getInt("minutofine"));
             }
         } catch (SQLException e) {
-            throw new Exception("Impossibile leggere tutte le lezioni dal database: " + e.getMessage());
+            throw new SQLException("Impossibile leggere tutte le lezioni dal database: " + e.getMessage());
         }
     }
 }

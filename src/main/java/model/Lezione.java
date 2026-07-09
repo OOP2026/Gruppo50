@@ -97,7 +97,7 @@ public void setInsegnamento(Insegnamento i){
      * gli stessi campi usati nel confronto di uguaglianza.
      * </p>
      *
-     * @return l'hash code della lezione
+     * @Returns l'hash code della lezione
      */
     @Override
     public int hashCode() {
