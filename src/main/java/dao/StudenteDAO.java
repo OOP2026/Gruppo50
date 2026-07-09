@@ -1,4 +1,5 @@
 package dao;
+import java.sql.SQLException;
 import java.util.ArrayList;
 /**
  * Interfaccia DAO per gli studenti, memorizzati nella tabella unica
@@ -24,22 +25,22 @@ public interface StudenteDAO {
      * @param matricola la matricola univoca dello studente.
      * @param annoCorso l'anno di corso (1-3).
      */
-    void salvaStudenteDB(String nome, String cognome, String email,
-                         String login, String password,String matricola, int annoCorso)throws Exception;
+     void salvaStudenteDB(String nome, String cognome, String email,
+                          String login, String password,String matricola, int annoCorso) throws SQLException;
 
     /**Recupera i dati di tutti gli studenti registrati.
      * Le liste passate come parametro vengono riempite in modo parallelo
      * (stesso indice = stesso studente).
      */
     void leggiStudenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
-                         ArrayList<String> login, ArrayList<String> password,ArrayList<String> matricola,ArrayList<Integer> annoCorso)throws Exception;
+                         ArrayList<String> login, ArrayList<String> password,ArrayList<String> matricola,ArrayList<Integer> annoCorso) throws SQLException;
 
     /**Genera la prossima matricola univoca basandosi sui dati presenti nel
      * database (matricola massima + 1), così da evitare collisioni con
      * studenti registrati in sessioni precedenti.
      * @return la nuova matricola nel formato {@code "DE00000001"}.
      */
-    String generaMatricolaDB() throws Exception;
+    String generaMatricolaDB() throws SQLException;
 
 }
 

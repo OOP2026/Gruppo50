@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -40,11 +41,11 @@ public interface RichiestaDAO {
      * @throws Exception se la scrittura sul database fallisce (ad es. FK
      *                   inesistente o violazione di un CHECK sugli orari)
      */
-    int salvaRichiestaDB(String emailDocente, String emailResponsabile, String motivo,
+     int salvaRichiestaDB(String emailDocente, String emailResponsabile, String motivo,
                          String giornoIniziale, int oraInizioIniziale, int minutoInizioIniziale,
                          int oraFineIniziale, int minutoFineIniziale,
                          String giornoProposto, int oraInizioProposto, int minutoInizioProposto,
-                         int oraFineProposto, int minutoFineProposto) throws Exception;
+                         int oraFineProposto, int minutoFineProposto) throws SQLException;
 
     /**
      * Legge dal database tutte le richieste inviate da un dato docente. I
@@ -68,7 +69,7 @@ public interface RichiestaDAO {
      * @param stato                 lista in cui inserire gli stati delle richieste
      * @throws Exception se la lettura dal database fallisce
      */
-    void leggiRichiesteDocenteDB(String emailDocente,
+     void leggiRichiesteDocenteDB(String emailDocente,
                                  ArrayList<Integer> id,
                                  ArrayList<String> emailResponsabile,
                                  ArrayList<String> motivo,
@@ -77,8 +78,8 @@ public interface RichiestaDAO {
                                  ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                  ArrayList<String> giornoProposto,
                                  ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                 ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
-                                 ArrayList<String> stato) throws Exception;
+                                  ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
+                                  ArrayList<String> stato) throws SQLException;
 
 
 
@@ -104,7 +105,7 @@ public interface RichiestaDAO {
      * @param minutoFineProposto    lista in cui inserire i minuti di fine proposti
      * @throws Exception se la lettura dal database fallisce
      */
-    void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
+     void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
                                   ArrayList<String> emailDocente,
                                   ArrayList<String> emailResponsabile,
                                   ArrayList<String> motivo,
@@ -113,7 +114,7 @@ public interface RichiestaDAO {
                                   ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                   ArrayList<String> giornoProposto,
                                   ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                  ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws Exception;
+                                   ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException;
 
     /**
      * Aggiorna lo stato di una richiesta (tipicamente quando il responsabile la
@@ -123,7 +124,7 @@ public interface RichiestaDAO {
      * @param nuovoStato  nuovo stato: {@code 'IN_ATTESA'}, {@code 'APPROVATA'} o {@code 'RIFIUTATA'}
      * @throws Exception se l'aggiornamento fallisce (ad es. stato non ammesso dal CHECK)
      */
-    void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws Exception;
+    void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws SQLException;
 
     /**
      * Aggiorna l'orario proposto di una richiesta ancora in attesa (usato quando
@@ -139,5 +140,5 @@ public interface RichiestaDAO {
      */
     void aggiornaOrarioPropostoDB(int idRichiesta, String giornoProposto,
                                   int oraInizioProposto, int minutoInizioProposto,
-                                  int oraFineProposto, int minutoFineProposto) throws Exception;
+                                  int oraFineProposto, int minutoFineProposto) throws SQLException;
 }

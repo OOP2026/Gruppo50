@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.SQLException;
+
 public interface VincoloDAO {
     /**
      * Permette di salvare un vincolo nel database
@@ -10,12 +12,12 @@ public interface VincoloDAO {
      * @param oraFine l'ora di fine del vincolo
      * @param minutoFine il minuto di fine del vincolo
      */
-    void salvaVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws Exception;
+    void salvaVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws SQLException;
 
     /**
      * Restituisce un array che contiene i vincoli all'interno del database
      * @return {@code Object[][]}
      */
-    Object[][] caricaVincoliDB(String emailDocente) throws Exception;
-    void rimuoviVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws Exception;
+    Object[][] caricaVincoliDB(String emailDocente) throws SQLException;
+    void rimuoviVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInizio, int oraFine, int minutoFine) throws SQLException;
 }

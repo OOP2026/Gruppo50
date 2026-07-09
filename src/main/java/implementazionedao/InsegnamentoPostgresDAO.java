@@ -16,7 +16,7 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
     private static final Logger logger = Logger.getLogger(InsegnamentoPostgresDAO.class.getName());
 
 
-    public InsegnamentoPostgresDAO() throws Exception {
+    public InsegnamentoPostgresDAO() throws SQLException {
         connection = ConnessioneDatabase.getInstance().getConnection();
     }
 
@@ -51,7 +51,7 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
     }
 
     @Override
-    public void salvaInsegnamento(String nome, int annoCorso, int cfu) throws Exception {
+    public void salvaInsegnamento(String nome, int annoCorso, int cfu) throws SQLException {
         // Implementazione per salvare il vincolo nel database PostgreSQL
         String sql = "INSERT INTO insegnamento (nomecorso,cfu,annocorso) " +
                 "VALUES (?,?,?)";
@@ -62,7 +62,7 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new Exception("Impossibile caricare l'insegnamento nel DataBase: " + e.getMessage());
+            throw new SQLException("Impossibile caricare l'insegnamento nel DataBase: " + e.getMessage());
         }
     }
 

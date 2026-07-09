@@ -2,6 +2,7 @@ package implementazionedao;
 
 import dao.StudenteDAO;
 import dao.UtenteDAO;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -24,9 +25,9 @@ public class StudentePostgresDao implements StudenteDAO {
      * Nel costruttore si crea il DAO della tabella utente a cui delegare
      * le operazioni (che a sua volta ottiene la connessione dal singleton).
      *
-     * @throws Exception se la connessione al database fallisce
+     * @throws SQLException se la connessione al database fallisce
      */
-    public StudentePostgresDao() throws Exception {
+    public StudentePostgresDao() throws SQLException {
         utenteDao = new UtentePostgresDao();
     }
 
@@ -42,10 +43,10 @@ public class StudentePostgresDao implements StudenteDAO {
      * @param password  password segreta dello studente per accedere.
      * @param matricola la matricola univoca dello studente.
      * @param annoCorso l'anno di corso (1-3).
-     * @throws Exception Sql Exception se la scrittura al DB fallisce.
+     * @throws SQLException Sql Exception se la scrittura al DB fallisce.
      */
     @Override
-    public void salvaStudenteDB(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) throws Exception {
+    public void salvaStudenteDB(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) throws SQLException {
         utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, annoCorso);
     }
 
@@ -61,10 +62,10 @@ public class StudentePostgresDao implements StudenteDAO {
      * @param password  la lista in cui verranno aggiunte le password degli studenti recuperati.
      * @param matricola la lista in cui verranno aggiunte le matricole degli studenti recuperati.
      * @param annoCorso la lista in cui verranno aggiunti gli anni di corso degli studenti recuperati.
-     * @throws Exception se si verifica un errore SQL durante l'accesso al database o durante la lettura dei dati.
+     * @throws SQLException se si verifica un errore SQL durante l'accesso al database o durante la lettura dei dati.
      */
     @Override
-    public void leggiStudenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password, ArrayList<String> matricola, ArrayList<Integer> annoCorso) throws Exception {
+    public void leggiStudenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password, ArrayList<String> matricola, ArrayList<Integer> annoCorso) throws SQLException {
         ArrayList<String> nomi = new ArrayList<>();
         ArrayList<String> cognomi = new ArrayList<>();
         ArrayList<String> emails = new ArrayList<>();
@@ -96,10 +97,10 @@ public class StudentePostgresDao implements StudenteDAO {
      * "utente" e incrementata di uno.
      *
      * @return la nuova matricola generata nel formato con prefisso "DE" e 8 cifre numeriche (es. {@code "DE00000001"}).
-     * @throws Exception se si verifica un errore SQL durante la lettura del valore massimo o l'accesso al database.
+     * @throws SQLException se si verifica un errore SQL durante la lettura del valore massimo o l'accesso al database.
      */
     @Override
-    public String generaMatricolaDB() throws Exception {
+    public String generaMatricolaDB() throws SQLException {
         return utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
     }
 }

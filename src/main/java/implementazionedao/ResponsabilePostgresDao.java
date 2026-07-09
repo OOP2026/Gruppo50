@@ -28,9 +28,9 @@ public class ResponsabilePostgresDao implements ResponsabileDAO {
      * Nel costruttore si crea il DAO della tabella utente a cui delegare
      * le operazioni (che a sua volta ottiene la connessione dal singleton).
      *
-     * @throws Exception se la connessione al database fallisce
+     * @throws java.sql.SQLException se la connessione al database fallisce
      */
-    public ResponsabilePostgresDao() throws Exception {
+    public ResponsabilePostgresDao() throws java.sql.SQLException {
         utenteDao = new UtentePostgresDao();
     }
 
@@ -45,10 +45,10 @@ public class ResponsabilePostgresDao implements ResponsabileDAO {
      * @param email    l'email del Responsabile.
      * @param login    username con cui accede il Responsabile al sistema.
      * @param password password segreta del Responsabile per accedere.
-     * @throws Exception Throws exception quando la scrittura nel database non va a buon fine.
+     * @throws java.sql.SQLException Throws exception quando la scrittura nel database non va a buon fine.
      */
     @Override
-    public void salvaResponsabileDB(String nome, String cognome, String email, String login, String password) throws Exception {
+    public void salvaResponsabileDB(String nome, String cognome, String email, String login, String password) throws java.sql.SQLException {
         String matricola = utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
         utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null);
     }
@@ -62,10 +62,10 @@ public class ResponsabilePostgresDao implements ResponsabileDAO {
      * @param email la lista delle email dei responsabili presenti nel db.
      * @param login la lista degli username dei responsabili presenti nel db.
      * @param password la lista delle password dei responsabili presenti nel db.
-     * @throws Exception Throws exception quando la lettura nel database non va a buon fine.
+     * @throws java.sql.SQLException Throws exception quando la lettura nel database non va a buon fine.
      */
     @Override
-    public void leggiResponsabileDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws Exception {
+    public void leggiResponsabileDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws java.sql.SQLException {
         ArrayList<String> nomi = new ArrayList<>();
         ArrayList<String> cognomi = new ArrayList<>();
         ArrayList<String> emails = new ArrayList<>();
