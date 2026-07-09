@@ -202,6 +202,9 @@ public class OrarioLezioni {
      * @return true se c'è uno scontro di orario, false altrimenti
      */
     private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente){
+       if(!l.getOrario().getGiorno().equalsIgnoreCase(lezioneGiaPresente.getOrario().getGiorno())){
+           return false;
+           }
         int inizioNuovo = l.getOrario().getOrarioInizioInMinuti();
         int fineNuovo = l.getOrario().getOrarioFineInMinuti();
 
@@ -219,12 +222,12 @@ public class OrarioLezioni {
     private boolean controlloConflittoLezione(Lezione l){
         for (Lezione lf : orariolezioni) {
             boolean conflittoOrario= controlloConflittoOrario(l,lf);
-            if ((lf.getOrario().getGiorno().equals(l.getOrario().getGiorno()))) {
+
                 if(conflittoOrario){
                     if(l.getAula().getNome().equals(lf.getAula().getNome())) return true;
                     if(l.getInsegnamento().getDocente().equals(lf.getInsegnamento().getDocente())) return true;
 
-                }
+
 
             }
         }
