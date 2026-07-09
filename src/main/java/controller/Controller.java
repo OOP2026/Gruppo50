@@ -89,8 +89,10 @@ public class Controller {
             }
             // Carica le richieste in attesa così il responsabile le vede in GUI
             String erroreRichieste = caricaRichiesteResponsabileDaDB();
-            if (erroreRichieste != null)
-                logger.info("Errore caricamento richieste: "+ erroreRichieste);
+            if (erroreRichieste != null){
+                String errore= "Errore caricamento richieste: "+ erroreRichieste;
+                logger.info(errore);
+            }
             return true;
         }
         return false;
