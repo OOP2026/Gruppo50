@@ -122,7 +122,7 @@ dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
 
         return true;
     }
-    /// Carica tutti Action Listener
+    /** Carica tutti Action Listener */
     private void caricaEvents() {
         indietroButton.addActionListener(e -> {
             frame.setVisible(false);
@@ -195,7 +195,7 @@ dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
             table.getSelectionModel().clearSelection();
         });
     }
-///Reseta i campi
+    /** Reseta i campi */
     private void resetCampi() {
         oraIniziaLezioneText.setText("");
         minutiIniziaLezioneText.setText("");
@@ -210,7 +210,9 @@ dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
         giorniNuoviBox.setSelectedIndex(0);
     }
 
-  ///Imposta il limite massimo di caratteri che si possono scrivere nel panel motivo
+    /**
+     * Imposta il limite massimo di caratteri che si possono scrivere nel panel motivo
+     */
     private void impostaLimiteCaratteri(JTextArea areaText,int limiteCaratteri) {
         //ottiene il documento di motivoText per applicare il filtro
         AbstractDocument doc = (AbstractDocument) areaText.getDocument();
@@ -240,7 +242,7 @@ dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
 
         });
     }
-///Genera le colonne della tabella e la riempie con i dati
+    /** Genera le colonne della tabella e la riempie con i dati */
     private void creaTableRichiesta(){
         Object[][] data=controller.ottieniRichiesteInviate();
         table.setModel(new DefaultTableModel(data,

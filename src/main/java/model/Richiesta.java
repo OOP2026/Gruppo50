@@ -57,7 +57,9 @@ public class Richiesta{
     public void caricaStatoDaDB(String stato){
         this.statoRichiesta = StatoRichiesta.valueOf(stato);
     }
-    ///Questo metodo a come scopo quello di individuare la lezione a cui si riferisce la richiesta
+    /**
+     * Questo metodo a come scopo quello di individuare la lezione a cui si riferisce la richiesta
+     */
     public boolean equalsLezione(Lezione l){
         return this.docenteRichiedente.email.equals(l.getInsegnamento().getDocente().email) &&
                 this.orarioLezioneDaSpostare.equals(l.getOrario());

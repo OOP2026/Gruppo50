@@ -130,8 +130,10 @@ public class CrealezioneDialog {
         //rimette il testo scritto dall'utente nella textfield della combobox
         textComboBoxIns.setText(materia);
     }
-    /// Restituisce la JTextField dell'editor della JComboBox 'nomeInsField'.
-    /// @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
+    /**
+     * Restituisce la JTextField dell'editor della JComboBox 'nomeInsField'.
+     * @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
+     */
     public JTextField textFieldComboBoxIns() {
         if(nomeInsField == null) {
             throw new NullPointerException("nomeInsField è null");
@@ -176,8 +178,10 @@ public class CrealezioneDialog {
         //Rimette il testo digitato dall'utente nella textfield della ComboBox
         textComboBoxAula.setText(nomeAula);
     }
-    /// Restituisce la JTextField dell'editor della JComboBox 'nomeAulaField'.
-    /// @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
+    /**
+     * Restituisce la JTextField dell'editor della JComboBox 'nomeAulaField'.
+     * @throws IllegalStateException se l'editor non è un JTextField, indicando che la JComboBox non è editabile.
+     */
     public JTextField textFieldComboBoxAula() {
         if(nomeAulaField == null) {
             throw new NullPointerException("nomeAulaField è null");

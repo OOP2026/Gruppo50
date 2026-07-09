@@ -173,20 +173,26 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
     }
     return null;
  }
-    ///Carica nel responsabile le richieste di spostamento lette dal database,
-    ///sostituendo quelle in memoria
+    /**
+     * Carica nel responsabile le richieste di spostamento lette dal database,
+     * sostituendo quelle in memoria
+     */
     public void caricaRichiesteSpostamento(List<Richiesta> richiesteDaCaricare){
         richiesteSpostamento = new ArrayList<>(richiesteDaCaricare);
     }
 
 
-    /// Restituisce la lista non modificabile delle richieste di spostamento
-     /// ricevute da questo responsabile.
-     public java.util.List<Richiesta> getRichiesteSpostamento() {
+    /**
+     * Restituisce la lista non modificabile delle richieste di spostamento
+     * ricevute da questo responsabile.
+     */
+      public java.util.List<Richiesta> getRichiesteSpostamento() {
         return java.util.Collections.unmodifiableList(richiesteSpostamento);
     }
 
-    ///Metodo di appoggio per il controller per ottenere il valore della richiesta come stringa
+    /**
+     * Metodo di appoggio per il controller per ottenere il valore della richiesta come stringa
+     */
     public String getStatoRichiesta(int numeroRichiesta) {
         if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
             return null;
@@ -194,7 +200,9 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
         return richiesteSpostamento.get(numeroRichiesta).getStatoRichiesta().name();
     }
 
-    ///Verifica che una richiesta sia ancora in attesa utilizzato dal controller
+    /**
+     * Verifica che una richiesta sia ancora in attesa utilizzato dal controller
+     */
     public boolean isRichiestaInAttesa(int numeroRichiesta) {
         if (numeroRichiesta < 0 || numeroRichiesta >= richiesteSpostamento.size()) {
             return false;
@@ -202,7 +210,7 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
         return richiesteSpostamento.get(numeroRichiesta).getStatoRichiesta() == StatoRichiesta.IN_ATTESA;
     }
 
-    /// Il token serve per usare alcuni metodi che solo il responsabile puo usare
+    /** Il token serve per usare alcuni metodi che solo il responsabile puo usare */
 public class Token {
     private Token() {
 

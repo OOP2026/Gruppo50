@@ -199,7 +199,7 @@ public class Controller {
 	}
 	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
 	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-	///@Returns Restituisce una Strinra o null
+	///@Returns Restituisce una {@code String} o {@code null}
 	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
@@ -289,8 +289,10 @@ public class Controller {
 		return null;
 	}
 
-	///Un metodo che permette di ottenere i {@link Vincolo vincoli} del docente
-	/// @return Restituisce un array di tipo {@code Object[][]}
+	/**
+	 * Un metodo che permette di ottenere i {@link Vincolo vincoli} del docente
+	 * @return Restituisce un array di tipo {@code Object[][]}
+	 */
 	public Object[][] ottieniVincoli() {
 		List<Vincolo> v = docente.getVincoli();
 
