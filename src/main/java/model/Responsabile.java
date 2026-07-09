@@ -151,12 +151,12 @@ richiesta.setNuovoOrarioLezione(orarioNuovo);
 private boolean verificaDisponibilita(List<Vincolo> vincoli, Orario orario){
     if(vincoli.isEmpty()) return true;
 for(Vincolo vincolo:vincoli) {
-    int orarioInizioVincolo = vincolo.orario.getOrarioInizioInMinuti();
-    int orarioFineVincolo = vincolo.orario.getOrarioFineInMinuti();
+    int orarioInizioVincolo = vincolo.getOrario().getOrarioInizioInMinuti();
+    int orarioFineVincolo = vincolo.getOrario().getOrarioFineInMinuti();
     int orarioInizioLezione = orario.getOrarioInizioInMinuti();
     int orarioFineLezione = orario.getOrarioFineInMinuti();
     logger.info("Sto confrontando i giorni");
-    if (!vincolo.orario.getGiorno().equals(orario.getGiorno())) {
+    if (!vincolo.getOrario().getGiorno().equals(orario.getGiorno())) {
         logger.info("Giorni diversi");
         continue;
     }

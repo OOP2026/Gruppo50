@@ -11,8 +11,8 @@ public class SchermataDocente {
     private JButton gestioneVincoliButton;
     private JButton insegnamentiButton;
     private JButton logoutButton;
-    final private Controller controller;
-    final private JFrame frameChiamante;
+    private final Controller controller;
+    private final JFrame frameChiamante;
     public SchermataDocente(Controller c,JFrame f) {
         controller=c;
         frameChiamante=f;

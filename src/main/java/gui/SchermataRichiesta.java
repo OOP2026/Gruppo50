@@ -32,7 +32,7 @@ public class SchermataRichiesta {
     private JButton indietroButton;
     private JTextArea motivoText;
     private JTextField oraIniziaNuovaText;
-    private JScrollPane Scroller;
+    private JScrollPane scrollerTable;
     private JTable table;
     JFrame frameChiamante;
     Controller controller;
@@ -46,13 +46,13 @@ public class SchermataRichiesta {
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
         //Controllo che il pannello per scrollare le richieste si generi corettamente
-        JScrollPane scroller = Scroller;
+        JScrollPane scroller = scrollerTable;
         if (scroller != null) {
             scroller.setPreferredSize(new Dimension(1000, -1));
         }
 
         // Diciamo a SonarQube in modo esplicito che i componenti esistono
-        java.util.Objects.requireNonNull(Scroller, "Lo Scroller deve essere inizializzato dal designer").setPreferredSize(new Dimension(1000, -1));
+        java.util.Objects.requireNonNull(scrollerTable, "Lo Scroller deve essere inizializzato dal designer").setPreferredSize(new Dimension(1000, -1));
         java.util.Objects.requireNonNull(table, "La tabella deve essere inizializzata dal designer");
 
         caricaEvents();

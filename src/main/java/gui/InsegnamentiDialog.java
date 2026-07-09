@@ -8,8 +8,8 @@ import javax.swing.table.DefaultTableModel;
 public class InsegnamentiDialog {
     JDialog dialog;
     private JPanel panel1;
-    private JPanel SottoPannello2;
-    private JPanel SottoPannello1;
+    private JPanel sottoPannello2;
+    private JPanel sottoPannello1;
     private JTable tabellaInsegnamenti;
     private JButton chiudiButton;
     private JLabel labelErrore;

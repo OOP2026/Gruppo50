@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class OrarioDocente {
     JFrame frame;
-    final private JFrame frameChiamante;
+    private final JFrame frameChiamante;
     private JPanel panel1;
     private JTable tabellaOrario;
     private JButton indietroButton;

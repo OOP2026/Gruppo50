@@ -25,9 +25,9 @@ public class CrealezioneDialog {
     private JTextField minIField;
     private JTextField oraFField;
     private JTextField minFField;
-    final private JTextField textComboBoxIns;
-    final private JTextField textComboBoxAula;
-    final private Controller controller;
+    private final  JTextField textComboBoxIns;
+    private final JTextField textComboBoxAula;
+    private final  Controller controller;
     private static final Logger logger = Logger.getLogger(CrealezioneDialog.class.getName());
 
     public CrealezioneDialog(Controller controller, JFrame frameChiamante) {

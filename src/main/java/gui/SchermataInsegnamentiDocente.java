@@ -18,8 +18,8 @@ public class SchermataInsegnamentiDocente {
     private JButton indietroButton;
     private JComboBox<String> insegnamentiBox;
     private JPanel panel1;
-   final private Controller controller;
-   final private JFrame frameChiamante;
+   private final Controller controller;
+   private final JFrame frameChiamante;
     public SchermataInsegnamentiDocente(Controller c, JFrame f) {
         controller=c;
         frameChiamante=f;

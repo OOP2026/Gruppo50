@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class Studente extends Utente  {
     private final String matricola;
-    final private int annoCorso;
+    private final int annoCorso;
 
     private static final Logger logger = Logger.getLogger(Studente.class.getName());
 

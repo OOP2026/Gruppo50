@@ -5,32 +5,32 @@ package model;
  */
 public class Aula {
     /** Il nome associato all'aula espresso in lettere es(A1,B1,C1...) */
-    final private String Nome;
+    private final String nome;
     /** Capienza fisica associata all'aula espressa con un valore intero. */
-  final private int Capienza;
+  private final int capienza;
 
 //getter and setter
     public String getNome(){
-        return Nome;
+        return nome;
     }
 
  public int getCapienza(){
-     return Capienza;
+     return capienza;
  }
 
     /**
      * Crea una nuova aula, aula e orario.
      *
-     * @param Nome dell'aula in cui si svolge la lezione
-     * @param Capienza  dell'aula in cui si svolge la lezione
+     * @param nome dell'aula in cui si svolge la lezione
+     * @param capienza  dell'aula in cui si svolge la lezione
      */
-    public Aula(String Nome,int Capienza) {
-        this.Nome=Nome;
-        this.Capienza=Capienza;
+    public Aula(String nome,int capienza) {
+        this.nome=nome;
+        this.capienza=capienza;
     }
 public Aula(Aula a){
-        this.Nome= a.Nome;
-        this.Capienza= a.Capienza;
+        this.nome= a.nome;
+        this.capienza= a.capienza;
 }
     
 }

@@ -2,7 +2,6 @@ package gui;
 
 import controller.Controller;
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class PrimoFrame {
     JFrame frame;

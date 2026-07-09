@@ -1,4 +1,4 @@
-package implementazioneDao;
+package ImplementazioneDao;
 
 import dao.InsegnamentoDAO;
 import database_connection.ConnessioneDatabase;
@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
