@@ -5,7 +5,6 @@ import java.util.function.Predicate;
 import model.Responsabile.Token;
 import java.util.List;
 import java.util.logging.Logger;
-///Rappresenta l'orario delle lezioni, all'interno ci sono tutti le lezioni create
 /**
  * Rappresenta l'orario delle lezioni; all'interno contiene e gestisce
  * tutte le lezioni create all'interno del sistema.
@@ -26,7 +25,6 @@ public class OrarioLezioni {
         orariolezioni=new ArrayList<>();
     }
 
-///Restituisce le lezioni del docente
     /**
      * Restituisce una lista di tutte le lezioni assegnate a un docente
      * @param docente il docente di cui si vogliono cercare le lezioni
@@ -48,9 +46,6 @@ public class OrarioLezioni {
         return lista2;
 
     }
-    ///Il metodo permette di aggiungere una lezione nell'orario
-    ///@param l È un oggetto di tipo {@link Lezione}
-    ///@param token è un oggetto che ha solo un responsabile
     /**
      * Permette di aggiungere una nuova lezione all'orario
      * Solo un Responsabile in possesso del Token valido può eseguire questa operazione.
@@ -94,8 +89,6 @@ public class OrarioLezioni {
         orariolezioni.add(l);
     }
 
-/// Permette di vedere l'orario completo del corso dentro il terminale
-/// solamente il responsabile può farlo
     /**
      * Stampa nel terminale l'orario completo di tutti i corsi.
      * Operazione che solo il Responsabile puó fare.
