@@ -21,19 +21,29 @@ public class  Controller {
 	private Responsabile responsabileTemp;
 	private Docente docente;
 	private Utente utente;
-	///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
+	/**E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati*/
 	private final List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
 	private List<Aula> aule=new ArrayList<>();
+
+	/**
+	 * Costruisce il controller dell'applicazione (pattern BCE).
+	 * @param utentiRegistrati la lista condivisa di tutti gli {@link Utente utenti} registrati,
+	 * che verrà popolata anche dal caricamento dal database al momento del login.
+	 */
 	public Controller(List<Utente> utentiRegistrati) {
 		this.utentiRegistrati = utentiRegistrati;
 
 	}
+	/**
+	 * Apre la connessione al database inizializzando il singleton {@link ConnessioneDatabase}.
+	 * @throws SQLException se la connessione al database non può essere stabilita.
+	 */
 	public void apriConnessioneDatabase() throws SQLException {
 		ConnessioneDatabase.getInstance();
 	}
-	/// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
+	/** Azzera i riferimenti precedenti per evitare bug tra un login e l'altro */
 	public void logout(){
 		//Logout
 		this.studente=null;
@@ -42,6 +52,19 @@ public class  Controller {
 		this.responsabileTemp=null;
 		this.utente= null;
 	}
+	/**
+	 * Esegue il login di un utente a partire dalle credenziali inserite nella GUI.
+	 * <p>
+	 * Prima del controllo delle credenziali carica dal database utenti,
+	 * insegnamenti e lezioni, così da rendere accessibili anche i dati salvati
+	 * nelle sessioni precedenti. Se le credenziali corrispondono a un utente,
+	 * ne identifica il tipo ({@link Studente}, {@link Docente} o
+	 * {@link Responsabile}) e lo imposta come utente loggato.
+	 * </p>
+	 * @param username lo username inserito.
+	 * @param password la password inserita.
+	 * @return {@code true} se il login ha avuto successo, {@code false} altrimenti.
+	 */
 	public boolean accedi(String username, String password) {
 
 		// Carica dal database tutti gli utenti registrati (studenti, docenti e
@@ -69,8 +92,9 @@ public class  Controller {
 		}
 		return false;
 	}
-	/// Questo metodo controlla se l'utente è uno studente
-	/// @return Ritorna un valore booleano
+	/**
+	 * Questo metodo controlla se l'utente è uno studente.
+	 * @return Ritorna un valore booleano.*/
 	public boolean isStudente(Utente u){
 		if (u instanceof Studente) {
 			this.studente = (Studente) u;
@@ -78,8 +102,9 @@ public class  Controller {
 		}
 		return false;
 	}
-	///Questo metodo controlla se l'utente è un responsabile
-	/// @return Ritorna un valore booleano
+	/**
+	 * Questo metodo controlla se l'utente è un responsabile
+	 * @return Ritorna un valore booleano*/
 	public boolean isResponsabile(Utente u){
 		if (u instanceof Responsabile) {
 			this.responsabile = (Responsabile) u;
@@ -97,8 +122,9 @@ public class  Controller {
 		}
 		return false;
 	}
-	///Questo metodo controlla se l'utente è un docente
-	/// @return Ritorna un valore booleano
+	/**
+	 * Questo metodo controlla se l'utente è un docente
+	 * @return Ritorna un valore booleano*/
 	public boolean isDocente(Utente u){
 		if (u instanceof Docente) {
 			this.docente = (Docente) u;
@@ -113,14 +139,18 @@ public class  Controller {
 		return false;
 	}
 
-
+	/**
+	 * Restituisce il ruolo dell'utente attualmente loggato.
+	 * @return {@code "RESPONSABILE"}, {@code "DOCENTE"} o {@code "STUDENTE"};
+	 * {@code null} se nessun utente è loggato.
+	 */
 	public String getRuolo() {
 		if (responsabile != null) return RESPONSABILE_RUOLO;
 		if (docente != null) return DOCENTE_RUOLO;
 		if (studente != null) return STUDENTE_RUOLO;
 		return null;
 	}
-	///Imposta il responsabileTemp che serve per mandare le richieste al responsabile
+	/**Imposta il responsabileTemp che serve per mandare le richieste al responsabile.*/
 	public void putResponsabile(){
 		for (Utente u : utentiRegistrati) {
 			this.utente = u;
@@ -132,8 +162,9 @@ public class  Controller {
 		}
 		responsabileTemp=null;
 	}
-	///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
-	/// @throws NullPointerException
+	/**
+	 * Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
+	 * @throws NullPointerException*/
 	public void checkResponsabileTemp(){
 		if(responsabileTemp==null){
 			throw new NullPointerException("Non è presente ancora un responsabile");
@@ -142,11 +173,26 @@ public class  Controller {
 
 
 
-	//Responsabile rifiuta lo spostamento
-
-
-	//Responsabile crea una lezione
-	//Responsabile crea una lezione
+	/**
+	 * Permette al {@link Responsabile responsabile} di creare una nuova lezione.
+	 * <p>
+	 * L'insegnamento deve già esistere tra quelli registrati (la lezione non ne
+	 * crea uno nuovo) e l'email indicata deve essere quella del docente titolare.
+	 * La lezione viene prima inserita in memoria nel Model (che valida orario e
+	 * disponibilità del docente) e poi salvata sul database; se il salvataggio
+	 * fallisce, la lezione resta solo in memoria e l'errore è segnalato a console.
+	 * </p>
+	 * @param nomeInsegnamento il nome dell'insegnamento registrato a cui associare la lezione.
+	 * @param emailDocente l'email del docente titolare dell'insegnamento.
+	 * @param nomeAula il nome dell'aula in cui si terrà la lezione.
+	 * @param giorno il giorno della settimana della lezione.
+	 * @param oraInizio l'ora di inizio.
+	 * @param minutoInizio il minuto di inizio.
+	 * @param oraFine l'ora di fine.
+	 * @param minutoFine il minuto di fine.
+	 * @return {@code null} se la creazione ha avuto successo, altrimenti una
+	 * {@code String} con il messaggio di errore da mostrare in GUI.
+	 */
 	public String creaLezione(
 			String nomeInsegnamento,
 			String emailDocente,
@@ -203,15 +249,21 @@ public class  Controller {
 
 		return null;
 	}
-	///Permette al docente di aggiungere un Insegnamento che può insegnare
+	/**
+	 * Questo metodo permette al {@link Docente docente} di aggiungere una materia che insegna,
+	 * @param materia serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da aggiungere
+	 * @return Restituisce una {@code String} o {@code null}
+	 */
 	public void addInsegnamentoDocente(String materia){
 
 		docente.addInsegnamento(stringToInsegnamento(materia));
 
 	}
-	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
-	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-	///@Returns Restituisce una {@code String} o {@code null}
+	/**
+	 * Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
+	 * @param materia serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
+	 * @return Restituisce una {@code String} o {@code null}
+	 */
 	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
@@ -220,9 +272,11 @@ public class  Controller {
 		}
 		return null;
 	}
-	///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
-	/// @return Restituisce un oggetto di tipo {@link Insegnamento}
-	/// @param materia è il nome dell'insegnamento
+	/**
+	 * Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
+	 * @param materia materia è il nome dell'insegnamento
+	 * @return Restituisce un oggetto di tipo {@link Insegnamento}
+	 */
 	private Insegnamento stringToInsegnamento(String materia){
 		for(Insegnamento insegnamento:insegnamentiRegistrati){
 			if(insegnamento.getNome().equalsIgnoreCase(materia)){
@@ -231,8 +285,11 @@ public class  Controller {
 		}
 		return null;
 	}
-	///Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
-	///@return Restituisce una lista di tipo {@code String}
+
+	/**
+	 * Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
+	 * @return  Restituisce una lista di tipo {@code String}
+	 */
 	public List<String> getInsegnamentiRegistratiDocente(){
 		List<String> data= new ArrayList<>();
 		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
@@ -458,7 +515,7 @@ public class  Controller {
 	 * indicata. Best-effort: se la richiesta non era mai stata salvata sul DB
 	 * ({@code id < 0}) o l'aggiornamento fallisce, lo stato resta aggiornato solo
 	 * in memoria e l'errore viene segnalato a console.
-	 * @param numeroRichiesta posizione della richiesta nella lista del responsabile
+	 * @param numeroRichiesta posizione della richiesta nella lista del responsabile.
 	 */
 	private void aggiornaStatoRichiestaSuDB(int numeroRichiesta) {
 		try {
@@ -470,8 +527,11 @@ public class  Controller {
 			logger.info("Stato richiesta NON aggiornato sul database: " + e.getMessage());
 		}
 	}
-	/// Restituisce un array che contiene le richieste inviate dal docente
-	/// @return Restituisce un array di tipo {@code Object[][]}
+
+	/**
+	 *  Restituisce un array che contiene le richieste inviate dal docente.
+	 * @return Restituisce un array di tipo {@code Object[][]}.
+	 */
 	public Object[][] ottieniRichiesteInviate() {
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
@@ -483,8 +543,10 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
-	/// @return Ritorna una array di tipo {@code Object[][]}
+	/**
+	 * Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario.
+	 * @return  Ritorna una array di tipo {@code Object[][]}.
+	 */
 	public Object[][] getLezioniDocente() {
 		List<Lezione> l = docente.getLezioni(orarioLezioni);
 
@@ -579,6 +641,10 @@ public class  Controller {
 		utentiRegistrati.add(nuovoUtente);
 		return true;
 	}
+	/**
+	 * Restituisce la matricola dello {@link Studente studente} attualmente loggato.
+	 * @return la matricola dello studente; {@code ""} se nessuno studente è loggato.
+	 */
 	public String getMatricola() {
 		//Condizione che verifica che lo studente non sia null altrimenti restituisce ""
 		if (studente != null) {
@@ -666,8 +732,12 @@ public class  Controller {
 		}
 		return righe;
 	}
-	/// Metodo che utilizza il get richieste di responsabile
-	/// Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
+
+	/**
+	 * Metodo che utilizza il get richieste di responsabile
+	 * Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
+	 * @return richieste in ATTESA per quel responsabile.
+	 */
 	public Object[][] getRichiesteSpostamento() {
 		List<model.Richiesta> lista = responsabile.getRichiesteSpostamento();
 		Object[][] data = new Object[lista.size()][6];
@@ -684,8 +754,12 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
-	/// Approva la richiesta dato il numero di richiesta in input
+	/**
+	 * Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	 *  Approva la richiesta dato il numero di richiesta in input.
+	 * @param numeroRichiesta il numero di richiesta associato.
+	 * @return restituisce null se va tutto bene altrimenti mostra un messaggio di errore.
+	 */
 	public String approvaRichiestaSpostamento(int numeroRichiesta) {
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
@@ -707,8 +781,12 @@ public class  Controller {
 
 		return null; // successo
 	}
-	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
-	/// Rifiuta la richiesta dato il numero di richiesta in input
+
+	/**
+	 * Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	 * Rifiuta la richiesta dato il numero di richiesta in input.
+	 * @param numeroRichiesta il numero di richiesta associato.
+	 */
 	public void rifiutaRichiestaSpostamento(int numeroRichiesta) {
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			return; // già processata o indice non valido
