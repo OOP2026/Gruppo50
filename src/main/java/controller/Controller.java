@@ -315,8 +315,10 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Ritorna gli insegnamenti del docente
-	///@return Restituisce un array di tipo {@code Object[][]}
+	/**
+	 * Ritorna gli insegnamenti del docente.
+	 * @return Restituisce un array di tipo {@code Object[][]}
+	 */
 	public Object[][] getInsegnamentiDocente(){
 		List<Insegnamento> insegnamenti= docente.getInsegnamenti();
 		if(insegnamenti.isEmpty()){ return new Object[0][0];}
@@ -328,9 +330,17 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Permette al docente di aggiungere un {@link Vincolo} max 3.
-	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	///@return Restituisce una {@code String} o {@code null}
+
+	/**
+	 * Permette al docente di aggiungere un {@link Vincolo} max 3.
+	 * Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+	 * @param giorno giorno indicato dal docente in cui non è disponibile.
+	 * @param oraInizio ora di inizio del vincolo indicato dal docente in cui non è disponibile.
+	 * @param minutoInizio minuto di inizio del vincolo indicato dal docente in cui non è disponibile.
+	 * @param oraFine ora di fine del vincolo indicato dal docente in cui non è disponibile.
+	 * @param minutoFine minuto di fine del vincolo indicato dal docente in cui non è disponibile.
+	 * @return Restituisce una {@code String} o {@code null}
+	 */
 	public String aggiungiVincolo(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 		try{
 			VincoloDAO vincoloDAO= new VincoloPostgresDao();
@@ -341,9 +351,12 @@ public class  Controller {
 		}
 		return null;
 	}
-	///Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere
-	/// @return Restituisce una {@code String} o {@code null}
-	/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
+
+	/**
+	 * Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere.
+	 * @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente.
+	 * @return  Restituisce una {@code String} o {@code null}.
+	 */
 	public String rimuoviVincolo(int ind) {
 		try{
 			VincoloDAO vincoloDAO= new VincoloPostgresDao();
@@ -391,7 +404,7 @@ public class  Controller {
 		return null;
 	}
 
-	///Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario
+	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
 		checkResponsabileTemp();
@@ -690,6 +703,20 @@ public class  Controller {
 		}
 		return mappa;
 	}
+	/**
+	 * Permette al {@link Responsabile responsabile} di registrare un nuovo insegnamento.
+	 * <p>
+	 * Il docente titolare viene cercato per email tra gli utenti registrati;
+	 * se l'insegnamento non è già presente viene aggiunto alla lista in memoria
+	 * e salvato sul database tramite {@link InsegnamentoDAO}.
+	 * </p>
+	 * @param nome il nome dell'insegnamento.
+	 * @param cfu il numero di crediti formativi.
+	 * @param annoCorso l'anno di corso in cui viene insegnato.
+	 * @param emailDocente l'email del docente titolare.
+	 * @return {@code null} se la registrazione ha avuto successo, altrimenti una
+	 * {@code String} con il messaggio di errore da mostrare in GUI.
+	 */
 	public String registraInsegnamento(String nome, int cfu, int annoCorso, String emailDocente) {
 		Docente docenteTrovato = null;
 		for (Utente u : utentiRegistrati) {
@@ -795,6 +822,17 @@ public class  Controller {
 		// Persiste lo stato RIFIUTATA sul database
 		aggiornaStatoRichiestaSuDB(numeroRichiesta);
 	}
+	/**
+	 * Carica dal database tutte le lezioni salvate e ricostruisce l'orario in
+	 * memoria, cosi' che vengano visualizzate anche nelle sessioni successive
+	 * (in particolare dai docenti). Viene invocato al login, dopo il caricamento
+	 * degli utenti: per ogni lezione letta si ricerca il docente titolare tra
+	 * gli utenti registrati e si ricostruiscono Insegnamento, Aula e Orario.
+	 * L'orario viene ricostruito da zero a ogni login per riflettere fedelmente
+	 * il database ed evitare lezioni duplicate. Eventuali errori del database
+	 * vengono segnalati a console senza interrompere il login; in tal caso
+	 * l'orario in memoria resta invariato.
+	 */
 	public String modificaOrarioRichiesta(
 			int numeroRichiesta, String giorno, int oraInizio, int minutoInizio,  int oraFine, int minutoFine){
 
@@ -823,16 +861,6 @@ public class  Controller {
 			return e.getMessage();
 		}
 	}
-
-	/** <p>Legge tutti gli utenti dal database tramite {@link UtenteDAO} (unico
-	 * metodo di caricamento: la tabella {@code utente} contiene studenti, docenti
-	 * e responsabili) e li aggiunge alla lista {@code utentiRegistrati}, evitando
-	 * duplicati (confronto per email). In base alla colonna {@code ruolo} viene
-	 * istanziata la classe corretta del Model. Per docenti e responsabili la
-	 * matricola letta dal database viene ignorata: per il momento non viene
-	 * visualizzata a schermo. Eventuali errori del database vengono segnalati a
-	 * console senza interrompere il login degli utenti già presenti in memoria.</p>
-	 */
 	/**
 	 * Carica dal database tutte le lezioni salvate e ricostruisce l'orario in
 	 * memoria, cosi' che vengano visualizzate anche nelle sessioni successive
@@ -893,7 +921,15 @@ public class  Controller {
 		}
 		return new Docente("", "", email, "", "");
 	}
-
+	/** <p>Legge tutti gli utenti dal database tramite {@link UtenteDAO} (unico
+	 * metodo di caricamento: la tabella {@code utente} contiene studenti, docenti
+	 * e responsabili) e li aggiunge alla lista {@code utentiRegistrati}, evitando
+	 * duplicati (confronto per email). In base alla colonna {@code ruolo} viene
+	 * istanziata la classe corretta del Model. Per docenti e responsabili la
+	 * matricola letta dal database viene ignorata: per il momento non viene
+	 * visualizzata a schermo. Eventuali errori del database vengono segnalati a
+	 * console senza interrompere il login degli utenti già presenti in memoria.</p>
+	 */
 	private void caricaUtentiDaDB() {
 		try {
 			UtenteDAO utenteDAO = new UtentePostgresDao();
@@ -939,8 +975,12 @@ public class  Controller {
 			logger.info("Errore nel caricamento degli utenti dal database: " + e.getMessage());
 		}
 	}
-
-	//Metodi sulle Aule
+	/**
+	 * Carica dal database tutte le {@link Aula aule} tramite {@link AulaDAO}
+	 * e ricostruisce da zero la lista in memoria {@code aule}, usata dalla GUI
+	 * (es. dialog di creazione lezione) per popolare l'elenco delle aule disponibili.
+	 * @throws SQLException se la lettura dal database fallisce.
+	 */
 	public void caricaAuleDaDB() throws SQLException {
 		AulaPostgresDao aulaDao= new AulaPostgresDao();
 		List<Aula> a=new ArrayList<>();
@@ -952,7 +992,8 @@ public class  Controller {
 		}
 		aule=new ArrayList<>(a);
 	}
-	/**Ritorna le aule  però solo il nome
+	/**
+	 * Ritorna le aule  però solo il nome
 	 *@param nomeAula <p>Se nomeAula è {@code ""} il metodo ritorna tutte le aule,
 	 *se non è vuota ritorna le aule che iniziano con la stringa dentro nomeAula.
 	 *@return Restituisce una lista di tipo {@code String}
@@ -967,16 +1008,6 @@ public class  Controller {
 		}
 		return data;
 	}
-
-	/**
-	 * Cerca tra gli utenti registrati il docente con l'email indicata. Se non
-	 * viene trovato, ne crea uno "leggero" con la sola email valorizzata,
-	 * sufficiente ad associare la lezione al docente corretto in fase di
-	 * visualizzazione.
-	 *
-	 * @param email email del docente titolare della lezione
-	 * @return il {@link Docente} corrispondente all'email
-	 */
 	/**
 	 * Carica dal database tutti gli insegnamenti salvati e li aggiunge alla
 	 * lista in memoria {@code insegnamentiRegistrati}, così che siano visibili
