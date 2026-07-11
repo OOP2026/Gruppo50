@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 
 public class  Controller {
 	private static final Logger logger = Logger.getLogger(Controller.class.getName());
-   private static final String RESPONSABILE_RUOLO= "RESPONSABILE";
-   private static final String STUDENTE_RUOLO="STUDENTE";
-   private static final String DOCENTE_RUOLO="DOCENTE";
+	private static final String RESPONSABILE_RUOLO= "RESPONSABILE";
+	private static final String STUDENTE_RUOLO="STUDENTE";
+	private static final String DOCENTE_RUOLO="DOCENTE";
 	private Studente studente;
 	private Responsabile responsabile;
 	private Responsabile responsabileTemp;
@@ -33,7 +33,7 @@ public class  Controller {
 	public void apriConnessioneDatabase() throws SQLException {
 		ConnessioneDatabase.getInstance();
 	}
-/// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
+	/// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
 	public void logout(){
 		//Logout
 		this.studente=null;
@@ -42,76 +42,76 @@ public class  Controller {
 		this.responsabileTemp=null;
 		this.utente= null;
 	}
-    public boolean accedi(String username, String password) {
+	public boolean accedi(String username, String password) {
 
-        // Carica dal database tutti gli utenti registrati (studenti, docenti e
-        // responsabili), così è possibile accedere anche a utenti salvati in
-        // sessioni precedenti (pattern BCE + DAO).
-        caricaUtentiDaDB();
-        caricaLezioniDaDB();
+		// Carica dal database tutti gli utenti registrati (studenti, docenti e
+		// responsabili), così è possibile accedere anche a utenti salvati in
+		// sessioni precedenti (pattern BCE + DAO).
+		caricaUtentiDaDB();
+		caricaLezioniDaDB();
+		caricaInsegnamentiDaDB();
+		for (Utente u : utentiRegistrati) {
+			if (u.login(username, password)) {
+				this.utente = u;
 
-        for (Utente u : utentiRegistrati) {
-            if (u.login(username, password)) {
-                this.utente = u;
-
-                // Identifica il tipo di istanza
-                if(isResponsabile(u)){
-                    return true;
-                }
-                if(isDocente(u)){
-                    return true;
-                }
-                if(isStudente(u)){
-                    return true;
-                }
-                break;
-            }
-        }
-        return false;
-    }
-    /// Questo metodo controlla se l'utente è uno studente
-    /// @return Ritorna un valore booleano
-    public boolean isStudente(Utente u){
-        if (u instanceof Studente) {
-            this.studente = (Studente) u;
-            return true;
-        }
-        return false;
-    }
-    ///Questo metodo controlla se l'utente è un responsabile
-    /// @return Ritorna un valore booleano
-    public boolean isResponsabile(Utente u){
-        if (u instanceof Responsabile) {
-            this.responsabile = (Responsabile) u;
-            try{caricaAuleDaDB(); }
-            catch(Exception e){
-                logger.info("Errore caricamento aule: "+e.getMessage());
-            }
-            // Carica le richieste in attesa così il responsabile le vede in GUI
-            String erroreRichieste = caricaRichiesteResponsabileDaDB();
-            if (erroreRichieste != null){
-                String errore= "Errore caricamento richieste: "+ erroreRichieste;
-                logger.info(errore);
-            }
-            return true;
-        }
-        return false;
-    }
-    ///Questo metodo controlla se l'utente è un docente
-    /// @return Ritorna un valore booleano
-    public boolean isDocente(Utente u){
-        if (u instanceof Docente) {
-            this.docente = (Docente) u;
-            putResponsabile();
-            // Carica le richieste inviate così il docente le vede in GUI
-            String erroreRichieste = caricaRichiesteDocenteDaDB();
-            if (erroreRichieste != null) {
-               String errore ="Errore caricamento richieste: " + erroreRichieste;
-                logger.info(errore);}
-            return true;
-        }
-        return false;
-    }
+				// Identifica il tipo di istanza
+				if(isResponsabile(u)){
+					return true;
+				}
+				if(isDocente(u)){
+					return true;
+				}
+				if(isStudente(u)){
+					return true;
+				}
+				break;
+			}
+		}
+		return false;
+	}
+	/// Questo metodo controlla se l'utente è uno studente
+	/// @return Ritorna un valore booleano
+	public boolean isStudente(Utente u){
+		if (u instanceof Studente) {
+			this.studente = (Studente) u;
+			return true;
+		}
+		return false;
+	}
+	///Questo metodo controlla se l'utente è un responsabile
+	/// @return Ritorna un valore booleano
+	public boolean isResponsabile(Utente u){
+		if (u instanceof Responsabile) {
+			this.responsabile = (Responsabile) u;
+			try{caricaAuleDaDB(); }
+			catch(Exception e){
+				logger.info("Errore caricamento aule: "+e.getMessage());
+			}
+			// Carica le richieste in attesa così il responsabile le vede in GUI
+			String erroreRichieste = caricaRichiesteResponsabileDaDB();
+			if (erroreRichieste != null){
+				String errore= "Errore caricamento richieste: "+ erroreRichieste;
+				logger.info(errore);
+			}
+			return true;
+		}
+		return false;
+	}
+	///Questo metodo controlla se l'utente è un docente
+	/// @return Ritorna un valore booleano
+	public boolean isDocente(Utente u){
+		if (u instanceof Docente) {
+			this.docente = (Docente) u;
+			putResponsabile();
+			// Carica le richieste inviate così il docente le vede in GUI
+			String erroreRichieste = caricaRichiesteDocenteDaDB();
+			if (erroreRichieste != null) {
+				String errore ="Errore caricamento richieste: " + erroreRichieste;
+				logger.info(errore);}
+			return true;
+		}
+		return false;
+	}
 
 
 	public String getRuolo() {
@@ -148,10 +148,16 @@ public class  Controller {
 	//Responsabile crea una lezione
 	//Responsabile crea una lezione
 	public String creaLezione(
-			String nomeInsegnamento, int cfu, int annoCorso,
+			String nomeInsegnamento,
 			String emailDocente,
 			String nomeAula,
 			String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
+		//Verifico che l'insegnamento inserito esista tra quelli registrati (confronto per nome).
+		//La lezione NON crea un nuovo insegnamento: riusa quello già registrato.
+		Insegnamento insegnamento = stringToInsegnamento(nomeInsegnamento);
+		if (insegnamento == null) {
+			return "Errore si sta provando a creare una lezione per un insegnamento non esistente";
+		}
 		//Cerco se il docente a cui il responsabile assegna la lezione esista davvero
 		Docente docenteTrovato = null;
 		for (Utente u : utentiRegistrati) {
@@ -163,11 +169,14 @@ public class  Controller {
 		if (docenteTrovato == null) {
 			return "Nessun docente registrato con questa email.";
 		}
+		//L'email deve essere quella del docente titolare dell'insegnamento registrato
+		if (!insegnamento.getDocente().getmail().equals(emailDocente)) {
+			return "Il docente indicato non è il titolare dell'insegnamento.";
+		}
 
 		// 1) Inserimento in memoria nel Model (valida orario e disponibilità del docente).
 		//    Se questa parte fallisce è un errore vero: si interrompe e si mostra il messaggio.
 		try {
-			Insegnamento insegnamento = new Insegnamento(nomeInsegnamento, cfu, annoCorso, docenteTrovato);
 			Aula aula = new Aula(nomeAula, 200);
 			Orario orario = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 			Lezione lezione = new Lezione(insegnamento, aula, orario);
@@ -184,7 +193,7 @@ public class  Controller {
 		try {
 			LezioneDAO lezioneDAO= new LezionePostgresDao();
 			lezioneDAO.salvaLezioneDB(
-					nomeInsegnamento, annoCorso,
+					insegnamento.getNome(), insegnamento.getAnnoCorso(),
 					emailDocente,
 					nomeAula, giorno,
 					oraInizio, minutoInizio, oraFine, minutoFine);
@@ -267,8 +276,8 @@ public class  Controller {
 	///@return Restituisce una {@code String} o {@code null}
 	public String aggiungiVincolo(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 		try{
-            VincoloDAO vincoloDAO= new VincoloPostgresDao();
-            vincoloDAO.salvaVincoloDB(this.docente.getmail(),giorno,oraInizio,minutoInizio,oraFine,minutoFine);
+			VincoloDAO vincoloDAO= new VincoloPostgresDao();
+			vincoloDAO.salvaVincoloDB(this.docente.getmail(),giorno,oraInizio,minutoInizio,oraFine,minutoFine);
 			docente.aggiungiVincolo(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
 		}catch(Exception e){
 			return e.getMessage();
@@ -630,6 +639,14 @@ public class  Controller {
 			return "Insegnamento già presente.";
 		}
 		insegnamentiRegistrati.add(candidato);
+        InsegnamentoDAO insegnamentoDAO= null;
+        try {
+            insegnamentoDAO = new InsegnamentoPostgresDAO();
+			insegnamentoDAO.salvaInsegnamento(nome,annoCorso,cfu,emailDocente);
+        } catch (SQLException e) {
+			return e.getMessage();
+        }
+
 		return null;
 	}
 
@@ -872,5 +889,48 @@ public class  Controller {
 		}
 		return data;
 	}
-}
 
+	/**
+	 * Cerca tra gli utenti registrati il docente con l'email indicata. Se non
+	 * viene trovato, ne crea uno "leggero" con la sola email valorizzata,
+	 * sufficiente ad associare la lezione al docente corretto in fase di
+	 * visualizzazione.
+	 *
+	 * @param email email del docente titolare della lezione
+	 * @return il {@link Docente} corrispondente all'email
+	 */
+	/**
+	 * Carica dal database tutti gli insegnamenti salvati e li aggiunge alla
+	 * lista in memoria {@code insegnamentiRegistrati}, così che siano visibili
+	 * nella schermata del responsabile (dialog "Insegnamenti Attivi") anche
+	 * nelle sessioni successive a quella in cui sono stati creati.
+	 * <p>
+	 * Viene invocato al login, dopo il caricamento degli utenti: per ogni
+	 * insegnamento letto si ricerca il docente titolare tra gli utenti
+	 * registrati tramite {@link #trovaDocentePerEmail(String)}. Gli
+	 * insegnamenti già presenti in memoria non vengono duplicati. Eventuali
+	 * errori del database vengono segnalati a console senza interrompere il
+	 * login.
+	 */
+	private void caricaInsegnamentiDaDB() {
+		try {
+			InsegnamentoDAO insegnamentoDAO = new InsegnamentoPostgresDAO();
+			for (Object[] riga : insegnamentoDAO.caricaInsegnamentiDB()) {
+				// Ordine colonne restituito dal DAO: nome, cfu, annoCorso, emailDocente
+				String nome = (String) riga[0];
+				int cfu = (int) riga[1];
+				int annoCorso = (int) riga[2];
+				String emailDocente = (String) riga[3];
+
+				Docente docenteTitolare = trovaDocentePerEmail(emailDocente);
+				Insegnamento insegnamento = new Insegnamento(nome, cfu, annoCorso, docenteTitolare);
+				if (!insegnamentiRegistrati.contains(insegnamento)) {
+					insegnamentiRegistrati.add(insegnamento);
+				}
+			}
+		} catch (Exception e) {
+			logger.info("Errore nel caricamento degli insegnamenti dal database: " + e.getMessage());
+		}
+	}
+
+}

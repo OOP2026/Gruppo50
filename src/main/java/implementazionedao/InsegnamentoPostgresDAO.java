@@ -37,7 +37,8 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
                 String nome= rs.getString("nomecorso");
                 int cfu= rs.getInt("cfu");
                 int annoCorso= rs.getInt("annocorso");
-                insegnamenti.add(new Object[]{nome,cfu,annoCorso});
+                String emaildoc= rs.getString("emaildoc");
+                insegnamenti.add(new Object[]{nome,cfu,annoCorso,emaildoc});
             }
             rs.close();
         }catch (SQLException e){
@@ -51,14 +52,15 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
     }
 
     @Override
-    public void salvaInsegnamento(String nome, int annoCorso, int cfu) throws SQLException {
+    public void salvaInsegnamento(String nome, int annoCorso, int cfu, String emailDocente) throws SQLException {
         // Implementazione per salvare il vincolo nel database PostgreSQL
-        String sql = "INSERT INTO insegnamento (nomecorso,cfu,annocorso) " +
-                "VALUES (?,?,?)";
+        String sql = "INSERT INTO insegnamento (nomecorso,cfu,annocorso,emaildoc) " +
+                "VALUES (?,?,?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1,nome);
             ps.setInt(2,cfu);
             ps.setInt(3,annoCorso);
+            ps.setString(4,emailDocente);
 
             ps.executeUpdate();
         } catch (SQLException e) {

@@ -17,8 +17,6 @@ public class CrealezioneDialog {
     private JComboBox<String> giornoCombo;
     private JComboBox<String> nomeInsField;
     private JLabel labelErrore;
-    private JTextField cfuField;
-    private JTextField annoField;
     private JTextField emailDocField;
     private JComboBox<String> nomeAulaField;
     private JTextField oraIField;
@@ -63,8 +61,6 @@ public class CrealezioneDialog {
                 String giorno = (String) giornoCombo.getSelectedItem();
 
                 if (nomeIns.isEmpty() || emailDoc.isEmpty() || nomeAula.isEmpty()
-                        || cfuField.getText().trim().isEmpty()
-                        || annoField.getText().trim().isEmpty()
                         || oraIField.getText().trim().isEmpty()
                         || minIField.getText().trim().isEmpty()
                         || oraFField.getText().trim().isEmpty()
@@ -74,15 +70,13 @@ public class CrealezioneDialog {
                 }
 
                 try {
-                    int cfu = Integer.parseInt(cfuField.getText().trim());
-                    int anno = Integer.parseInt(annoField.getText().trim());
                     int oraI = Integer.parseInt(oraIField.getText().trim());
                     int minI = Integer.parseInt(minIField.getText().trim());
                     int oraF = Integer.parseInt(oraFField.getText().trim());
                     int minF = Integer.parseInt(minFField.getText().trim());
 
                     String errore = controller.creaLezione(
-                            nomeIns, cfu, anno,
+                            nomeIns,
                             emailDoc,
                             nomeAula,
                             giorno, oraI, minI, oraF, minF);
@@ -96,7 +90,7 @@ public class CrealezioneDialog {
                     dialog.dispose();
 
                 } catch (NumberFormatException ex) {
-                    labelErrore.setText("CFU, anno, capienza e orari devono essere numeri interi.");
+                    labelErrore.setText("Gli orari devono essere numeri interi.");
                 }
             });
         }
@@ -118,7 +112,7 @@ public class CrealezioneDialog {
         nomeInsField.repaint();
         //Questo if ha lo scopo di chiudere il popup della JComboBox se è aperto
         // e poi riaprirlo solo se ci sono items da mostrare. Questo evita che il popup rimanga aperto con una lista vuota.
-            if(nomeInsField.isPopupVisible()){
+        if(nomeInsField.isPopupVisible()){
             nomeInsField.setPopupVisible(false);
             if(nomeInsField.getItemCount()>0)
                 nomeInsField.setPopupVisible(true);
@@ -198,22 +192,22 @@ public class CrealezioneDialog {
 
 
     private void caricaEvents() {
-            textComboBoxIns.addKeyListener(new KeyAdapter(){
-                @Override
-                public void keyReleased(KeyEvent e){
-                    String testoAttuale= textComboBoxIns.getText();
-                    caricaInsegnamentiBox(testoAttuale);
-                }
+        textComboBoxIns.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyReleased(KeyEvent e){
+                String testoAttuale= textComboBoxIns.getText();
+                caricaInsegnamentiBox(testoAttuale);
+            }
 
-            });
-            textComboBoxAula.addKeyListener(new KeyAdapter(){
-                @Override
-                public void keyReleased(KeyEvent e){
-                    String testoAttuale= textComboBoxAula.getText();
-                    caricaAuleBox(testoAttuale);
-                }
+        });
+        textComboBoxAula.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyReleased(KeyEvent e){
+                String testoAttuale= textComboBoxAula.getText();
+                caricaAuleBox(testoAttuale);
+            }
 
-            });
+        });
 
 
     }
