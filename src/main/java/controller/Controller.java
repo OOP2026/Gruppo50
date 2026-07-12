@@ -164,7 +164,8 @@ public class  Controller {
 	}
 	/**
 	 * Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
-	 * @throws NullPointerException*/
+	 * @throws NullPointerException quando il responsabileTemp è null viene lanciata l'eccezione per non far crashare il programma.vi
+	 */
 	public void checkResponsabileTemp(){
 		if(responsabileTemp==null){
 			throw new NullPointerException("Non è presente ancora un responsabile");
@@ -252,8 +253,7 @@ public class  Controller {
 	/**
 	 * Questo metodo permette al {@link Docente docente} di aggiungere una materia che insegna,
 	 * @param materia serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da aggiungere
-	 * @return Restituisce una {@code String} o {@code null}
-	 */
+     */
 	public void addInsegnamentoDocente(String materia){
 
 		docente.addInsegnamento(stringToInsegnamento(materia));

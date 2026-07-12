@@ -45,15 +45,19 @@ public class Lezione implements Comparable<Lezione> {
      * @return una stringa con le informazioni principali della lezione
      */
     public String infoLezione(){
-     return "Insegnamento: "+this.insegnamento.getNome()+" Docente: "+this.insegnamento.getDocente().nome+" "+this.insegnamento.getDocente().cognome+" Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
+        return "Insegnamento: "+this.insegnamento.getNome()+" Docente: "+
+                this.insegnamento.getDocente().nome+" "+this.insegnamento.getDocente().cognome+
+                " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
     }
     //Getter and setter
     public Insegnamento getInsegnamento () {
         return new Insegnamento(this.insegnamento);
     }
-public void setInsegnamento(Insegnamento i){
+
+    public void setInsegnamento(Insegnamento i){
         this.insegnamento=i;
 }
+
     public Aula getAula () {
         return new Aula(this.aula);
     }
@@ -96,8 +100,7 @@ public void setInsegnamento(Insegnamento i){
      * È calcolato a partire da insegnamento, orario e nome dell'aula, ovvero
      * gli stessi campi usati nel confronto di uguaglianza.
      * </p>
-     *
-     * @Returns l'hash code della lezione
+     * @return l'hash code della lezione
      */
     @Override
     public int hashCode() {
@@ -110,7 +113,6 @@ public void setInsegnamento(Insegnamento i){
      * L'ordinamento avviene prima per giorno della settimana e, a parità
      * di giorno, per orario di inizio.
      * </p>
-     *
      * @param l la lezione da confrontare con questa
      * @return un valore negativo, zero o positivo se questa lezione precede,
      *         coincide o segue {@code l} nell'ordine cronologico

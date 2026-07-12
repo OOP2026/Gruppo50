@@ -9,14 +9,11 @@ public class Aula {
     /** Capienza fisica associata all'aula espressa con un valore intero. */
   private final int capienza;
 
-//getter and setter
     public String getNome(){
         return nome;
     }
 
- public int getCapienza(){
-     return capienza;
- }
+
 
     /**
      * Crea una nuova aula, aula e orario.
