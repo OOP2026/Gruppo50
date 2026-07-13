@@ -42,6 +42,7 @@ public class SchermataStudente {
 
     private JLabel matricola;
     private JButton indietroButton;
+    private JButton logoutButton;
 
     /** Slot per giorno, in ordine: prima, seconda, terza lezione */
     private JTextArea[][] slotPerGiorno;
@@ -73,6 +74,14 @@ public class SchermataStudente {
                     ta.setText("");
                 }
             }
+        }
+        if(logoutButton != null) {
+            logoutButton.addActionListener(e -> {
+                controller.logout();
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
+            });
         }
 
         // Popola il tabellone con le lezioni esistenti (caricate dal DB al login)
