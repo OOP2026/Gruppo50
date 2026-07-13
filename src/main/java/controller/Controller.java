@@ -22,7 +22,7 @@ public class  Controller {
 	private Responsabile responsabileTemp;
 	private Docente docente;
 	private Utente utente;
-	///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
+	/**E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati.*/
 	private final List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
@@ -43,7 +43,7 @@ public class  Controller {
 	public void apriConnessioneDatabase() throws SQLException {
 		ConnessioneDatabase.getInstance();
 	}
-	/// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
+	/** Azzera i riferimenti precedenti per evitare bug tra un login e l'altro.*/
 	public void logout(){
 		//Logout
 		this.studente=null;
@@ -93,8 +93,10 @@ public class  Controller {
 		}
 		return false;
 	}
-	/// Questo metodo controlla se l'utente è uno studente
-	/// @return Ritorna un valore booleano
+	/**
+	 * Questo metodo controlla se l'utente è uno studente.
+	 * @return  Ritorna un valore booleano.
+	 */
 	public boolean isStudente(Utente u){
 		if (u instanceof Studente) {
 			this.studente = (Studente) u;
@@ -102,8 +104,10 @@ public class  Controller {
 		}
 		return false;
 	}
-	///Questo metodo controlla se l'utente è un responsabile
-	/// @return Ritorna un valore booleano
+	/**
+	 * Questo metodo controlla se l'utente è un responsabile.
+	 * @return Ritorna un valore booleano.
+	 */
 	public boolean isResponsabile(Utente u){
 		if (u instanceof Responsabile) {
 			this.responsabile = (Responsabile) u;
@@ -121,8 +125,10 @@ public class  Controller {
 		}
 		return false;
 	}
-	///Questo metodo controlla se l'utente è un docente
-	/// @return Ritorna un valore booleano
+	/**
+	 * Questo metodo controlla se l'utente è un docente
+	 * @return Ritorna un valore booleano.
+	 */
 	public boolean isDocente(Utente u){
 		if (u instanceof Docente) {
 			this.docente = (Docente) u;
@@ -136,8 +142,6 @@ public class  Controller {
 		}
 		return false;
 	}
-
-
 	/**
 	 * Restituisce il ruolo dell'utente attualmente loggato.
 	 * @return {@code "RESPONSABILE"}, {@code "DOCENTE"} o {@code "STUDENTE"};
@@ -149,7 +153,7 @@ public class  Controller {
 		if (studente != null) return STUDENTE_RUOLO;
 		return null;
 	}
-	///Imposta il responsabileTemp che serve per mandare le richieste al responsabile
+	/**Imposta il responsabileTemp che serve per mandare le richieste al responsabile*/
 	public void putResponsabile(){
 		for (Utente u : utentiRegistrati) {
 			this.utente = u;
@@ -161,8 +165,9 @@ public class  Controller {
 		}
 		responsabileTemp=null;
 	}
-	///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
-	/// @throws NullPointerException
+	/**Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
+	 * @throws NullPointerException se il responsabile è null lancia un eccezione mostrando un errore senza far crushare il programma.
+	 */
 	public void checkResponsabileTemp(){
 		if(responsabileTemp==null){
 			throw new NullPointerException("Non è presente ancora un responsabile");
@@ -250,15 +255,18 @@ public class  Controller {
 
 		return null;
 	}
-	///Permette al docente di aggiungere un Insegnamento che può insegnare
+	/**Permette al docente di aggiungere un Insegnamento che può insegnare*/
 	public void addInsegnamentoDocente(String materia){
 
 		docente.addInsegnamento(stringToInsegnamento(materia));
 
 	}
-	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
-	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-	///@Returns Restituisce una {@code String} o {@code null}
+	/**
+	 * Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
+	 * 	serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere.
+	 * @param materia la materia che il docente preferisce rimuovere dagli insegnamenti.
+	 * @return Restituisce una {@code String} o {@code null}.
+	 */
 	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
@@ -267,9 +275,11 @@ public class  Controller {
 		}
 		return null;
 	}
-	///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
-	/// @return Restituisce un oggetto di tipo {@link Insegnamento}
-	/// @param materia è il nome dell'insegnamento
+	/**
+	 * Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi.
+	 * @param materia è il nome dell'insegnamento.
+	 * @return Restituisce un oggetto di tipo {@link Insegnamento}.
+	 */
 	private Insegnamento stringToInsegnamento(String materia){
 		for(Insegnamento insegnamento:insegnamentiRegistrati){
 			if(insegnamento.getNome().equalsIgnoreCase(materia)){
@@ -278,8 +288,10 @@ public class  Controller {
 		}
 		return null;
 	}
-	///Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
-	///@return Restituisce una lista di tipo {@code String}
+	/**
+	 * Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
+	 * @return Restituisce una lista di tipo {@code String}.
+	 */
 	public List<String> getInsegnamentiRegistratiDocente(){
 		List<String> data= new ArrayList<>();
 		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
@@ -305,8 +317,10 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Ritorna gli insegnamenti del docente
-	///@return Restituisce un array di tipo {@code Object[][]}
+	/**
+	 * Ritorna gli insegnamenti del docente.
+	 * @return Restituisce un array di tipo {@code Object[][]}.
+	 */
 	public Object[][] getInsegnamentiDocente(){
 		List<Insegnamento> insegnamenti= docente.getInsegnamenti();
 		if(insegnamenti.isEmpty()){ return new Object[0][0];}
@@ -318,9 +332,16 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Permette al docente di aggiungere un {@link Vincolo} max 3.
-	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	///@return Restituisce una {@code String} o {@code null}
+	/**
+	 * Permette al docente di aggiungere un {@link Vincolo} max 3.
+	 * Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+	 * @param giorno giorno indicato dal docente in cui non è disponibile.
+	 * @param oraInizio ora di inizio del vincolo indicato dal docente in cui non è disponibile.
+	 * @param minutoInizio minuto di inizio del vincolo indicato dal docente in cui non è disponibile.
+	 * @param oraFine ora di fine del vincolo indicato dal docente in cui non è disponibile.
+	 * @param minutoFine minuto di fine del vincolo indicato dal docente in cui non è disponibile.
+	 * @return Restituisce una {@code String} o {@code null}.
+	 */
 	public String aggiungiVincolo(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 		try{
 			VincoloDAO vincoloDAO= new VincoloPostgresDao();
@@ -331,9 +352,11 @@ public class  Controller {
 		}
 		return null;
 	}
-	///Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere
-	/// @return Restituisce una {@code String} o {@code null}
-	/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
+	/**
+	 * Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere.
+	 * @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente.
+	 * @return  Restituisce una {@code String} o {@code null}.
+	 */
 	public String rimuoviVincolo(int ind) {
 		try{
 			VincoloDAO vincoloDAO= new VincoloPostgresDao();
@@ -380,8 +403,7 @@ public class  Controller {
 		}
 		return null;
 	}
-
-	///Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario
+	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
 		checkResponsabileTemp();
@@ -410,7 +432,7 @@ public class  Controller {
 	 * del docente, così la GUI ({@code SchermataRichiesteInviate}) le vede tramite
 	 * {@link #ottieniRichiesteInviate()} anche nelle sessioni successive.
 	 * Viene invocato al login del docente.
-	 * @return Restituisce una {@code String} con l'errore o {@code null} se tutto ok
+	 * @return Restituisce una {@code String} con l'errore o {@code null} se tutto ok.
 	 */
 	public String caricaRichiesteDocenteDaDB() {
 		try {
@@ -458,7 +480,7 @@ public class  Controller {
 	 * loggato, così la GUI ({@code VisualizzaRichiestaDialog}) le vede tramite
 	 * {@link #getRichiesteSpostamento()} anche nelle sessioni successive.
 	 * Viene invocato al login del responsabile.
-	 * @return Restituisce una {@code String} con l'errore o {@code null} se tutto ok
+	 * @return Restituisce una {@code String} con l'errore o {@code null} se è tutto ok.
 	 */
 	public String caricaRichiesteResponsabileDaDB() {
 		try {
@@ -505,7 +527,7 @@ public class  Controller {
 	 * indicata. Best-effort: se la richiesta non era mai stata salvata sul DB
 	 * ({@code id < 0}) o l'aggiornamento fallisce, lo stato resta aggiornato solo
 	 * in memoria e l'errore viene segnalato a console.
-	 * @param numeroRichiesta posizione della richiesta nella lista del responsabile
+	 * @param numeroRichiesta posizione della richiesta nella lista del responsabile.
 	 */
 	private void aggiornaStatoRichiestaSuDB(int numeroRichiesta) {
 		try {
@@ -517,8 +539,10 @@ public class  Controller {
 			logger.info("Stato richiesta NON aggiornato sul database: " + e.getMessage());
 		}
 	}
-	/// Restituisce un array che contiene le richieste inviate dal docente
-	/// @return Restituisce un array di tipo {@code Object[][]}
+	/**
+	 *  Restituisce un array che contiene le richieste inviate dal docente.
+	 * @return Restituisce un array di tipo {@code Object[][]}.
+	 */
 	public Object[][] ottieniRichiesteInviate() {
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
@@ -530,8 +554,10 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
-	/// @return Ritorna una array di tipo {@code Object[][]}
+	/**
+	 * Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario.
+	 * @return  Ritorna una array di tipo {@code Object[][]}.
+	 */
 	public Object[][] getLezioniDocente() {
 		List<Lezione> l = docente.getLezioni(orarioLezioni);
 
@@ -738,8 +764,11 @@ public class  Controller {
 		}
 		return righe;
 	}
-	/// Metodo che utilizza il get richieste di responsabile
-	/// Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
+	/**
+	 * Metodo che utilizza il get richieste di responsabile
+	 * Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
+	 * @return richieste in ATTESA per quel responsabile.
+	 */
 	public Object[][] getRichiesteSpostamento() {
 		List<model.Richiesta> lista = responsabile.getRichiesteSpostamento();
 		Object[][] data = new Object[lista.size()][6];
@@ -756,8 +785,12 @@ public class  Controller {
 		}
 		return data;
 	}
-	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
-	/// Approva la richiesta dato il numero di richiesta in input
+	/**
+	 * Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	 *  Approva la richiesta dato il numero di richiesta in input.
+	 * @param numeroRichiesta il numero di richiesta associato.
+	 * @return restituisce null se va tutto bene altrimenti mostra un messaggio di errore.
+	 */
 	public String approvaRichiestaSpostamento(int numeroRichiesta) {
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
@@ -779,8 +812,11 @@ public class  Controller {
 
 		return null; // successo
 	}
-	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
-	/// Rifiuta la richiesta dato il numero di richiesta in input
+	/**
+	 * Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	 * Rifiuta la richiesta dato il numero di richiesta in input.
+	 * @param numeroRichiesta il numero di richiesta associato.
+	 */
 	public void rifiutaRichiestaSpostamento(int numeroRichiesta) {
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			return; // già processata o indice non valido
