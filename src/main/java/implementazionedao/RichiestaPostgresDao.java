@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementazione PostgreSQL dell'interfaccia {@link RichiestaDAO}.
@@ -53,26 +54,26 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      * restituita al chiamante.</p>
      */
     @Override
-    public int salvaRichiestaDB(String emailDocente, String emailResponsabile, String motivo,
-                                String giornoIniziale, int oraInizioIniziale, int minutoInizioIniziale,
-                                int oraFineIniziale, int minutoFineIniziale,
-                                String giornoProposto, int oraInizioProposto, int minutoInizioProposto,
-                                 int oraFineProposto, int minutoFineProposto) throws SQLException {
+    public int salvaRichiestaDB(List<Object> datiRichiesta) throws SQLException {
         String sql = "INSERT INTO richiesta " +
                 "(email_docente, email_responsabile, motivo, " +
                 " giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 " giorno_proposto, ora_inizio_proposto, ora_fine_proposto) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, emailDocente);
-            ps.setString(2, emailResponsabile);
-            ps.setString(3, motivo);
-            ps.setString(4, giornoIniziale);
-            ps.setObject(5, LocalTime.of(oraInizioIniziale, minutoInizioIniziale));
-            ps.setObject(6, LocalTime.of(oraFineIniziale, minutoFineIniziale));
-            ps.setString(7, giornoProposto);
-            ps.setObject(8, LocalTime.of(oraInizioProposto, minutoInizioProposto));
-            ps.setObject(9, LocalTime.of(oraFineProposto, minutoFineProposto));
+            ps.setString(1, (String) datiRichiesta.get(EMAIL_DOCENTE));
+            ps.setString(2, (String) datiRichiesta.get(EMAIL_RESPONSABILE));
+            ps.setString(3, (String) datiRichiesta.get(MOTIVO));
+            ps.setString(4, (String) datiRichiesta.get(GIORNO_INIZIALE));
+            ps.setObject(5, LocalTime.of((Integer) datiRichiesta.get(ORA_INIZIO_INIZIALE),
+                    (Integer) datiRichiesta.get(MINUTO_INIZIO_INIZIALE)));
+            ps.setObject(6, LocalTime.of((Integer) datiRichiesta.get(ORA_FINE_INIZIALE),
+                    (Integer) datiRichiesta.get(MINUTO_FINE_INIZIALE)));
+            ps.setString(7, (String) datiRichiesta.get(GIORNO_PROPOSTO));
+            ps.setObject(8, LocalTime.of((Integer) datiRichiesta.get(ORA_INIZIO_PROPOSTO),
+                    (Integer) datiRichiesta.get(MINUTO_INIZIO_PROPOSTO)));
+            ps.setObject(9, LocalTime.of((Integer) datiRichiesta.get(ORA_FINE_PROPOSTO),
+                    (Integer) datiRichiesta.get(MINUTO_FINE_PROPOSTO)));
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return rs.getInt("id");
@@ -102,8 +103,8 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                                         ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                         ArrayList<String> giornoProposto,
                                         ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                         ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
-                                         ArrayList<String> stato) throws SQLException {
+                                        ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
+                                        ArrayList<String> stato) throws SQLException {
         String sql = "SELECT id, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto, stato " +
@@ -147,7 +148,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                                          ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                          ArrayList<String> giornoProposto,
                                          ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                          ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException {
+                                         ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException {
         String sql = "SELECT id, email_docente, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto " +

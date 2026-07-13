@@ -39,37 +39,13 @@ public interface LezioneDAO {
                         String nomeAula,
                         String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws SQLException;
 
-    /**
-     * Legge dal database tutte le lezioni di un dato anno di corso (quelle che
-     * compongono l'orario dello studente di quell'anno). I risultati vengono
-     * inseriti nelle liste passate come parametro: a parità di indice, i valori
-     * delle varie liste appartengono alla stessa lezione. Il Controller potrà
-     * poi usarli per costruire gli oggetti Lezione in memoria (nel Model).
-     *
-     * @param annoCorso        anno di corso da filtrare
-     * @param nomiInsegnamento lista in cui inserire i nomi degli insegnamenti
-     * @param emailDocente     lista in cui inserire le email dei docenti
-     * @param nomeAula         lista in cui inserire i nomi delle aule
-     * @param giorno           lista in cui inserire i giorni
-     * @param oraInizio        lista in cui inserire le ore di inizio
-     * @param minutoInizio     lista in cui inserire i minuti di inizio
-     * @param oraFine          lista in cui inserire le ore di fine
-     * @param minutoFine       lista in cui inserire i minuti di fine
-     * @throws Exception se la lettura dal database fallisce
-     */
-    void leggiLezioniDB(int annoCorso,
-                        ArrayList<String> nomiInsegnamento,
-                        ArrayList<String> emailDocente,
-                        ArrayList<String> nomeAula,
-                        ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                        ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException;
+
 
     /**
      * Legge dal database tutte le lezioni presenti, senza filtrare per anno di
      * corso. Serve al Controller per ricostruire in memoria l'intero orario
      * (pattern BCE + DAO) al momento del login, così che ogni docente possa
-     * vedere le lezioni salvate in sessioni precedenti. A differenza di
-     * {@link #leggiLezioniDB}, restituisce anche l'anno di corso di ciascuna
+     * vedere le lezioni salvate in sessioni precedenti.Restituisce anche l'anno di corso di ciascuna
      * lezione, necessario per ricostruire l'insegnamento. I risultati vengono
      * inseriti nelle liste passate come parametro: a parità di indice, i valori
      * delle varie liste appartengono alla stessa lezione.

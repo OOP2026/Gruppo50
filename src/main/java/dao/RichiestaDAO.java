@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Interfaccia DAO per la tabella {@code richiesta}.
@@ -19,33 +20,40 @@ import java.util.ArrayList;
  */
 public interface RichiestaDAO {
 
+    // Indici dei valori nella lista passata a salvaRichiestaDB.
+    int EMAIL_DOCENTE = 0;
+    int EMAIL_RESPONSABILE = 1;
+    int MOTIVO = 2;
+    int GIORNO_INIZIALE = 3;
+    int ORA_INIZIO_INIZIALE = 4;
+    int MINUTO_INIZIO_INIZIALE = 5;
+    int ORA_FINE_INIZIALE = 6;
+    int MINUTO_FINE_INIZIALE = 7;
+    int GIORNO_PROPOSTO = 8;
+    int ORA_INIZIO_PROPOSTO = 9;
+    int MINUTO_INIZIO_PROPOSTO = 10;
+    int ORA_FINE_PROPOSTO = 11;
+    int MINUTO_FINE_PROPOSTO = 12;
+
     /**
      * Salva nel database una richiesta di spostamento inviata da un docente a un
      * responsabile. Lo stato non viene passato: sul DB assume il valore di
      * default {@code 'IN_ATTESA'}.
      *
-     * @param emailDocente          email del docente richiedente (FK docente)
-     * @param emailResponsabile     email del responsabile destinatario (FK responsabile)
-     * @param motivo                motivo della richiesta
-     * @param giornoIniziale        giorno della lezione da spostare
-     * @param oraInizioIniziale     ora di inizio della lezione da spostare
-     * @param minutoInizioIniziale  minuto di inizio della lezione da spostare
-     * @param oraFineIniziale       ora di fine della lezione da spostare
-     * @param minutoFineIniziale    minuto di fine della lezione da spostare
-     * @param giornoProposto        giorno del nuovo orario proposto
-     * @param oraInizioProposto     ora di inizio del nuovo orario proposto
-     * @param minutoInizioProposto  minuto di inizio del nuovo orario proposto
-     * @param oraFineProposto       ora di fine del nuovo orario proposto
-     * @param minutoFineProposto    minuto di fine del nuovo orario proposto
+     * <p>I dati della richiesta viaggiano in un'unica lista di {@link Object},
+     * i cui elementi devono rispettare l'ordine definito dalle costanti di
+     * questa interfaccia ({@link #EMAIL_DOCENTE} ... {@link #MINUTO_FINE_PROPOSTO}):
+     * email del docente (String), email del responsabile (String), motivo (String),
+     * giorno iniziale (String), ora/minuto di inizio e fine iniziali (Integer),
+     * giorno proposto (String), ora/minuto di inizio e fine proposti (Integer).</p>
+     *
+     * @param datiRichiesta lista dei 13 valori della richiesta, nell'ordine
+     *                      indicato dalle costanti di indice
      * @return l'id (chiave primaria) generato dal database per la richiesta salvata
-     * @throws Exception se la scrittura sul database fallisce (ad es. FK
-     *                   inesistente o violazione di un CHECK sugli orari)
+     * @throws SQLException se la scrittura sul database fallisce (ad es. FK
+     *                      inesistente o violazione di un CHECK sugli orari)
      */
-     int salvaRichiestaDB(String emailDocente, String emailResponsabile, String motivo,
-                         String giornoIniziale, int oraInizioIniziale, int minutoInizioIniziale,
-                         int oraFineIniziale, int minutoFineIniziale,
-                         String giornoProposto, int oraInizioProposto, int minutoInizioProposto,
-                         int oraFineProposto, int minutoFineProposto) throws SQLException;
+    int salvaRichiestaDB(List<Object> datiRichiesta) throws SQLException;
 
     /**
      * Legge dal database tutte le richieste inviate da un dato docente. I
@@ -69,7 +77,7 @@ public interface RichiestaDAO {
      * @param stato                 lista in cui inserire gli stati delle richieste
      * @throws Exception se la lettura dal database fallisce
      */
-     void leggiRichiesteDocenteDB(String emailDocente,
+    void leggiRichiesteDocenteDB(String emailDocente,
                                  ArrayList<Integer> id,
                                  ArrayList<String> emailResponsabile,
                                  ArrayList<String> motivo,
@@ -78,8 +86,8 @@ public interface RichiestaDAO {
                                  ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                  ArrayList<String> giornoProposto,
                                  ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                  ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
-                                  ArrayList<String> stato) throws SQLException;
+                                 ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
+                                 ArrayList<String> stato) throws SQLException;
 
 
 
@@ -105,7 +113,7 @@ public interface RichiestaDAO {
      * @param minutoFineProposto    lista in cui inserire i minuti di fine proposti
      * @throws Exception se la lettura dal database fallisce
      */
-     void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
+    void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
                                   ArrayList<String> emailDocente,
                                   ArrayList<String> emailResponsabile,
                                   ArrayList<String> motivo,
@@ -114,7 +122,7 @@ public interface RichiestaDAO {
                                   ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
                                   ArrayList<String> giornoProposto,
                                   ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                   ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException;
+                                  ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException;
 
     /**
      * Aggiorna lo stato di una richiesta (tipicamente quando il responsabile la

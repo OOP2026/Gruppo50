@@ -6,6 +6,7 @@ import model.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.logging.Logger;
@@ -21,12 +22,11 @@ public class  Controller {
 	private Responsabile responsabileTemp;
 	private Docente docente;
 	private Utente utente;
-	/**E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati*/
+	///E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati
 	private final List<Utente> utentiRegistrati;
 	private OrarioLezioni orarioLezioni = new OrarioLezioni();
 	private List<Insegnamento> insegnamentiRegistrati = new ArrayList<>();
 	private List<Aula> aule=new ArrayList<>();
-
 	/**
 	 * Costruisce il controller dell'applicazione (pattern BCE).
 	 * @param utentiRegistrati la lista condivisa di tutti gli {@link Utente utenti} registrati,
@@ -43,7 +43,7 @@ public class  Controller {
 	public void apriConnessioneDatabase() throws SQLException {
 		ConnessioneDatabase.getInstance();
 	}
-	/** Azzera i riferimenti precedenti per evitare bug tra un login e l'altro */
+	/// Azzera i riferimenti precedenti per evitare bug tra un login e l'altro
 	public void logout(){
 		//Logout
 		this.studente=null;
@@ -71,8 +71,9 @@ public class  Controller {
 		// responsabili), così è possibile accedere anche a utenti salvati in
 		// sessioni precedenti (pattern BCE + DAO).
 		caricaUtentiDaDB();
-		caricaLezioniDaDB();
 		caricaInsegnamentiDaDB();
+		caricaLezioniDaDB();
+
 		for (Utente u : utentiRegistrati) {
 			if (u.login(username, password)) {
 				this.utente = u;
@@ -92,9 +93,8 @@ public class  Controller {
 		}
 		return false;
 	}
-	/**
-	 * Questo metodo controlla se l'utente è uno studente.
-	 * @return Ritorna un valore booleano.*/
+	/// Questo metodo controlla se l'utente è uno studente
+	/// @return Ritorna un valore booleano
 	public boolean isStudente(Utente u){
 		if (u instanceof Studente) {
 			this.studente = (Studente) u;
@@ -102,9 +102,8 @@ public class  Controller {
 		}
 		return false;
 	}
-	/**
-	 * Questo metodo controlla se l'utente è un responsabile
-	 * @return Ritorna un valore booleano*/
+	///Questo metodo controlla se l'utente è un responsabile
+	/// @return Ritorna un valore booleano
 	public boolean isResponsabile(Utente u){
 		if (u instanceof Responsabile) {
 			this.responsabile = (Responsabile) u;
@@ -122,9 +121,8 @@ public class  Controller {
 		}
 		return false;
 	}
-	/**
-	 * Questo metodo controlla se l'utente è un docente
-	 * @return Ritorna un valore booleano*/
+	///Questo metodo controlla se l'utente è un docente
+	/// @return Ritorna un valore booleano
 	public boolean isDocente(Utente u){
 		if (u instanceof Docente) {
 			this.docente = (Docente) u;
@@ -139,6 +137,7 @@ public class  Controller {
 		return false;
 	}
 
+
 	/**
 	 * Restituisce il ruolo dell'utente attualmente loggato.
 	 * @return {@code "RESPONSABILE"}, {@code "DOCENTE"} o {@code "STUDENTE"};
@@ -150,7 +149,7 @@ public class  Controller {
 		if (studente != null) return STUDENTE_RUOLO;
 		return null;
 	}
-	/**Imposta il responsabileTemp che serve per mandare le richieste al responsabile.*/
+	///Imposta il responsabileTemp che serve per mandare le richieste al responsabile
 	public void putResponsabile(){
 		for (Utente u : utentiRegistrati) {
 			this.utente = u;
@@ -162,16 +161,17 @@ public class  Controller {
 		}
 		responsabileTemp=null;
 	}
-	/**
-	 * Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
-	 * @throws NullPointerException quando il responsabileTemp è null viene lanciata l'eccezione per non far crashare il programma.vi
-	 */
+	///Controlla se non è null {@code responsabileTemp} se lo è lancia una {@link Exception}
+	/// @throws NullPointerException
 	public void checkResponsabileTemp(){
 		if(responsabileTemp==null){
 			throw new NullPointerException("Non è presente ancora un responsabile");
 		}
 	}
 
+
+
+	//Responsabile rifiuta lo spostamento
 
 
 	/**
@@ -250,20 +250,15 @@ public class  Controller {
 
 		return null;
 	}
-	/**
-	 * Questo metodo permette al {@link Docente docente} di aggiungere una materia che insegna,
-	 * @param materia serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da aggiungere
-     */
+	///Permette al docente di aggiungere un Insegnamento che può insegnare
 	public void addInsegnamentoDocente(String materia){
 
 		docente.addInsegnamento(stringToInsegnamento(materia));
 
 	}
-	/**
-	 * Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
-	 * @param materia serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
-	 * @return Restituisce una {@code String} o {@code null}
-	 */
+	///Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
+	/// serve solo inserire come parametro il nome dell'{@link Insegnamento insegnamento} da rimuovere
+	///@Returns Restituisce una {@code String} o {@code null}
 	public String removeInsegnamentoDocente(String materia){
 		try{
 			docente.removeInsegnamento(stringToInsegnamento(materia));
@@ -272,11 +267,9 @@ public class  Controller {
 		}
 		return null;
 	}
-	/**
-	 * Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
-	 * @param materia materia è il nome dell'insegnamento
-	 * @return Restituisce un oggetto di tipo {@link Insegnamento}
-	 */
+	///Ritorna un  {@link Insegnamento insegnamento} solo se esiste nell'elenco degli insegnamenti attivi
+	/// @return Restituisce un oggetto di tipo {@link Insegnamento}
+	/// @param materia è il nome dell'insegnamento
 	private Insegnamento stringToInsegnamento(String materia){
 		for(Insegnamento insegnamento:insegnamentiRegistrati){
 			if(insegnamento.getNome().equalsIgnoreCase(materia)){
@@ -285,11 +278,8 @@ public class  Controller {
 		}
 		return null;
 	}
-
-	/**
-	 * Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
-	 * @return  Restituisce una lista di tipo {@code String}
-	 */
+	///Ritorna gli insegnamenti registrati meno quelli del docente però solo il nome
+	///@return Restituisce una lista di tipo {@code String}
 	public List<String> getInsegnamentiRegistratiDocente(){
 		List<String> data= new ArrayList<>();
 		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
@@ -315,10 +305,8 @@ public class  Controller {
 		}
 		return data;
 	}
-	/**
-	 * Ritorna gli insegnamenti del docente.
-	 * @return Restituisce un array di tipo {@code Object[][]}
-	 */
+	///Ritorna gli insegnamenti del docente
+	///@return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] getInsegnamentiDocente(){
 		List<Insegnamento> insegnamenti= docente.getInsegnamenti();
 		if(insegnamenti.isEmpty()){ return new Object[0][0];}
@@ -330,17 +318,9 @@ public class  Controller {
 		}
 		return data;
 	}
-
-	/**
-	 * Permette al docente di aggiungere un {@link Vincolo} max 3.
-	 * Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	 * @param giorno giorno indicato dal docente in cui non è disponibile.
-	 * @param oraInizio ora di inizio del vincolo indicato dal docente in cui non è disponibile.
-	 * @param minutoInizio minuto di inizio del vincolo indicato dal docente in cui non è disponibile.
-	 * @param oraFine ora di fine del vincolo indicato dal docente in cui non è disponibile.
-	 * @param minutoFine minuto di fine del vincolo indicato dal docente in cui non è disponibile.
-	 * @return Restituisce una {@code String} o {@code null}
-	 */
+	///Permette al docente di aggiungere un {@link Vincolo} max 3.
+	///Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
+	///@return Restituisce una {@code String} o {@code null}
 	public String aggiungiVincolo(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 		try{
 			VincoloDAO vincoloDAO= new VincoloPostgresDao();
@@ -351,12 +331,9 @@ public class  Controller {
 		}
 		return null;
 	}
-
-	/**
-	 * Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere.
-	 * @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente.
-	 * @return  Restituisce una {@code String} o {@code null}.
-	 */
+	///Permette di rimuovere un {@link Vincolo vincolo} usando la posizione del vincolo che si vuole rimuovere
+	/// @return Restituisce una {@code String} o {@code null}
+	/// @param ind E' la posizione in cui sta il vincolo nella list vincoli del docente
 	public String rimuoviVincolo(int ind) {
 		try{
 			VincoloDAO vincoloDAO= new VincoloPostgresDao();
@@ -404,7 +381,7 @@ public class  Controller {
 		return null;
 	}
 
-	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
+	///Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
 	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
 		checkResponsabileTemp();
@@ -417,10 +394,10 @@ public class  Controller {
 		// così approvazione/rifiuto potranno aggiornare la riga corretta.
 		try {
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
-			int idGenerato = richiestaDAO.salvaRichiestaDB(
+			int idGenerato = richiestaDAO.salvaRichiestaDB(Arrays.asList(
 					docente.getmail(), responsabileTemp.getmail(), motivo,
 					giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio,
-					giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
+					giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
 			List<Richiesta> inviate = docente.getRichiesteInviate();
 			inviate.get(inviate.size() - 1).setId(idGenerato);
 		} catch (Exception e) {
@@ -528,7 +505,7 @@ public class  Controller {
 	 * indicata. Best-effort: se la richiesta non era mai stata salvata sul DB
 	 * ({@code id < 0}) o l'aggiornamento fallisce, lo stato resta aggiornato solo
 	 * in memoria e l'errore viene segnalato a console.
-	 * @param numeroRichiesta posizione della richiesta nella lista del responsabile.
+	 * @param numeroRichiesta posizione della richiesta nella lista del responsabile
 	 */
 	private void aggiornaStatoRichiestaSuDB(int numeroRichiesta) {
 		try {
@@ -540,11 +517,8 @@ public class  Controller {
 			logger.info("Stato richiesta NON aggiornato sul database: " + e.getMessage());
 		}
 	}
-
-	/**
-	 *  Restituisce un array che contiene le richieste inviate dal docente.
-	 * @return Restituisce un array di tipo {@code Object[][]}.
-	 */
+	/// Restituisce un array che contiene le richieste inviate dal docente
+	/// @return Restituisce un array di tipo {@code Object[][]}
 	public Object[][] ottieniRichiesteInviate() {
 		List<Richiesta> r = docente.getRichiesteInviate();
 		Object[][] data = new Object[r.size()][4];
@@ -556,10 +530,8 @@ public class  Controller {
 		}
 		return data;
 	}
-	/**
-	 * Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario.
-	 * @return  Ritorna una array di tipo {@code Object[][]}.
-	 */
+	///Il metodo ritorna le lezioni del docente in ordine, prima il giorno e poi l'orario
+	/// @return Ritorna una array di tipo {@code Object[][]}
 	public Object[][] getLezioniDocente() {
 		List<Lezione> l = docente.getLezioni(orarioLezioni);
 
@@ -739,13 +711,13 @@ public class  Controller {
 			return "Insegnamento già presente.";
 		}
 		insegnamentiRegistrati.add(candidato);
-        InsegnamentoDAO insegnamentoDAO= null;
-        try {
-            insegnamentoDAO = new InsegnamentoPostgresDAO();
+		InsegnamentoDAO insegnamentoDAO= null;
+		try {
+			insegnamentoDAO = new InsegnamentoPostgresDAO();
 			insegnamentoDAO.salvaInsegnamento(nome,annoCorso,cfu,emailDocente);
-        } catch (SQLException e) {
+		} catch (SQLException e) {
 			return e.getMessage();
-        }
+		}
 
 		return null;
 	}
@@ -766,12 +738,8 @@ public class  Controller {
 		}
 		return righe;
 	}
-
-	/**
-	 * Metodo che utilizza il get richieste di responsabile
-	 * Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
-	 * @return richieste in ATTESA per quel responsabile.
-	 */
+	/// Metodo che utilizza il get richieste di responsabile
+	/// Viene utilizzato dalla gui nella dialog visualizzaRichiesta, per ottenere le richieste in ATTESA per quel responsabile
 	public Object[][] getRichiesteSpostamento() {
 		List<model.Richiesta> lista = responsabile.getRichiesteSpostamento();
 		Object[][] data = new Object[lista.size()][6];
@@ -788,12 +756,8 @@ public class  Controller {
 		}
 		return data;
 	}
-	/**
-	 * Metodo usato nella gui dalla dialog Visualizza Richiesta.
-	 *  Approva la richiesta dato il numero di richiesta in input.
-	 * @param numeroRichiesta il numero di richiesta associato.
-	 * @return restituisce null se va tutto bene altrimenti mostra un messaggio di errore.
-	 */
+	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	/// Approva la richiesta dato il numero di richiesta in input
 	public String approvaRichiestaSpostamento(int numeroRichiesta) {
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			String stato = responsabile.getStatoRichiesta(numeroRichiesta);
@@ -815,12 +779,8 @@ public class  Controller {
 
 		return null; // successo
 	}
-
-	/**
-	 * Metodo usato nella gui dalla dialog Visualizza Richiesta.
-	 * Rifiuta la richiesta dato il numero di richiesta in input.
-	 * @param numeroRichiesta il numero di richiesta associato.
-	 */
+	///Metodo usato nella gui dalla dialog Visualizza Richiesta.
+	/// Rifiuta la richiesta dato il numero di richiesta in input
 	public void rifiutaRichiestaSpostamento(int numeroRichiesta) {
 		if (!responsabile.isRichiestaInAttesa(numeroRichiesta)) {
 			return; // già processata o indice non valido
@@ -830,15 +790,21 @@ public class  Controller {
 		aggiornaStatoRichiestaSuDB(numeroRichiesta);
 	}
 	/**
-	 * Carica dal database tutte le lezioni salvate e ricostruisce l'orario in
-	 * memoria, cosi' che vengano visualizzate anche nelle sessioni successive
-	 * (in particolare dai docenti). Viene invocato al login, dopo il caricamento
-	 * degli utenti: per ogni lezione letta si ricerca il docente titolare tra
-	 * gli utenti registrati e si ricostruiscono Insegnamento, Aula e Orario.
-	 * L'orario viene ricostruito da zero a ogni login per riflettere fedelmente
-	 * il database ed evitare lezioni duplicate. Eventuali errori del database
-	 * vengono segnalati a console senza interrompere il login; in tal caso
-	 * l'orario in memoria resta invariato.
+	 * Permette al {@link Responsabile responsabile} di modificare l'orario proposto
+	 * in una richiesta di spostamento ancora in attesa.
+	 * <p>
+	 * Il nuovo orario viene validato dal Model e poi aggiornato anche sul database
+	 * (best-effort: se il salvataggio fallisce la modifica resta solo in memoria).
+	 * Se la richiesta è già stata approvata o rifiutata l'orario non è più modificabile.
+	 * </p>
+	 * @param numeroRichiesta l'indice della richiesta da modificare.
+	 * @param giorno il nuovo giorno proposto.
+	 * @param oraInizio la nuova ora di inizio.
+	 * @param minutoInizio il nuovo minuto di inizio.
+	 * @param oraFine la nuova ora di fine.
+	 * @param minutoFine il nuovo minuto di fine.
+	 * @return {@code null} se la modifica ha avuto successo, altrimenti una
+	 * {@code String} con il messaggio di errore da mostrare in GUI.
 	 */
 	public String modificaOrarioRichiesta(
 			int numeroRichiesta, String giorno, int oraInizio, int minutoInizio,  int oraFine, int minutoFine){
@@ -868,6 +834,7 @@ public class  Controller {
 			return e.getMessage();
 		}
 	}
+
 	/**
 	 * Carica dal database tutte le lezioni salvate e ricostruisce l'orario in
 	 * memoria, cosi' che vengano visualizzate anche nelle sessioni successive
@@ -912,6 +879,40 @@ public class  Controller {
 	}
 
 	/**
+	 * Carica dal database tutti gli insegnamenti salvati e li aggiunge alla
+	 * lista in memoria {@code insegnamentiRegistrati}, così che siano visibili
+	 * nella schermata del responsabile (dialog "Insegnamenti Attivi") anche
+	 * nelle sessioni successive a quella in cui sono stati creati.
+	 * <p>
+	 * Viene invocato al login, dopo il caricamento degli utenti: per ogni
+	 * insegnamento letto si ricerca il docente titolare tra gli utenti
+	 * registrati tramite {@link #trovaDocentePerEmail(String)}. Gli
+	 * insegnamenti già presenti in memoria non vengono duplicati. Eventuali
+	 * errori del database vengono segnalati a console senza interrompere il
+	 * login.
+	 */
+	private void caricaInsegnamentiDaDB() {
+		try {
+			InsegnamentoDAO insegnamentoDAO = new InsegnamentoPostgresDAO();
+			for (Object[] riga : insegnamentoDAO.caricaInsegnamentiDB()) {
+				// Ordine colonne restituito dal DAO: nome, cfu, annoCorso, emailDocente
+				String nome = (String) riga[0];
+				int cfu = (int) riga[1];
+				int annoCorso = (int) riga[2];
+				String emailDocente = (String) riga[3];
+
+				Docente docenteTitolare = trovaDocentePerEmail(emailDocente);
+				Insegnamento insegnamento = new Insegnamento(nome, cfu, annoCorso, docenteTitolare);
+				if (!insegnamentiRegistrati.contains(insegnamento)) {
+					insegnamentiRegistrati.add(insegnamento);
+				}
+			}
+		} catch (Exception e) {
+			logger.info("Errore nel caricamento degli insegnamenti dal database: " + e.getMessage());
+		}
+	}
+
+	/**
 	 * Cerca tra gli utenti registrati il docente con l'email indicata. Se non
 	 * viene trovato, ne crea uno "leggero" con la sola email valorizzata,
 	 * sufficiente ad associare la lezione al docente corretto in fase di
@@ -928,6 +929,7 @@ public class  Controller {
 		}
 		return new Docente("", "", email, "", "");
 	}
+
 	/** <p>Legge tutti gli utenti dal database tramite {@link UtenteDAO} (unico
 	 * metodo di caricamento: la tabella {@code utente} contiene studenti, docenti
 	 * e responsabili) e li aggiunge alla lista {@code utentiRegistrati}, evitando
@@ -982,6 +984,9 @@ public class  Controller {
 			logger.info("Errore nel caricamento degli utenti dal database: " + e.getMessage());
 		}
 	}
+
+	//Metodi sulle Aule
+
 	/**
 	 * Carica dal database tutte le {@link Aula aule} tramite {@link AulaDAO}
 	 * e ricostruisce da zero la lista in memoria {@code aule}, usata dalla GUI
@@ -999,8 +1004,7 @@ public class  Controller {
 		}
 		aule=new ArrayList<>(a);
 	}
-	/**
-	 * Ritorna le aule  però solo il nome
+	/**Ritorna le aule  però solo il nome
 	 *@param nomeAula <p>Se nomeAula è {@code ""} il metodo ritorna tutte le aule,
 	 *se non è vuota ritorna le aule che iniziano con la stringa dentro nomeAula.
 	 *@return Restituisce una lista di tipo {@code String}
@@ -1015,38 +1019,4 @@ public class  Controller {
 		}
 		return data;
 	}
-	/**
-	 * Carica dal database tutti gli insegnamenti salvati e li aggiunge alla
-	 * lista in memoria {@code insegnamentiRegistrati}, così che siano visibili
-	 * nella schermata del responsabile (dialog "Insegnamenti Attivi") anche
-	 * nelle sessioni successive a quella in cui sono stati creati.
-	 * <p>
-	 * Viene invocato al login, dopo il caricamento degli utenti: per ogni
-	 * insegnamento letto si ricerca il docente titolare tra gli utenti
-	 * registrati tramite {@link #trovaDocentePerEmail(String)}. Gli
-	 * insegnamenti già presenti in memoria non vengono duplicati. Eventuali
-	 * errori del database vengono segnalati a console senza interrompere il
-	 * login.
-	 */
-	private void caricaInsegnamentiDaDB() {
-		try {
-			InsegnamentoDAO insegnamentoDAO = new InsegnamentoPostgresDAO();
-			for (Object[] riga : insegnamentoDAO.caricaInsegnamentiDB()) {
-				// Ordine colonne restituito dal DAO: nome, cfu, annoCorso, emailDocente
-				String nome = (String) riga[0];
-				int cfu = (int) riga[1];
-				int annoCorso = (int) riga[2];
-				String emailDocente = (String) riga[3];
-
-				Docente docenteTitolare = trovaDocentePerEmail(emailDocente);
-				Insegnamento insegnamento = new Insegnamento(nome, cfu, annoCorso, docenteTitolare);
-				if (!insegnamentiRegistrati.contains(insegnamento)) {
-					insegnamentiRegistrati.add(insegnamento);
-				}
-			}
-		} catch (Exception e) {
-			logger.info("Errore nel caricamento degli insegnamenti dal database: " + e.getMessage());
-		}
-	}
-
 }
