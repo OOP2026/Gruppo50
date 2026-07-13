@@ -102,89 +102,103 @@ public class VisualizzaRichiestaDialog {
     // ---------------------------------------------------------------
     // Listener
     // ---------------------------------------------------------------
-
     private void collegaListener(Controller controller) {
+        // Ora il metodo fa solo ciò che dice il suo nome: collega i listener
+        table1.getSelectionModel().addListSelectionListener(this::gestisciSelezioneTabella);
+        approvaButton.addActionListener(e -> gestisciApprovazione(controller));
+        rifiutaButton.addActionListener(e -> gestisciRifiuto(controller));
+        modificaOrarioButton.addActionListener(e -> gestisciModificaOrario(controller));
+    }
+    private void gestisciSelezioneTabella(javax.swing.event.ListSelectionEvent e) {
+        if (e.getValueIsAdjusting()) return;
 
-        // Selezione riga → mostra dettaglio e abilita bottoni
-        table1.getSelectionModel().addListSelectionListener(e -> {
-            if (e.getValueIsAdjusting()) return;
-            int riga = table1.getSelectedRow();
-            if (riga < 0) {
-                azzeraDettaglio();
-                approvaButton.setEnabled(false);
-                rifiutaButton.setEnabled(false);
-                modificaOrarioButton.setEnabled(false);
-                rigaSelezionata = -1;
-                return;
-            }
-            rigaSelezionata = riga;
-            mostraDettaglio(riga);
+        int riga = table1.getSelectedRow();
 
-            // I bottoni sono abilitati solo se la richiesta è ancora IN_ATTESA
-            String stato = tableModel.getValueAt(riga, 5).toString();
-            boolean attesa = "IN_ATTESA".equalsIgnoreCase(stato);
-            approvaButton.setEnabled(attesa);
-            rifiutaButton.setEnabled(attesa);
-            modificaOrarioButton.setEnabled(attesa);
-        });
+        if (riga < 0) {
+            azzeraDettaglio();
+            impostaStatoBottoni(false);
+            rigaSelezionata = -1;
+            return;
+        }
 
-        // Approva
-        approvaButton.addActionListener(e -> {
-            if (rigaSelezionata < 0) return;
-            int conferma = JOptionPane.showConfirmDialog(
-                    dialog,
-                    "Approvare la richiesta n° " + rigaSelezionata + "?",
-                    "Conferma approvazione",
-                    JOptionPane.YES_NO_OPTION
-            );
-            if (conferma != JOptionPane.YES_OPTION) return;
+        rigaSelezionata = riga;
+        mostraDettaglio(riga);
 
-            String errore = controller.approvaRichiestaSpostamento(rigaSelezionata);
+        // I bottoni sono abilitati solo se la richiesta è ancora IN_ATTESA
+        String stato = tableModel.getValueAt(riga, 5).toString();
+        boolean attesa = "IN_ATTESA".equalsIgnoreCase(stato);
+        impostaStatoBottoni(attesa);
+    }
+
+    // Un piccolo metodo di supporto per evitare di ripetere l'abilitazione/disabilitazione
+    private void impostaStatoBottoni(boolean abilitati) {
+        approvaButton.setEnabled(abilitati);
+        rifiutaButton.setEnabled(abilitati);
+        modificaOrarioButton.setEnabled(abilitati);
+    }
+
+    private void gestisciApprovazione(Controller controller) {
+        if (rigaSelezionata < 0) return;
+
+        int conferma = JOptionPane.showConfirmDialog(
+                dialog,
+                "Approvare la richiesta n° " + rigaSelezionata + "?",
+                "Conferma approvazione",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (conferma != JOptionPane.YES_OPTION) return;
+
+        String errore = controller.approvaRichiestaSpostamento(rigaSelezionata);
+        if (errore != null) {
+            dialogErrore(errore);
+        } else {
+            JOptionPane.showMessageDialog(dialog, "Richiesta approvata con successo.");
+        }
+        aggiornaTabella(controller);
+    }
+
+    private void gestisciRifiuto(Controller controller) {
+        if (rigaSelezionata < 0) return;
+
+        int conferma = JOptionPane.showConfirmDialog(
+                dialog,
+                "Rifiutare la richiesta n° " + rigaSelezionata + "?",
+                "Conferma rifiuto",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (conferma != JOptionPane.YES_OPTION) return;
+
+        controller.rifiutaRichiestaSpostamento(rigaSelezionata);
+        JOptionPane.showMessageDialog(dialog, "Richiesta rifiutata.");
+        aggiornaTabella(controller);
+    }
+
+    private void gestisciModificaOrario(Controller controller) {
+        if (rigaSelezionata < 0) return;
+
+        String giorno = JOptionPane.showInputDialog(dialog, "Nuovo giorno (es. Lunedì):");
+        if (giorno == null) return; // Previene un'eccezione se l'utente clicca 'Annulla'
+
+        try {
+            int oraInizio    = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Ora inizio (08-17):"));
+            int minutoInizio = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Minuto inizio:"));
+            int oraFine      = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Ora fine (8-17):"));
+            int minutoFine   = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Minuto fine:"));
+
+            String errore = controller.modificaOrarioRichiesta(rigaSelezionata, giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+
             if (errore != null) {
                 dialogErrore(errore);
             } else {
-                JOptionPane.showMessageDialog(dialog, "Richiesta approvata con successo.");
+                JOptionPane.showMessageDialog(dialog, "Orario della richiesta modificato.");
             }
             aggiornaTabella(controller);
-        });
 
-        // Rifiuta
-        rifiutaButton.addActionListener(e -> {
-            if (rigaSelezionata < 0) return;
-            int conferma = JOptionPane.showConfirmDialog(
-                    dialog,
-                    "Rifiutare la richiesta n° " + rigaSelezionata + "?",
-                    "Conferma rifiuto",
-                    JOptionPane.YES_NO_OPTION
-            );
-            if (conferma != JOptionPane.YES_OPTION) return;
-
-            controller.rifiutaRichiestaSpostamento(rigaSelezionata);
-            JOptionPane.showMessageDialog(dialog, "Richiesta rifiutata.");
-            aggiornaTabella(controller);
-        });
-        modificaOrarioButton.addActionListener(e -> {
-            if (rigaSelezionata < 0) return;
-            String giorno = JOptionPane.showInputDialog(dialog, "Nuovo giorno (es. Lunedì):");
-            try {
-                int oraInizio    = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Ora inizio (08-17):"));
-                int minutoInizio = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Minuto inizio:"));
-                int oraFine      = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Ora fine (8-17):"));
-                int minutoFine   = Integer.parseInt(JOptionPane.showInputDialog(dialog, "Minuto fine:"));
-
-                String errore = controller.modificaOrarioRichiesta(rigaSelezionata, giorno, oraInizio, minutoInizio, oraFine, minutoFine);
-
-                if (errore != null) {
-                   dialogErrore(errore);
-                } else {
-                    JOptionPane.showMessageDialog(dialog, "Orario della richiesta modificato.");
-                }
-                aggiornaTabella(controller);
-            } catch (NumberFormatException ex) {
-              dialogErrore("Orari e minuti devono essere numeri interi.");
-            }
-
-        });
+        } catch (NumberFormatException ex) {
+            dialogErrore("Orari e minuti devono essere numeri interi.");
+        }
     }
 
 
