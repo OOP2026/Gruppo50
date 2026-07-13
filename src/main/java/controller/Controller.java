@@ -699,7 +699,14 @@ public class  Controller {
 					l.getOrario().getOraInizio(), l.getOrario().getMinutoInizio(),
 					l.getOrario().getOraFine(),   l.getOrario().getMinutoFine(),
 					l.getInsegnamento().getNome());
-			mappa.getOrDefault(giorno, new java.util.ArrayList<>()).add(testo);
+			// Confronto case-insensitive: il giorno salvato sul DB potrebbe
+			// differire per maiuscole/minuscole dalla chiave della mappa.
+			for (String g : giorni) {
+				if (g.equalsIgnoreCase(giorno)) {
+					mappa.get(g).add(testo);
+					break;
+				}
+			}
 		}
 		return mappa;
 	}

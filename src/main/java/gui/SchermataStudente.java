@@ -43,6 +43,9 @@ public class SchermataStudente {
     private JLabel matricola;
     private JButton indietroButton;
 
+    /** Slot per giorno, in ordine: prima, seconda, terza lezione */
+    private JTextArea[][] slotPerGiorno;
+
     private static final String[] GIORNI = {
             "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"
     };
@@ -54,8 +57,7 @@ public class SchermataStudente {
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
 
-        // Slot per giorno, in ordine: prima, seconda, terza lezione
-        JTextArea[][] slotPerGiorno = {
+        slotPerGiorno = new JTextArea[][]{
                 {primaLezioneLunedi, secondaLezioneLunedi, terzaLezioneLunedi},
                 {primaLezioneMartedi, secondaLezioneMartedi, terzaLezioneMartedi},
                 {primaLezioneMercoledi, secondaLezioneMercoledi, terzaLezioneMercoledi},
@@ -73,22 +75,18 @@ public class SchermataStudente {
             }
         }
 
-        // Recupera le lezioni dal Controller, ordinate per orario
-        Map<String, List<String>> lezioniPerGiorno = controller.getLezioniStudentePerGiorno();
-        for (String g : GIORNI) {
-            lezioniPerGiorno.computeIfAbsent(g, k -> new ArrayList<>())
-                    .sort(String::compareTo);
-        }
+        // Popola il tabellone con le lezioni esistenti (caricate dal DB al login)
+        // e con quelle già aggiunte in memoria durante l'esecuzione.
+        aggiornaOrario(controller);
 
-        // Popola ogni slot: lezione se presente, "—" se assente
-        for (int i = 0; i < GIORNI.length; i++) {
-            List<String> lezioni = lezioniPerGiorno.getOrDefault(GIORNI[i], new ArrayList<>());
-            JTextArea[]  slots   = slotPerGiorno[i];
-            for (int s = 0; s < slots.length; s++) {
-                if (slots[s] == null) continue;
-                slots[s].setText(s < lezioni.size() ? lezioni.get(s) : "—");
+        // Ripopola il tabellone ogni volta che la finestra torna in primo piano,
+        // così le lezioni aggiunte durante l'esecuzione compaiono senza riavviare.
+        frame.addWindowFocusListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowGainedFocus(java.awt.event.WindowEvent e) {
+                aggiornaOrario(controller);
             }
-        }
+        });
 
         matricola.setText("Matricola: " + controller.getMatricola());
         if (indietroButton != null) {
@@ -100,5 +98,28 @@ public class SchermataStudente {
             });
         }
     }
-    
+
+    /**
+     * Recupera dal {@link Controller} le lezioni dello studente (esistenti e
+     * aggiunte durante l'esecuzione) e popola gli slot del tabellone:
+     * lezione se presente, "—" se assente.
+     */
+    private void aggiornaOrario(Controller controller) {
+        // Recupera le lezioni dal Controller, ordinate per orario
+        Map<String, List<String>> lezioniPerGiorno = controller.getLezioniStudentePerGiorno();
+        for (String g : GIORNI) {
+            lezioniPerGiorno.computeIfAbsent(g, k -> new ArrayList<>())
+                    .sort(String::compareTo);
+        }
+
+        for (int i = 0; i < GIORNI.length; i++) {
+            List<String> lezioni = lezioniPerGiorno.getOrDefault(GIORNI[i], new ArrayList<>());
+            JTextArea[]  slots   = slotPerGiorno[i];
+            for (int s = 0; s < slots.length; s++) {
+                if (slots[s] == null) continue;
+                slots[s].setText(s < lezioni.size() ? lezioni.get(s) : "—");
+            }
+        }
+    }
+
 }
