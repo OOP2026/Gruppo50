@@ -89,10 +89,10 @@ public interface RichiestaDAO {
      * @throws Exception se la lettura dal database fallisce
      */
     void leggiRichiesteDocenteDB(String emailDocente,
-                                 ArrayList<Integer> id,
-                                 ArrayList<String[]> datiTesto,
-                                 ArrayList<int[]> orarioIniziale,
-                                 ArrayList<int[]> orarioProposto) throws SQLException;
+                                 List<Integer> id,
+                                 List<String[]> datiTesto,
+                                 List<int[]> orarioIniziale,
+                                 List<int[]> orarioProposto) throws SQLException;
 
 
 
@@ -104,10 +104,10 @@ public interface RichiestaDAO {
      * @param id                    lista in cui inserire gli id delle richieste
      * @throws Exception se la lettura dal database fallisce
      */
-    public void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
-                                         ArrayList<String[]> datiTesto,
-                                         ArrayList<int[]> orarioIniziale,
-                                         ArrayList<int[]> orarioProposto) throws SQLException;
+    public void leggiRichiesteInAttesaDB(List<Integer> id,
+                                         List<String[]> datiTesto,
+                                         List<int[]> orarioIniziale,
+                                         List<int[]> orarioProposto) throws SQLException;
 
     /**
      * Aggiorna lo stato di una richiesta (tipicamente quando il responsabile la

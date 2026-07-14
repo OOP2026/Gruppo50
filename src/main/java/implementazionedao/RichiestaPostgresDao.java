@@ -105,10 +105,10 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      */
     @Override
     public void leggiRichiesteDocenteDB(String emailDocente,
-                                        ArrayList<Integer> id,
-                                        ArrayList<String[]> datiTesto,
-                                        ArrayList<int[]> orarioIniziale,
-                                        ArrayList<int[]> orarioProposto) throws SQLException {
+                                        List<Integer> id,
+                                        List<String[]> datiTesto,
+                                        List<int[]> orarioIniziale,
+                                        List<int[]> orarioProposto) throws SQLException {
         String sql = "SELECT id, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto, stato " +
@@ -154,10 +154,10 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      * @throws SQLException se la lettura dal database fallisce
      */
     @Override
-    public void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
-                                         ArrayList<String[]> datiTesto,
-                                         ArrayList<int[]> orarioIniziale,
-                                         ArrayList<int[]> orarioProposto) throws SQLException {
+    public void leggiRichiesteInAttesaDB(List<Integer> id,
+                                         List<String[]> datiTesto,
+                                         List<int[]> orarioIniziale,
+                                         List<int[]> orarioProposto) throws SQLException {
         String sql = "SELECT id, email_docente, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto " +
