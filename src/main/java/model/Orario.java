@@ -110,7 +110,8 @@ public class Orario {
             throw new NullPointerException("Il giorno non può essere nullo o vuoto");
         }
         if( !giorni.contains(giorno.toLowerCase())){
-            logger.info("Giorno errato: "+giorno);
+            String msg="Giorno errato: "+giorno;
+            logger.info(msg);
             throw new IllegalArgumentException("Il giorno deve essere uno dei seguenti:" + giorni);}
     }
 

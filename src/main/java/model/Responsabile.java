@@ -43,8 +43,10 @@ private final Token token;
             }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
   for(Richiesta richiesta : richiesteSpostamento) {
-    logger.info("Numero richiesta: " + (numeroRichiesta));
-    logger.info("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
+   String msg="Numero richiesta: " + (numeroRichiesta);
+    logger.info(msg);
+    msg="Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome;
+    logger.info(msg);
     logger.info("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
     logger.info("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
     logger.info("Orario lezione nuovo: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());

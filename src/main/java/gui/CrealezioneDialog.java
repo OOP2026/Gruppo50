@@ -74,12 +74,12 @@ public class CrealezioneDialog {
                     int minI = Integer.parseInt(minIField.getText().trim());
                     int oraF = Integer.parseInt(oraFField.getText().trim());
                     int minF = Integer.parseInt(minFField.getText().trim());
-
+int [] orario= {oraI,minI,oraF,minF};
                     String errore = controller.creaLezione(
                             nomeIns,
                             emailDoc,
                             nomeAula,
-                            giorno, oraI, minI, oraF, minF);
+                            giorno, orario);
 
                     if (errore != null) {
                         labelErrore.setText(errore);

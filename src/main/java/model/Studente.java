@@ -57,7 +57,8 @@ public class Studente extends Utente  {
      * Stampa un messaggio di saluto nel terminale dicendo nome, cognome e matricola.
      */
     public void saluto() {
-        logger.info("Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola);
+        String msg="Ciao mi chiamo " + this.nome + " " + this.cognome + " e sono uno studente con matricola " + this.matricola;
+        logger.info(msg);
     }
 
     /**

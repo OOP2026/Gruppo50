@@ -159,9 +159,11 @@ dialogErrore_Warning("Tutti i campi degli orari devono essere compilati.",1);
             String motivo = String.valueOf(motivoText.getText());
 
             try {
+                int [] orarioVecchio={oraInizioLezione, minutoInizioLezione, oraFineLezione, minutoFineLezione};
+                int [] orarioNuovo={oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo};
+
                 controller.richiestaspostamentoLezione(motivo, giornoLezione,
-                        oraInizioLezione, minutoInizioLezione, oraFineLezione, minutoFineLezione,
-                        giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo);
+                        orarioVecchio, giornoNuovo, orarioNuovo);
             } catch (Exception ex) {
               dialogErrore_Warning(ex.getMessage(),0);
                 return;

@@ -51,7 +51,7 @@ public class OrarioLezioni {
      * Solo un Responsabile in possesso del Token valido può eseguire questa operazione.
      * @param l la {@link Lezione} da aggiungere all'orario
      * @param token l'oggetto Token che da i permessi al responsabile
-     * @return true se la lezione viene aggiunta con successo
+     * @Returns true se la lezione viene aggiunta con successo
      * @throws IllegalArgumentException se c'è un conflitto di orario, aula o docente con un'altra lezione
      * @throws NullPointerException se la lezione passata è nulla o se il token è nullo (permesso negato)
      */
@@ -122,8 +122,8 @@ public class OrarioLezioni {
         boolean trovata = false;
         for (Lezione l : elenco) {
             if (!giorno.equalsIgnoreCase(l.getOrario().getGiorno()) || !filtro.test(l)) continue;
-
-            logger.info("Docente: "+l.getInsegnamento().getDocente().nome+" "+l.getInsegnamento().getDocente().cognome);
+            String msg="Docente: "+l.getInsegnamento().getDocente().nome+" "+l.getInsegnamento().getDocente().cognome;
+            logger.info(msg);
             logger.info("Insegamento: "+l.getInsegnamento().getNome());
             logger.info("Orario: "+l.getOrario().getOrarioCompleto());
             logger.info("Aula: "+l.getAula().getNome());
@@ -145,8 +145,8 @@ public class OrarioLezioni {
      * @param studente lo studente che richiede di visualizzare il proprio orario
      */
     public void visualizzaOrarioCompleto(Studente studente){
-
-        logger.info("Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome);
+String msg="Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome;
+        logger.info(msg);
         giornoLezioni(giorni[0],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
         giornoLezioni(giorni[1],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
         giornoLezioni(giorni[2],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
@@ -163,8 +163,8 @@ public class OrarioLezioni {
      * @param docente il docente che richiede di visualizzare il proprio orario
      */
     public void visualizzaOrarioCompleto(Docente docente){
-
-        logger.info("Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome);
+String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome;
+        logger.info(msg);
         giornoLezioni(giorni[0], orariolezioni, l -> l.getInsegnamento().getDocente().equals(docente));
         giornoLezioni(giorni[1], orariolezioni, l -> l.getInsegnamento().getDocente()== docente);
         giornoLezioni(giorni[2], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);

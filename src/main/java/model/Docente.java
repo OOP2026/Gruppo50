@@ -126,7 +126,8 @@ public class Docente extends Utente {
         }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
         for(Richiesta richiesta : richiesteSpostamentoInviate) {
-            logger.info("Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome);
+      String msg="Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome;
+            logger.info(msg);
             logger.info("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
             logger.info("Orario lezione proposto: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
             logger.info("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
@@ -213,10 +214,12 @@ public class Docente extends Utente {
             logger.info("Non hai vincoli");
             return;
         }
-        logger.info("Vincoli di"+this.nome+" "+this.cognome+":");
+        String msg="Vincoli di"+this.nome+" "+this.cognome+":";
+        logger.info(msg);
         int numeroVincolo=0;
         for(Vincolo vincolo : vincoli){
-            logger.info("Numero vincolo: "+numeroVincolo);
+            String msg2="Numero vincolo: "+numeroVincolo;
+            logger.info(msg2);
             logger.info("Giorno: "+vincolo.getOrario().getGiorno());
             logger.info("Orario: "+vincolo.getOrario().getOrarioCompleto());
             logger.info("-----------------------------------");

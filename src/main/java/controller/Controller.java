@@ -192,10 +192,7 @@ public class  Controller {
 	 * @param emailDocente l'email del docente titolare dell'insegnamento.
 	 * @param nomeAula il nome dell'aula in cui si terrà la lezione.
 	 * @param giorno il giorno della settimana della lezione.
-	 * @param oraInizio l'ora di inizio.
-	 * @param minutoInizio il minuto di inizio.
-	 * @param oraFine l'ora di fine.
-	 * @param minutoFine il minuto di fine.
+	 * @param orarioIn è un array con dentro [0] l'ora di inizio , [1] il minuto d'inizio, [2] l'ora di fine e [3] il minuto di fine
 	 * @return {@code null} se la creazione ha avuto successo, altrimenti una
 	 * {@code String} con il messaggio di errore da mostrare in GUI.
 	 */
@@ -203,7 +200,7 @@ public class  Controller {
 			String nomeInsegnamento,
 			String emailDocente,
 			String nomeAula,
-			String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
+			String giorno, int[] orarioIn) {
 		//Verifico che l'insegnamento inserito esista tra quelli registrati (confronto per nome).
 		//La lezione NON crea un nuovo insegnamento: riusa quello già registrato.
 		Insegnamento insegnamento = stringToInsegnamento(nomeInsegnamento);
@@ -230,7 +227,7 @@ public class  Controller {
 		//    Se questa parte fallisce è un errore vero: si interrompe e si mostra il messaggio.
 		try {
 			Aula aula = new Aula(nomeAula, 200);
-			Orario orario = new Orario(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+			Orario orario = new Orario(giorno, orarioIn[0], orarioIn[1], orarioIn[2], orarioIn[3]);
 			Lezione lezione = new Lezione(insegnamento, aula, orario);
 			responsabile.inserisciLezione(lezione, orarioLezioni);
 		} catch (IllegalArgumentException e) {
@@ -248,7 +245,7 @@ public class  Controller {
 					insegnamento.getNome(), insegnamento.getAnnoCorso(),
 					emailDocente,
 					nomeAula, giorno,
-					oraInizio, minutoInizio, oraFine, minutoFine);
+					orarioIn);
 		} catch (Exception e) {
 			logger.info("Lezione NON salvata sul database (resta solo in memoria): " + e.getMessage());
 		}
@@ -404,10 +401,10 @@ public class  Controller {
 		return null;
 	}
 	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
-	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int oraInizioVecchio, int minutoInizioVecchio, int oraFineVecchio, int minutoFineVecchio, String giornoNuovo,
-	                                        int oraInizioNuovo, int minutoInizioNuovo, int oraFineNuovo, int minutoFineNuovo) {
+	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int [] orarioVecchio, String giornoNuovo,
+	                                       int [] orarioNuovo) {
 		checkResponsabileTemp();
-		docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio), new Orario(giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
+		docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, orarioVecchio[0], orarioVecchio[1], orarioVecchio[2], orarioVecchio[3]), new Orario(giornoNuovo, orarioNuovo[0], orarioNuovo[1], orarioNuovo[2], orarioNuovo[3]));
 
 		// Persistenza: la richiesta viene salvata nella tabella richiesta (stato
 		// di default 'IN_ATTESA'). Se il salvataggio fallisce la richiesta resta
@@ -418,8 +415,8 @@ public class  Controller {
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
 			int idGenerato = richiestaDAO.salvaRichiestaDB(Arrays.asList(
 					docente.getmail(), responsabileTemp.getmail(), motivo,
-					giornoVecchio, oraInizioVecchio, minutoInizioVecchio, oraFineVecchio, minutoFineVecchio,
-					giornoNuovo, oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo));
+					giornoVecchio, orarioVecchio[0], orarioVecchio[1], orarioVecchio[2], orarioVecchio[3],
+					giornoNuovo, orarioNuovo[0],orarioNuovo[1], orarioNuovo[2], orarioNuovo[3]));
 			List<Richiesta> inviate = docente.getRichiesteInviate();
 			inviate.get(inviate.size() - 1).setId(idGenerato);
 		} catch (Exception e) {

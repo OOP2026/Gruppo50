@@ -36,7 +36,7 @@ public class LezionePostgresDao implements LezioneDAO {
     public void salvaLezioneDB(String nomeInsegnamento, int annoCorso,
                                String emailDocente,
                                String nomeAula,
-                               String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws SQLException {
+                               String giorno, int [] orarioIn) throws SQLException {
         String sql = "INSERT INTO lezione " +
                 "(nomecorso, annocorso, emaildocente, nomeaula, " +
                 " giorno, orainizio, minutoinizio, orafine, minutofine) " +
@@ -47,10 +47,10 @@ public class LezionePostgresDao implements LezioneDAO {
             ps.setString(3, emailDocente);
             ps.setString(4, nomeAula);
             ps.setString(5, giorno);
-            ps.setInt(6, oraInizio);
-            ps.setInt(7, minutoInizio);
-            ps.setInt(8, oraFine);
-            ps.setInt(9, minutoFine);
+            ps.setInt(6, orarioIn[0]);
+            ps.setInt(7, orarioIn[1]);
+            ps.setInt(8, orarioIn[2]);
+            ps.setInt(9, orarioIn[3]);
             ps.executeUpdate();
         } catch (SQLException e) {
             // Es. violazione del vincolo UNIQUE: lezione già presente in quello slot/aula.

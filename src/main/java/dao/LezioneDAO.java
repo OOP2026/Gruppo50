@@ -37,7 +37,7 @@ public interface LezioneDAO {
     void salvaLezioneDB(String nomeInsegnamento, int annoCorso,
                         String emailDocente,
                         String nomeAula,
-                        String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) throws SQLException;
+                        String giorno, int [] orarioIn) throws SQLException;
 
 
 
