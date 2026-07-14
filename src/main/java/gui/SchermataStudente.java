@@ -9,7 +9,20 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * Finestra di interfaccia grafica (GUI) dedicata alla visualizzazione dell'orario delle lezioni.
+ * <p>
+ * Questa schermata accessibile solo agli Studenti, fornisce un tabellone settimanale che va dal Lunedì al Venerdì
+ * per consultare i propri corsi in programma.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Tabellone Orario:</b> Una griglia che ospita fino a tre lezioni giornaliere.
+ * Se non ci sono lezioni in una determinata fascia, viene mostrato un trattino (—).</li>
+ * <li><b>Matricola:</b> Un'etichetta che mostra in alto a destra la matricola dello studente.</li>
+ * <li><b>Logout / Indietro:</b> Bottoni che permettono di terminare la sessione e tornare in sicurezza alla schermata di accesso iniziale.</li>
+ * </ul>
+ */
 public class SchermataStudente {
 
     JFrame frame;

@@ -5,6 +5,22 @@ import controller.Controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 @SuppressWarnings("unused")
+
+/**
+ * Finestra di dialogo (GUI) dedicata alla visualizzazione e all'aggiunta di nuovi insegnamenti.
+ * <p>
+ * Questa schermata che può essere usata solo dal responsabile permette di vedere gli insegnamenti attivi
+ * e la possibilità di registrarne di nuovi. L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Tabella Insegnamenti:</b> Una tabella che mostra l'elenco dei corsi (Nome, CFU, Anno corso, Email docente).</li>
+ * <li><b>Nome Insegnamento:</b> Campo di testo per inserire il nome del corso.</li>
+ * <li><b>CFU:</b> Campo di testo per inserire i crediti formativi.</li>
+ * <li><b>Anno Corso:</b> Campo di testo per inserire l'anno di corso.</li>
+ * <li><b>Email Docente:</b> Campo di testo per inserire l'email del professore.</li>
+ * <li><b>Bottoni di Azione:</b> Aggiungi un nuovo insegnamento o chiudi la finestra.</li>
+ * </ul>
+ */
 public class InsegnamentiDialog {
     JDialog dialog;
     private JPanel panel1;

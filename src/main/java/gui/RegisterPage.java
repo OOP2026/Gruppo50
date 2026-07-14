@@ -1,5 +1,19 @@
 package gui;
-
+/**
+ * Finestra di interfaccia grafica (GUI) dedicata alla registrazione di un nuovo account.
+ * <p>
+ * Questa schermata accessibile a tutti, fornisce un modulo completo per inserire
+ * i dati anagrafici, le credenziali e scegliere il proprio ruolo all'interno del sistema (Studente, Docente o Responsabile).
+ *  L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Nome e Cognome:</b> Campi di testo per inserire nome e cognome dell'utente.</li>
+ * <li><b>Scegli il tipo di utente:</b> Menu a tendina per selezionare il ruolo.</li>
+ * <li><b>Email:</b> Campo di testo per la mail.</li>
+ * <li><b>Username e Password:</b> Campi per inserire username e password.</li>
+ * <li><b>Bottoni di Azione:</b> Conferma per inviare i dati al database, oppure annulla per tornare al menu iniziale.</li>
+ * </ul>
+ */
 import controller.Controller;
 import javax.swing.*;
 

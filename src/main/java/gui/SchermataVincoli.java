@@ -8,6 +8,20 @@ import controller.Controller;
 import java.awt.*;
 import java.util.Objects;
 @SuppressWarnings("unused")
+/**
+ * Finestra di interfaccia grafica (GUI) dedicata alla gestione dei vincoli.
+ * <p>
+ * Questa schermata, accessibile solo ai Docenti e ai Responsabili,
+ * permette di definire fasce orarie settimanali in cui l'insegnante non è disponibile per tenere lezioni.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Orario Inizio e Fine:</b> Campi di testo dedicati all'inserimento di ore e minuti per le fasce orarie del vincolo.</li>
+ * <li><b>Giorno:</b> Menu a tendina per selezionare il giorno della settimana a cui applicare il vincolo.</li>
+ * <li><b>Tabella Vincoli:</b> Un riepilogo visivo dei vincoli già salvati a sistema.</li>
+ * <li><b>Bottoni di Azione:</b> Permettono di aggiungere un nuovo vincolo, rimuovere quello selezionato dalla tabella o tornare alla dashboard principale.</li>
+ * </ul>
+ */
 public class SchermataVincoli {
     JFrame frame;
     private JPanel panel1;

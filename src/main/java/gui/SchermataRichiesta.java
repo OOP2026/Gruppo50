@@ -11,6 +11,22 @@ import controller.Controller;
 
 import java.awt.*;
 @SuppressWarnings("unused")
+/**
+ * Finestra di interfaccia grafica (GUI) dedicata alle richieste di spostamento delle lezioni.
+ * <p>
+ * Questa schermata accessibile ai docenti fornisce un modulo completo per richiedere modifiche all'orario
+ * e una tabella per tenere traccia dello storico delle richieste.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Lezione da spostare:</b> Campi di testo e menu a tendina per indicare giorno e orario della lezione originale.</li>
+ * <li><b>Lezione Proposta:</b> Campi di testo e menu a tendina per specificare il nuovo orario e giorno.</li>
+ * <li><b>Motivo:</b> Area di testo per giustificare il motivo dello spostamento (limitata a 200 caratteri).</li>
+ * <li><b>Tabella Storico:</b> Mostra l'elenco delle richieste già inviate (Orario vecchio, Orario nuovo, Motivo, Stato).
+ * Cliccando su una riga è possibile leggere la motivazione completa in un popup.</li>
+ * <li><b>Bottoni di Azione:</b> Invia la richiesta al Responsabile per l'approvazione, oppure torna alla schermata principale.</li>
+ * </ul>
+ */
 public class SchermataRichiesta {
     JFrame frame;
     private JTextField oraIniziaLezioneText;

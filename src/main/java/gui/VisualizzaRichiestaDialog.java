@@ -3,14 +3,20 @@ package gui;
 import controller.Controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-
-/** La schermta visualizzaRichiesta si differenzia dalla
- * schermata richista di docente, poichè il responsabile deve
- * poter vedere tutte le richieste in attesa di qualsiasi docente,
- * per poter deicidere se approvare, rifiutare o modificare l'orario
- * della richiesta di spostamento.
- * */
+/**
+ * Finestra di dialogo (GUI) dedicata alle richieste di spostamento.
+ * <p>
+ * Questa schermata ai Responsabili fa da pannello di controllo per esaminare
+ * e le proposte inoltrate dai docenti.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Tabella Richieste:</b> Mostra l'elenco completo di tutte le richieste, includendo Docente, Orario attuale, Nuovo orario, Motivo e Stato.</li>
+ * <li><b>Pannello Gestione:</b> Un'area che mostra i dettagli della richiesta attualmente selezionata.</li>
+ * <li><b>Bottoni di Azione (Approva/Rifiuta):</b> Permettono di validare o respingere la richiesta.</li>
+ * <li><b>Bottone Modifica:</b> Consente al responsabile di proporre/forzare un orario alternativo rispetto a quello richiesto dal docente.</li>
+ * </ul>
+ */
 @SuppressWarnings("unused")
 public class VisualizzaRichiestaDialog {
     JDialog dialog;

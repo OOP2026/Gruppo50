@@ -8,6 +8,21 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Finestra di dialogo (GUI) dedicata alla creazione e programmazione di una nuova lezione.
+ * <p>
+ * Questa schermata che può essere usata solo dal responsabile fornisce un modulo per inserire tutti i dettagli
+ * necessari alla creazione. L'interfaccia é formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Nome Insegnamento:</b> Un menu a tendina per scegliere l'insegnamento.</li>
+ * <li><b>Email docente:</b> Campo di testo per inserire la mail del professore.</li>
+ * <li><b>Nome aula:</b> Un menu a tendina dinamico per la selezione dell'aula.</li>
+ * <li><b>Giorno:</b> Menu a scorrimento per scegliere il giorno della settimana.</li>
+ * <li><b>Fascia Oraria:</b> Campi di testo dedicati all'inserimento di ore e minuti.</li>
+ * <li><b>Bottoni di Azione:</b> Conferma o annulla l'operazione.</li>
+ * </ul>
+ */
 
 public class CrealezioneDialog {
     JDialog dialog;
