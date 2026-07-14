@@ -617,7 +617,9 @@ public class  Controller {
 					studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
 				} catch (Exception e) {
 					logger.info("DB non disponibile, registrazione studente solo in memoria: " + e.getMessage());
-					long numStudenti = utentiRegistrati.stream().filter(u -> u instanceof Studente).count();
+					long numStudenti = utentiRegistrati.stream()
+							.filter(Studente.class::isInstance)
+							.count();
 					matricola = "DE" + String.format("%08d", numStudenti + 1);
 				}
 				Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
