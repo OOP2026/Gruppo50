@@ -199,7 +199,7 @@ public int getOrarioFineInMinuti() {
      * @param oraFine la nuova ora di fine.
      * @param minutoFine i nuovi minuti di fine.
      */
-    private void setOrarioFine(int oraFine, int minutoFine){
+  public void setOrarioFine(int oraFine, int minutoFine){
         checkThisOrarioFine(oraFine, minutoFine);
         checkConfrontoOrario();
         this.oraFine = oraFine;

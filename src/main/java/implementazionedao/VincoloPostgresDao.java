@@ -40,7 +40,7 @@ public class VincoloPostgresDao implements VincoloDAO {
 
     @Override
     public Object[][] caricaVincoliDB(String emailDocente) throws SQLException {
-        String sql="SELECT * FROM vincolo WHERE docentee = ?";
+        String sql="SELECT orarioi,orariof,giorno FROM vincolo WHERE docentee = ?";
         List<Object[]> vincoli= new ArrayList<>();
         boolean haRighe=false;
         try(PreparedStatement ps=connection.prepareStatement(sql)){

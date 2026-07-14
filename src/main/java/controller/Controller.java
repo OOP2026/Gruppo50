@@ -21,6 +21,7 @@ public class  Controller {
 	private Responsabile responsabile;
 	private Responsabile responsabileTemp;
 	private Docente docente;
+	@SuppressWarnings("unused")
 	private Utente utente;
 	/**E' una lista di tipo {@link Utente} che contiene tutti gli utenti che si sono registrati.*/
 	private final List<Utente> utentiRegistrati;

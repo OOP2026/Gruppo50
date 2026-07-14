@@ -25,7 +25,7 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
 
     @Override
     public Object[][] caricaInsegnamentiDB(){
-        String sql="SELECT * FROM insegnamento";
+        String sql="SELECT nomecorso,cfu,annocorso,emaildoc FROM insegnamento";
         List<Object[]> insegnamenti= new ArrayList<>();
         boolean haRighe=false;
         try(PreparedStatement ps=connection.prepareStatement(sql)){

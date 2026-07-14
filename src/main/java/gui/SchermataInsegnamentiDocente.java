@@ -74,7 +74,7 @@ if(tabellaInsegnamenti != null) {
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setEditable(false);
-        //textArea.setBackground(new Color(255, 255, 255, 0) );
+
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setPreferredSize(new Dimension(120, 100));
         int risposta = JOptionPane.showConfirmDialog(frame, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
