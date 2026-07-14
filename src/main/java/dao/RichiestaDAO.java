@@ -42,6 +42,13 @@ public interface RichiestaDAO {
     int TESTO_GIORNO_PROPOSTO = 3;
     int TESTO_STATO = 4;
 
+
+    // Indici dei valori negli array String[] riempiti da leggiRichiesteInAttesaDB.
+    int ATTESA_EMAIL_DOCENTE = 0;
+    int ATTESA_EMAIL_RESPONSABILE = 1;
+    int ATTESA_MOTIVO = 2;
+    int ATTESA_GIORNO_INIZIALE = 3;
+    int ATTESA_GIORNO_PROPOSTO = 4;
     /**
      * Salva nel database una richiesta di spostamento inviata da un docente a un
      * responsabile. Lo stato non viene passato: sul DB assume il valore di
@@ -94,33 +101,13 @@ public interface RichiestaDAO {
      * indipendentemente dal responsabile destinatario. Serve a far sì che
      * qualsiasi responsabile loggato possa vedere e gestire tutte le richieste
      * pendenti. Le liste sono parallele per indice.
-     *
      * @param id                    lista in cui inserire gli id delle richieste
-     * @param emailDocente          lista in cui inserire le email dei docenti richiedenti
-     * @param emailResponsabile     lista in cui inserire le email dei responsabili destinatari
-     * @param motivo                lista in cui inserire i motivi
-     * @param giornoIniziale        lista in cui inserire i giorni iniziali
-     * @param oraInizioIniziale     lista in cui inserire le ore di inizio iniziali
-     * @param minutoInizioIniziale  lista in cui inserire i minuti di inizio iniziali
-     * @param oraFineIniziale       lista in cui inserire le ore di fine iniziali
-     * @param minutoFineIniziale    lista in cui inserire i minuti di fine iniziali
-     * @param giornoProposto        lista in cui inserire i giorni proposti
-     * @param oraInizioProposto     lista in cui inserire le ore di inizio proposte
-     * @param minutoInizioProposto  lista in cui inserire i minuti di inizio proposti
-     * @param oraFineProposto       lista in cui inserire le ore di fine proposte
-     * @param minutoFineProposto    lista in cui inserire i minuti di fine proposti
      * @throws Exception se la lettura dal database fallisce
      */
-    void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
-                                  ArrayList<String> emailDocente,
-                                  ArrayList<String> emailResponsabile,
-                                  ArrayList<String> motivo,
-                                  ArrayList<String> giornoIniziale,
-                                  ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale,
-                                  ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
-                                  ArrayList<String> giornoProposto,
-                                  ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                  ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException;
+    public void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
+                                         ArrayList<String[]> datiTesto,
+                                         ArrayList<int[]> orarioIniziale,
+                                         ArrayList<int[]> orarioProposto) throws SQLException;
 
     /**
      * Aggiorna lo stato di una richiesta (tipicamente quando il responsabile la
