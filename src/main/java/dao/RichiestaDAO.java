@@ -35,6 +35,13 @@ public interface RichiestaDAO {
     int ORA_FINE_PROPOSTO = 11;
     int MINUTO_FINE_PROPOSTO = 12;
 
+    // Indici dei valori negli array String[] riempiti da leggiRichiesteDocenteDB.
+    int TESTO_EMAIL_RESPONSABILE = 0;
+    int TESTO_MOTIVO = 1;
+    int TESTO_GIORNO_INIZIALE = 2;
+    int TESTO_GIORNO_PROPOSTO = 3;
+    int TESTO_STATO = 4;
+
     /**
      * Salva nel database una richiesta di spostamento inviata da un docente a un
      * responsabile. Lo stato non viene passato: sul DB assume il valore di
@@ -62,32 +69,23 @@ public interface RichiestaDAO {
      *
      * @param emailDocente          email del docente di cui leggere le richieste
      * @param id                    lista in cui inserire gli id delle richieste
-     * @param emailResponsabile     lista in cui inserire le email dei responsabili
-     * @param motivo                lista in cui inserire i motivi
-     * @param giornoIniziale        lista in cui inserire i giorni iniziali
-     * @param oraInizioIniziale     lista in cui inserire le ore di inizio iniziali
-     * @param minutoInizioIniziale  lista in cui inserire i minuti di inizio iniziali
-     * @param oraFineIniziale       lista in cui inserire le ore di fine iniziali
-     * @param minutoFineIniziale    lista in cui inserire i minuti di fine iniziali
-     * @param giornoProposto        lista in cui inserire i giorni proposti
-     * @param oraInizioProposto     lista in cui inserire le ore di inizio proposte
-     * @param minutoInizioProposto  lista in cui inserire i minuti di inizio proposti
-     * @param oraFineProposto       lista in cui inserire le ore di fine proposte
-     * @param minutoFineProposto    lista in cui inserire i minuti di fine proposti
-     * @param stato                 lista in cui inserire gli stati delle richieste
+     * @param datiTesto             lista in cui inserire i campi testuali; ogni
+     *                              elemento è un array il cui ordine è definito
+     *                              dalle costanti {@link #TESTO_EMAIL_RESPONSABILE},
+     *                              {@link #TESTO_MOTIVO}, {@link #TESTO_GIORNO_INIZIALE},
+     *                              {@link #TESTO_GIORNO_PROPOSTO}, {@link #TESTO_STATO}
+     * @param orarioIniziale        lista in cui inserire gli orari iniziali; ogni
+     *                              elemento è un array {@code [oraInizio,
+     *                              minutoInizio, oraFine, minutoFine]}
+     * @param orarioProposto        lista in cui inserire gli orari proposti, nello
+     *                              stesso formato di {@code orarioIniziale}
      * @throws Exception se la lettura dal database fallisce
      */
     void leggiRichiesteDocenteDB(String emailDocente,
                                  ArrayList<Integer> id,
-                                 ArrayList<String> emailResponsabile,
-                                 ArrayList<String> motivo,
-                                 ArrayList<String> giornoIniziale,
-                                 ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale,
-                                 ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
-                                 ArrayList<String> giornoProposto,
-                                 ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                 ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
-                                 ArrayList<String> stato) throws SQLException;
+                                 ArrayList<String[]> datiTesto,
+                                 ArrayList<int[]> orarioIniziale,
+                                 ArrayList<int[]> orarioProposto) throws SQLException;
 
 
 

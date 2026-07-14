@@ -89,22 +89,18 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      *
      * <p>Seleziona tutte le righe della tabella {@code richiesta} il cui
      * {@code email_docente} coincide con quello passato, ordinate per {@code id}.
-     * Per ogni riga i valori vengono aggiunti in coda alle liste parallele: le
-     * colonne {@code time} sono scomposte in ora e minuto tramite
-     * {@link #aggiungiOra}.</p>
+     * Per ogni riga i valori vengono aggiunti in coda alle liste parallele: i
+     * campi testuali in un {@code String[]} ordinato secondo le costanti
+     * {@code TESTO_*} dell'interfaccia, le coppie di colonne {@code time}
+     * (inizio e fine) in un array {@code [oraInizio, minutoInizio, oraFine,
+     * minutoFine]} tramite {@link #leggiOrario}.</p>
      */
     @Override
     public void leggiRichiesteDocenteDB(String emailDocente,
                                         ArrayList<Integer> id,
-                                        ArrayList<String> emailResponsabile,
-                                        ArrayList<String> motivo,
-                                        ArrayList<String> giornoIniziale,
-                                        ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale,
-                                        ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
-                                        ArrayList<String> giornoProposto,
-                                        ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                        ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto,
-                                        ArrayList<String> stato) throws SQLException {
+                                        ArrayList<String[]> datiTesto,
+                                        ArrayList<int[]> orarioIniziale,
+                                        ArrayList<int[]> orarioProposto) throws SQLException {
         String sql = "SELECT id, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto, stato " +
@@ -114,15 +110,15 @@ public class RichiestaPostgresDao implements RichiestaDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     id.add(rs.getInt("id"));
-                    emailResponsabile.add(rs.getString("email_responsabile"));
-                    motivo.add(rs.getString("motivo"));
-                    giornoIniziale.add(rs.getString("giorno_iniziale"));
-                    aggiungiOra(rs, "ora_inizio_iniziale", oraInizioIniziale, minutoInizioIniziale);
-                    aggiungiOra(rs, "ora_fine_iniziale", oraFineIniziale, minutoFineIniziale);
-                    giornoProposto.add(rs.getString("giorno_proposto"));
-                    aggiungiOra(rs, "ora_inizio_proposto", oraInizioProposto, minutoInizioProposto);
-                    aggiungiOra(rs, "ora_fine_proposto", oraFineProposto, minutoFineProposto);
-                    stato.add(rs.getString("stato"));
+                    String[] testo = new String[5];
+                    testo[TESTO_EMAIL_RESPONSABILE] = rs.getString("email_responsabile");
+                    testo[TESTO_MOTIVO] = rs.getString("motivo");
+                    testo[TESTO_GIORNO_INIZIALE] = rs.getString("giorno_iniziale");
+                    testo[TESTO_GIORNO_PROPOSTO] = rs.getString("giorno_proposto");
+                    testo[TESTO_STATO] = rs.getString("stato");
+                    datiTesto.add(testo);
+                    orarioIniziale.add(leggiOrario(rs, "ora_inizio_iniziale", "ora_fine_iniziale"));
+                    orarioProposto.add(leggiOrario(rs, "ora_inizio_proposto", "ora_fine_proposto"));
                 }
             }
         } catch (SQLException e) {
@@ -286,5 +282,21 @@ public class RichiestaPostgresDao implements RichiestaDAO {
         LocalTime orario = rs.getObject(colonna, LocalTime.class);
         ore.add(orario.getHour());
         minuti.add(orario.getMinute());
+    }
+    /**
+     * Legge due colonne di tipo {@code time} (inizio e fine) dalla riga corrente
+     * del {@link ResultSet} e le converte in un array
+     * {@code [oraInizio, minutoInizio, oraFine, minutoFine]}.
+     *
+     * @param rs         result set posizionato sulla riga da leggere
+     * @param colInizio  nome della colonna {@code time} di inizio
+     * @param colFine    nome della colonna {@code time} di fine
+     * @return array di 4 interi: ora e minuto di inizio, ora e minuto di fine
+     * @throws SQLException se la lettura delle colonne fallisce
+     */
+    private int[] leggiOrario(ResultSet rs, String colInizio, String colFine) throws SQLException {
+        LocalTime inizio = rs.getObject(colInizio, LocalTime.class);
+        LocalTime fine = rs.getObject(colFine, LocalTime.class);
+        return new int[]{inizio.getHour(), inizio.getMinute(), fine.getHour(), fine.getMinute()};
     }
 }

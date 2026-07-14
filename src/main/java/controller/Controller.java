@@ -436,34 +436,22 @@ public class  Controller {
 		try {
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
 			ArrayList<Integer> id = new ArrayList<>();
-			ArrayList<String> emailResponsabile = new ArrayList<>();
-			ArrayList<String> motivo = new ArrayList<>();
-			ArrayList<String> giornoIniziale = new ArrayList<>();
-			ArrayList<Integer> oraInizioIniziale = new ArrayList<>();
-			ArrayList<Integer> minutoInizioIniziale = new ArrayList<>();
-			ArrayList<Integer> oraFineIniziale = new ArrayList<>();
-			ArrayList<Integer> minutoFineIniziale = new ArrayList<>();
-			ArrayList<String> giornoProposto = new ArrayList<>();
-			ArrayList<Integer> oraInizioProposto = new ArrayList<>();
-			ArrayList<Integer> minutoInizioProposto = new ArrayList<>();
-			ArrayList<Integer> oraFineProposto = new ArrayList<>();
-			ArrayList<Integer> minutoFineProposto = new ArrayList<>();
-			ArrayList<String> stato = new ArrayList<>();
+			ArrayList<String[]> datiTesto = new ArrayList<>();
+			ArrayList<int[]> orarioIniziale = new ArrayList<>();
+			ArrayList<int[]> orarioProposto = new ArrayList<>();
 			richiestaDAO.leggiRichiesteDocenteDB(docente.getmail(),
-					id, emailResponsabile, motivo,
-					giornoIniziale, oraInizioIniziale, minutoInizioIniziale, oraFineIniziale, minutoFineIniziale,
-					giornoProposto, oraInizioProposto, minutoInizioProposto, oraFineProposto, minutoFineProposto,
-					stato);
+					id, datiTesto, orarioIniziale, orarioProposto);
 
 			List<Richiesta> richieste = new ArrayList<>();
 			for (int i = 0; i < id.size(); i++) {
-				Richiesta r = new Richiesta(docente, motivo.get(i),
-						new Orario(giornoIniziale.get(i), oraInizioIniziale.get(i), minutoInizioIniziale.get(i),
-								oraFineIniziale.get(i), minutoFineIniziale.get(i)),
-						new Orario(giornoProposto.get(i), oraInizioProposto.get(i), minutoInizioProposto.get(i),
-								oraFineProposto.get(i), minutoFineProposto.get(i)));
+				String[] t = datiTesto.get(i);
+				int[] oi = orarioIniziale.get(i);
+				int[] op = orarioProposto.get(i);
+				Richiesta r = new Richiesta(docente, t[RichiestaDAO.TESTO_MOTIVO],
+						new Orario(t[RichiestaDAO.TESTO_GIORNO_INIZIALE], oi[0], oi[1], oi[2], oi[3]),
+						new Orario(t[RichiestaDAO.TESTO_GIORNO_PROPOSTO], op[0], op[1], op[2], op[3]));
 				r.setId(id.get(i));
-				r.caricaStatoDaDB(stato.get(i));
+				r.caricaStatoDaDB(t[RichiestaDAO.TESTO_STATO]);
 				richieste.add(r);
 			}
 			docente.caricaRichiesteInviate(richieste);
