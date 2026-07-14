@@ -1,5 +1,4 @@
 package model;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -18,13 +17,13 @@ public class TestModel {
 	Aula ai= new Aula("Aula 1",50);
 	Orario o1= new Orario(LUNEDI,11,13,14,16);
 	Orario o2= new Orario(LUNEDI,8,30,10,30);
-	Orario o3= new Orario(LUNEDI,15,13,17,16);;
+	Orario o3= new Orario(LUNEDI,15,13,17,16);
 	Lezione l1= new Lezione(i1,ai,o1);
 	Lezione l2= new Lezione(i1,ai,o2);
 	Lezione l3= new Lezione(i1,ai,o3);
 		Orario o4= new Orario(MARTEDI,11,13,14,16);
 		Orario o5= new Orario(MARTEDI,8,30,10,30);
-		Orario o6= new Orario(MARTEDI,15,13,17,16);;
+		Orario o6= new Orario(MARTEDI,15,13,17,16);
 Lezione l4= new Lezione(i1,ai,o4);
 Lezione l5= new Lezione(i1,ai,o5);
 Lezione l6= new Lezione(i1,ai,o6);
