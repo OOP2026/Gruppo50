@@ -22,8 +22,8 @@ public class AulaPostgresDao implements AulaDAO {
 
     @Override
     public void salvaAulaDB(String nome, int capienza) throws SQLException {
-        String sql = "INSERT INTO aula (nome,capienza) " +
-                "VALUES (?,?)";
+        String sql = "INSERT INTO \"aula\" " +
+                "(\"nome\",\"capienza\") VALUES (?,?);";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nome);
             ps.setInt(2, capienza);
