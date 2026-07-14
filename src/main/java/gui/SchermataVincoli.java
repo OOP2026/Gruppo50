@@ -64,7 +64,7 @@ public class SchermataVincoli {
             String giorno= Objects.requireNonNull(giorniBox.getSelectedItem()).toString().toLowerCase();
             String ex=controller.aggiungiVincolo(giorno,oraInizio,minutiInizio,oraFine,minutiFine);
             if(ex!=null){
-             dialogErrore_warning(ex,0);
+             dialogErroreWarning(ex,0);
                 return;
             }
             resetCampi();
@@ -74,12 +74,12 @@ public class SchermataVincoli {
         rimuoviButton.addActionListener(e->{
             int indice=tabellaVincoli.getSelectedRow();
             if(indice==-1){
-             dialogErrore_warning("Seleziona un vincolo da rimuovere",1);
+             dialogErroreWarning("Seleziona un vincolo da rimuovere",1);
                 return;
             }
             String ex=controller.rimuoviVincolo(indice);
                 if(ex!=null){
-                    dialogErrore_warning(ex,0);
+                    dialogErroreWarning(ex,0);
                     return;
                 }
 
@@ -92,7 +92,7 @@ public class SchermataVincoli {
 private boolean checkCampi(){
     //controlla se tutti i campi sono stati compilati
     if(oraFineText.getText().isEmpty() || minutiFineText.getText().isEmpty() || oraInizioText.getText().isEmpty() || minutiInizioText.getText().isEmpty()){
-dialogErrore_warning("Compila tutti i campi",1);
+dialogErroreWarning("Compila tutti i campi",1);
         return false;
     }
     try{
@@ -101,7 +101,7 @@ dialogErrore_warning("Compila tutti i campi",1);
         Integer.parseInt( oraInizioText.getText());
         Integer.parseInt( minutiInizioText.getText());
     }catch(NumberFormatException ex){
-        dialogErrore_warning("Inserisci valori numerici validi per orari e minuti",1);
+        dialogErroreWarning("Inserisci valori numerici validi per orari e minuti",1);
         return false;
     }
 
@@ -130,7 +130,7 @@ private void resetCampi(){
         tabellaVincoli.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
-    private void dialogErrore_warning(String e,int tipo){
+    private void dialogErroreWarning(String e, int tipo){
         switch (tipo){
             case 0:{
                 JOptionPane.showMessageDialog(frame,e,"Errore",JOptionPane.ERROR_MESSAGE);

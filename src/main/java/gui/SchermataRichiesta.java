@@ -70,7 +70,7 @@ public class SchermataRichiesta {
 
         // 2. Controllo sulle ComboBox (FONDAMENTALE per evitare NPE in caricaEvents)
         if (giorniBox.getSelectedItem() == null || giorniNuoviBox.getSelectedItem() == null) {
-dialogErrore_warning("Seleziona un giorno valido per entrambe le lezioni.", 1);
+dialogErroreWarning("Seleziona un giorno valido per entrambe le lezioni.", 1);
             return false;
         }
 
@@ -95,12 +95,12 @@ dialogErrore_warning("Seleziona un giorno valido per entrambe le lezioni.", 1);
                 oraFineN == null || oraFineN.trim().isEmpty() ||
                 minFineN == null || minFineN.trim().isEmpty()) {
 
-dialogErrore_warning("Tutti i campi degli orari devono essere compilati.",1);
+dialogErroreWarning("Tutti i campi degli orari devono essere compilati.",1);
             return false;
         }
 
         if (motivo == null || motivo.trim().isEmpty()) {
-        dialogErrore_warning("Il campo motivo non può essere vuoto.",1);
+        dialogErroreWarning("Il campo motivo non può essere vuoto.",1);
             return false;
         }
 
@@ -116,7 +116,7 @@ dialogErrore_warning("Tutti i campi degli orari devono essere compilati.",1);
             Integer.parseInt(oraFineN.trim());
             Integer.parseInt(minFineN.trim());
         } catch (NumberFormatException e) {
-       dialogErrore_warning("Inserisci valori numerici validi per orari e minuti.",1);
+       dialogErroreWarning("Inserisci valori numerici validi per orari e minuti.",1);
             return false;
         }
 
@@ -165,7 +165,7 @@ dialogErrore_warning("Tutti i campi degli orari devono essere compilati.",1);
                 controller.richiestaspostamentoLezione(motivo, giornoLezione,
                         orarioVecchio, giornoNuovo, orarioNuovo);
             } catch (Exception ex) {
-              dialogErrore_warning(ex.getMessage(),0);
+              dialogErroreWarning(ex.getMessage(),0);
                 return;
             }
 
@@ -254,7 +254,7 @@ dialogErrore_warning("Tutti i campi degli orari devono essere compilati.",1);
         table.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
-    private void dialogErrore_warning(String e,int tipo){
+    private void dialogErroreWarning(String e, int tipo){
         switch (tipo){
             case 0:{
                 JOptionPane.showMessageDialog(frame,e,"Errore",JOptionPane.ERROR_MESSAGE);
