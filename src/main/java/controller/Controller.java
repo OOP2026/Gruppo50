@@ -888,12 +888,9 @@ public class  Controller {
 			ArrayList<String> emailDocente = new ArrayList<>();
 			ArrayList<String> nomeAula = new ArrayList<>();
 			ArrayList<String> giorno = new ArrayList<>();
-			ArrayList<Integer> oraInizio = new ArrayList<>();
-			ArrayList<Integer> minutoInizio = new ArrayList<>();
-			ArrayList<Integer> oraFine = new ArrayList<>();
-			ArrayList<Integer> minutoFine = new ArrayList<>();
+			ArrayList<int[]> orarioLetto = new ArrayList<>();
 			lezioneDAO.leggiTutteLezioniDB(nomiInsegnamento, anniCorso, emailDocente,
-					nomeAula, giorno, oraInizio, minutoInizio, oraFine, minutoFine);
+					nomeAula, giorno, orarioLetto);
 
 			OrarioLezioni orarioCaricato = new OrarioLezioni();
 			for (int i = 0; i < nomiInsegnamento.size(); i++) {
@@ -901,9 +898,9 @@ public class  Controller {
 				Insegnamento insegnamento = new Insegnamento(
 						nomiInsegnamento.get(i), 0, anniCorso.get(i), docenteTitolare);
 				Aula aula = new Aula(nomeAula.get(i), 200);
+				int[] o = orarioLetto.get(i);
 				Orario orario = new Orario(giorno.get(i),
-						oraInizio.get(i), minutoInizio.get(i),
-						oraFine.get(i), minutoFine.get(i));
+						o[0], o[1], o[2], o[3]);
 				orarioCaricato.caricaLezioneDaDB(new Lezione(insegnamento, aula, orario));
 			}
 			this.orarioLezioni = orarioCaricato;
@@ -911,7 +908,6 @@ public class  Controller {
 			logger.info("Errore nel caricamento delle lezioni dal database: " + e.getMessage());
 		}
 	}
-
 	/**
 	 * Carica dal database tutti gli insegnamenti salvati e li aggiunge alla
 	 * lista in memoria {@code insegnamentiRegistrati}, così che siano visibili

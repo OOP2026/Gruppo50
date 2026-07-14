@@ -21,18 +21,14 @@ public interface LezioneDAO {
     /**
      * Salva nel database una lezione creata dal responsabile.
      * I parametri sono i dati grezzi della lezione (non oggetti del Model).
-     *
      * @param nomeInsegnamento nome del corso/insegnamento
-     * @param annoCorso        anno di corso
-     * @param emailDocente     email del docente
-     * @param nomeAula         nome dell'aula
-     * @param giorno           giorno della settimana
-     * @param oraInizio        ora di inizio
-     * @param minutoInizio     minuto di inizio
-     * @param oraFine          ora di fine
-     * @param minutoFine       minuto di fine
-     * @throws Exception se la scrittura sul database fallisce
-     *                   (ad es. lezione già presente in quello slot/aula)
+     * @param annoCorso anno di corso della lezione.
+     * @param emailDocente email del docente.
+     * @param nomeAula nome dell'aula.
+     * @param giorno giorno della settimana.
+     * @param orarioIn  arraylist che contiene l'orario di inizio e di fine della lezione{@code [oraInizio, minutoInizio, oraFine, minutoFine]}.
+     * @throws SQLException se la scrittura sul database fallisce.
+     * (ad es. lezione già presente in quello slot/aula)
      */
     void salvaLezioneDB(String nomeInsegnamento, int annoCorso,
                         String emailDocente,
@@ -55,16 +51,16 @@ public interface LezioneDAO {
      * @param emailDocente     lista in cui inserire le email dei docenti
      * @param nomeAula         lista in cui inserire i nomi delle aule
      * @param giorno           lista in cui inserire i giorni
-     * @param oraInizio        lista in cui inserire le ore di inizio
-     * @param minutoInizio     lista in cui inserire i minuti di inizio
-     * @param oraFine          lista in cui inserire le ore di fine
-     * @param minutoFine       lista in cui inserire i minuti di fine
-     * @throws Exception se la lettura dal database fallisce
+     * @param orario           lista in cui inserire gli orari; ogni elemento è un
+     *                         array {@code [oraInizio, minutoInizio, oraFine, minutoFine]},
+     *                         nello stesso formato di {@code orarioIn} in
+     *                         {@link #salvaLezioneDB}.
+     * @throws SQLException se la lettura dal database fallisce.
      */
     void leggiTutteLezioniDB(ArrayList<String> nomiInsegnamento,
                              ArrayList<Integer> annoCorso,
                              ArrayList<String> emailDocente,
                              ArrayList<String> nomeAula,
-                             ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                             ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException;
+                             ArrayList<String> giorno,
+                             ArrayList<int[]> orario) throws SQLException;
 }

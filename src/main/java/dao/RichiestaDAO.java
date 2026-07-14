@@ -51,7 +51,7 @@ public interface RichiestaDAO {
      *                      indicato dalle costanti di indice
      * @return l'id (chiave primaria) generato dal database per la richiesta salvata
      * @throws SQLException se la scrittura sul database fallisce (ad es. FK
-     *                      inesistente o violazione di un CHECK sugli orari)
+     * inesistente o violazione di un CHECK sugli orari)
      */
     int salvaRichiestaDB(List<Object> datiRichiesta) throws SQLException;
 

@@ -59,13 +59,23 @@ public class LezionePostgresDao implements LezioneDAO {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Esegue una {@code SELECT} sulla tabella {@code lezione} e, per ogni
+     * riga del {@link ResultSet}, aggiunge i valori alle liste passate come
+     * parametro. L'orario di ciascuna lezione viene inserito nella lista
+     * {@code orario} come array {@code [oraInizio, minutoInizio, oraFine,
+     * minutoFine]}, lo stesso formato di {@code orarioIn} in
+     * {@link #salvaLezioneDB}.</p>
+     */
     @Override
     public void leggiTutteLezioniDB(ArrayList<String> nomiInsegnamento,
                                     ArrayList<Integer> annoCorso,
                                     ArrayList<String> emailDocente,
                                     ArrayList<String> nomeAula,
-                                    ArrayList<String> giorno, ArrayList<Integer> oraInizio, ArrayList<Integer> minutoInizio,
-                                    ArrayList<Integer> oraFine, ArrayList<Integer> minutoFine) throws SQLException {
+                                    ArrayList<String> giorno,
+                                    ArrayList<int[]> orario) throws SQLException {
         String sql = "SELECT nomecorso, annocorso, emaildocente, nomeaula, " +
                 "giorno, orainizio, minutoinizio, orafine, minutofine " +
                 "FROM lezione";
@@ -77,10 +87,12 @@ public class LezionePostgresDao implements LezioneDAO {
                 emailDocente.add(rs.getString("emaildocente"));
                 nomeAula.add(rs.getString("nomeaula"));
                 giorno.add(rs.getString("giorno"));
-                oraInizio.add(rs.getInt("orainizio"));
-                minutoInizio.add(rs.getInt("minutoinizio"));
-                oraFine.add(rs.getInt("orafine"));
-                minutoFine.add(rs.getInt("minutofine"));
+                orario.add(new int[]{
+                        rs.getInt("orainizio"),
+                        rs.getInt("minutoinizio"),
+                        rs.getInt("orafine"),
+                        rs.getInt("minutofine")
+                });
             }
         } catch (SQLException e) {
             throw new SQLException("Impossibile leggere tutte le lezioni dal database: " + e.getMessage());
