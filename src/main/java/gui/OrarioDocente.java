@@ -1,5 +1,15 @@
 package gui;
-
+/**
+ * Finestra di interfaccia grafica (GUI) dedicata all'orario settimanale.
+ * <p>
+ * Questa schermata accessibile solo ai docenti fornisce una griglia in cui sono
+ * elencate tutte le lezioni che gli sono state assegnate. L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Tabella Orario:</b> Una tabella strutturata in cinque colonne che vanno dal Lunedì al Venerdì.</li>
+ * <li><b>Bottone Indietro:</b> Un pulsante per chiudere l'orario e tornare alla schermata precedente.</li>
+ * </ul>
+ */
 import controller.Controller;
 
 import javax.swing.*;

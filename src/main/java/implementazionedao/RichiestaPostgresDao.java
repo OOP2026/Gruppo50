@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,22 +84,30 @@ public class RichiestaPostgresDao implements RichiestaDAO {
     }
 
     /**
-     * {@inheritDoc}
+     * Legge dal database tutte le richieste inviate da un dato docente. I
+     * risultati vengono inseriti nelle liste passate come parametro: a parità di
+     * indice, i valori delle varie liste appartengono alla stessa richiesta.
      *
-     * <p>Seleziona tutte le righe della tabella {@code richiesta} il cui
-     * {@code email_docente} coincide con quello passato, ordinate per {@code id}.
-     * Per ogni riga i valori vengono aggiunti in coda alle liste parallele: i
-     * campi testuali in un {@code String[]} ordinato secondo le costanti
-     * {@code TESTO_*} dell'interfaccia, le coppie di colonne {@code time}
-     * (inizio e fine) in un array {@code [oraInizio, minutoInizio, oraFine,
-     * minutoFine]} tramite {@link #leggiOrario}.</p>
+     * @param emailDocente          email del docente di cui leggere le richieste
+     * @param id                    lista in cui inserire gli id delle richieste
+     * @param datiTesto             lista in cui inserire i campi testuali; ogni
+     *                              elemento è un array il cui ordine è definito
+     *                              dalle costanti {@link #TESTO_EMAIL_RESPONSABILE},
+     *                              {@link #TESTO_MOTIVO}, {@link #TESTO_GIORNO_INIZIALE},
+     *                              {@link #TESTO_GIORNO_PROPOSTO}, {@link #TESTO_STATO}
+     * @param orarioIniziale        lista in cui inserire gli orari iniziali; ogni
+     *                              elemento è un array {@code [oraInizio,
+     *                              minutoInizio, oraFine, minutoFine]}
+     * @param orarioProposto        lista in cui inserire gli orari proposti, nello
+     *                              stesso formato di {@code orarioIniziale}
+     * @throws SQLException se la lettura dal database fallisce
      */
     @Override
     public void leggiRichiesteDocenteDB(String emailDocente,
-                                        ArrayList<Integer> id,
-                                        ArrayList<String[]> datiTesto,
-                                        ArrayList<int[]> orarioIniziale,
-                                        ArrayList<int[]> orarioProposto) throws SQLException {
+                                        List<Integer> id,
+                                        List<String[]> datiTesto,
+                                        List<int[]> orarioIniziale,
+                                        List<int[]> orarioProposto) throws SQLException {
         String sql = "SELECT id, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto, stato " +
@@ -127,24 +134,29 @@ public class RichiestaPostgresDao implements RichiestaDAO {
     }
 
     /**
-     * {@inheritDoc}
+     * Legge dal database tutte le richieste ancora in stato {@code 'IN_ATTESA'},
+     * indipendentemente dal responsabile destinatario. Serve a far sì che
+     * qualsiasi responsabile loggato possa vedere e gestire tutte le richieste
+     * pendenti. Le liste sono parallele per indice.
      *
-     * <p>Seleziona tutte le righe ancora in stato {@code 'IN_ATTESA'},
-     * indipendentemente dal responsabile destinatario, ordinate per {@code id}.
-     * Lo stato non viene restituito perché è implicitamente {@code 'IN_ATTESA'}
-     * per tutte le righe estratte.</p>
+     * @param id                    lista in cui inserire gli id delle richieste
+     * @param datiTesto             lista in cui inserire i campi testuali; ogni
+     *                              elemento è un array il cui ordine è definito
+     *                              dalle costanti {@link #ATTESA_EMAIL_DOCENTE},
+     *                              {@link #ATTESA_EMAIL_RESPONSABILE}, {@link #ATTESA_MOTIVO},
+     *                              {@link #ATTESA_GIORNO_INIZIALE}, {@link #ATTESA_GIORNO_PROPOSTO}
+     * @param orarioIniziale        lista in cui inserire gli orari iniziali; ogni
+     *                              elemento è un array {@code [oraInizio,
+     *                              minutoInizio, oraFine, minutoFine]}
+     * @param orarioProposto        lista in cui inserire gli orari proposti, nello
+     *                              stesso formato di {@code orarioIniziale}
+     * @throws SQLException se la lettura dal database fallisce
      */
     @Override
-    public void leggiRichiesteInAttesaDB(ArrayList<Integer> id,
-                                         ArrayList<String> emailDocente,
-                                         ArrayList<String> emailResponsabile,
-                                         ArrayList<String> motivo,
-                                         ArrayList<String> giornoIniziale,
-                                         ArrayList<Integer> oraInizioIniziale, ArrayList<Integer> minutoInizioIniziale,
-                                         ArrayList<Integer> oraFineIniziale, ArrayList<Integer> minutoFineIniziale,
-                                         ArrayList<String> giornoProposto,
-                                         ArrayList<Integer> oraInizioProposto, ArrayList<Integer> minutoInizioProposto,
-                                         ArrayList<Integer> oraFineProposto, ArrayList<Integer> minutoFineProposto) throws SQLException {
+    public void leggiRichiesteInAttesaDB(List<Integer> id,
+                                         List<String[]> datiTesto,
+                                         List<int[]> orarioIniziale,
+                                         List<int[]> orarioProposto) throws SQLException {
         String sql = "SELECT id, email_docente, email_responsabile, motivo, " +
                 "giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 "giorno_proposto, ora_inizio_proposto, ora_fine_proposto " +
@@ -153,15 +165,16 @@ public class RichiestaPostgresDao implements RichiestaDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     id.add(rs.getInt("id"));
-                    emailDocente.add(rs.getString("email_docente"));
-                    emailResponsabile.add(rs.getString("email_responsabile"));
-                    motivo.add(rs.getString("motivo"));
-                    giornoIniziale.add(rs.getString("giorno_iniziale"));
-                    aggiungiOra(rs, "ora_inizio_iniziale", oraInizioIniziale, minutoInizioIniziale);
-                    aggiungiOra(rs, "ora_fine_iniziale", oraFineIniziale, minutoFineIniziale);
-                    giornoProposto.add(rs.getString("giorno_proposto"));
-                    aggiungiOra(rs, "ora_inizio_proposto", oraInizioProposto, minutoInizioProposto);
-                    aggiungiOra(rs, "ora_fine_proposto", oraFineProposto, minutoFineProposto);
+                    String[] testo = new String[5];
+                    testo[ATTESA_EMAIL_DOCENTE] = rs.getString("email_docente");
+                    testo[ATTESA_EMAIL_RESPONSABILE] = rs.getString("email_responsabile");
+                    testo[ATTESA_MOTIVO] = rs.getString("motivo");
+                    testo[ATTESA_GIORNO_INIZIALE] = rs.getString("giorno_iniziale");
+                    testo[ATTESA_GIORNO_PROPOSTO] = rs.getString("giorno_proposto");
+                    datiTesto.add(testo);
+                    orarioIniziale.add(leggiOrario(rs, "ora_inizio_iniziale", "ora_fine_iniziale"));
+                    orarioProposto.add(leggiOrario(rs, "ora_inizio_proposto", "ora_fine_proposto"));
+
                 }
             }
         } catch (SQLException e) {
@@ -181,6 +194,7 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      * che coincide con docente, giorno e orario iniziali della richiesta viene
      * aggiornata al giorno e all'orario proposti. Se la lezione non viene
      * trovata la transazione è annullata e lo stato non cambia.</p>
+     * @throws SQLException se la modifica nel database fallisce.
      */
     @Override
     public void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws SQLException {
@@ -263,25 +277,6 @@ public class RichiestaPostgresDao implements RichiestaDAO {
             // Es. violazione del CHECK sugli orari proposti o del CHECK "proposto != iniziale".
             throw new SQLException("Impossibile aggiornare l'orario proposto della richiesta sul database: " + e.getMessage());
         }
-    }
-
-    /**
-     * Legge una colonna di tipo {@code time} dalla riga corrente del
-     * {@link ResultSet} e ne aggiunge ora e minuto, come interi separati, in
-     * coda alle due liste passate. Metodo di utilità usato dai metodi di lettura
-     * per evitare duplicazione nella conversione {@code time} → (ora, minuto).
-     *
-     * @param rs      result set posizionato sulla riga da leggere
-     * @param colonna nome della colonna {@code time} da estrarre
-     * @param ore     lista in cui inserire l'ora (0-23)
-     * @param minuti  lista in cui inserire il minuto (0-59)
-     * @throws SQLException se la lettura della colonna fallisce
-     */
-    private void aggiungiOra(ResultSet rs, String colonna,
-                             ArrayList<Integer> ore, ArrayList<Integer> minuti) throws SQLException {
-        LocalTime orario = rs.getObject(colonna, LocalTime.class);
-        ore.add(orario.getHour());
-        minuti.add(orario.getMinute());
     }
     /**
      * Legge due colonne di tipo {@code time} (inizio e fine) dalla riga corrente

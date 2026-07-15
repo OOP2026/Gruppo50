@@ -1,5 +1,19 @@
 package gui;
-
+/**
+ * Finestra di interfaccia grafica (GUI) dedicata alla gestione degli insegnamenti del docente.
+ * <p>
+ * Questa schermata, accessibile solo ai Docenti e ai Responsabili
+ * permette di visualizzare, aggiungere e rimuovere le materie
+ * che il professore può insegnare.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Tabella Insegnamenti:</b> Mostra l'elenco dei corsi associati al docente (Nome, CFU, Anno).</li>
+ * <li><b>Menu Insegnamenti:</b> Un menu a tendina che elenca tutti i corsi registrati nel sistema non ancora associati al docente.</li>
+ * <li><b>Bottone Aggiungi:</b> Associa l'insegnamento selezionato nel menu al profilo del docente.</li>
+ * <li><b>Bottone Indietro:</b> Chiude la finestra e riporta l'utente alla schermata di controllo principale.</li>
+ * </ul>
+ */
 import controller.Controller;
 
 import javax.swing.*;

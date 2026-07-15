@@ -2,10 +2,21 @@
 package gui;
 import controller.Controller;
 import javax.swing.*;
-
-/**Questa GUI rapressenta la gui di responsabile dove può creare le lezioni, gestire gli insegnamenti attivi
- * e anche gestire le richieste di spostamento fatte dai docenti.
+/**
+ * Finestra di interfaccia grafica (GUI) che fa da menu principale per il responsabile.
+ * <p>
+ * Questa schermata accessibile solo ai Responsabili fornisce un pannello di controllo per la gestione dell'orario,
+ * dei corsi e delle richieste dei docenti.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Visualizza Richieste:</b> Apre la finestra per controllare, approvare o rifiutare le richieste di spostamento delle lezioni mandate dai docenti.</li>
+ * <li><b>Crea Lezione:</b> Apre il modulo dedicato alla programmazione e all'inserimento di una nuova lezione nell'orario.</li>
+ * <li><b>Insegnamenti Attivi:</b> Permette di accedere alla schermata per visualizzare e registrare nuovi insegnamenti.</li>
+ * <li><b>Logout:</b> Disconnette l'utente in sicurezza e lo riporta alla schermata di accesso iniziale.</li>
+ * </ul>
  */
+
 public class SchermataResponsabile {
     JFrame frame;
     private JPanel panel1;

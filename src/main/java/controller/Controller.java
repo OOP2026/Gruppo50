@@ -479,32 +479,21 @@ public class  Controller {
 		try {
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
 			ArrayList<Integer> id = new ArrayList<>();
-			ArrayList<String> emailDocente = new ArrayList<>();
-			ArrayList<String> emailResponsabile = new ArrayList<>();
-			ArrayList<String> motivo = new ArrayList<>();
-			ArrayList<String> giornoIniziale = new ArrayList<>();
-			ArrayList<Integer> oraInizioIniziale = new ArrayList<>();
-			ArrayList<Integer> minutoInizioIniziale = new ArrayList<>();
-			ArrayList<Integer> oraFineIniziale = new ArrayList<>();
-			ArrayList<Integer> minutoFineIniziale = new ArrayList<>();
-			ArrayList<String> giornoProposto = new ArrayList<>();
-			ArrayList<Integer> oraInizioProposto = new ArrayList<>();
-			ArrayList<Integer> minutoInizioProposto = new ArrayList<>();
-			ArrayList<Integer> oraFineProposto = new ArrayList<>();
-			ArrayList<Integer> minutoFineProposto = new ArrayList<>();
+			ArrayList<String[]> datiTesto = new ArrayList<>();
+			ArrayList<int[]> orarioIniziale = new ArrayList<>();
+			ArrayList<int[]> orarioProposto = new ArrayList<>();
 			richiestaDAO.leggiRichiesteInAttesaDB(
-					id, emailDocente, emailResponsabile, motivo,
-					giornoIniziale, oraInizioIniziale, minutoInizioIniziale, oraFineIniziale, minutoFineIniziale,
-					giornoProposto, oraInizioProposto, minutoInizioProposto, oraFineProposto, minutoFineProposto);
+					id, datiTesto, orarioIniziale, orarioProposto);
 
 			List<Richiesta> richieste = new ArrayList<>();
 			for (int i = 0; i < id.size(); i++) {
-				Docente docenteRichiedente = trovaDocentePerEmail(emailDocente.get(i));
-				Richiesta r = new Richiesta(docenteRichiedente, motivo.get(i),
-						new Orario(giornoIniziale.get(i), oraInizioIniziale.get(i), minutoInizioIniziale.get(i),
-								oraFineIniziale.get(i), minutoFineIniziale.get(i)),
-						new Orario(giornoProposto.get(i), oraInizioProposto.get(i), minutoInizioProposto.get(i),
-								oraFineProposto.get(i), minutoFineProposto.get(i)));
+				String[] t = datiTesto.get(i);
+				int[] oi = orarioIniziale.get(i);
+				int[] op = orarioProposto.get(i);
+				Docente docenteRichiedente = trovaDocentePerEmail(t[RichiestaDAO.ATTESA_EMAIL_DOCENTE]);
+				Richiesta r = new Richiesta(docenteRichiedente, t[RichiestaDAO.ATTESA_MOTIVO],
+						new Orario(t[RichiestaDAO.ATTESA_GIORNO_INIZIALE], oi[0], oi[1], oi[2], oi[3]),
+						new Orario(t[RichiestaDAO.ATTESA_GIORNO_PROPOSTO], op[0], op[1], op[2], op[3]));
 				r.setId(id.get(i));
 				// lo stato non viene letto: le richieste estratte sono tutte IN_ATTESA (default)
 				richieste.add(r);
@@ -515,6 +504,7 @@ public class  Controller {
 		}
 		return null;
 	}
+
 
 	/**Aggiorna sul database lo stato corrente (letto dal Model) della richiesta
 	 * indicata. Best-effort: se la richiesta non era mai stata salvata sul DB
@@ -634,7 +624,9 @@ public class  Controller {
 					studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
 				} catch (Exception e) {
 					logger.info("DB non disponibile, registrazione studente solo in memoria: " + e.getMessage());
-					long numStudenti = utentiRegistrati.stream().filter(u -> u instanceof Studente).count();
+					long numStudenti = utentiRegistrati.stream()
+							.filter(Studente.class::isInstance)
+							.count();
 					matricola = "DE" + String.format("%08d", numStudenti + 1);
 				}
 				Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);

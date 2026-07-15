@@ -1,5 +1,17 @@
 package gui;
-
+/**
+ * Finestra di dialogo (GUI) dedicata all'accesso degli utenti già registrati nel sistema.
+ * <p>
+ * Questa schermata accessibile a tutti fornisce un modulo per inserire le credenziali di accesso.
+ * Dopo la verifica col database, reindirizza automaticamente l'utente alla propria
+ * schermata personale in base al ruolo. L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Username:</b> Campo di testo per inserire l'username dell'utente.</li>
+ * <li><b>Password:</b> Campo di testo per inserire la password.</li>
+ * <li><b>Bottoni di Azione:</b> Esegui l'accesso o torna alla schermata precedente.</li>
+ * </ul>
+ */
 import controller.Controller;
 import javax.swing.*;
 

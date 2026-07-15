@@ -2,7 +2,20 @@
 package gui;
 import controller.Controller;
 import javax.swing.*;
-
+/**
+ * Finestra di interfaccia grafica (GUI) che fa da menu per il docente.
+ * <p>
+ * Questa schermata accessibile solo ai Docenti, fornisce un pannello di controllo per gestire tutte le attività didattiche personali.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Insegnamenti:</b> Apre la schermata per visualizzare le proprie materie d'insegnamento.</li>
+ * <li><b>Richieste:</b> Permette di accedere alla sezione per le richieste di spostamento delle lezioni.</li>
+ * <li><b>Visualizza Orario:</b> Mostra la griglia settimanale con le lezioni assegnate al docente.</li>
+ * <li><b>Vincoli:</b> Apre l'interfaccia per inserire o rimuovere i vincoli per i propri orari.</li>
+ * <li><b>Logout:</b> Disconnette l'utente in sicurezza e lo riporta alla schermata di accesso iniziale.</li>
+ * </ul>
+ */
 public class SchermataDocente {
     JFrame frame;
     private JPanel panel1;

@@ -1,5 +1,15 @@
 package gui;
-
+/**
+ * Finestra di interfaccia grafica (GUI) che serve da schermata iniziale dell'applicazione.
+ * <p>
+ * Questa schermata accessibile a tutti gli utenti rappresenta il punto di ingresso principale del sistema.
+ * L'interfaccia è formata dai seguenti elementi:
+ * </p>
+ * <ul>
+ * <li><b>Bottone Login:</b> Reindirizza l'utente alla schermata per inserire le credenziali di accesso.</li>
+ * <li><b>Bottone Registrati:</b> Apre il modulo dedicato alla creazione di un nuovo account all'interno del sistema.</li>
+ * </ul>
+ */
 import controller.Controller;
 import javax.swing.*;
 

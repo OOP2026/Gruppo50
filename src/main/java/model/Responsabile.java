@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  * Estende {@link Docente} e ha il compito di gestire gli orari,
  * approvare o rifiutare richieste di spostamenti delle lezioni e risolvere eventuali conflitti.
  */
-public class Responsabile extends Docente {
+public class Responsabile extends Utente {
     /** Lista delle richieste di spostamento ricevute.
      */
   ArrayList<Richiesta> richiesteSpostamento;
