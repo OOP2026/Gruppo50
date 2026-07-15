@@ -19,20 +19,13 @@ import java.util.List;
  */
 public interface RichiestaDAO {
 
-    // Indici dei valori nella lista passata a salvaRichiestaDB.
+    // Indici dei campi testuali negli array String[] usati da salvaRichiestaDB
+    // e leggiRichiesteInAttesaDB (stessi campi, stesso ordine).
     int EMAIL_DOCENTE = 0;
     int EMAIL_RESPONSABILE = 1;
     int MOTIVO = 2;
     int GIORNO_INIZIALE = 3;
-    int ORA_INIZIO_INIZIALE = 4;
-    int MINUTO_INIZIO_INIZIALE = 5;
-    int ORA_FINE_INIZIALE = 6;
-    int MINUTO_FINE_INIZIALE = 7;
-    int GIORNO_PROPOSTO = 8;
-    int ORA_INIZIO_PROPOSTO = 9;
-    int MINUTO_INIZIO_PROPOSTO = 10;
-    int ORA_FINE_PROPOSTO = 11;
-    int MINUTO_FINE_PROPOSTO = 12;
+    int GIORNO_PROPOSTO = 4;
 
     // Indici dei valori negli array String[] riempiti da leggiRichiesteDocenteDB.
     int TESTO_EMAIL_RESPONSABILE = 0;
@@ -40,33 +33,24 @@ public interface RichiestaDAO {
     int TESTO_GIORNO_INIZIALE = 2;
     int TESTO_GIORNO_PROPOSTO = 3;
     int TESTO_STATO = 4;
-
-
-    // Indici dei valori negli array String[] riempiti da leggiRichiesteInAttesaDB.
-    int ATTESA_EMAIL_DOCENTE = 0;
-    int ATTESA_EMAIL_RESPONSABILE = 1;
-    int ATTESA_MOTIVO = 2;
-    int ATTESA_GIORNO_INIZIALE = 3;
-    int ATTESA_GIORNO_PROPOSTO = 4;
     /**
      * Salva nel database una richiesta di spostamento inviata da un docente a un
      * responsabile. Lo stato non viene passato: sul DB assume il valore di
      * default {@code 'IN_ATTESA'}.
      *
-     * <p>I dati della richiesta viaggiano in un'unica lista di {@link Object},
-     * i cui elementi devono rispettare l'ordine definito dalle costanti di
-     * questa interfaccia ({@link #EMAIL_DOCENTE} ... {@link #MINUTO_FINE_PROPOSTO}):
-     * email del docente (String), email del responsabile (String), motivo (String),
-     * giorno iniziale (String), ora/minuto di inizio e fine iniziali (Integer),
-     * giorno proposto (String), ora/minuto di inizio e fine proposti (Integer).</p>
-     *
-     * @param datiRichiesta lista dei 13 valori della richiesta, nell'ordine
-     *                      indicato dalle costanti di indice
+     * @param datiTesto      campi testuali della richiesta, nell'ordine definito
+     *                       dalle costanti {@link #EMAIL_DOCENTE},
+     *                       {@link #EMAIL_RESPONSABILE}, {@link #MOTIVO},
+     *                       {@link #GIORNO_INIZIALE}, {@link #GIORNO_PROPOSTO}
+     * @param orarioIniziale orario iniziale come array {@code [oraInizio,
+     *                       minutoInizio, oraFine, minutoFine]}
+     * @param orarioProposto orario proposto, nello stesso formato di
+     *                       {@code orarioIniziale}
      * @return l'id (chiave primaria) generato dal database per la richiesta salvata
      * @throws SQLException se la scrittura sul database fallisce (ad es. FK
      * inesistente o violazione di un CHECK sugli orari)
      */
-    int salvaRichiestaDB(List<Object> datiRichiesta) throws SQLException;
+    int salvaRichiestaDB(String[] datiTesto, int[] orarioIniziale, int[] orarioProposto) throws SQLException;
 
     /**
      * Legge dal database tutte le richieste inviate da un dato docente. I

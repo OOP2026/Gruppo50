@@ -410,7 +410,7 @@ public class  Controller {
 	}
 	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int [] orarioVecchio, String giornoNuovo,
-	                                       int [] orarioNuovo) {
+	                                        int [] orarioNuovo) {
 		checkResponsabileTemp();
 		docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, orarioVecchio[0], orarioVecchio[1], orarioVecchio[2], orarioVecchio[3]), new Orario(giornoNuovo, orarioNuovo[0], orarioNuovo[1], orarioNuovo[2], orarioNuovo[3]));
 
@@ -421,17 +421,19 @@ public class  Controller {
 		// così approvazione/rifiuto potranno aggiornare la riga corretta.
 		try {
 			RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
-			int idGenerato = richiestaDAO.salvaRichiestaDB(Arrays.asList(
-					docente.getmail(), responsabileTemp.getmail(), motivo,
-					giornoVecchio, orarioVecchio[0], orarioVecchio[1], orarioVecchio[2], orarioVecchio[3],
-					giornoNuovo, orarioNuovo[0],orarioNuovo[1], orarioNuovo[2], orarioNuovo[3]));
+			String[] datiTesto = new String[5];
+			datiTesto[RichiestaDAO.EMAIL_DOCENTE] = docente.getmail();
+			datiTesto[RichiestaDAO.EMAIL_RESPONSABILE] = responsabileTemp.getmail();
+			datiTesto[RichiestaDAO.MOTIVO] = motivo;
+			datiTesto[RichiestaDAO.GIORNO_INIZIALE] = giornoVecchio;
+			datiTesto[RichiestaDAO.GIORNO_PROPOSTO] = giornoNuovo;
+			int idGenerato = richiestaDAO.salvaRichiestaDB(datiTesto, orarioVecchio, orarioNuovo);
 			List<Richiesta> inviate = docente.getRichiesteInviate();
 			inviate.get(inviate.size() - 1).setId(idGenerato);
 		} catch (Exception e) {
 			logger.info("Richiesta NON salvata sul database (resta solo in memoria): " + e.getMessage());
 		}
 	}
-
 	/**Carica dal database le richieste inviate dal docente loggato (di qualsiasi
 	 * stato: in attesa, approvate e rifiutate) e le mette nella lista in memoria
 	 * del docente, così la GUI ({@code SchermataRichiesteInviate}) le vede tramite
@@ -490,10 +492,10 @@ public class  Controller {
 				String[] t = datiTesto.get(i);
 				int[] oi = orarioIniziale.get(i);
 				int[] op = orarioProposto.get(i);
-				Docente docenteRichiedente = trovaDocentePerEmail(t[RichiestaDAO.ATTESA_EMAIL_DOCENTE]);
-				Richiesta r = new Richiesta(docenteRichiedente, t[RichiestaDAO.ATTESA_MOTIVO],
-						new Orario(t[RichiestaDAO.ATTESA_GIORNO_INIZIALE], oi[0], oi[1], oi[2], oi[3]),
-						new Orario(t[RichiestaDAO.ATTESA_GIORNO_PROPOSTO], op[0], op[1], op[2], op[3]));
+				Docente docenteRichiedente = trovaDocentePerEmail(t[RichiestaDAO.EMAIL_DOCENTE]);
+				Richiesta r = new Richiesta(docenteRichiedente, t[RichiestaDAO.MOTIVO],
+						new Orario(t[RichiestaDAO.GIORNO_INIZIALE], oi[0], oi[1], oi[2], oi[3]),
+						new Orario(t[RichiestaDAO.GIORNO_PROPOSTO], op[0], op[1], op[2], op[3]));
 				r.setId(id.get(i));
 				// lo stato non viene letto: le richieste estratte sono tutte IN_ATTESA (default)
 				richieste.add(r);

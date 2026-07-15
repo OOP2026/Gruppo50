@@ -53,26 +53,22 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      * restituita al chiamante.</p>
      */
     @Override
-    public int salvaRichiestaDB(List<Object> datiRichiesta) throws SQLException {
+    public int salvaRichiestaDB(String[] datiTesto, int[] orarioIniziale, int[] orarioProposto) throws SQLException {
         String sql = "INSERT INTO richiesta " +
                 "(email_docente, email_responsabile, motivo, " +
                 " giorno_iniziale, ora_inizio_iniziale, ora_fine_iniziale, " +
                 " giorno_proposto, ora_inizio_proposto, ora_fine_proposto) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, (String) datiRichiesta.get(EMAIL_DOCENTE));
-            ps.setString(2, (String) datiRichiesta.get(EMAIL_RESPONSABILE));
-            ps.setString(3, (String) datiRichiesta.get(MOTIVO));
-            ps.setString(4, (String) datiRichiesta.get(GIORNO_INIZIALE));
-            ps.setObject(5, LocalTime.of((Integer) datiRichiesta.get(ORA_INIZIO_INIZIALE),
-                    (Integer) datiRichiesta.get(MINUTO_INIZIO_INIZIALE)));
-            ps.setObject(6, LocalTime.of((Integer) datiRichiesta.get(ORA_FINE_INIZIALE),
-                    (Integer) datiRichiesta.get(MINUTO_FINE_INIZIALE)));
-            ps.setString(7, (String) datiRichiesta.get(GIORNO_PROPOSTO));
-            ps.setObject(8, LocalTime.of((Integer) datiRichiesta.get(ORA_INIZIO_PROPOSTO),
-                    (Integer) datiRichiesta.get(MINUTO_INIZIO_PROPOSTO)));
-            ps.setObject(9, LocalTime.of((Integer) datiRichiesta.get(ORA_FINE_PROPOSTO),
-                    (Integer) datiRichiesta.get(MINUTO_FINE_PROPOSTO)));
+            ps.setString(1, datiTesto[EMAIL_DOCENTE]);
+            ps.setString(2, datiTesto[EMAIL_RESPONSABILE]);
+            ps.setString(3, datiTesto[MOTIVO]);
+            ps.setString(4, datiTesto[GIORNO_INIZIALE]);
+            ps.setObject(5, LocalTime.of(orarioIniziale[0], orarioIniziale[1]));
+            ps.setObject(6, LocalTime.of(orarioIniziale[2], orarioIniziale[3]));
+            ps.setString(7, datiTesto[GIORNO_PROPOSTO]);
+            ps.setObject(8, LocalTime.of(orarioProposto[0], orarioProposto[1]));
+            ps.setObject(9, LocalTime.of(orarioProposto[2], orarioProposto[3]));
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return rs.getInt("id");
@@ -142,9 +138,9 @@ public class RichiestaPostgresDao implements RichiestaDAO {
      * @param id                    lista in cui inserire gli id delle richieste
      * @param datiTesto             lista in cui inserire i campi testuali; ogni
      *                              elemento è un array il cui ordine è definito
-     *                              dalle costanti {@link #ATTESA_EMAIL_DOCENTE},
-     *                              {@link #ATTESA_EMAIL_RESPONSABILE}, {@link #ATTESA_MOTIVO},
-     *                              {@link #ATTESA_GIORNO_INIZIALE}, {@link #ATTESA_GIORNO_PROPOSTO}
+     *                              dalle costanti {@link #EMAIL_DOCENTE},
+     *                              {@link #EMAIL_RESPONSABILE}, {@link #MOTIVO},
+     *                              {@link #GIORNO_INIZIALE}, {@link #GIORNO_PROPOSTO}
      * @param orarioIniziale        lista in cui inserire gli orari iniziali; ogni
      *                              elemento è un array {@code [oraInizio,
      *                              minutoInizio, oraFine, minutoFine]}
@@ -166,11 +162,11 @@ public class RichiestaPostgresDao implements RichiestaDAO {
                 while (rs.next()) {
                     id.add(rs.getInt("id"));
                     String[] testo = new String[5];
-                    testo[ATTESA_EMAIL_DOCENTE] = rs.getString("email_docente");
-                    testo[ATTESA_EMAIL_RESPONSABILE] = rs.getString("email_responsabile");
-                    testo[ATTESA_MOTIVO] = rs.getString("motivo");
-                    testo[ATTESA_GIORNO_INIZIALE] = rs.getString("giorno_iniziale");
-                    testo[ATTESA_GIORNO_PROPOSTO] = rs.getString("giorno_proposto");
+                    testo[EMAIL_DOCENTE] = rs.getString("email_docente");
+                    testo[EMAIL_RESPONSABILE] = rs.getString("email_responsabile");
+                    testo[MOTIVO] = rs.getString("motivo");
+                    testo[GIORNO_INIZIALE] = rs.getString("giorno_iniziale");
+                    testo[GIORNO_PROPOSTO] = rs.getString("giorno_proposto");
                     datiTesto.add(testo);
                     orarioIniziale.add(leggiOrario(rs, "ora_inizio_iniziale", "ora_fine_iniziale"));
                     orarioProposto.add(leggiOrario(rs, "ora_inizio_proposto", "ora_fine_proposto"));
