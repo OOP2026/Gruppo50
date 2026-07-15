@@ -50,6 +50,10 @@ public class Lezione implements Comparable<Lezione> {
                 " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
     }
     //Getter and setter
+    /**
+     * Restituisce l'insegnamento della lezione tramite una copia.
+     * @return una nuova istanza di {@link Insegnamento}
+     */
     public Insegnamento getInsegnamento () {
         return new Insegnamento(this.insegnamento);
     }
@@ -58,16 +62,25 @@ public class Lezione implements Comparable<Lezione> {
         this.insegnamento=i;
 }
 
+    /**
+     * Restituisce l'aula della lezione tramite una copia.
+     * @return una nuova istanza di {@link Aula}
+     */
     public Aula getAula () {
         return new Aula(this.aula);
     }
+
     public void setAula(Aula a){
         this.aula=a;
     }
-
+    /**
+     * Restituisce l'orario della lezione tramite una copia.
+     * @return una nuova istanza di {@link Orario}
+     */
     public Orario getOrario () {
         return new Orario(this.orario);
     }
+
     public void setOrario(Orario o){
         this.orario=o;}
 
