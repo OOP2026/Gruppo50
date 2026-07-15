@@ -261,6 +261,15 @@ public class Token {
 
 }
 
+    /**
+     * Rimuove una lezione dall'orario generale.
+     * <p>
+     * Operazione riservata al Responsabile. Il metodo fa da delegato, passando
+     * in automatico il token di sicurezza interno per autorizzare la cancellazione.
+     * </p>
+     * @param l la lezione da eliminare
+     * @param o il registro orario da cui rimuovere la lezione
+     */
 public void rimuoviLezione(Lezione l,OrarioLezioni o){
     o.rimuoviLezione(l,this.token);
 }

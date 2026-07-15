@@ -49,9 +49,11 @@ public class OrarioLezioni {
     /**
      * Permette di aggiungere una nuova lezione all'orario
      * Solo un Responsabile in possesso del Token valido può eseguire questa operazione.
+     * Il livello di privilegio è garantito a livello di codice dalla richiesta obbligatoria
+     * di un oggetto {@link Token} valido, che solo l'amministratore può generare e possedere.
+     *</p>
      * @param l la {@link Lezione} da aggiungere all'orario
      * @param token l'oggetto Token che da i permessi al responsabile
-     * @Returns true se la lezione viene aggiunta con successo
      * @throws IllegalArgumentException se c'è un conflitto di orario, aula o docente con un'altra lezione
      * @throws NullPointerException se la lezione passata è nulla o se il token è nullo (permesso negato)
      */
@@ -66,6 +68,16 @@ public class OrarioLezioni {
         if(!controlloConflittoLezione(l)) orariolezioni.add(l);
     }
 
+    /**
+     * Rimuove una lezione esistente dall'orario generale.
+     * <p>
+     * Come per l'inserimento, questa operazione distruttiva è blindata. È accessibile solo al
+     * Responsabile, la cui identità viene verificata tramite la validazione del {@link Token}.
+     * </p>
+     * @param l la {@link Lezione} da rimuovere dall'orario
+     * @param token l'oggetto Token che fa da "chiave" per convalidare i permessi
+     * @throws NullPointerException se la lezione passata è nulla o se il token di sicurezza è mancante
+     */
     public void rimuoviLezione(Lezione l, Token token){
         if(token==null){ throw new NullPointerException("Non hai il permesso");}
         if (l == null){
@@ -192,6 +204,16 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
         }
         return orariolezioni;
     }
+
+    /**
+     * Restituisce l'elenco di tutte le lezioni programmate nell'orario (sola lettura).
+     * <p>
+     * Accessibile a tutti gli utenti per la consultazione. Utilizza una <b>copia difensiva</b>
+     * per impedire modifiche dirette alla lista e garantire che solo il Responsabile
+     * possa alterare l'orario.
+     * </p>
+     * @return una nuova lista contenente tutte le lezioni a sistema
+     */
     public List<Lezione> getOrarioLezioni() {
         return new ArrayList<>(orariolezioni);
     }
