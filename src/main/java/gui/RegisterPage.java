@@ -31,6 +31,7 @@ public class RegisterPage {
     private JButton confermaButton;
     private JButton annullaButton;
     private JComboBox comboBox1;
+    private static final String TITOLO_ERRORE_REGISTRAZIONE = "Errore nella registrazione";
 
     public RegisterPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Registrati");
@@ -60,16 +61,16 @@ public class RegisterPage {
                 // Solo controllo input
                 if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty()
                         || username.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 if(!mailValidazione()) {
-                    JOptionPane.showMessageDialog(frame, "Email non valida.", "Errore nella registrazione", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Email non valida.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
                 if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
-                    JOptionPane.showMessageDialog(frame, "Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Email già in uso.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
