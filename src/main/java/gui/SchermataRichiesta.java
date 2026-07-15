@@ -194,6 +194,10 @@ dialogErroreWarning("Tutti i campi degli orari devono essere compilati.",1);
         }
 
         // 3. QUESTO È IL BLOCCO CHE MANCAVA E CHE RISOLVE L'ERRORE SULLA TEXTAREA
+       tableListener();
+    }
+
+    private void tableListener(){
         table.getSelectionModel().addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
 

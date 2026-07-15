@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 public class AulaPostgresDao implements AulaDAO {
     private final Connection connection;
-    private static final Logger logger = Logger.getLogger(AulaPostgresDao.class.getName());
 
     public AulaPostgresDao() throws SQLException {
         this.connection = ConnessioneDatabase.getInstance().getConnection();
