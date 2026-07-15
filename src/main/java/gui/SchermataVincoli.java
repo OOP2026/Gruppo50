@@ -67,39 +67,41 @@ caricaVincoli();
 
             });
         }
-        aggiungiButton.addActionListener(e->{
-    if(!checkCampi()) return;
-    int oraFine=Integer.parseInt( oraFineText.getText());
-            int minutiFine=Integer.parseInt( minutiFineText.getText());
-            int oraInizio=Integer.parseInt( oraInizioText.getText());
-            int minutiInizio=Integer.parseInt( minutiInizioText.getText());
-            String giorno= Objects.requireNonNull(giorniBox.getSelectedItem()).toString().toLowerCase();
-            String ex=controller.aggiungiVincolo(giorno,oraInizio,minutiInizio,oraFine,minutiFine);
-            if(ex!=null){
-             dialogErroreWarning(ex,0);
+        if(aggiungiButton!=null) {
+            aggiungiButton.addActionListener(e -> {
+                if (!checkCampi()) return;
+                int oraFine = Integer.parseInt(oraFineText.getText());
+                int minutiFine = Integer.parseInt(minutiFineText.getText());
+                int oraInizio = Integer.parseInt(oraInizioText.getText());
+                int minutiInizio = Integer.parseInt(minutiInizioText.getText());
+                String giorno = Objects.requireNonNull(giorniBox.getSelectedItem()).toString().toLowerCase();
+                String ex = controller.aggiungiVincolo(giorno, oraInizio, minutiInizio, oraFine, minutiFine);
+                if (ex != null) {
+                    dialogErroreWarning(ex, 0);
+                    return;
+                }
+                resetCampi();
+                creaTable();
+            });
+        }
+    if(rimuoviButton!=null) {
+        rimuoviButton.addActionListener(e -> {
+            int indice = tabellaVincoli.getSelectedRow();
+            if (indice == -1) {
+                dialogErroreWarning("Seleziona un vincolo da rimuovere", 1);
                 return;
             }
-            resetCampi();
+            String ex = controller.rimuoviVincolo(indice);
+            if (ex != null) {
+                dialogErroreWarning(ex, 0);
+                return;
+            }
+
+
             creaTable();
         });
 
-        rimuoviButton.addActionListener(e->{
-            int indice=tabellaVincoli.getSelectedRow();
-            if(indice==-1){
-             dialogErroreWarning("Seleziona un vincolo da rimuovere",1);
-                return;
-            }
-            String ex=controller.rimuoviVincolo(indice);
-                if(ex!=null){
-                    dialogErroreWarning(ex,0);
-                    return;
-                }
-
-
-                creaTable();
-        });
-
-
+    }
     }
 private boolean checkCampi(){
     //controlla se tutti i campi sono stati compilati

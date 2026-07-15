@@ -22,7 +22,8 @@ public class Insegnamento {
      */
     public Insegnamento(String nome,int numeroCFU,int annoCorso, Docente docente){
        if(annoCorso>3 || annoCorso<1) throw new IllegalArgumentException("L'anno deve essere tra 1 e 3");
-        this.nome=nome;
+
+       this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;
         this.docente=docente;
@@ -89,7 +90,7 @@ public class Insegnamento {
         return this.nome.equals(insegnamento.nome)
                 && this.numeroCFU == insegnamento.numeroCFU
                 && this.annoCorso == insegnamento.annoCorso
-                && this.docente.email.equals(insegnamento.docente.email);
+                && this.docente.getmail().equals(insegnamento.docente.getmail());
     }
     /**
      * Crea un hash code per questo insegnamento su determinati attributi.
@@ -97,7 +98,7 @@ public class Insegnamento {
      */
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(this.nome, this.numeroCFU, this.annoCorso, this.docente.email);
+        return java.util.Objects.hash(this.nome, this.numeroCFU, this.annoCorso, this.docente.getmail());
     }
     
 }

@@ -84,9 +84,9 @@ if(!mailValidazione()) {
 
     private boolean mailValidazione(){
         //un modo per vedere se il pattern della mail è corretto attraverso regex
-       String  email_regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-       Pattern email_pattern= Pattern.compile(email_regex);
-       Matcher matcher=email_pattern.matcher(emailText.getText());
+       String  emailRegex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+       Pattern emailPattern= Pattern.compile(emailRegex);
+       Matcher matcher=emailPattern.matcher(emailText.getText());
        return matcher.matches();
     }
 }
