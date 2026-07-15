@@ -15,5 +15,7 @@ public interface AulaDAO {
      * Restituisce un array che contiene le aule all'interno del database
      * @return {@code Object[][]}
      */
-    Object[][] caricaAulaDB();
+    Object[][] caricaAulaDB() throws SQLException;
+
+    void rimuoviAulaDB(String nome) throws SQLException;
 }

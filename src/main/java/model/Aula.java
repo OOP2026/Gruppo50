@@ -13,7 +13,9 @@ public class Aula {
         return nome;
     }
 
-
+    public int getCapienza() {
+        return capienza;
+    }
 
     /**
      * Crea una nuova aula, aula e orario.
@@ -29,5 +31,18 @@ public Aula(Aula a){
         this.nome= a.nome;
         this.capienza= a.capienza;
 }
-    
+
+  //fare un override del metodo equals per confrontare due aule in base al nome
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Aula aula = (Aula) obj;
+        return this.nome.equals(aula.nome);
+    }
+    //fare un override del metodo hashCode per confrontare due aule in base al nome
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(this.nome);
+    }
 }

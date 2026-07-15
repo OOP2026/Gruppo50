@@ -5,6 +5,6 @@ import java.sql.SQLException;
 public interface InsegnamentoDAO {
     void salvaInsegnamento(String nome, int annoCorso, int cfu, String emailDocente) throws SQLException;
 
-    Object[][] caricaInsegnamentiDB();
+    Object[][] caricaInsegnamentiDB() throws SQLException;
 
 }

@@ -13,6 +13,7 @@ public class SchermataResponsabile {
     private JButton creaLezioneButton;
     private JButton insegnamentiAttiviButton;
     private JButton logoutButton;
+    private JButton gestioneAuleButton;
 
     public SchermataResponsabile(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Responsabile");
@@ -21,6 +22,7 @@ public class SchermataResponsabile {
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
 
+
         /* Controllo che il bottone si inizializzato corettamente*/
         if(creaLezioneButton != null) {
             creaLezioneButton.addActionListener(e -> {
@@ -28,6 +30,15 @@ public class SchermataResponsabile {
                 d.dialog.setVisible(true);
             });
         }
+        if(gestioneAuleButton!=null){
+            gestioneAuleButton.addActionListener(e->{
+                GestioneAuleDialog g= new GestioneAuleDialog(controller,frame);
+                g.dialog.setVisible(true);
+            });
+
+        }
+
+
         if(insegnamentiAttiviButton != null) {
             insegnamentiAttiviButton.addActionListener(e -> {
                 InsegnamentiDialog d = new InsegnamentiDialog(controller, frame);

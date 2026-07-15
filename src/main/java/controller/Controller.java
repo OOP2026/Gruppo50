@@ -112,10 +112,7 @@ public class  Controller {
 	public boolean isResponsabile(Utente u){
 		if (u instanceof Responsabile) {
 			this.responsabile = (Responsabile) u;
-			try{caricaAuleDaDB(); }
-			catch(Exception e){
-				logger.info("Errore caricamento aule: "+e.getMessage());
-			}
+
 			// Carica le richieste in attesa così il responsabile le vede in GUI
 			String erroreRichieste = caricaRichiesteResponsabileDaDB();
 			if (erroreRichieste != null){
@@ -342,12 +339,16 @@ public class  Controller {
 	 */
 	public String aggiungiVincolo(String giorno, int oraInizio, int minutoInizio, int oraFine, int minutoFine) {
 		try{
-			VincoloDAO vincoloDAO= new VincoloPostgresDao();
-			vincoloDAO.salvaVincoloDB(this.docente.getmail(),giorno,oraInizio,minutoInizio,oraFine,minutoFine);
+
 			docente.aggiungiVincolo(giorno, oraInizio, minutoInizio, oraFine, minutoFine);
-		}catch(Exception e){
-			return e.getMessage();
-		}
+            VincoloDAO vincoloDAO= new VincoloPostgresDao();
+            vincoloDAO.salvaVincoloDB(this.docente.getmail(),giorno,oraInizio,minutoInizio,oraFine,minutoFine);
+		}catch(SQLException e){
+            return "Impossibile salvare salvare il vincolo nel DataBase:\n" +  e.getMessage();
+        }
+        catch(Exception e){
+            return e.getMessage();
+        }
 		return null;
 	}
 	/**
@@ -357,12 +358,16 @@ public class  Controller {
 	 */
 	public String rimuoviVincolo(int ind) {
 		try{
-			VincoloDAO vincoloDAO= new VincoloPostgresDao();
+
 			List<Vincolo> vincoli= new ArrayList<>(docente.getVincoli());
 			Vincolo v= vincoli.get(ind);
 			//rimozioni attraverso db
-			vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.getOrario().getGiorno(),v.getOrario().getOraInizio(),v.getOrario().getMinutoInizio(),v.getOrario().getOraFine(),v.getOrario().getMinutoFine());
-			docente.rimuoviVincolo(ind);}
+			docente.rimuoviVincolo(ind);
+            VincoloDAO vincoloDAO= new VincoloPostgresDao();
+            vincoloDAO.rimuoviVincoloDB(this.docente.getmail(),v.getOrario().getGiorno(),v.getOrario().getOraInizio(),v.getOrario().getMinutoInizio(),v.getOrario().getOraFine(),v.getOrario().getMinutoFine());
+        } catch (SQLException e) {
+            return "Impossibile rimuovere il vincolo dal DataBase: \n" +e.getMessage();
+        }
 		catch (Exception e){
 			return e.getMessage();
 		}
@@ -396,9 +401,11 @@ public class  Controller {
 				vs.add(new Vincolo((String)vincolo[0],(int)vincolo[1],(int)vincolo[2],(int)vincolo[3],(int)vincolo[4]));
 			}
 			docente.caricaVincoliInDocente(vs);
+		}catch(SQLException e){
+			return "Impossibile carica i vincoli del docente \n"+e.getMessage();
 		}catch(Exception e){
-			return e.getMessage();
-		}
+            return e.getMessage();
+        }
 		return null;
 	}
 	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
@@ -909,25 +916,19 @@ public class  Controller {
 	 * errori del database vengono segnalati a console senza interrompere il
 	 * login.
 	 */
-	private void caricaInsegnamentiDaDB() {
+	public String caricaInsegnamentiDaDB() {
 		try {
 			InsegnamentoDAO insegnamentoDAO = new InsegnamentoPostgresDAO();
+            List<Insegnamento> i= new ArrayList<>();
 			for (Object[] riga : insegnamentoDAO.caricaInsegnamentiDB()) {
-				// Ordine colonne restituito dal DAO: nome, cfu, annoCorso, emailDocente
-				String nome = (String) riga[0];
-				int cfu = (int) riga[1];
-				int annoCorso = (int) riga[2];
-				String emailDocente = (String) riga[3];
-
-				Docente docenteTitolare = trovaDocentePerEmail(emailDocente);
-				Insegnamento insegnamento = new Insegnamento(nome, cfu, annoCorso, docenteTitolare);
-				if (!insegnamentiRegistrati.contains(insegnamento)) {
-					insegnamentiRegistrati.add(insegnamento);
-				}
+                i.add(new Insegnamento((String) riga[0],(int)riga[1],(int)riga[2],trovaDocentePerEmail((String) riga[3])));
 			}
+            insegnamentiRegistrati= new ArrayList<>(i);
+
 		} catch (Exception e) {
-			logger.info("Errore nel caricamento degli insegnamenti dal database: " + e.getMessage());
+			return "Impossibile caricare gli insegnamenti attivi dal database:\n" + e.getMessage();
 		}
+        return null;
 	}
 
 	/**
@@ -999,7 +1000,7 @@ public class  Controller {
 				}
 			}
 		} catch (Exception e) {
-			logger.info("Errore nel caricamento degli utenti dal database: " + e.getMessage());
+			logger.info("Errore nel caricamento degli utenti dal database:\n " + e.getMessage());
 		}
 	}
 
@@ -1009,18 +1010,22 @@ public class  Controller {
 	 * Carica dal database tutte le {@link Aula aule} tramite {@link AulaDAO}
 	 * e ricostruisce da zero la lista in memoria {@code aule}, usata dalla GUI
 	 * (es. dialog di creazione lezione) per popolare l'elenco delle aule disponibili.
-	 * @throws SQLException se la lettura dal database fallisce.
 	 */
-	public void caricaAuleDaDB() throws SQLException {
-		AulaPostgresDao aulaDao= new AulaPostgresDao();
-		List<Aula> a=new ArrayList<>();
-		Object[][] dati = aulaDao.caricaAulaDB();
-		for (Object[] aula : dati) {
-			String nome = (String) aula[0];
-			int capienza = (int) aula[1];
-			a.add(new Aula(nome, capienza));
-		}
-		aule=new ArrayList<>(a);
+	public String caricaAuleDaDB(){
+        try {
+            AulaPostgresDao aulaDao= new AulaPostgresDao();
+            List<Aula> a=new ArrayList<>();
+            Object[][] dati = aulaDao.caricaAulaDB();
+            for (Object[] aula : dati) {
+                String nome = (String) aula[0];
+                int capienza = (int) aula[1];
+                a.add(new Aula(nome, capienza));
+            }
+            aule = new ArrayList<>(a);
+        }catch (Exception e){
+            return "Impossibile caricare le Aule dal database: \n"+ e.getMessage();
+        }
+        return null;
 	}
 	/**Ritorna le aule  però solo il nome
 	 *@param nomeAula <p>Se nomeAula è {@code ""} il metodo ritorna tutte le aule,
@@ -1037,4 +1042,58 @@ public class  Controller {
 		}
 		return data;
 	}
+    public Object[][] getAuleData(){
+        if(aule.isEmpty()) return new Object[0][0];
+        Object[][] data= new Object[aule.size()][2];
+        for(int i=0; i<aule.size(); i++){
+            data[i][0]=aule.get(i).getNome();
+            data[i][1]=aule.get(i).getCapienza();
+        }
+
+        return data;
+    }
+
+    public String inserisciAula(String nome, int capienza){
+        try{
+            Aula aula= new Aula(nome,capienza);
+            if(aule.contains(aula)) throw new IllegalArgumentException("Esiste gia un aula di nome: "+nome);
+
+            aule.add(aula);
+            AulaPostgresDao aulaDAO= new AulaPostgresDao();
+            aulaDAO.salvaAulaDB(nome,capienza);
+        }
+        catch(SQLException e){
+            return "Impossibile salvare salvare l'aula nel DataBase:\n " +e.getMessage();
+        }
+        catch(Exception e){
+            return e.getMessage();
+        }
+        return null;
+    }
+    public String rimuoviAula(String nomeAula){
+        try{
+            Aula aulaTemp= stringToAula(nomeAula);
+            if(aulaTemp==null) throw new NullPointerException("Non esiste quest'aula che vuoi rimuovere: "+nomeAula);
+            aule.remove(aulaTemp);
+            AulaPostgresDao aulaDAO= new AulaPostgresDao();
+            aulaDAO.rimuoviAulaDB(nomeAula);
+
+        } catch (SQLException e) {
+            return "Impossibile rimuove l'aula dal database: \n"+e.getMessage();
+        }
+        catch (Exception e){
+            return e.getMessage();
+        }
+        return null;
+
+    }
+
+    public Aula stringToAula(String nomeAula){
+            for(Aula aula:aule){
+                if(aula.getNome().equals(nomeAula)){
+                    return aula;
+                }
+            }
+            return null;
+        }
 }

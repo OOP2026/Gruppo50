@@ -28,6 +28,7 @@ public class SchermataInsegnamentiDocente {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(frameChiamante);
+        caricaInsegnamenti();
         if(insegnamentiBox!=null) {insegnamentiBox.setMaximumRowCount(4);}
         caricaEvents();
 
@@ -112,7 +113,12 @@ dialogErrore("Errore GUI: insegnamentiBox non inizializzato dal designer, riavvi
         //quando le righe vengono cliccati diventano grigio chiaro
         tabellaInsegnamenti.setSelectionBackground(Color.LIGHT_GRAY);
     }
-
+    private void caricaInsegnamenti(){
+        String msg= controller.caricaInsegnamentiDaDB();
+        if(msg!=null){
+            dialogErrore(msg);
+        }
+    }
     private void eliminaInsegnamento(int risposta, String materia){
         if (risposta == JOptionPane.YES_OPTION) {
             String action = controller.removeInsegnamentoDocente(materia);

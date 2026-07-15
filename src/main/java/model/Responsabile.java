@@ -251,6 +251,8 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
         return richiesteSpostamento.get(numeroRichiesta).getStatoRichiesta() == StatoRichiesta.IN_ATTESA;
     }
 
+
+
     /** Il token serve per usare alcuni metodi che solo il responsabile puo usare. */
 public class Token {
     private Token() {

@@ -35,10 +35,7 @@ public class SchermataVincoli {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
-
-        if (indietroButton != null) {
-            caricaEvents();
-        }
+caricaVincoli();
 
         //Passa la tabella solo se è stata inizializzata
         if (tabellaVincoli != null) {
@@ -128,6 +125,13 @@ private void resetCampi(){
         tabellaVincoli.setDefaultEditor(Object.class, null);
         //quando le righe vengono cliccati diventano grigio chiaro
         tabellaVincoli.setSelectionBackground(Color.LIGHT_GRAY);
+    }
+
+    private void caricaVincoli(){
+        String ex= controller.caricaVincoliDaDB();
+        if(ex!=null){
+            dialogErroreWarning(ex,0);
+        }
     }
 
     private void dialogErroreWarning(String e, int tipo){

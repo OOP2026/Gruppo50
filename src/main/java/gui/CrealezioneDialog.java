@@ -34,7 +34,8 @@ public class CrealezioneDialog {
         dialog.setContentPane(panel1);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.pack();
-
+caricaAule();
+caricaInsegnamenti();
         //verifico che il frame chiamante non sia null
         if (frameChiamante != null) {
             dialog.setLocationRelativeTo(frameChiamante);
@@ -208,7 +209,19 @@ int [] orario= {oraI,minI,oraF,minF};
             }
 
         });
-
-
     }
+
+    private void caricaInsegnamenti(){
+        String msg= controller.caricaInsegnamentiDaDB();
+        if(msg!=null){
+            JOptionPane.showMessageDialog(dialog, msg, "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void caricaAule(){
+        String ex= controller.caricaAuleDaDB();
+        if(ex!=null){
+            JOptionPane.showMessageDialog(dialog, ex, "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }

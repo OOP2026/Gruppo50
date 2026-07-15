@@ -124,55 +124,58 @@ dialogErroreWarning("Tutti i campi degli orari devono essere compilati.",1);
     }
     /** Carica tutti Action Listener */
     private void caricaEvents() {
-        indietroButton.addActionListener(e -> {
-            frame.setVisible(false);
-            frameChiamante.setVisible(true);
-            frame.dispose();
-        });
+        if(indietroButton!=null) {
+            indietroButton.addActionListener(e -> {
+                frame.setVisible(false);
+                frameChiamante.setVisible(true);
+                frame.dispose();
+            });
+        }
+        if(inviaButton!=null) {
+            inviaButton.addActionListener(e -> {
+                if (!checkCampi()) return;
 
-        inviaButton.addActionListener(e -> {
-            if(!checkCampi()) return;
+                // 1. Estraiamo gli oggetti selezionati e facciamo un controllo locale
+                // che SonarQube può vedere chiaramente in questo specifico blocco
+                Object selGiorno = giorniBox.getSelectedItem();
+                Object selGiornoNuovo = giorniNuoviBox.getSelectedItem();
 
-            // 1. Estraiamo gli oggetti selezionati e facciamo un controllo locale
-            // che SonarQube può vedere chiaramente in questo specifico blocco
-            Object selGiorno = giorniBox.getSelectedItem();
-            Object selGiornoNuovo = giorniNuoviBox.getSelectedItem();
+                if (selGiorno == null || selGiornoNuovo == null) {
+                    return; // Sicurezza extra per SonarQube
+                }
 
-            if (selGiorno == null || selGiornoNuovo == null) {
-                return; // Sicurezza extra per SonarQube
-            }
+                String giornoLezione = selGiorno.toString();
+                String giornoNuovo = selGiornoNuovo.toString();
 
-            String giornoLezione = selGiorno.toString();
-            String giornoNuovo = selGiornoNuovo.toString();
+                // 2. Usiamo String.valueOf per il getText() (che protegge da eventuali null interni di Swing)
+                int oraInizioLezione = Integer.parseInt(String.valueOf(oraIniziaLezioneText.getText()).trim());
+                int minutoInizioLezione = Integer.parseInt(String.valueOf(minutiIniziaLezioneText.getText()).trim());
+                int oraFineLezione = Integer.parseInt(String.valueOf(oraFineLezioneText.getText()).trim());
+                int minutoFineLezione = Integer.parseInt(String.valueOf(minutiFineLezioneText.getText()).trim());
 
-            // 2. Usiamo String.valueOf per il getText() (che protegge da eventuali null interni di Swing)
-            int oraInizioLezione = Integer.parseInt(String.valueOf(oraIniziaLezioneText.getText()).trim());
-            int minutoInizioLezione = Integer.parseInt(String.valueOf(minutiIniziaLezioneText.getText()).trim());
-            int oraFineLezione = Integer.parseInt(String.valueOf(oraFineLezioneText.getText()).trim());
-            int minutoFineLezione = Integer.parseInt(String.valueOf(minutiFineLezioneText.getText()).trim());
+                int oraInizioNuovo = Integer.parseInt(String.valueOf(oraIniziaNuovaText.getText()).trim());
+                int minutoInizioNuovo = Integer.parseInt(String.valueOf(minutiIniziaNuovaText.getText()).trim());
+                int oraFineNuovo = Integer.parseInt(String.valueOf(oraFineNuovaText.getText()).trim());
+                int minutoFineNuovo = Integer.parseInt(String.valueOf(minutiFineNuovaText.getText()).trim());
 
-            int oraInizioNuovo = Integer.parseInt(String.valueOf(oraIniziaNuovaText.getText()).trim());
-            int minutoInizioNuovo = Integer.parseInt(String.valueOf(minutiIniziaNuovaText.getText()).trim());
-            int oraFineNuovo = Integer.parseInt(String.valueOf(oraFineNuovaText.getText()).trim());
-            int minutoFineNuovo = Integer.parseInt(String.valueOf(minutiFineNuovaText.getText()).trim());
+                String motivo = String.valueOf(motivoText.getText());
 
-            String motivo = String.valueOf(motivoText.getText());
+                try {
+                    int[] orarioVecchio = {oraInizioLezione, minutoInizioLezione, oraFineLezione, minutoFineLezione};
+                    int[] orarioNuovo = {oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo};
 
-            try {
-                int [] orarioVecchio={oraInizioLezione, minutoInizioLezione, oraFineLezione, minutoFineLezione};
-                int [] orarioNuovo={oraInizioNuovo, minutoInizioNuovo, oraFineNuovo, minutoFineNuovo};
+                    controller.richiestaspostamentoLezione(motivo, giornoLezione,
+                            orarioVecchio, giornoNuovo, orarioNuovo);
+                } catch (Exception ex) {
+                    dialogErroreWarning(ex.getMessage(), 0);
+                    return;
+                }
 
-                controller.richiestaspostamentoLezione(motivo, giornoLezione,
-                        orarioVecchio, giornoNuovo, orarioNuovo);
-            } catch (Exception ex) {
-              dialogErroreWarning(ex.getMessage(),0);
-                return;
-            }
-
-            resetCampi();
-            creaTableRichiesta();
-            JOptionPane.showMessageDialog(frame, "Richiesta inviata con successo!");
-        });
+                resetCampi();
+                creaTableRichiesta();
+                JOptionPane.showMessageDialog(frame, "Richiesta inviata con successo!");
+            });
+        }
 
         // 3. QUESTO È IL BLOCCO CHE MANCAVA E CHE RISOLVE L'ERRORE SULLA TEXTAREA
         table.getSelectionModel().addListSelectionListener(e -> {

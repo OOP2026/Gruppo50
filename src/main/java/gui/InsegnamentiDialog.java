@@ -18,16 +18,18 @@ public class InsegnamentiDialog {
     private JTextField annoField;
     private JTextField emailDocField;
     private JButton aggiungiButton;
-
+private final Controller controller;
     private DefaultTableModel tableModel;
 
     public InsegnamentiDialog(Controller controller, JFrame frameChiamante) {
+
         dialog = new JDialog(frameChiamante, "Insegnamenti Attivi", true);
         dialog.setContentPane(panel1);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.pack();
         dialog.setLocationRelativeTo(frameChiamante);
-
+this.controller= controller;
+caricaInsegnamenti();
         // Inizializza il DefaultTableModel e assegnalo alla JTable
         String[] colonne = {"Nome", "CFU", "Anno corso", "Email docente"};
         tableModel = new DefaultTableModel(colonne, 0) {
@@ -67,6 +69,7 @@ public class InsegnamentiDialog {
                 String errore = controller.registraInsegnamento(nome, cfu, anno, emailDoc);
                 if (errore != null) {
                     labelErrore.setText(errore);
+                    aggiornaTabella(controller);
                     return;
                 }
 
@@ -87,6 +90,13 @@ public class InsegnamentiDialog {
         tableModel.setRowCount(0);
         for (Object[] riga : controller.getInsegnamentiAttivi()) {
             tableModel.addRow(riga);
+        }
+    }
+
+    private void caricaInsegnamenti(){
+        String msg= controller.caricaInsegnamentiDaDB();
+        if(msg!=null){
+            JOptionPane.showMessageDialog(dialog, msg, "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

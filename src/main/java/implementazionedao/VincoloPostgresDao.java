@@ -34,7 +34,7 @@ public class VincoloPostgresDao implements VincoloDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException("Impossibile salvare salvare l'aula nel DataBase: " + e.getMessage());
+            throw new SQLException(e.getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ public class VincoloPostgresDao implements VincoloDAO {
                 throw new SQLException("Nessun vincolo trovato per la rimozione.");
             }
         } catch (SQLException e) {
-            throw new SQLException("Impossibile rimuovere il vincolo dal DataBase: " + e.getMessage());
+            throw new SQLException( e.getMessage());
         }
     }
 

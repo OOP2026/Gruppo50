@@ -22,20 +22,19 @@ public class AulaPostgresDao implements AulaDAO {
 
     @Override
     public void salvaAulaDB(String nome, int capienza) throws SQLException {
-        String sql = "INSERT INTO \"aula\" " +
-                "(\"nome\",\"capienza\") VALUES (?,?);";
+ String sql="INSERT INTO aula (nome, capienza) VALUES (?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nome);
             ps.setInt(2, capienza);
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException("Impossibile salvare salvare l'aula nel DataBase: " + e.getMessage());
+            throw new SQLException(e.getMessage());
         }
     }
 
     @Override
-    public Object[][] caricaAulaDB() {
+    public Object[][] caricaAulaDB() throws SQLException {
         String sql="SELECT nome, capienza FROM aula";
         List<Object[]> aule= new ArrayList<>();
         boolean haRighe=false;
@@ -51,11 +50,26 @@ public class AulaPostgresDao implements AulaDAO {
           }
 rs.close();
         }catch (SQLException e){
-            logger.info("Errore nel prendere le aule dal database: "+e.getMessage());
+            throw new SQLException(e.getMessage());
         }
 if(!haRighe){
     return new Object[0][0];
 }
         return aule.toArray(new Object[0][]);
+    }
+
+    @Override
+    public void rimuoviAulaDB(String nome) throws SQLException {
+        String sql="DELETE FROM aula WHERE nome=?";
+        try(PreparedStatement ps=connection.prepareStatement(sql)){
+            ps.setString(1,nome);
+            int righeEliminate=ps.executeUpdate();
+            if(righeEliminate==0){
+                throw new SQLException("Nessuna aula trovata con il nome: "+nome);
+            }
+        }catch (SQLException e){
+            throw new SQLException(e.getMessage());
+        }
+
     }
 }

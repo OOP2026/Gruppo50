@@ -52,7 +52,6 @@ public class VisualizzaRichiestaDialog {
                 dialog.dispose() );
         }
 
-        dialog.setVisible(true);
     }
 
     // ---------------------------------------------------------------

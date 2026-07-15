@@ -49,7 +49,7 @@ public class OrarioDocente {
         //non rende editable la tabella
         table.setDefaultEditor(Object.class, null);
       configuraTable(table);
-      caricaLezioni(table,data);
+      caricaLezioniTable(table,data);
         //inseriamo manualmente i dati per un test
     }
     private void configuraTable(JTable table){
@@ -82,7 +82,7 @@ public class OrarioDocente {
         area.setMaximumSize(new Dimension(70, 90));
         return area;
     }
-    private void caricaLezioni(JTable table,Object[][] data){
+    private void caricaLezioniTable(JTable table,Object[][] data){
         DefaultTableModel model= (DefaultTableModel) table.getModel();
         if(data.length==0){
             JOptionPane.showMessageDialog(this.frame,"Non hai lezioni!");

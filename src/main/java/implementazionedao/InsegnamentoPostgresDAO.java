@@ -24,7 +24,7 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
 
 
     @Override
-    public Object[][] caricaInsegnamentiDB(){
+    public Object[][] caricaInsegnamentiDB() throws SQLException {
         String sql="SELECT nomecorso,cfu,annocorso,emaildoc FROM insegnamento";
         List<Object[]> insegnamenti= new ArrayList<>();
         boolean haRighe=false;
@@ -42,7 +42,7 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
             }
             rs.close();
         }catch (SQLException e){
-            logger.info("Errore nel prendere gli insegnamenti dal database: "+e.getMessage());
+            throw new SQLException (e.getMessage());
         }
         if(!haRighe){
             logger.info("Non ci sono insegnamenti nel database");
