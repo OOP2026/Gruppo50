@@ -590,8 +590,8 @@ public class  Controller {
 	 */
 	public boolean registra(String name,String cogn, String email,String login, String pass,String ruolo){
 		for (Utente u : utentiRegistrati) {
-			if (u.getmail().equals(email)) {
-				return false; // Non possono esistere più user con la stessa mail.
+			if (u.getmail().equals(email) || u.getUsername().equals(login)) {
+				return false; // Non possono esistere più user con la stessa mail o username.
 			}
 		}
 		Utente nuovoUtente;
@@ -1096,6 +1096,12 @@ public class  Controller {
                 responsabile.rimuoviLezione(l,orarioLezioni);
             }
         }
-
+    }
+    public void removeLezioneByInsegnamento(Insegnamento ins){
+        for(Lezione l:orarioLezioni.getOrarioLezioni()) {
+            if (l.getInsegnamento().equals(ins)) {
+                responsabile.rimuoviLezione(l, orarioLezioni);
+            }
         }
+    }
 }

@@ -69,7 +69,7 @@ if(!mailValidazione()) {
                 }
 
                 if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
-                    JOptionPane.showMessageDialog(frame, "Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Username o Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 

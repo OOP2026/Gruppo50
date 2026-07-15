@@ -7,15 +7,15 @@ package model;
 
 public class Utente {
     /** Il nome dell'utente. */
-    public String nome;
+    private String nome;
     /** Il cognome dell'utente. */
-    public String cognome;
+    private String cognome;
     /** L'indirizzo email dell'utente. */
-    public String email;
+    private String email;
     /** L'username utilizzato per l'accesso al sistema. */
-    protected String username;
+    private String username;
     /** La password per l'autenticazione. */
-    protected String password;
+    private String password;
 
     /**
      * Costruisce un nuovo Utente con i dati e le credenziali specificate.
@@ -62,7 +62,24 @@ public class Utente {
      * Restituisce l'indirizzo email dell'utente.
      * @return l'email dell'utente come stringa.
      */
+    //getter
     public String getmail(){
         return this.email;
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
