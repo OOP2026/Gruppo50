@@ -7,15 +7,15 @@ package model;
 
 public class Utente {
     /** Il nome dell'utente. */
-    private String nome;
+    protected String nome;
     /** Il cognome dell'utente. */
-    private String cognome;
+    protected String cognome;
     /** L'indirizzo email dell'utente. */
-    private String email;
+    protected String email;
     /** L'username utilizzato per l'accesso al sistema. */
-    private String username;
+    protected String username;
     /** La password per l'autenticazione. */
-    private String password;
+    protected String password;
 
     /**
      * Costruisce un nuovo Utente con i dati e le credenziali specificate.
