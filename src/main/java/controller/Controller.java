@@ -1045,7 +1045,16 @@ public class  Controller {
 
         return data;
     }
-
+	/**
+	 * Registra una nuova aula all'interno del sistema e la salva nel database.
+	 * <p>
+	 * Questa operazione è riservata esclusivamente ai Responsabili.
+	 * Il metodo gestisce sia l'aggiornamento della memoria locale sia la persistenza tramite DAO.
+	 * </p>
+	 * @param nome l'identificativo dell'aula (es. "A1")
+	 * @param capienza il numero massimo di posti disponibili
+	 * @return {@code null} se l'operazione va a buon fine, altrimenti una stringa contenente il messaggio di errore
+	 */
     public String inserisciAula(String nome, int capienza){
         try{
             Aula aula= new Aula(nome,capienza);
@@ -1063,6 +1072,16 @@ public class  Controller {
         }
         return null;
     }
+	/**
+	 * Elimina un'aula dal sistema e dal database.
+	 * <p>
+	 * Essendo un'operazione distruttiva, è accessibile solo al Responsabile.
+	 * La rimozione dell'aula comporta automaticamente l'eliminazione di
+	 * tutte le lezioni attualmente programmate al suo interno.
+	 * </p>
+	 * @param nomeAula il nome dell'aula da eliminare
+	 * @return {@code null} se l'operazione va a buon fine, altrimenti una stringa contenente il messaggio di errore
+	 */
     public String rimuoviAula(String nomeAula){
         try{
             Aula aulaTemp= stringToAula(nomeAula);
@@ -1081,7 +1100,11 @@ public class  Controller {
         return null;
 
     }
-
+	/**
+	 * Metodo di supporto per cercare un'istanza di Aula partendo dal suo nome.
+	 * @param nomeAula il nome dell'aula da cercare
+	 * @return l'oggetto {@link Aula} corrispondente se trovato, {@code null} altrimenti
+	 */
     public Aula stringToAula(String nomeAula){
             for(Aula aula:aule){
                 if(aula.getNome().equals(nomeAula)){
@@ -1090,6 +1113,15 @@ public class  Controller {
             }
             return null;
         }
+	/**
+	 * Rimuove dall'orario generale tutte le lezioni associate a un'aula specifica.
+	 * <p>
+	 * L'operazione viene eseguita utilizzando i permessi del Responsabile.
+	 * Il metodo utilizza una lista temporanea per evitare eccezioni di modifica
+	 * concorrente durante l'iterazione.
+	 * </p>
+	 * @param aula l'aula di cui si vogliono cancellare le lezioni
+	 */
         public void removeLezioneByAula(Aula aula){
         for(Lezione l:orarioLezioni.getOrarioLezioni()){
             if(l.getAula().equals(aula)){
