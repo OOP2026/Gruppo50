@@ -8,7 +8,9 @@ import java.util.logging.Logger;
  * la matricola (che é unica per studente) e l'anno di corso.
  */
 public class Studente extends Utente  {
+    /** Il codice matricola unico dello studente. */
     private final String matricola;
+    /** L'anno accademico attualmente frequentato. */
     private final int annoCorso;
 
     private static final Logger logger = Logger.getLogger(Studente.class.getName());
