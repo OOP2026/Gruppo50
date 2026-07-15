@@ -60,7 +60,7 @@ public class RegisterPage {
                 // Solo controllo input
                 if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty()
                         || username.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore Nella Registrazione", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 if(!mailValidazione()) {
@@ -69,7 +69,7 @@ if(!mailValidazione()) {
                 }
 
                 if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
-                    JOptionPane.showMessageDialog(frame, "Username o Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Username o Email già in uso.", "errore nella registrazione", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
