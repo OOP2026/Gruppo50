@@ -261,4 +261,8 @@ public class Token {
 
 }
 
+public void rimuoviLezione(Lezione l,OrarioLezioni o){
+    o.rimuoviLezione(l,this.token);
+}
+
 }

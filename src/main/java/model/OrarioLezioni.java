@@ -63,10 +63,15 @@ public class OrarioLezioni {
             throw new NullPointerException("Questa lezione è vuota");
         }
 
-        if(controlloConflittoLezione(l)){
-            throw new IllegalArgumentException("C'è un conflitto con un'altra lezione");
+        if(!controlloConflittoLezione(l)) orariolezioni.add(l);
+    }
+
+    public void rimuoviLezione(Lezione l, Token token){
+        if(token==null){ throw new NullPointerException("Non hai il permesso");}
+        if (l == null){
+            throw new NullPointerException("Questa lezione è vuota");
         }
-        orariolezioni.add(l);
+        orariolezioni.remove(l);
     }
 
     /**
@@ -187,6 +192,10 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
         }
         return orariolezioni;
     }
+    public List<Lezione> getOrarioLezioni() {
+        return new ArrayList<>(orariolezioni);
+    }
+
 
     /**
      * Controlla se le fasce orarie di due lezioni si scontrino
@@ -217,8 +226,13 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
             boolean conflittoOrario= controlloConflittoOrario(l,lf);
 
                 if(conflittoOrario){
-                    if(l.getAula().getNome().equals(lf.getAula().getNome())) return true;
-                    if(l.getInsegnamento().getDocente().equals(lf.getInsegnamento().getDocente())) return true;
+                    if(l.getAula().getNome().equals(lf.getAula().getNome())) throw new IllegalArgumentException("C'è già nella stessa aula un'altra lezione in questa fascia oraria");
+                    logger.info("Sto vedendo se il docnete e lo stesso");
+                    //mostrare l'emaail dei due docenti nel terminale
+                    logger.info("Docente lezione nuova: "+l.getInsegnamento().getDocente().getmail());
+                    logger.info("Docente lezione esistente: "+lf.getInsegnamento().getDocente().getmail());
+
+                    if(l.getInsegnamento().getDocente().getmail().equals(lf.getInsegnamento().getDocente().getmail())) throw new IllegalArgumentException("Il docente ha già un altra lezione in questa fascia oraria");
 
 
 

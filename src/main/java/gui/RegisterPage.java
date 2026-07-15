@@ -16,6 +16,8 @@ package gui;
  */
 import controller.Controller;
 import javax.swing.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class RegisterPage {
     JFrame frame;
@@ -61,7 +63,10 @@ public class RegisterPage {
                     JOptionPane.showMessageDialog(frame, "Compila tutti i campi", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
+if(!mailValidazione()) {
+                    JOptionPane.showMessageDialog(frame, "Email non valida.", "Errore nella registrazione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
                     JOptionPane.showMessageDialog(frame, "Email già in uso.", "Errore nella registrazione", JOptionPane.ERROR_MESSAGE);
@@ -74,5 +79,13 @@ public class RegisterPage {
                 frame.dispose();
             });
         }
+    }
+
+    private boolean mailValidazione(){
+        //un modo per vedere se il pattern della mail è corretto attraverso regex
+       String  email_regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+       Pattern email_pattern= Pattern.compile(email_regex);
+       Matcher matcher=email_pattern.matcher(emailText.getText());
+       return matcher.matches();
     }
 }

@@ -718,6 +718,7 @@ public class  Controller {
 		if (docenteTrovato == null) return "Nessun docente registrato con questa email.";
 
 		Insegnamento candidato = new Insegnamento(nome, cfu, annoCorso, docenteTrovato);
+
 		if (insegnamentiRegistrati.contains(candidato)) {
 			return "Insegnamento già presente.";
 		}
@@ -1067,6 +1068,7 @@ public class  Controller {
             Aula aulaTemp= stringToAula(nomeAula);
             if(aulaTemp==null) throw new NullPointerException("Non esiste quest'aula che vuoi rimuovere: "+nomeAula);
             aule.remove(aulaTemp);
+            removeLezioneByAula(aulaTemp);
             AulaPostgresDao aulaDAO= new AulaPostgresDao();
             aulaDAO.rimuoviAulaDB(nomeAula);
 
@@ -1087,5 +1089,13 @@ public class  Controller {
                 }
             }
             return null;
+        }
+        public void removeLezioneByAula(Aula aula){
+        for(Lezione l:orarioLezioni.getOrarioLezioni()){
+            if(l.getAula().equals(aula)){
+                responsabile.rimuoviLezione(l,orarioLezioni);
+            }
+        }
+
         }
 }

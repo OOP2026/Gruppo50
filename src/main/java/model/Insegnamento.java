@@ -21,6 +21,7 @@ public class Insegnamento {
      * @param docente il docente assegnato all'insegnamento.
      */
     public Insegnamento(String nome,int numeroCFU,int annoCorso, Docente docente){
+       if(annoCorso>3 || annoCorso<1) throw new IllegalArgumentException("L'anno deve essere tra 1 e 3");
         this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;
@@ -32,6 +33,7 @@ public class Insegnamento {
      * @param annoCorso l'anno del corso dell'insegnamento.
      */
     public Insegnamento(String nome,int numeroCFU,int annoCorso){
+        if(annoCorso>3 || annoCorso<1) throw new IllegalArgumentException("L'anno deve essere tra 1 e 3");
         this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;

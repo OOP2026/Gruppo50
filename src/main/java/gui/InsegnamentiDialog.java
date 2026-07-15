@@ -81,6 +81,7 @@ caricaInsegnamenti();
             try {
                 int cfu  = Integer.parseInt(cfuTxt);
                 int anno = Integer.parseInt(annoTxt);
+                if(anno>3 || anno<1)throw new IllegalArgumentException("L'anno deve essere tra 1 e 3");
 
                 String errore = controller.registraInsegnamento(nome, cfu, anno, emailDoc);
                 if (errore != null) {

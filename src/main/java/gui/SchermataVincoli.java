@@ -55,6 +55,7 @@ caricaVincoli();
         if (tabellaVincoli != null) {
             creaTable();
         }
+        caricaEvents();
     }
     private void caricaEvents(){
 
