@@ -763,7 +763,7 @@ public class  Controller {
 		for (int i = 0; i < lista.size(); i++) {
 			model.Richiesta r = lista.get(i);
 			data[i][0] = i;
-			data[i][1] = r.getDocenteRichiedente().nome + " " + r.getDocenteRichiedente().cognome;
+			data[i][1] = r.getDocenteRichiedente().getNome() + " " + r.getDocenteRichiedente().getCognome();
 			data[i][2] = r.getOrarioLezioneDaSpostare().getGiorno() + " "
 					+ r.getOrarioLezioneDaSpostare().getOrarioCompleto();
 			data[i][3] = r.getNuovoOrarioLezione().getGiorno() + " "
