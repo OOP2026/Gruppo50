@@ -49,6 +49,10 @@ public class Lezione implements Comparable<Lezione> {
                 this.insegnamento.getDocente().nome+" "+this.insegnamento.getDocente().cognome+
                 " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
     }
+    public String infoLezioneSenzaDocente(){
+        return "Insegnamento: "+this.insegnamento.getNome()+
+                " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
+    }
     //Getter and setter
     /**
      * Restituisce l'insegnamento della lezione tramite una copia.

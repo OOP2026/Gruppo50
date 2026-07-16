@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -49,6 +50,26 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
             return new Object[0][0];
         }
         return insegnamenti.toArray(new Object[0][]);
+    }
+
+    /**
+     * @param nome
+     * @throws SQLException
+     */
+    @Override
+    public void rimuoviInsegnamentoDB(String nome) throws SQLException {
+        String sql = "DELETE FROM Insegnamento WHERE nomecorso =?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nome);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Nessun insegnamento trovato per la rimozione.");
+            }
+        } catch (SQLException e) {
+            throw new SQLException( e.getMessage());
+        }
+
     }
 
     @Override

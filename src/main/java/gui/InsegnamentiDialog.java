@@ -4,6 +4,8 @@ import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+
 @SuppressWarnings("unused")
 
 /**
@@ -101,6 +103,38 @@ caricaInsegnamenti();
                 labelErrore.setText("CFU e anno corso devono essere numeri interi.");
             }
         });
+
+
+        if(tabellaInsegnamenti != null) {
+            tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e -> {
+                int riga = tabellaInsegnamenti.getSelectedRow();
+                if (riga == -1 || !e.getValueIsAdjusting()) return;
+                String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
+                String motivo = "Vuoi rimuovere l'insegnamento " + nomeInsegnamento + "? Se rimuovi l'insegnamento verrano rimosse anche le lezioni associate con questo insegnamento";
+                JTextArea textArea = new JTextArea(motivo);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.setEditable(false);
+
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(120, 100));
+                int risposta = JOptionPane.showConfirmDialog(dialog, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
+                rimuoviInsegnamento(risposta, nomeInsegnamento);
+
+             tabellaInsegnamenti.getSelectionModel().clearSelection();
+            });
+        }
+    }
+
+    public void rimuoviInsegnamento(int risposta,String nomeIns){
+        if (risposta == JOptionPane.YES_OPTION) {
+            String action = controller.removeInsegnamento(nomeIns);
+            if (action != null) {
+                JOptionPane.showMessageDialog(dialog, action, "Errore nella rimozione", JOptionPane.ERROR_MESSAGE);
+            }
+            aggiornaTabella(controller);
+        }
+
     }
 
     private void aggiornaTabella(Controller controller) {

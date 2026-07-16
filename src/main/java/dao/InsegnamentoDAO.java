@@ -7,4 +7,5 @@ public interface InsegnamentoDAO {
 
     Object[][] caricaInsegnamentiDB() throws SQLException;
 
+    void rimuoviInsegnamentoDB(String nome) throws SQLException;
 }

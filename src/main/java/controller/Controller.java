@@ -199,6 +199,10 @@ public class  Controller {
 			String emailDocente,
 			String nomeAula,
 			String giorno, int[] orarioIn) {
+        Aula aula = stringToAula(nomeAula);
+        if (aula == null) {
+            return "Errore si sta provando a creare una lezione con un aula non esistente";
+        }
 		//Verifico che l'insegnamento inserito esista tra quelli registrati (confronto per nome).
 		//La lezione NON crea un nuovo insegnamento: riusa quello già registrato.
 		Insegnamento insegnamento = stringToInsegnamento(nomeInsegnamento);
@@ -224,12 +228,22 @@ public class  Controller {
 		// 1) Inserimento in memoria nel Model (valida orario e disponibilità del docente).
 		//    Se questa parte fallisce è un errore vero: si interrompe e si mostra il messaggio.
 		try {
-			Aula aula = new Aula(nomeAula, 200);
 			Orario orario = new Orario(giorno, orarioIn[0], orarioIn[1], orarioIn[2], orarioIn[3]);
 			Lezione lezione = new Lezione(insegnamento, aula, orario);
+            this.docente= docenteTrovato;
+            caricaVincoliDocenteDaDB();
 			responsabile.inserisciLezione(lezione, orarioLezioni);
-		} catch (IllegalArgumentException e) {
+            this.docente=null;
+		}catch (SQLException e) {
+            Orario orario = new Orario(giorno, orarioIn[0], orarioIn[1], orarioIn[2], orarioIn[3]);
+            Lezione lezione = new Lezione(insegnamento, aula, orario);
+            responsabile.inserisciLezione(lezione, orarioLezioni);
+            this.docente=null;
+            return e.getMessage();
+        }
+        catch (IllegalArgumentException e) {
 			// Errore di validazione del Model (es. orario non valido, docente non disponibile)
+            this.docente=null;
 			return e.getMessage();
 		}
 
@@ -563,7 +577,7 @@ public class  Controller {
 			boolean hasLezioni=false;
 			// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
 			for(int g=0; g<giorni.length; g++){
-				row[g]=lezioniPerGiorno.get(g).isEmpty()? "":lezioniPerGiorno.get(g).get(0).infoLezione();
+				row[g]=lezioniPerGiorno.get(g).isEmpty()? "":lezioniPerGiorno.get(g).get(0).infoLezioneSenzaDocente();
 			}
 			// rimuove la prima lezione di ogni giorno, se non ci sono lezioni per quel giorno non fa nulla
 			for(int j=0; j<giorni.length; j++){
@@ -1124,18 +1138,47 @@ public class  Controller {
 	 * </p>
 	 * @param aula l'aula di cui si vogliono cancellare le lezioni
 	 */
-        public void removeLezioneByAula(Aula aula){
+        private void removeLezioneByAula(Aula aula){
         for(Lezione l:orarioLezioni.getOrarioLezioni()){
             if(l.getAula().equals(aula)){
                 responsabile.rimuoviLezione(l,orarioLezioni);
             }
         }
     }
-    public void removeLezioneByInsegnamento(Insegnamento ins){
+    private void removeLezioneByInsegnamento(Insegnamento ins){
         for(Lezione l:orarioLezioni.getOrarioLezioni()) {
             if (l.getInsegnamento().equals(ins)) {
                 responsabile.rimuoviLezione(l, orarioLezioni);
             }
         }
     }
+
+    public String removeInsegnamento(String nome){
+			try{
+				Insegnamento ins= stringToInsegnamento(nome);
+				insegnamentiRegistrati.remove(ins);
+				removeLezioneByInsegnamento(ins);
+				InsegnamentoPostgresDAO insDAO= new InsegnamentoPostgresDAO();
+				insDAO.rimuoviInsegnamentoDB(nome);
+
+			}
+			catch(SQLException e){
+				return "Impossibile rimuovere l'insegnamento dal database\n:" + e.getMessage();
+			}
+			catch(Exception e){
+				return e.getMessage();
+			}
+			return null;
+	}
+//Viene usato per quando responsabile crea lezione e deve controllare i vincoli
+    private void caricaVincoliDocenteDaDB() throws SQLException {
+
+            VincoloDAO vincoloDAO = new VincoloPostgresDao();
+            List<Vincolo> vs=new ArrayList<>();
+            Object[][] vincoli = vincoloDAO.caricaVincoliDB(docente.getmail());
+            for (Object[] vincolo : vincoli) {
+                vs.add(new Vincolo((String)vincolo[0],(int)vincolo[1],(int)vincolo[2],(int)vincolo[3],(int)vincolo[4]));
+            }
+            docente.caricaVincoliInDocente(vs);
+            }
 }
