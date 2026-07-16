@@ -10,7 +10,9 @@ public class Home {
 	public static void main(String[] args) {
 		try {
 			controller.apriConnessioneDatabase();
+            controller.online();
 		} catch (Exception e) {
+            controller.offline();
 			JOptionPane.showMessageDialog(null,
 			"Impossibile connettersi al database.\n" +
 					"L'applicazione funzionerà solo in memoria: i dati non verranno salvati.\n\n" + e.getMessage(),

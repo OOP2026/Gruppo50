@@ -19,7 +19,13 @@ import java.util.logging.Logger;
 public class ConnessioneDatabase {
 
     // --- ATTRIBUTI ---
-
+    /**Se status è {@code false} significa che il programma continuera offline
+     * senza mandare query al database
+     * Se status è {@code true} il programma mandare query al database
+     * Serve per evitare inutili problemi con gli errori delle query quando la connessione con il db non c'è
+     * Lo status viene impostato appena si entra nel programma, se la connessione al db va a buon fine allora status è {@code true}, altrimenti è {@code false}
+     * */
+private static boolean status;
     /** Unica istanza della classe (pattern Singleton) */
     private static ConnessioneDatabase instance;
 
@@ -37,7 +43,7 @@ public class ConnessioneDatabase {
      * Formato: jdbc:postgresql://<host>:<porta>/<nome_database>
      * Il database si chiama "orariolezione" come da schema SQL fornito.
      */
-    private String url = "jdbc:postgresql://localhost:5432/orariolezionz";
+    private String url = "jdbc:postgresql://localhost:5432/orariolezione";
 
     /** Nome del driver JDBC per PostgreSQL */
     private String driver = "org.postgresql.Driver";
@@ -97,4 +103,9 @@ public class ConnessioneDatabase {
     public Connection getConnection() {
         return connection;
     }
+    
+    public static boolean getStatus(){return ConnessioneDatabase.status;}
+    public static void setStatus(boolean status){
+        ConnessioneDatabase.status =status;}
 }
+

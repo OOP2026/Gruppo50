@@ -184,7 +184,7 @@ richiesta.setNuovoOrarioLezione(orarioNuovo);
  * @param orario la fascia oraria da verificare.
  * @return true se il docente è disponibile, false altrimenti.
  */
-private boolean verificaDisponibilita(List<Vincolo> vincoli, Orario orario){
+public boolean verificaDisponibilita(List<Vincolo> vincoli, Orario orario){
     if(vincoli.isEmpty()) return true;
 for(Vincolo vincolo:vincoli) {
     int orarioInizioVincolo = vincolo.getOrario().getOrarioInizioInMinuti();

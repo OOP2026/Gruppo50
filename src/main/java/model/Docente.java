@@ -165,19 +165,14 @@ public class Docente extends Utente {
 
 //Gestione dei vincoli
     /** Permette di aggiungere un vincolo, massimo fino a 3 vincoli.
-     * @param giorno il giorno della settimana dove e stato impostato il vincolo.
-     * @param oraInzio l'ora di inizio del vincolo.
-     * @param minutoInzio i minuti di inizio del vincolo.
-     * @param oraFIne l'ora di fine del vincolo.
-     * @param minutoFine i minuti di fine del vincolo.
      * @throws IllegalArgumentException se si è raggiunto il limite di vincoli.
      */
 
-    public void aggiungiVincolo(String giorno, int oraInzio, int minutoInzio,int oraFIne,int minutoFine){
+    public void aggiungiVincolo(Vincolo v){
         if(vincoli.size()==3){
             throw new IllegalStateException("Hai già raggiunto il numero massimo di vincoli (3)");
         }
-        vincoli.add(new Vincolo(giorno, oraInzio, minutoInzio, oraFIne, minutoFine));
+        vincoli.add(v);
         logger.info("Vincolo aggiunto con successo");
 
     }
