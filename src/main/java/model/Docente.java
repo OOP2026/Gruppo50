@@ -103,12 +103,12 @@ public class Docente extends Utente {
      * @param orarioVecchio l'orario attuale che si vuole cambiare.
      * @throws IllegalArgumentException se la lezione della richiesta non esiste.
      */
-    public void richiestaSpostamentoLezione(OrarioLezioni orario,Responsabile responsabile,String motivo, Orario orarioVecchio, Orario orarioProposto) {
+    public void richiestaSpostamentoLezione(OrarioLezioni orario,String motivo, Orario orarioVecchio, Orario orarioProposto) {
         //creazione della richiesta
         Richiesta richiesta = new Richiesta(this, motivo, orarioVecchio, orarioProposto);
         if (!checkRichiestaLezione(richiesta, orario))
             throw new IllegalArgumentException("La lezione riferita dalla richiesta non è esistente");
-        responsabile.richiesteSpostamento.add(richiesta);
+      Responsabile.inviaRichiesta(richiesta);
         this.richiesteSpostamentoInviate.add(richiesta);
 
     }
