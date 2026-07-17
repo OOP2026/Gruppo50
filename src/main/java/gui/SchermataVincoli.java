@@ -49,7 +49,7 @@ public class SchermataVincoli {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
-caricaVincoli();
+        caricaVincoli();
 
         //Passa la tabella solo se è stata inizializzata
         if (tabellaVincoli != null) {
