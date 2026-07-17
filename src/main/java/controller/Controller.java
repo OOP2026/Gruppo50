@@ -445,7 +445,6 @@ public class  Controller {
 	/**Permette al {@link Docente Docente} di richiedere di spostare la lezione indicando il nuovo e il vecchio orario*/
 	public void richiestaspostamentoLezione(String motivo, String giornoVecchio, int [] orarioVecchio, String giornoNuovo,
 	                                        int [] orarioNuovo) {
-		checkResponsabileTemp();
 
 
 		// Persistenza: la richiesta viene salvata nella tabella richiesta (stato
@@ -454,6 +453,7 @@ public class  Controller {
 		// creaLezione). L'id generato dal DB viene memorizzato nella richiesta,
 		// così approvazione/rifiuto potranno aggiornare la riga corretta.
 		try {
+            checkResponsabileTemp();
             if(ConnessioneDatabase.getStatus()) {
                 RichiestaDAO richiestaDAO = new RichiestaPostgresDao();
                 String[] datiTesto = new String[5];
@@ -466,7 +466,7 @@ public class  Controller {
                 List<Richiesta> inviate = docente.getRichiesteInviate();
                 inviate.get(inviate.size() - 1).setId(idGenerato);
             }
-            docente.richiestaSpostamentoLezione(orarioLezioni,responsabileTemp,motivo, new Orario(giornoVecchio, orarioVecchio[0], orarioVecchio[1], orarioVecchio[2], orarioVecchio[3]), new Orario(giornoNuovo, orarioNuovo[0], orarioNuovo[1], orarioNuovo[2], orarioNuovo[3]));
+            docente.richiestaSpostamentoLezione(orarioLezioni,motivo, new Orario(giornoVecchio, orarioVecchio[0], orarioVecchio[1], orarioVecchio[2], orarioVecchio[3]), new Orario(giornoNuovo, orarioNuovo[0], orarioNuovo[1], orarioNuovo[2], orarioNuovo[3]));
 		} catch (SQLException e) {
 			logger.info("Richiesta non salvata sul database (resta solo in memoria): " + e.getMessage());
 		}

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class Responsabile extends Utente {
     /** Lista delle richieste di spostamento ricevute.
      */
-  ArrayList<Richiesta> richiesteSpostamento;
+ private static ArrayList<Richiesta> richiesteSpostamento= new ArrayList<>();
   /** Token di sicurezza utilizzato per autorizzare modifiche sull'orario.
    */
 private final Token token;
@@ -26,7 +26,6 @@ private final Token token;
      */
     public Responsabile(String nome, String cognome, String email, String login, String password) {
         super(nome, cognome, email, login, password);
-        richiesteSpostamento= new ArrayList<>();
         this.token = new Token();
     }
 
@@ -273,5 +272,9 @@ public class Token {
 public void rimuoviLezione(Lezione l,OrarioLezioni o){
     o.rimuoviLezione(l,this.token);
 }
+
+    public static void inviaRichiesta(Richiesta r){
+richiesteSpostamento.add(r);
+    }
 
 }
