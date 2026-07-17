@@ -772,19 +772,25 @@ public class  Controller {
 		}
 		if (docenteTrovato == null) return "Nessun docente registrato con questa email.";
 
-		Insegnamento candidato = new Insegnamento(nome, cfu, annoCorso, docenteTrovato);
 
-		if (insegnamentiRegistrati.contains(candidato)) {
-			return "Insegnamento già presente.";
-		}
 
 		InsegnamentoDAO insegnamentoDAO= null;
-		try {if(ConnessioneDatabase.getStatus()) {
+		try {
+			Insegnamento candidato = new Insegnamento(nome, cfu, annoCorso, docenteTrovato);
+
+			if (insegnamentiRegistrati.contains(candidato)) {
+				return "Insegnamento già presente.";
+			}
+
+			if(ConnessioneDatabase.getStatus()) {
             insegnamentoDAO = new InsegnamentoPostgresDAO();
             insegnamentoDAO.salvaInsegnamento(nome, annoCorso, cfu, emailDocente);
         }
             insegnamentiRegistrati.add(candidato);
 		} catch (SQLException e) {
+			logger.warning(e.getMessage());
+			return "Impossibile salvare l'insegnamento nel database";
+		}catch(Exception e){
 			return e.getMessage();
 		}
 
