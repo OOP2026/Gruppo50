@@ -942,7 +942,7 @@ public class  Controller {
 	 */
 	private void caricaLezioniDaDB() {
 		try {
-            if(!ConnessioneDatabase.getStatus()){return;}
+			if(!ConnessioneDatabase.getStatus()){return;}
 			LezioneDAO lezioneDAO = new LezionePostgresDao();
 			ArrayList<String> nomiInsegnamento = new ArrayList<>();
 			ArrayList<Integer> anniCorso = new ArrayList<>();
@@ -956,8 +956,12 @@ public class  Controller {
 			OrarioLezioni orarioCaricato = new OrarioLezioni();
 			for (int i = 0; i < nomiInsegnamento.size(); i++) {
 				Docente docenteTitolare = trovaDocentePerEmail(emailDocente.get(i));
-				Insegnamento insegnamento = new Insegnamento(
-						nomiInsegnamento.get(i), 0, anniCorso.get(i), docenteTitolare);
+				Insegnamento insegnamento = trovaInsegnamentoRegistrato(
+						nomiInsegnamento.get(i), anniCorso.get(i));
+				if (insegnamento == null) {
+					insegnamento = new Insegnamento(
+							nomiInsegnamento.get(i), 1, anniCorso.get(i), docenteTitolare);
+				}
 				Aula aula = new Aula(nomeAula.get(i), 200);
 				int[] o = orarioLetto.get(i);
 				Orario orario = new Orario(giorno.get(i),
@@ -1016,7 +1020,22 @@ public class  Controller {
 		}
 		return new Docente("", "", email, "", "");
 	}
-
+	/**
+	 * Cerca tra gli insegnamenti registrati quello con nome e anno di corso
+	 * indicati, così da riusare i CFU reali letti dal database.
+	 *
+	 * @param nome nome dell'insegnamento
+	 * @param annoCorso anno di corso dell'insegnamento
+	 * @return l'{@link Insegnamento} corrispondente, o {@code null} se assente
+	 */
+	private Insegnamento trovaInsegnamentoRegistrato(String nome, int annoCorso) {
+		for (Insegnamento ins : insegnamentiRegistrati) {
+			if (ins.getNome().equals(nome) && ins.getAnnoCorso() == annoCorso) {
+				return ins;
+			}
+		}
+		return null;
+	}
 	/** <p>Legge tutti gli utenti dal database tramite {@link UtenteDAO} (unico
 	 * metodo di caricamento: la tabella {@code utente} contiene studenti, docenti
 	 * e responsabili) e li aggiunge alla lista {@code utentiRegistrati}, evitando
