@@ -36,7 +36,7 @@ private static boolean status;
     private String nome = "postgres";
 
     /** Password del database */
-    private String password = "Basiati2026";
+    private String password = "Basidati2026";
 
     /**
      * URL di connessione JDBC.

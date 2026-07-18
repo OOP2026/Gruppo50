@@ -90,17 +90,5 @@ public class StudentePostgresDao implements StudenteDAO {
         }
     }
 
-    /**
-     * Genera una nuova matricola univoca per gli studenti delegando a
-     * {@link UtenteDAO#generaMatricolaDB} con il prefisso {@code "DE"}:
-     * viene cercata la matricola massima con quel prefisso nella tabella
-     * "utente" e incrementata di uno.
-     *
-     * @return la nuova matricola generata nel formato con prefisso "DE" e 8 cifre numeriche (es. {@code "DE00000001"}).
-     * @throws SQLException se si verifica un errore SQL durante la lettura del valore massimo o l'accesso al database.
-     */
-    @Override
-    public String generaMatricolaDB() throws SQLException {
-        return utenteDao.generaMatricolaDB(PREFISSO_MATRICOLA);
-    }
+
 }

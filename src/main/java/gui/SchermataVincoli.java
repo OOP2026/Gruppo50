@@ -7,7 +7,7 @@ import controller.Controller;
 
 import java.awt.*;
 import java.util.Objects;
-@SuppressWarnings("unused")
+
 /**
  * Finestra di interfaccia grafica (GUI) dedicata alla gestione dei vincoli.
  * <p>
@@ -22,6 +22,7 @@ import java.util.Objects;
  * <li><b>Bottoni di Azione:</b> Permettono di aggiungere un nuovo vincolo, rimuovere quello selezionato dalla tabella o tornare alla dashboard principale.</li>
  * </ul>
  */
+@SuppressWarnings("unused")
 public class SchermataVincoli {
     JFrame frame;
     private JPanel panel1;

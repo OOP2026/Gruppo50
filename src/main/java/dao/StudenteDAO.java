@@ -35,12 +35,7 @@ public interface StudenteDAO {
     void leggiStudenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
                          ArrayList<String> login, ArrayList<String> password,ArrayList<String> matricola,ArrayList<Integer> annoCorso) throws SQLException;
 
-    /**Genera la prossima matricola univoca basandosi sui dati presenti nel
-     * database (matricola massima + 1), così da evitare collisioni con
-     * studenti registrati in sessioni precedenti.
-     * @return la nuova matricola nel formato {@code "DE00000001"}.
-     */
-    String generaMatricolaDB() throws SQLException;
+
 
 }
 

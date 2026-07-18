@@ -68,11 +68,48 @@ if(!mailValidazione()) {
                     JOptionPane.showMessageDialog(frame, "Email non valida.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                if(Ruolocombobox.getSelectedItem().equals("Studente")) {
+                String matricola=null;
+                // Controllo ruolo e richiesta matricola ciclica
+                if ("Studente".equals(ruolo)) {
+                    boolean matricolaValida = false;
 
+                    while (!matricolaValida) {
+                        matricola = JOptionPane.showInputDialog(frame,
+                                "Inserisci la tua matricola\n(Formato richiesto: DE1 seguito da 7 numeri, es. DE1234567):",
+                                "Richiesta Matricola",
+                                JOptionPane.QUESTION_MESSAGE);
+
+                        // Se l'utente preme "Annulla" o chiude la finestra con la 'X'
+                        if (matricola == null) {
+                            JOptionPane.showMessageDialog(frame, "La matricola è obbligatoria per completare la registrazione.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
+                            return; // Interrompe l'intera registrazione
+                        }
+
+                        matricola = matricola.trim(); // Rimuove eventuali spazi inseriti per sbaglio
+
+                        // Controllo il formato tramite Regex:
+                        // ^ = inizio stringa, DE1 = testo fisso, \d{7} = esattamente 7 numeri, $ = fine stringa
+                        if (matricola.matches("^DE1\\d{7}$")) {
+                            if (controller.matricolaEsiste(matricola)) {
+                                // Mostra l'errore e il ciclo while ripartirà chiedendo di nuovo l'input
+                                JOptionPane.showMessageDialog(frame,
+                                        "Matricola già registrata!\nInserisci una matricola diversa.",
+                                        "Matricola già in uso",
+                                        JOptionPane.WARNING_MESSAGE);
+                            } else {
+                                matricolaValida = true; // Esce dal ciclo while
+                            }
+                        } else {
+                            // Mostra l'errore e il ciclo while ripartirà chiedendo di nuovo l'input
+                            JOptionPane.showMessageDialog(frame,
+                                    "Formato non valido!\nLa matricola deve iniziare con 'DE1' ed essere seguita da esattamente 7 cifre.",
+                                    "Errore Formato",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
                 }
 
-                if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
+                if (!controller.registra(nome, cognome, email, username, password, ruolo,matricola)) {
                     JOptionPane.showMessageDialog(frame, "Username o Email già in uso.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
                     return;
                 }

@@ -63,7 +63,7 @@ public interface UtenteDAO {
      * registrati in sessioni precedenti. Il conteggio è separato per ogni
      * prefisso.
      *
-     * @param prefisso il prefisso della matricola: {@code "DE"} per gli
+     * @param prefisso il prefisso della matricola: {@code "DE1"} per gli
      *                 studenti, {@code "DA"} per i docenti, {@code "RE"}
      *                 per i responsabili.
      * @return la nuova matricola nel formato prefisso + 8 cifre numeriche
