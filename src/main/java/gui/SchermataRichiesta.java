@@ -6,11 +6,9 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
-
 import controller.Controller;
-
 import java.awt.*;
-@SuppressWarnings("unused")
+
 /**
  * Finestra di interfaccia grafica (GUI) dedicata alle richieste di spostamento delle lezioni.
  * <p>
@@ -27,6 +25,7 @@ import java.awt.*;
  * <li><b>Bottoni di Azione:</b> Invia la richiesta al Responsabile per l'approvazione, oppure torna alla schermata principale.</li>
  * </ul>
  */
+@SuppressWarnings("unused")
 public class SchermataRichiesta {
     JFrame frame;
     private JTextField oraIniziaLezioneText;
@@ -111,12 +110,12 @@ dialogErroreWarning("Seleziona un giorno valido per entrambe le lezioni.", 1);
                 oraFineN == null || oraFineN.trim().isEmpty() ||
                 minFineN == null || minFineN.trim().isEmpty()) {
 
-dialogErroreWarning("Tutti i campi degli orari devono essere compilati.",1);
+            dialogErroreWarning("Tutti i campi degli orari devono essere compilati.",1);
             return false;
         }
 
         if (motivo == null || motivo.trim().isEmpty()) {
-        dialogErroreWarning("Il campo motivo non può essere vuoto.",1);
+            dialogErroreWarning("Il campo motivo non può essere vuoto.",1);
             return false;
         }
 
@@ -132,7 +131,7 @@ dialogErroreWarning("Tutti i campi degli orari devono essere compilati.",1);
             Integer.parseInt(oraFineN.trim());
             Integer.parseInt(minFineN.trim());
         } catch (NumberFormatException e) {
-       dialogErroreWarning("Inserisci valori numerici validi per orari e minuti.",1);
+            dialogErroreWarning("Inserisci valori numerici validi per orari e minuti.",1);
             return false;
         }
 

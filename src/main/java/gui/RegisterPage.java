@@ -1,4 +1,9 @@
 package gui;
+
+import controller.Controller;
+import javax.swing.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 /**
  * Finestra di interfaccia grafica (GUI) dedicata alla registrazione di un nuovo account.
  * <p>
@@ -14,11 +19,6 @@ package gui;
  * <li><b>Bottoni di Azione:</b> Conferma per inviare i dati al database, oppure annulla per tornare al menu iniziale.</li>
  * </ul>
  */
-import controller.Controller;
-import javax.swing.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 public class RegisterPage {
     JFrame frame;
     private JPanel panel1;
@@ -30,7 +30,7 @@ public class RegisterPage {
     /** Il bottone di conferma per finalizzare la registrazione dell'Utente. */
     private JButton confermaButton;
     private JButton annullaButton;
-    private JComboBox comboBox1;
+    private JComboBox Ruolocombobox;
     private static final String TITOLO_ERRORE_REGISTRAZIONE = "Errore nella registrazione";
 
     public RegisterPage(Controller controller, JFrame frameChiamante) {
@@ -53,7 +53,7 @@ public class RegisterPage {
             confermaButton.addActionListener(e -> {
                 String nome = nomeText.getText();
                 String cognome = cognomeText.getText();
-                String ruolo = (String) comboBox1.getSelectedItem();
+                String ruolo = (String) Ruolocombobox.getSelectedItem();
                 String email = emailText.getText();
                 String username = usernameText.getText();
                 String password = new String(passwordText.getPassword());
@@ -67,6 +67,9 @@ public class RegisterPage {
 if(!mailValidazione()) {
                     JOptionPane.showMessageDialog(frame, "Email non valida.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.WARNING_MESSAGE);
                     return;
+                }
+                if(Ruolocombobox.getSelectedItem().equals("Studente")) {
+
                 }
 
                 if (!controller.registra(nome, cognome, email, username, password, ruolo)) {
