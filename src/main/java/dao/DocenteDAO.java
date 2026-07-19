@@ -38,4 +38,29 @@ public interface DocenteDAO {
      */
     void leggiDocenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
                         ArrayList<String> login, ArrayList<String> password)throws SQLException;
+
+    /**Salva nel database l'associazione tra il docente e una materia che può insegnare.
+     * <p>Viene invocato sia in fase di registrazione (quando il docente appena
+     * registrato seleziona subito le sue materie) sia quando le aggiunge in un
+     * secondo momento dalla sua schermata insegnamenti.</p>
+     *
+     * @param emailDocente l'email del docente a cui associare la materia.
+     * @param nomeMateria il nome dell'insegnamento (materia) da associare.
+     */
+    void salvaMateriaDocenteDB(String emailDocente, String nomeMateria) throws SQLException;
+
+    /**Rimuove dal database l'associazione tra il docente e una materia.
+     *
+     * @param emailDocente l'email del docente da cui rimuovere la materia.
+     * @param nomeMateria il nome dell'insegnamento (materia) da rimuovere.
+     */
+    void rimuoviMateriaDocenteDB(String emailDocente, String nomeMateria) throws SQLException;
+
+    /**Recupera dal database i nomi delle materie associate al docente,
+     * così che restino visibili anche nelle sessioni successive.
+     *
+     * @param emailDocente l'email del docente di cui leggere le materie.
+     * @param nomiMaterie lista (di output) riempita con i nomi delle materie del docente.
+     */
+    void leggiMaterieDocenteDB(String emailDocente, ArrayList<String> nomiMaterie) throws SQLException;
 }

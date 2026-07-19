@@ -152,6 +152,11 @@ public class  Controller {
 			if (erroreRichieste != null) {
 				String errore ="Errore caricamento richieste: " + erroreRichieste;
 				logger.info(errore);}
+			// Carica le materie del docente così le rivede anche nelle sessioni successive
+			String erroreMaterie = caricaMaterieDocenteDaDB();
+			if (erroreMaterie != null) {
+				String errore = "Errore caricamento materie: " + erroreMaterie;
+				logger.info(errore);}
 			return true;
 		}
 		return false;
@@ -281,11 +286,29 @@ public class  Controller {
 
 		return null;
 	}
-	/**Permette al docente di aggiungere un Insegnamento che può insegnare*/
-	public void addInsegnamentoDocente(String materia){
-
-		docente.addInsegnamento(stringToInsegnamento(materia));
-
+	/**Permette al docente di aggiungere un Insegnamento che può insegnare.
+	 * <p>L'associazione viene anche salvata nella tabella {@code docenteinsegnamento}
+	 * tramite {@link DocenteDAO#salvaMateriaDocenteDB}, sia in fase di registrazione
+	 * sia quando la materia viene aggiunta in un secondo momento, così da renderla
+	 * persistente tra le sessioni.</p>
+	 * @param materia il nome della materia da aggiungere al docente.
+	 * @return {@code null} se tutto ok, altrimenti una {@code String} con l'errore.
+	 */
+	public String addInsegnamentoDocente(String materia){
+		try{
+			Insegnamento insegnamento = stringToInsegnamento(materia);
+			if(ConnessioneDatabase.getStatus() && insegnamento != null){
+				DocenteDAO docenteDAO = new DocentePostgresDao();
+				docenteDAO.salvaMateriaDocenteDB(docente.getmail(), insegnamento.getNome());
+			}
+			docente.addInsegnamento(insegnamento);
+		}catch(SQLException e){
+			logger.warning(e.getMessage());
+			return "Impossibile salvare la materia del docente nel database.";
+		}catch(Exception e){
+			return e.getMessage();
+		}
+		return null;
 	}
 	/**
 	 * Questo metodo permette al {@link Docente docente} di rimuovere una materia che insegna,
@@ -295,9 +318,49 @@ public class  Controller {
 	 */
 	public String removeInsegnamentoDocente(String materia){
 		try{
-			docente.removeInsegnamento(stringToInsegnamento(materia));
+			Insegnamento insegnamento = stringToInsegnamento(materia);
+			if(ConnessioneDatabase.getStatus() && insegnamento != null){
+				DocenteDAO docenteDAO = new DocentePostgresDao();
+				docenteDAO.rimuoviMateriaDocenteDB(docente.getmail(), insegnamento.getNome());
+			}
+			docente.removeInsegnamento(insegnamento);
+		}catch(SQLException e){
+			logger.warning(e.getMessage());
+			return "Impossibile rimuovere la materia del docente dal database.";
 		}catch(Exception ex){
 			return ex.getMessage();
+		}
+		return null;
+	}
+	/**Carica dal database le materie associate al docente loggato (tabella
+	 * {@code docenteinsegnamento}) e le mette nella lista in memoria del docente,
+	 * sostituendo quella precedente per evitare duplicati tra un login e l'altro.
+	 * I nomi letti vengono risolti negli {@link Insegnamento insegnamenti}
+	 * registrati (caricati all'avvio con {@link #caricaInsegnamentiDaDB()});
+	 * eventuali materie non più registrate vengono ignorate.
+	 * Viene invocato al login del docente.
+	 * @return Restituisce una {@code String} con l'errore o {@code null} se tutto ok.
+	 */
+	public String caricaMaterieDocenteDaDB() {
+		try {
+			if(!ConnessioneDatabase.getStatus()){return null;}
+			DocenteDAO docenteDAO = new DocentePostgresDao();
+			ArrayList<String> nomiMaterie = new ArrayList<>();
+			docenteDAO.leggiMaterieDocenteDB(docente.getmail(), nomiMaterie);
+
+			List<Insegnamento> materie = new ArrayList<>();
+			for (String nome : nomiMaterie) {
+				Insegnamento insegnamento = stringToInsegnamento(nome);
+				if (insegnamento != null) {
+					materie.add(insegnamento);
+				}
+			}
+			docente.caricaInsegnamentiInDocente(materie);
+		} catch (SQLException e) {
+			logger.warning(e.getMessage());
+			return "Impossibile caricare le materie del docente dal database.";
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 		return null;
 	}

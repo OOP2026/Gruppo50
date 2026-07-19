@@ -85,6 +85,14 @@ public class Docente extends Utente {
     public List<Insegnamento> getInsegnamenti(){
         return new ArrayList<>(insegnamenti);
     }
+    /**Carica nel docente gli insegnamenti letti dal database, sostituendo
+     * quelli in memoria (stesso pattern di {@link #caricaVincoliInDocente}).
+     * In questo modo a ogni login la lista riflette il database senza duplicati.
+     * @param insegnamentiDaCaricare la lista di insegnamenti recuperati dal database.
+     */
+    public void caricaInsegnamentiInDocente(List<Insegnamento> insegnamentiDaCaricare){
+        insegnamenti = new ArrayList<>(insegnamentiDaCaricare);
+    }
 
     /**
      * Ritorna le lezioni del docente.
@@ -97,7 +105,6 @@ public class Docente extends Utente {
     /**
      * Questa funzione invia una richiesta di spostamento al responsabile.
      * @param orario elenco degli orari dove verificare l'esistenza della lezione.
-     * @param responsabile il responsabile a cui inviare la richiesta.
      * @param motivo la motivazione della richiesta dello spostamento.
      * @param orarioProposto il nuovo orario richiesto.
      * @param orarioVecchio l'orario attuale che si vuole cambiare.
@@ -108,7 +115,7 @@ public class Docente extends Utente {
         Richiesta richiesta = new Richiesta(this, motivo, orarioVecchio, orarioProposto);
         if (!checkRichiestaLezione(richiesta, orario))
             throw new IllegalArgumentException("La lezione riferita dalla richiesta non è esistente");
-      Responsabile.inviaRichiesta(richiesta);
+        Responsabile.inviaRichiesta(richiesta);
         this.richiesteSpostamentoInviate.add(richiesta);
 
     }
@@ -126,7 +133,7 @@ public class Docente extends Utente {
         }
         //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
         for(Richiesta richiesta : richiesteSpostamentoInviate) {
-      String msg="Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome;
+            String msg="Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome;
             logger.info(msg);
             logger.info("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
             logger.info("Orario lezione proposto: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
