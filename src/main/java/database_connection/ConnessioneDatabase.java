@@ -43,7 +43,7 @@ private static boolean status;
      * Formato: jdbc:postgresql://<host>:<porta>/<nome_database>
      * Il database si chiama "orariolezione" come da schema SQL fornito.
      */
-    private String url = "jdbc:postgresql://localhost:5432/orariolezione";
+    private String url = "jdbc:postgresql://localhost:5432/orariolezionez";
 
     /** Nome del driver JDBC per PostgreSQL */
     private String driver = "org.postgresql.Driver";

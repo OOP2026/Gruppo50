@@ -72,16 +72,37 @@ public class InsegnamentoPostgresDAO implements InsegnamentoDAO {
 
     }
 
+    /**
+     * @param email
+     * @param ins
+     * @throws SQLException
+     */
     @Override
-    public void salvaInsegnamento(String nome, int annoCorso, int cfu, String emailDocente) throws SQLException {
+    public void assegnaDocenteTitolare(String email, String ins) throws SQLException {
+
+        String sql = "UPDATE insegnamento SET emaildoc=? WHERE nomecorso =?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(1, ins);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Nessun insegnamento trovato");
+            }
+        } catch (SQLException e) {
+            throw new SQLException( e.getMessage());
+        }
+    }
+
+    @Override
+    public void salvaInsegnamento(String nome, int annoCorso, int cfu) throws SQLException {
         // Implementazione per salvare il vincolo nel database PostgreSQL
-        String sql = "INSERT INTO insegnamento (nomecorso,cfu,annocorso,emaildoc) " +
-                "VALUES (?,?,?,?)";
+        String sql = "INSERT INTO insegnamento (nomecorso,cfu,annocorso) " +
+                "VALUES (?,?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1,nome);
             ps.setInt(2,cfu);
             ps.setInt(3,annoCorso);
-            ps.setString(4,emailDocente);
 
             ps.executeUpdate();
         } catch (SQLException e) {

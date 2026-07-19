@@ -230,6 +230,9 @@ public class  Controller {
 		if (insegnamento == null) {
 			return "Errore si sta provando a creare una lezione per un insegnamento non esistente";
 		}
+        if(insegnamento.getDocente()==null){
+            return "Questo insegnamento non ha un docente titolare";
+        }
 		//Cerco se il docente a cui il responsabile assegna la lezione esista davvero
 		Docente docenteTrovato = null;
 		for (Utente u : utentiRegistrati) {
@@ -401,7 +404,7 @@ public class  Controller {
 		List<Insegnamento> a= new ArrayList<>(insegnamentiRegistrati);
 
 		for(Insegnamento insegnamento:a){
-			if(insegnamento.getNome().toLowerCase().startsWith(materia))
+			if(insegnamento.getNome().toLowerCase().startsWith(materia) && insegnamento.getDocente()!=null)
 				data.add(insegnamento.getNome());
 		}
 		return data;
@@ -836,32 +839,21 @@ public class  Controller {
 	/**
 	 * Permette al {@link Responsabile responsabile} di registrare un nuovo insegnamento.
 	 * <p>
-	 * Il docente titolare viene cercato per email tra gli utenti registrati;
 	 * se l'insegnamento non è già presente viene aggiunto alla lista in memoria
 	 * e salvato sul database tramite {@link InsegnamentoDAO}.
 	 * </p>
 	 * @param nome il nome dell'insegnamento.
 	 * @param cfu il numero di crediti formativi.
 	 * @param annoCorso l'anno di corso in cui viene insegnato.
-	 * @param emailDocente l'email del docente titolare.
 	 * @return {@code null} se la registrazione ha avuto successo, altrimenti una
 	 * {@code String} con il messaggio di errore da mostrare in GUI.
 	 */
-	public String registraInsegnamento(String nome, int cfu, int annoCorso, String emailDocente) {
-		Docente docenteTrovato = null;
-		for (Utente u : utentiRegistrati) {
-			if (u instanceof Docente && u.getmail().equals(emailDocente)) {
-				docenteTrovato = (Docente) u;
-				break;
-			}
-		}
-		if (docenteTrovato == null) return "Nessun docente registrato con questa email.";
-
+	public String registraInsegnamento(String nome, int cfu, int annoCorso) {
 
 
 		InsegnamentoDAO insegnamentoDAO= null;
 		try {
-			Insegnamento candidato = new Insegnamento(nome, cfu, annoCorso, docenteTrovato);
+			Insegnamento candidato = new Insegnamento(nome, cfu, annoCorso);
 
 			if (insegnamentiRegistrati.contains(candidato)) {
 				return "Insegnamento già presente.";
@@ -869,7 +861,7 @@ public class  Controller {
 
 			if(ConnessioneDatabase.getStatus()) {
 				insegnamentoDAO = new InsegnamentoPostgresDAO();
-				insegnamentoDAO.salvaInsegnamento(nome, annoCorso, cfu, emailDocente);
+				insegnamentoDAO.salvaInsegnamento(nome, annoCorso, cfu);
 			}
 			insegnamentiRegistrati.add(candidato);
 		} catch (SQLException e) {
@@ -889,11 +881,14 @@ public class  Controller {
 	public List<Object[]> getInsegnamentiAttivi() {
 		List<Object[]> righe = new ArrayList<>();
 		for (Insegnamento ins : insegnamentiRegistrati) {
+            String d="nessuno";
+            if(ins.getDocente() != null){d=ins.getDocente().getmail(); }
+
 			righe.add(new Object[]{
 					ins.getNome(),
 					ins.getNumeroCFU(),
 					ins.getAnnoCorso(),
-					ins.getDocente().getmail()
+					d
 			});
 		}
 		return righe;
@@ -1362,4 +1357,31 @@ public class  Controller {
 		}
 		docente.caricaVincoliInDocente(vs);
 	}
+    public String assegnaDocente(String ins,String email){
+       Docente d=null;
+        for (Utente u : utentiRegistrati) {
+            if (u.getmail().equals(email) && (u instanceof Docente)) {
+                d= (Docente)u;
+            }
+        }
+        if(d==null) {return "Non esiste un docente con questa email";}
+
+        Insegnamento insegnamento = stringToInsegnamento(ins);
+        if (insegnamento == null) {
+            return "Errore si sta provando ad assegnare ad un insegnamento non esistente";
+        }
+        try{
+            if(ConnessioneDatabase.getStatus()) {
+                InsegnamentoPostgresDAO insDAO = new InsegnamentoPostgresDAO();
+                insDAO.assegnaDocenteTitolare(email,ins);
+            }
+            insegnamento.setDocente(d);
+        }catch(SQLException e){
+            logger.warning(e.getMessage());
+            return"Impossibile assegnare un docente a questa materia";
+        }catch(Exception e){
+            return e.getMessage();
+        }
+        return null;
+    }
 }

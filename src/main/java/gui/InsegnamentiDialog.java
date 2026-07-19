@@ -5,6 +5,8 @@ import controller.Controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 
@@ -34,7 +36,6 @@ public class InsegnamentiDialog {
     private JTextField nomeInsField;
     private JTextField cfuField;
     private JTextField annoField;
-    private JTextField emailDocField;
     private JButton aggiungiButton;
 private final Controller controller;
     private DefaultTableModel tableModel;
@@ -73,9 +74,8 @@ caricaInsegnamenti();
             String nome     = nomeInsField.getText().trim();
             String cfuTxt   = cfuField.getText().trim();
             String annoTxt  = annoField.getText().trim();
-            String emailDoc = emailDocField.getText().trim();
 
-            if (nome.isEmpty() || cfuTxt.isEmpty() || annoTxt.isEmpty() || emailDoc.isEmpty()) {
+            if (nome.isEmpty() || cfuTxt.isEmpty() || annoTxt.isEmpty()) {
                 labelErrore.setText("Compila tutti i campi.");
                 return;
             }
@@ -84,7 +84,7 @@ caricaInsegnamenti();
                 int cfu  = Integer.parseInt(cfuTxt);
                 int anno = Integer.parseInt(annoTxt);
 
-                String errore = controller.registraInsegnamento(nome, cfu, anno, emailDoc);
+                String errore = controller.registraInsegnamento(nome, cfu, anno);
                 if (errore != null) {
                     labelErrore.setText(errore);
                     aggiornaTabella(controller);
@@ -92,10 +92,8 @@ caricaInsegnamenti();
                 }
 
                 aggiornaTabella(controller);
-                emailDocField.setText("");
                 cfuField.setText("");
                 annoField.setText("");
-                emailDocField.setText("");
                 JOptionPane.showMessageDialog(dialog, "Insegnamento aggiunto con successo!");
 
             } catch (NumberFormatException ex) {
@@ -107,18 +105,15 @@ caricaInsegnamenti();
         if(tabellaInsegnamenti != null) {
             tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e -> {
                 int riga = tabellaInsegnamenti.getSelectedRow();
-                if (riga == -1 || !e.getValueIsAdjusting()) return;
-                String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
-                String motivo = "Vuoi rimuovere l'insegnamento " + nomeInsegnamento + "? Se rimuovi l'insegnamento verrano rimosse anche le lezioni associate con questo insegnamento";
-                JTextArea textArea = new JTextArea(motivo);
-                textArea.setLineWrap(true);
-                textArea.setWrapStyleWord(true);
-                textArea.setEditable(false);
+                if (riga == -1 || !e.getValueIsAdjusting()) {return;}
+                String campoDocente = tabellaInsegnamenti.getValueAt(riga, 3).toString();
 
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setPreferredSize(new Dimension(120, 100));
-                int risposta = JOptionPane.showConfirmDialog(dialog, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
-                rimuoviInsegnamento(risposta, nomeInsegnamento);
+                if(campoDocente.equalsIgnoreCase("nessuno")){
+                    gestioneInsegnamento(riga);
+                }else{removePanel(riga);
+                }
+
+
 
              tabellaInsegnamenti.getSelectionModel().clearSelection();
             });
@@ -136,6 +131,19 @@ caricaInsegnamenti();
 
     }
 
+    public void assegnaDocente(String nomeIns, String emailDocente){
+        if (!emailDocente.trim().isEmpty()) {
+            String action = controller.assegnaDocente(nomeIns,emailDocente);
+            if (action != null) {
+                JOptionPane.showMessageDialog(dialog, action, "Errore nell'assegnazione del docente", JOptionPane.ERROR_MESSAGE);
+            }
+            aggiornaTabella(controller);
+        }else{
+            JOptionPane.showMessageDialog(dialog, "Il campo dell'email non può essere vuoto!", "ATTENZIONE", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+
     private void aggiornaTabella(Controller controller) {
         tableModel.setRowCount(0);
         for (Object[] riga : controller.getInsegnamentiAttivi()) {
@@ -148,6 +156,57 @@ caricaInsegnamenti();
         if(msg!=null){
             JOptionPane.showMessageDialog(dialog, msg, "Errore", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void gestioneInsegnamento(int riga){
+        String[] opzioni={"Assegna docente","Rimuovi insegnamento","Annulla"};
+        int scelta= JOptionPane.showOptionDialog(dialog,"Cosa desideri fare con questo insegnamento?",
+                "Gestione insegnamento",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,opzioni,opzioni[0]);
+        switch(scelta){
+            case 0:
+                assegnaDocentePanel(riga);
+                break;
+
+            case 1:
+                removePanel(riga);
+                break;
+            default:
+                break;
+        }
+
+    }
+    private void removePanel(int riga){
+        String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
+        String motivo = "Vuoi rimuovere l'insegnamento " + nomeInsegnamento + "? Se rimuovi l'insegnamento verrano rimosse anche le lezioni associate con questo insegnamento";
+        JTextArea textArea = new JTextArea(motivo);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(120, 100));
+        int risposta = JOptionPane.showConfirmDialog(dialog, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
+        rimuoviInsegnamento(risposta, nomeInsegnamento);}
+    private void assegnaDocentePanel(int riga){
+
+        String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
+
+        String emailDocente = JOptionPane.showInputDialog(dialog,"Inserisci l'email del docente da assegnare:",
+                "Assegnazione Docente",JOptionPane.QUESTION_MESSAGE);
+   if(emailDocente==null){return;}
+   if(mailValidazione(emailDocente)){
+       JOptionPane.showMessageDialog(dialog, "Email non valida.", "ATTENZIONE!", JOptionPane.WARNING_MESSAGE);
+return;
+   }
+        assegnaDocente(nomeInsegnamento,emailDocente.trim());
+    }
+
+    private boolean mailValidazione(String mail){
+        // un modo per vedere se il pattern della mail è corretto attraverso regex
+        String emailRegex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+        Pattern emailPattern = Pattern.compile(emailRegex);
+        Matcher matcher = emailPattern.matcher(mail);
+        return matcher.matches();
     }
 }
 

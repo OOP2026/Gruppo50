@@ -40,7 +40,7 @@ public class Insegnamento {
         this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;
-
+this.docente=null;
     }
     /**Costruttore che copia insegnamento clonando tutti i dati in un'altra istanza.
      * @param i l'insegnamento da cui copiare.
@@ -75,7 +75,15 @@ public class Insegnamento {
      * @return il docente assegnato all'insegnamento.
      */
     public Docente getDocente() {
+        if(docente==null) return null;
         return new Docente(docente);
+    }
+
+    public void setDocente(Docente doc){
+        if(!doc.getInsegnamenti().contains(this)) {
+        throw new IllegalArgumentException("Questo docente non può essere titolare di questa materia, perchè non la insegna!");
+        }
+        this.docente=doc;
     }
     /**
      * Confronta questo insegnamento con un altro oggetto per verificare se sono uguali.

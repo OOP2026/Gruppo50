@@ -76,6 +76,10 @@ public class Docente extends Utente {
         if(insegnamento==null){
             throw new NullPointerException("Il valore è null non puo essere aggiunto!");
         }
+        Docente tempDocente=insegnamento.getDocente();
+        if(tempDocente!=null && tempDocente.getmail().equals(this.email)){
+            throw new IllegalArgumentException("Non puoi rimuovere questa materia, sei il docente titolare di questo insegnamento.");
+        }
         this.insegnamenti.remove(insegnamento);
     }
     /**
