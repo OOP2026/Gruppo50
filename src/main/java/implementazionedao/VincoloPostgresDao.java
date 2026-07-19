@@ -12,13 +12,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Implementazione PostgreSQL dell'interfaccia {@link VincoloDAO}.
+ * Gestisce la persistenza dei vincoli di disponibilità dei docenti sulla tabella {@code vincolo}.
+ */
 public class VincoloPostgresDao implements VincoloDAO {
     private final Connection connection;
     private static final Logger logger = Logger.getLogger(VincoloPostgresDao.class.getName());
+
+    /**
+     * Costruisce il DAO ottenendo la connessione al database tramite {@link ConnessioneDatabase}
+     * @throws SQLException se non è possibile stabilire la connessione al database
+     */
     public VincoloPostgresDao() throws SQLException {
         new ConnessioneDatabase();
         this.connection = ConnessioneDatabase.getInstance().getConnection();
     }
+    /**
+     * Salva un vincolo nella tabella {@code vincolo}, convertendo ore e minuti in {@link LocalTime}
+     * @param emailDocente l'email del docente a cui appartiene il vincolo
+     * @param giorno il giorno del vincolo
+     * @param oraInzio l'ora di inizio del vincolo
+     * @param minutoInzio il minuto di inizio del vincolo
+     * @param oraFine l'ora di fine del vincolo
+     * @param minutoFine il minuto di fine del vincolo
+     * @throws SQLException se si verifica un errore durante l'inserimento nel database
+     */
     @Override
     public void salvaVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws SQLException {
         // Implementazione per salvare il vincolo nel database PostgreSQL
@@ -38,6 +57,14 @@ public class VincoloPostgresDao implements VincoloDAO {
         }
     }
 
+    /**
+     * Carica dal database tutti i vincoli associati al docente indicato.
+     * Se il docente non ha vincoli viene registrato un messaggio informativo nel log
+     * @param emailDocente l'email del docente di cui caricare i vincoli
+     * @return {@code Object[][]} in cui ogni riga rappresenta un vincolo nel formato
+     *         {giorno, oraInizio, minutoInizio, oraFine, minutoFine}
+     * @throws SQLException se si verifica un errore durante la lettura dal database
+     */
     @Override
     public Object[][] caricaVincoliDB(String emailDocente) throws SQLException {
         String sql="SELECT orarioi,orariof,giorno FROM vincolo WHERE docentee = ?";
@@ -65,6 +92,16 @@ public class VincoloPostgresDao implements VincoloDAO {
 
     }
 
+    /**
+     * Rimuove dal database il vincolo corrispondente ai parametri specificati
+     * @param emailDocente l'email del docente a cui appartiene il vincolo
+     * @param giorno il giorno del vincolo (confronto case-insensitive)
+     * @param oraInzio l'ora di inizio del vincolo
+     * @param minutoInzio il minuto di inizio del vincolo
+     * @param oraFine l'ora di fine del vincolo
+     * @param minutoFine il minuto di fine del vincolo
+     * @throws SQLException se si verifica un errore durante la rimozione o se nessun vincolo corrisponde
+     */
     @Override
     public void rimuoviVincoloDB(String emailDocente, String giorno, int oraInzio, int minutoInzio, int oraFine, int minutoFine) throws SQLException {
 

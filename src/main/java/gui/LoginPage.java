@@ -1,4 +1,7 @@
 package gui;
+
+import controller.Controller;
+import javax.swing.*;
 /**
  * Finestra di dialogo (GUI) dedicata all'accesso degli utenti già registrati nel sistema.
  * <p>
@@ -12,9 +15,6 @@ package gui;
  * <li><b>Bottoni di Azione:</b> Esegui l'accesso o torna alla schermata precedente.</li>
  * </ul>
  */
-import controller.Controller;
-import javax.swing.*;
-
 public class LoginPage {
     JFrame frame;
     private JPanel panel1;

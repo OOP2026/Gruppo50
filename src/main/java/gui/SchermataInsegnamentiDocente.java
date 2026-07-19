@@ -1,4 +1,13 @@
 package gui;
+
+import controller.Controller;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.List;
+import java.util.Objects;
 /**
  * Finestra di interfaccia grafica (GUI) dedicata alla gestione degli insegnamenti del docente.
  * <p>
@@ -14,14 +23,6 @@ package gui;
  * <li><b>Bottone Indietro:</b> Chiude la finestra e riporta l'utente alla schermata di controllo principale.</li>
  * </ul>
  */
-import controller.Controller;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.List;
-import java.util.Objects;
 @SuppressWarnings("unused")
 public class SchermataInsegnamentiDocente {
     JFrame frame;

@@ -1,4 +1,11 @@
 package gui;
+
+import controller.Controller;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 /**
  * Finestra di interfaccia grafica (GUI) dedicata all'orario settimanale.
  * <p>
@@ -10,13 +17,6 @@ package gui;
  * <li><b>Bottone Indietro:</b> Un pulsante per chiudere l'orario e tornare alla schermata precedente.</li>
  * </ul>
  */
-import controller.Controller;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-
 public class OrarioDocente {
     JFrame frame;
     private final JFrame frameChiamante;

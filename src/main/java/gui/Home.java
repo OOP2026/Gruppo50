@@ -5,8 +5,21 @@ import controller.Controller;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * Classe di avvio dell'applicazione.
+ * Inizializza il {@link Controller}, tenta la connessione al database
+ * e apre la finestra principale {@link PrimoFrame}.
+ */
 public class Home {
 	private static final Controller controller=new Controller(new ArrayList<>());
+
+	/**
+	 * Punto di ingresso dell'applicazione.
+	 * Apre la connessione al database e passa in modalità online; se la connessione
+	 * fallisce, passa in modalità offline (solo in memoria, dati non salvati) avvisando
+	 * l'utente con un dialogo. Carica poi i dati iniziali e mostra il frame principale
+	 * @param args argomenti da riga di comando (non utilizzati)
+	 */
 	public static void main(String[] args) {
 		try {
 			controller.apriConnessioneDatabase();

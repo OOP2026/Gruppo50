@@ -1,4 +1,7 @@
 package gui;
+
+import controller.Controller;
+import javax.swing.*;
 /**
  * Finestra di interfaccia grafica (GUI) che serve da schermata iniziale dell'applicazione.
  * <p>
@@ -10,9 +13,6 @@ package gui;
  * <li><b>Bottone Registrati:</b> Apre il modulo dedicato alla creazione di un nuovo account all'interno del sistema.</li>
  * </ul>
  */
-import controller.Controller;
-import javax.swing.*;
-
 public class PrimoFrame {
     JFrame frame;
     private JPanel panel1;
