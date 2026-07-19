@@ -33,6 +33,7 @@ public class RegisterPage {
     private JButton annullaButton;
     private JComboBox Ruolocombobox;
     private static final String TITOLO_ERRORE_REGISTRAZIONE = "Errore nella registrazione";
+    private static final String TITOLO_AGGIUNGI_INSEGNAMENTO="Aggiungi insegnamento";
 
     public RegisterPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Registrati");
@@ -172,7 +173,7 @@ public class RegisterPage {
         while (true) {
             int risposta = JOptionPane.showConfirmDialog(frame,
                     "Vuoi aggiungere una materia (insegnamento)?",
-                    "Aggiungi Insegnamento",
+                    TITOLO_AGGIUNGI_INSEGNAMENTO,
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
 
@@ -184,14 +185,14 @@ public class RegisterPage {
             if (disponibili.isEmpty()) {
                 JOptionPane.showMessageDialog(frame,
                         "Non ci sono altri insegnamenti disponibili da aggiungere.",
-                        "Aggiungi Insegnamento",
+                        TITOLO_AGGIUNGI_INSEGNAMENTO,
                         JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
 
             String materia = (String) JOptionPane.showInputDialog(frame,
                     "Seleziona la materia da aggiungere:",
-                    "Aggiungi Insegnamento",
+                    TITOLO_AGGIUNGI_INSEGNAMENTO,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     disponibili.toArray(),

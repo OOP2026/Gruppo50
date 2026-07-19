@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class OrarioLezioni {
 
     /** Una lista che contiene tutte le {@link Lezione Lezioni} programmate  */
-    private ArrayList<Lezione> orariolezioni;
+    private ArrayList<Lezione> lezioni;
     /** Un elenco con i giorni validi          */
     private final String[] giorni={"Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"};
     private static final Logger logger = Logger.getLogger(OrarioLezioni.class.getName());
@@ -22,7 +22,7 @@ public class OrarioLezioni {
      * Costruisce un nuovo oggetto OrarioLezioni, controllando l'arraylist */
 
     public OrarioLezioni(){
-        orariolezioni=new ArrayList<>();
+        lezioni=new ArrayList<>();
     }
 
     /**
@@ -32,7 +32,7 @@ public class OrarioLezioni {
      */
     public List<Lezione> getDocenteLezioni(Docente docente){
         List<Lezione> lista=new ArrayList<>();
-        for(Lezione l : orariolezioni){
+        for(Lezione l : lezioni){
             if(l.getInsegnamento().getDocente().email.equals(docente.email)){
                 lista.add(l);
             }
@@ -65,7 +65,7 @@ public class OrarioLezioni {
             throw new NullPointerException("Questa lezione è vuota");
         }
 
-        if(!controlloConflittoLezione(l)) orariolezioni.add(l);
+        if(!controlloConflittoLezione(l)) lezioni.add(l);
     }
 
     /**
@@ -83,7 +83,7 @@ public class OrarioLezioni {
         if (l == null){
             throw new NullPointerException("Questa lezione è vuota");
         }
-        orariolezioni.remove(l);
+        lezioni.remove(l);
     }
 
     /**
@@ -103,7 +103,7 @@ public class OrarioLezioni {
         if (l == null) {
             return;
         }
-        orariolezioni.add(l);
+        lezioni.add(l);
     }
 
     /**
@@ -119,11 +119,11 @@ public class OrarioLezioni {
 
         logger.info("Orario completo delle lezioni:");
 
-        giornoLezioni(giorni[0],  orariolezioni, l -> true);
-        giornoLezioni(giorni[1],  orariolezioni, l -> true);
-        giornoLezioni(giorni[2],  orariolezioni, l -> true);
-        giornoLezioni(giorni[3],  orariolezioni, l -> true);
-        giornoLezioni(giorni[4],  orariolezioni, l -> true);
+        giornoLezioni(giorni[0],  lezioni, l -> true);
+        giornoLezioni(giorni[1],  lezioni, l -> true);
+        giornoLezioni(giorni[2],  lezioni, l -> true);
+        giornoLezioni(giorni[3],  lezioni, l -> true);
+        giornoLezioni(giorni[4],  lezioni, l -> true);
 
     }
 
@@ -162,13 +162,13 @@ public class OrarioLezioni {
      * @param studente lo studente che richiede di visualizzare il proprio orario
      */
     public void visualizzaOrarioCompleto(Studente studente){
-String msg="Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome;
+        String msg="Orario completo delle lezioni Studente: "+studente.nome+" "+studente.cognome;
         logger.info(msg);
-        giornoLezioni(giorni[0],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
-        giornoLezioni(giorni[1],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
-        giornoLezioni(giorni[2],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
-        giornoLezioni(giorni[3],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
-        giornoLezioni(giorni[4],    orariolezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[0],    lezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[1],    lezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[2],    lezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[3],    lezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
+        giornoLezioni(giorni[4],    lezioni, l -> l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso());
 
     }
 
@@ -180,13 +180,13 @@ String msg="Orario completo delle lezioni Studente: "+studente.nome+" "+studente
      * @param docente il docente che richiede di visualizzare il proprio orario
      */
     public void visualizzaOrarioCompleto(Docente docente){
-String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome;
+        String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.cognome;
         logger.info(msg);
-        giornoLezioni(giorni[0], orariolezioni, l -> l.getInsegnamento().getDocente().equals(docente));
-        giornoLezioni(giorni[1], orariolezioni, l -> l.getInsegnamento().getDocente()== docente);
-        giornoLezioni(giorni[2], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
-        giornoLezioni(giorni[3], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
-        giornoLezioni(giorni[4], orariolezioni, l -> l.getInsegnamento().getDocente() == docente);
+        giornoLezioni(giorni[0], lezioni, l -> l.getInsegnamento().getDocente().equals(docente));
+        giornoLezioni(giorni[1], lezioni, l -> l.getInsegnamento().getDocente()== docente);
+        giornoLezioni(giorni[2], lezioni, l -> l.getInsegnamento().getDocente() == docente);
+        giornoLezioni(giorni[3], lezioni, l -> l.getInsegnamento().getDocente() == docente);
+        giornoLezioni(giorni[4], lezioni, l -> l.getInsegnamento().getDocente() == docente);
     }
 
 
@@ -202,7 +202,7 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
             logger.info("Non hai il permesso");
             return new ArrayList<>();
         }
-        return orariolezioni;
+        return lezioni;
     }
 
     /**
@@ -215,7 +215,7 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
      * @return una nuova lista contenente tutte le lezioni a sistema
      */
     public List<Lezione> getOrarioLezioni() {
-        return new ArrayList<>(orariolezioni);
+        return new ArrayList<>(lezioni);
     }
 
 
@@ -226,9 +226,9 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
      * @return true se c'è uno scontro di orario, false altrimenti
      */
     private boolean  controlloConflittoOrario(Lezione l, Lezione lezioneGiaPresente){
-       if(!l.getOrario().getGiorno().equalsIgnoreCase(lezioneGiaPresente.getOrario().getGiorno())){
-           return false;
-           }
+        if(!l.getOrario().getGiorno().equalsIgnoreCase(lezioneGiaPresente.getOrario().getGiorno())){
+            return false;
+        }
         int inizioNuovo = l.getOrario().getOrarioInizioInMinuti();
         int fineNuovo = l.getOrario().getOrarioFineInMinuti();
 
@@ -244,17 +244,17 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
      * @return true se viene rilevato un conflitto di risorse, false se può essere inserita
      */
     private boolean controlloConflittoLezione(Lezione l){
-        for (Lezione lf : orariolezioni) {
+        for (Lezione lf : lezioni) {
             boolean conflittoOrario= controlloConflittoOrario(l,lf);
 
-                if(conflittoOrario){
-                    if(l.getAula().getNome().equals(lf.getAula().getNome())) throw new IllegalArgumentException("C'è già nella stessa aula un'altra lezione in questa fascia oraria");
-                    logger.info("Sto vedendo se il docnete e lo stesso");
-                    //mostrare l'emaail dei due docenti nel terminale
-                    logger.info("Docente lezione nuova: "+l.getInsegnamento().getDocente().getmail());
-                    logger.info("Docente lezione esistente: "+lf.getInsegnamento().getDocente().getmail());
+            if(conflittoOrario){
+                if(l.getAula().getNome().equals(lf.getAula().getNome())) throw new IllegalArgumentException("C'è già nella stessa aula un'altra lezione in questa fascia oraria");
+                logger.info("Sto vedendo se il docnete e lo stesso");
+                //mostrare l'emaail dei due docenti nel terminale
+                logger.info("Docente lezione nuova: "+l.getInsegnamento().getDocente().getmail());
+                logger.info("Docente lezione esistente: "+lf.getInsegnamento().getDocente().getmail());
 
-                    if(l.getInsegnamento().getDocente().getmail().equals(lf.getInsegnamento().getDocente().getmail())) throw new IllegalArgumentException("Il docente ha già un altra lezione in questa fascia oraria");
+                if(l.getInsegnamento().getDocente().getmail().equals(lf.getInsegnamento().getDocente().getmail())) throw new IllegalArgumentException("Il docente ha già un altra lezione in questa fascia oraria");
 
 
 
@@ -271,7 +271,7 @@ String msg="Orario completo delle lezioni Docente: "+docente.nome+" "+docente.co
      */
     public List<Lezione> getLezioniStudente(Studente studente) {
         List<Lezione> risultato = new ArrayList<>();
-        for (Lezione l : orariolezioni) {
+        for (Lezione l : lezioni) {
             if (l.getInsegnamento().getAnnoCorso() == studente.getAnnoCorso()) {
                 risultato.add(l);
             }
