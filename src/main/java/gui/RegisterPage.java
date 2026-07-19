@@ -176,43 +176,50 @@ public class RegisterPage {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
 
-            // Se l'utente preme "No" (o chiude la dialog), si imposta la fine del ciclo
             if (risposta != JOptionPane.YES_OPTION) {
                 continuaAggiunta = false;
             } else {
-                java.util.List<String> disponibili = controller.getInsegnamentiRegistratiDocente();
-
-                if (disponibili.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Non ci sono altri insegnamenti disponibili da aggiungere.",
-                            TITOLO_AGGIUNGI_INSEGNAMENTO,
-                            JOptionPane.INFORMATION_MESSAGE);
-                    continuaAggiunta = false; // Nessuna materia, si imposta la fine del ciclo
-                } else {
-                    String materia = (String) JOptionPane.showInputDialog(frame,
-                            "Seleziona la materia da aggiungere:",
-                            TITOLO_AGGIUNGI_INSEGNAMENTO,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            disponibili.toArray(),
-                            disponibili.get(0));
-
-                    // Se seleziona una materia procede.
-                    // Se annulla (materia == null), l'if viene ignorato e il ciclo riparte da solo (niente 'continue').
-                    if (materia != null) {
-                        try {
-                            controller.addInsegnamentoDocente(materia);
-                            JOptionPane.showMessageDialog(frame, materia + " aggiunta con successo!");
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
+                // Deleghiamo la logica complessa a un metodo separato.
+                // Il metodo restituirà 'false' se non ci sono più materie disponibili.
+                continuaAggiunta = gestisciSelezioneMateria(controller);
             }
         }
 
-        // Azzera il docente impostato da registra: l'utente non è ancora loggato
-        controller.logout();
+        // (Ricordati di mantenere l'eventuale controller.logout() qui alla fine se presente)
+    }
+
+    private boolean gestisciSelezioneMateria(Controller controller) {
+        java.util.List<String> disponibili = controller.getInsegnamentiRegistratiDocente();
+
+        // Controllo disponibilità
+        if (disponibili.isEmpty()) {
+            JOptionPane.showMessageDialog(frame,
+                    "Non ci sono altri insegnamenti disponibili da aggiungere.",
+                    TITOLO_AGGIUNGI_INSEGNAMENTO,
+                    JOptionPane.INFORMATION_MESSAGE);
+            return false; // Interrompe il ciclo nel metodo chiamante
+        }
+
+        // Input utente
+        String materia = (String) JOptionPane.showInputDialog(frame,
+                "Seleziona la materia da aggiungere:",
+                TITOLO_AGGIUNGI_INSEGNAMENTO,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                disponibili.toArray(),
+                disponibili.get(0));
+
+        // Inserimento se l'utente non ha premuto Annulla
+        if (materia != null) {
+            try {
+                controller.addInsegnamentoDocente(materia);
+                JOptionPane.showMessageDialog(frame, materia + " aggiunta con successo!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return true; // La procedura è andata a buon fine, si può continuare ad aggiungere
     }
 
     private boolean mailValidazione(){
