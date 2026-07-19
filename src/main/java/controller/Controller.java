@@ -669,7 +669,11 @@ public class  Controller {
 				} catch (Exception e) {
 					logger.info("DB non disponibile, registrazione docente solo in memoria: " + e.getMessage());
 				}
-				nuovoUtente = new Docente(name, cogn, email, login, pass);
+				Docente nuovoDocente = new Docente(name, cogn, email, login, pass);
+				nuovoUtente = nuovoDocente;
+				// Permette alla GUI di aggiungere subito le materie del docente appena registrato
+				// (stesso pattern usato per lo studente); la GUI chiama logout() a fine dialog.
+				this.docente = nuovoDocente;
 				break;
 
 			case STUDENTE_RUOLO:

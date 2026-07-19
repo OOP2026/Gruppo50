@@ -64,7 +64,7 @@ public class RegisterPage {
                     JOptionPane.showMessageDialog(frame, "Compila tutti i campi", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-if(!mailValidazione()) {
+                if(!mailValidazione()) {
                     JOptionPane.showMessageDialog(frame, "Email non valida.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.WARNING_MESSAGE);
                     return;
                 }
@@ -113,8 +113,15 @@ if(!mailValidazione()) {
                     JOptionPane.showMessageDialog(frame, "Username o Email già in uso.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                // Se si è registrato un docente, chiede ciclicamente se vuole aggiungere materie
+                if ("Docente".equals(ruolo)) {
+                    chiediInsegnamentiDocente(controller);
+                }
 
                 JOptionPane.showMessageDialog(frame, "Registrazione completata!");
+
+
+
                 frame.setVisible(false);
                 frameChiamante.setVisible(true);
                 frame.dispose();
@@ -122,11 +129,69 @@ if(!mailValidazione()) {
         }
     }
 
+    /**
+     * Dopo la registrazione di un docente chiede, tramite una dialog ciclica,
+     * se vuole aggiungere una materia (insegnamento).
+     * <p>
+     * Finché il docente preme "Sì" può selezionare una materia tra gli insegnamenti
+     * registrati non ancora associati a lui; premendo "No" l'inserimento termina.
+     * Le materie aggiunte vengono poi visualizzate nella schermata Insegnamenti del docente.
+     * Riusa i metodi del Controller della schermata Insegnamenti: {@code registra}
+     * imposta come docente corrente quello appena creato, e a fine dialog viene
+     * chiamato {@code logout()} per azzerare lo stato.
+     * </p>
+     * @param controller il controller dell'applicazione.
+     */
+    private void chiediInsegnamentiDocente(Controller controller) {
+        while (true) {
+            int risposta = JOptionPane.showConfirmDialog(frame,
+                    "Vuoi aggiungere una materia (insegnamento)?",
+                    "Aggiungi Insegnamento",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (risposta != JOptionPane.YES_OPTION) {
+                break; // Il docente ha premuto "No" (o chiuso la dialog): fine inserimento
+            }
+
+            java.util.List<String> disponibili = controller.getInsegnamentiRegistratiDocente();
+            if (disponibili.isEmpty()) {
+                JOptionPane.showMessageDialog(frame,
+                        "Non ci sono altri insegnamenti disponibili da aggiungere.",
+                        "Aggiungi Insegnamento",
+                        JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
+
+            String materia = (String) JOptionPane.showInputDialog(frame,
+                    "Seleziona la materia da aggiungere:",
+                    "Aggiungi Insegnamento",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    disponibili.toArray(),
+                    disponibili.get(0));
+
+            // Se annulla la selezione, si torna alla domanda "Vuoi aggiungere una materia?"
+            if (materia == null) {
+                continue;
+            }
+
+            try {
+                controller.addInsegnamentoDocente(materia);
+                JOptionPane.showMessageDialog(frame, materia + " aggiunta con successo!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        // Azzera il docente impostato da registra: l'utente non è ancora loggato
+        controller.logout();
+    }
+
     private boolean mailValidazione(){
         //un modo per vedere se il pattern della mail è corretto attraverso regex
-       String  emailRegex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-       Pattern emailPattern= Pattern.compile(emailRegex);
-       Matcher matcher=emailPattern.matcher(emailText.getText());
-       return matcher.matches();
+        String  emailRegex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+        Pattern emailPattern= Pattern.compile(emailRegex);
+        Matcher matcher=emailPattern.matcher(emailText.getText());
+        return matcher.matches();
     }
 }
