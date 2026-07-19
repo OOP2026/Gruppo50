@@ -15,9 +15,7 @@ import java.util.ArrayList;
 public class StudentePostgresDao implements StudenteDAO {
     /** Ruolo con cui gli studenti sono salvati nella tabella utente. */
     private static final String RUOLO = "STUDENTE";
-    /** Prefisso delle matricole degli studenti. */
-    private static final String PREFISSO_MATRICOLA = "DE";
-
+    
     /** DAO della tabella unica utente a cui vengono delegate lettura e scrittura. */
     private final UtenteDAO utenteDao;
 

@@ -123,35 +123,7 @@ public class Docente extends Utente {
         this.richiesteSpostamentoInviate.add(richiesta);
 
     }
-    /**
-     * Stampa le richieste inviate del docente nel terminale.
-     */
-    protected void visualizzaRichiesteInviate(){
-        int numeroRichiesta=1;
-        int numeroRichieste=richiesteSpostamentoInviate.size();
-        logger.info("Richieste di spostamento inviate:");
-        if(numeroRichieste==0){
-            logger.info("Non hai richieste di spostamento inviate");
-            logger.info("-----Fine-----");
-            return;
-        }
-        //Implementazione del metodo per visualizzare le richieste di spostamento delle lezioni
-        for(Richiesta richiesta : richiesteSpostamentoInviate) {
-            String msg="Docente richiedente: " + richiesta.getDocenteRichiedente().nome + " " + richiesta.getDocenteRichiedente().cognome;
-            logger.info(msg);
-            logger.info("Orario lezione da spostare: " + richiesta.getOrarioLezioneDaSpostare().getOrarioCompleto());
-            logger.info("Orario lezione proposto: " + richiesta.getNuovoOrarioLezione().getOrarioCompleto());
-            logger.info("Motivo della richiesta: " + richiesta.getMotivoRichiesta());
-            logger.info("Stato Richiesta: "+ richiesta.getStatoRichiesta());
-            if(numeroRichieste==numeroRichiesta){
-                logger.info("-----Fine-----");
-                return; }
-            logger.info("------------------------------------------------");
-            numeroRichiesta++;
 
-        }
-
-    }
     /**
      * Ritorna una lista che contiene le richieste inviate.
      * @return una nuova lista con le richieste di spostamento.
@@ -167,18 +139,12 @@ public class Docente extends Utente {
         richiesteSpostamentoInviate = new ArrayList<>(richiesteDaCaricare);
     }
 
-    /** Stampa l'orario del docente nel terminale.
-     * @param elencoLezioni un elenco con all'interno l'orario di tutte le lezioni.
-     */
-    public void visualizzaOrario(OrarioLezioni elencoLezioni){
-        elencoLezioni.visualizzaOrarioCompleto(this);
-    }
+
 
 //Gestione dei vincoli
     /** Permette di aggiungere un vincolo, massimo fino a 3 vincoli.
      * @throws IllegalArgumentException se si è raggiunto il limite di vincoli.
      */
-
     public void aggiungiVincolo(Vincolo v){
         if(vincoli.size()==3){
             throw new IllegalStateException("Hai già raggiunto il numero massimo di vincoli (3)");
@@ -213,26 +179,7 @@ public class Docente extends Utente {
         vincoli.remove(indice);
         logger.info("Vincolo rimosso con successo");
     }
-    /**Mostra i vincoli nel terminale.
-     */
-    public void mostraVincoli(){
-        if(vincoli.isEmpty()){
-            logger.info("Non hai vincoli");
-            return;
-        }
-        String msg="Vincoli di"+this.nome+" "+this.cognome+":";
-        logger.info(msg);
-        int numeroVincolo=0;
-        for(Vincolo vincolo : vincoli){
-            String msg2="Numero vincolo: "+numeroVincolo;
-            logger.info(msg2);
-            logger.info("Giorno: "+vincolo.getOrario().getGiorno());
-            logger.info("Orario: "+vincolo.getOrario().getOrarioCompleto());
-            logger.info("-----------------------------------");
-            numeroVincolo++;
-        }
 
-    }
     /** Controlla se la richiesta si riferisce a una lezione esistente.
      * @param r la richiesta di spostamento.
      * @param orario l'orario delle lezioni in cui cercare.
@@ -247,7 +194,6 @@ public class Docente extends Utente {
         return lezioneTrovata;
 
     }
-
 
 
 }

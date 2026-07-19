@@ -31,8 +31,9 @@ public class RegisterPage {
     /** Il bottone di conferma per finalizzare la registrazione dell'Utente. */
     private JButton confermaButton;
     private JButton annullaButton;
-    private JComboBox Ruolocombobox;
+    private JComboBox ruolocombobox;
     private static final String TITOLO_ERRORE_REGISTRAZIONE = "Errore nella registrazione";
+    private static final String TITOLO_AGGIUNGI_INSEGNAMENTO="Aggiungi insegnamento";
 
     public RegisterPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Registrati");
@@ -58,7 +59,7 @@ public class RegisterPage {
     private void processaRegistrazione(Controller controller, JFrame frameChiamante) {
         String nome = nomeText.getText();
         String cognome = cognomeText.getText();
-        String ruolo = (String) Ruolocombobox.getSelectedItem();
+        String ruolo = (String) ruolocombobox.getSelectedItem();
         String email = emailText.getText();
         String username = usernameText.getText();
         String password = new String(passwordText.getPassword());
@@ -107,9 +108,6 @@ public class RegisterPage {
         return true;
     }
 
-    /**
-     * Gestisce la richiesta ciclica e la validazione della matricola per lo studente.
-     */
     private String ottieniMatricolaValida(Controller controller) {
         while (true) {
             String matricola = JOptionPane.showInputDialog(frame,
@@ -131,18 +129,18 @@ public class RegisterPage {
                         "Formato non valido!\nLa matricola deve iniziare con 'DE1' ed essere seguita da esattamente 7 cifre.",
                         "Errore Formato",
                         JOptionPane.WARNING_MESSAGE);
-                continue;
             }
-
-            if (controller.matricolaEsiste(matricola)) {
+            // Controllo esistenza se il formato è valido
+            else if (controller.matricolaEsiste(matricola)) {
                 JOptionPane.showMessageDialog(frame,
                         "Matricola già registrata!\nInserisci una matricola diversa.",
                         "Matricola già in uso",
                         JOptionPane.WARNING_MESSAGE);
-                continue;
             }
-
-            return matricola;
+            // Se supera tutti i controlli, la matricola è valida
+            else {
+                return matricola;
+            }
         }
     }
 
@@ -169,39 +167,50 @@ public class RegisterPage {
      * @param controller il controller dell'applicazione.
      */
     private void chiediInsegnamentiDocente(Controller controller) {
-        while (true) {
+        boolean continuaAggiunta = true;
+
+        while (continuaAggiunta) {
             int risposta = JOptionPane.showConfirmDialog(frame,
                     "Vuoi aggiungere una materia (insegnamento)?",
-                    "Aggiungi Insegnamento",
+                    TITOLO_AGGIUNGI_INSEGNAMENTO,
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
 
             if (risposta != JOptionPane.YES_OPTION) {
-                break; // Il docente ha premuto "No" (o chiuso la dialog): fine inserimento
+                continuaAggiunta = false;
+            } else {
+                // Deleghiamo la logica complessa a un metodo separato.
+                // Il metodo restituirà 'false' se non ci sono più materie disponibili.
+                continuaAggiunta = gestisciSelezioneMateria(controller);
             }
+        }
 
-            java.util.List<String> disponibili = controller.getInsegnamentiRegistratiDocente();
-            if (disponibili.isEmpty()) {
-                JOptionPane.showMessageDialog(frame,
-                        "Non ci sono altri insegnamenti disponibili da aggiungere.",
-                        "Aggiungi Insegnamento",
-                        JOptionPane.INFORMATION_MESSAGE);
-                break;
-            }
+        // (Ricordati di mantenere l'eventuale controller.logout() qui alla fine se presente)
+    }
 
-            String materia = (String) JOptionPane.showInputDialog(frame,
-                    "Seleziona la materia da aggiungere:",
-                    "Aggiungi Insegnamento",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    disponibili.toArray(),
-                    disponibili.get(0));
+    private boolean gestisciSelezioneMateria(Controller controller) {
+        java.util.List<String> disponibili = controller.getInsegnamentiRegistratiDocente();
 
-            // Se annulla la selezione, si torna alla domanda "Vuoi aggiungere una materia?"
-            if (materia == null) {
-                continue;
-            }
+        // Controllo disponibilità
+        if (disponibili.isEmpty()) {
+            JOptionPane.showMessageDialog(frame,
+                    "Non ci sono altri insegnamenti disponibili da aggiungere.",
+                    TITOLO_AGGIUNGI_INSEGNAMENTO,
+                    JOptionPane.INFORMATION_MESSAGE);
+            return false; // Interrompe il ciclo nel metodo chiamante
+        }
 
+        // Input utente
+        String materia = (String) JOptionPane.showInputDialog(frame,
+                "Seleziona la materia da aggiungere:",
+                TITOLO_AGGIUNGI_INSEGNAMENTO,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                disponibili.toArray(),
+                disponibili.get(0));
+
+        // Inserimento se l'utente non ha premuto Annulla
+        if (materia != null) {
             try {
                 controller.addInsegnamentoDocente(materia);
                 JOptionPane.showMessageDialog(frame, materia + " aggiunta con successo!");
@@ -209,8 +218,8 @@ public class RegisterPage {
                 JOptionPane.showMessageDialog(frame, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             }
         }
-        // Azzera il docente impostato da registra: l'utente non è ancora loggato
-        controller.logout();
+
+        return true; // La procedura è andata a buon fine, si può continuare ad aggiungere
     }
 
     private boolean mailValidazione(){
