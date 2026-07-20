@@ -660,38 +660,44 @@ public class  Controller {
 	public Object[][] getLezioniDocente() {
 		List<Lezione> l = docente.getLezioni(orarioLezioni);
 
-		if(l.isEmpty()){
-
-			return new Object[0][0]; }
-		List<List<Lezione>> lezioniPerGiorno = new ArrayList<>();
-		List<Object[]> data = new ArrayList<>();
-		String[] giorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"};
-		// raggruppa le lezione per giorno.
-		for (String giorno:giorni) {
-			//crea un list con lezioni per ogni giorno dentro un'altra list
-			lezioniPerGiorno.add(l.stream().filter(lezione -> lezione.getOrario().getGiorno().equalsIgnoreCase(giorno)).collect(Collectors.toList()));
-
+		if (l.isEmpty()) {
+			return new Object[0][0];
 		}
-		while(true) {
-			Object[] row = new Object[5];
-			boolean hasLezioni=false;
-			// crea la riga con le lezioni del giorno, se non ci sono lezioni per quel giorno mette ""
-			for(int g=0; g<giorni.length; g++){
-				row[g]=lezioniPerGiorno.get(g).isEmpty()? "":lezioniPerGiorno.get(g).get(0).infoLezioneSenzaDocente();
-			}
-			// rimuove la prima lezione di ogni giorno, se non ci sono lezioni per quel giorno non fa nulla
-			for(int j=0; j<giorni.length; j++){
-				if(!lezioniPerGiorno.get(j).isEmpty()){
-					lezioniPerGiorno.get(j).remove(0);
-					hasLezioni=true;
+
+		String[] giorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"};
+		List<List<Lezione>> lezioniPerGiorno = new ArrayList<>();
+
+		// Raggruppa le lezioni per giorno
+		for (String giorno : giorni) {
+			lezioniPerGiorno.add(l.stream()
+					.filter(lezione -> lezione.getOrario().getGiorno().equalsIgnoreCase(giorno))
+					.collect(Collectors.toList()));
+		}
+
+		// Trova il numero massimo di lezioni in un singolo giorno (sarà il numero di righe)
+		int maxRighe = lezioniPerGiorno.stream()
+				.mapToInt(List::size)
+				.max()
+				.orElse(0);
+
+		// Inizializza direttamente la matrice finale
+		Object[][] data = new Object[maxRighe][giorni.length];
+
+		// Popola la matrice
+		for (int riga = 0; riga < maxRighe; riga++) {
+			for (int col = 0; col < giorni.length; col++) {
+				List<Lezione> lezioniDelGiorno = lezioniPerGiorno.get(col);
+
+				// Se in questo giorno c'è una lezione per la riga corrente, inseriscila, altrimenti metti ""
+				if (riga < lezioniDelGiorno.size()) {
+					data[riga][col] = lezioniDelGiorno.get(riga).infoLezioneSenzaDocente();
+				} else {
+					data[riga][col] = "";
 				}
 			}
-			//Se non ci sono piu lezioni in nessuna lista ferma il loop
-			if(!hasLezioni) break;
-			data.add(row);
 		}
 
-		return data.toArray(new Object[0][]);
+		return data;
 	}
 
 	/**
