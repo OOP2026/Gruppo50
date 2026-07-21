@@ -67,18 +67,34 @@ public class Utente {
         return this.email;
     }
 
+    /**
+     * Restituisce l'username dell'utente.
+     * @return username come stringa
+     */
     public String getUsername(){
         return this.username;
     }
 
+    /**
+     * Restituisce il cognome dell'utente.
+     * @return cognome come stringa
+     */
     public String getCognome() {
         return cognome;
     }
 
+    /**
+     * Restituisce il nome dell'utente.
+     * @return nome come stringa
+     */
     public String getNome() {
         return nome;
     }
 
+    /**
+     * Restituisce la password memorizzata per l'utente.
+     * @return password come stringa
+     */
     public String getPassword() {
         return password;
     }

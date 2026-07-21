@@ -35,6 +35,13 @@ public class RegisterPage {
     private static final String TITOLO_ERRORE_REGISTRAZIONE = "Errore nella registrazione";
     private static final String TITOLO_AGGIUNGI_INSEGNAMENTO="Aggiungi insegnamento";
 
+    /**
+     * Costruisce la schermata di registrazione e collega i pulsanti di conferma
+     * e annulla alla logica del controller. Controlla input di base e gestisce
+     * flussi specifici per ruolo (matricola per Studente, insegnamenti per Docente).
+     * @param controller controller dell'applicazione
+     * @param frameChiamante frame genitore per il posizionamento
+     */
     public RegisterPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Registrati");
         frame.setContentPane(panel1);
@@ -108,6 +115,13 @@ public class RegisterPage {
         return true;
     }
 
+    /**
+     * Richiede ciclicamente all'utente la matricola fino a quando non fornisce
+     * un valore con il formato corretto (DE1 seguito da 7 cifre) e non già
+     * presente nel sistema. Mostra messaggi di errore/avviso all'utente.
+     * @param controller controller per verificare l'esistenza della matricola
+     * @return la matricola valida oppure {@code null} se l'utente annulla
+     */
     private String ottieniMatricolaValida(Controller controller) {
         while (true) {
             String matricola = JOptionPane.showInputDialog(frame,
@@ -188,6 +202,13 @@ public class RegisterPage {
         // (Ricordati di mantenere l'eventuale controller.logout() qui alla fine se presente)
     }
 
+    /**
+     * Mostra una dialog per scegliere un insegnamento da aggiungere al docente
+     * corrente. Se non ci sono materie disponibili mostra un messaggio e
+     * termina il ciclo di aggiunta.
+     * @param controller controller usato per recuperare e aggiungere insegnamenti
+     * @return {@code false} se non ci sono più insegnamenti disponibili, altrimenti {@code true}
+     */
     private boolean gestisciSelezioneMateria(Controller controller) {
         java.util.List<String> disponibili = controller.getInsegnamentiRegistratiDocente();
 
@@ -222,6 +243,10 @@ public class RegisterPage {
         return true; // La procedura è andata a buon fine, si può continuare ad aggiungere
     }
 
+    /**
+     * Valida la sintassi dell'indirizzo email inserito usando una regex.
+     * @return {@code true} se la mail rispetta il formato previsto, {@code false} altrimenti
+     */
     private boolean mailValidazione(){
         // un modo per vedere se il pattern della mail è corretto attraverso regex
         String emailRegex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";

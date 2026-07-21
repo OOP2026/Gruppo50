@@ -43,6 +43,13 @@ public class CrealezioneDialog {
     private final  Controller controller;
 
 
+    /**
+     * Costruisce il dialog per creare una nuova lezione. Prepara le combo
+     * dinamiche per insegnamenti e aule, registra i listener e valida i campi
+     * prima di delegare la creazione al controller.
+     * @param controller controller dell'applicazione
+     * @param frameChiamante frame genitore usato per centrare il dialog
+     */
     public CrealezioneDialog(Controller controller, JFrame frameChiamante) {
         dialog = new JDialog(frameChiamante, "Crea Nuova Lezione", true);
         this.controller = controller;
@@ -112,6 +119,11 @@ int [] orario= {oraI,minI,oraF,minF};
         }
     }
 
+    /**
+     * Aggiorna la JComboBox degli insegnamenti filtrandola per la stringa
+     * fornita dall'utente e mantenendo l'editor testuale sincronizzato.
+     * @param materia filtro testuale da applicare
+     */
     private void caricaInsegnamentiBox(String materia){
         //Rimuove tutti gli items precedenti
         nomeInsField.removeAllItems();
@@ -158,6 +170,11 @@ int [] orario= {oraI,minI,oraF,minF};
         // invece di passare un null che causerebbe danni più avanti.
         throw new IllegalStateException("L'editor della JComboBox 'nomeInsField' non è un JTextField. Assicurati che sia editabile.");
     }
+    /**
+     * Aggiorna la JComboBox delle aule filtrandola per il testo inserito
+     * dall'utente e sincronizza l'editor testuale.
+     * @param nomeAula filtro testuale da applicare
+     */
     private void caricaAuleBox(String nomeAula){
         //rimuove tutti gli items precedenti
         nomeAulaField.removeAllItems();
@@ -207,6 +224,10 @@ int [] orario= {oraI,minI,oraF,minF};
     }
 
 
+    /**
+     * Registra i listener per le textfield degli editor delle combo in modo
+     * da eseguire il filtering al rilascio di un tasto.
+     */
     private void caricaEvents() {
         textComboBoxIns.addKeyListener(new KeyAdapter(){
             @Override
@@ -226,12 +247,20 @@ int [] orario= {oraI,minI,oraF,minF};
         });
     }
 
+    /**
+     * Richiama il controller per caricare gli insegnamenti dal database e
+     * mostra un messaggio all'utente se si verifica un errore.
+     */
     private void caricaInsegnamenti(){
         String msg= controller.caricaInsegnamentiDaDB();
         if(msg!=null){
             JOptionPane.showMessageDialog(dialog, msg, "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
+    /**
+     * Richiama il controller per caricare le aule dal database e mostra un
+     * messaggio all'utente se si verifica un errore.
+     */
     private void caricaAule(){
         String ex= controller.caricaAuleDaDB();
         if(ex!=null){

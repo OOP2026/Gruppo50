@@ -24,6 +24,12 @@ public class OrarioDocente {
     private JTable tabellaOrario;
     private JButton indietroButton;
 
+    /**
+     * Costruisce la schermata che mostra l'orario del docente.
+     * Crea la tabella e registra l'evento di ritorno alla schermata chiamante.
+     * @param c controller usato per ottenere le lezioni del docente
+     * @param f frame chiamante per il posizionamento
+     */
     public OrarioDocente(Controller c, JFrame f){
         frameChiamante=f;
         frame = new JFrame("Schermata Orario Docente");
@@ -42,6 +48,9 @@ public class OrarioDocente {
     }
 
 
+    /**
+     * Registra i listener dei pulsanti presenti nella schermata (ad es. Indietro).
+     */
     private void caricaEvents(){
         if(indietroButton != null) {
             indietroButton.addActionListener(e -> {
@@ -52,6 +61,11 @@ public class OrarioDocente {
             });
         }
     }
+    /**
+     * Costruisce il modello della tabella orario e la popola con i dati forniti.
+     * @param table la JTable da configurare
+     * @param data dati delle lezioni da inserire (righe)
+     */
     private void creaTable(JTable table, Object[][] data){
        DefaultTableModel model=new DefaultTableModel(null,
                new String[]{"Lunedi","Martedi","Mercoledi","Giovedi","Venerdi"} );
@@ -62,6 +76,11 @@ public class OrarioDocente {
       caricaLezioniTable(table,data);
         //inseriamo manualmente i dati per un test
     }
+    /**
+     * Applica un renderer personalizzato per mostrare il testo delle celle
+     * su più righe e imposta l'altezza delle righe.
+     * @param table la JTable da configurare
+     */
     private void configuraTable(JTable table){
         //TableCellRenderer gestisce la creazione delle celle della tabella
         TableCellRenderer orarioRender= new TableCellRenderer() {
@@ -84,6 +103,11 @@ public class OrarioDocente {
         }
         table.setRowHeight(50);
     }
+    /**
+     * Crea e restituisce una JTextArea pronta per essere usata come renderer
+     * nelle celle della tabella (non editabile, con word-wrap abilitato).
+     * @return una JTextArea configurata
+     */
     private JTextArea creaTextArea() {
         JTextArea area = new JTextArea();
         area.setLineWrap(true);
@@ -92,6 +116,12 @@ public class OrarioDocente {
         area.setMaximumSize(new Dimension(70, 90));
         return area;
     }
+    /**
+     * Inserisce le righe delle lezioni nel modello della tabella.
+     * Mostra un messaggio se non sono presenti lezioni.
+     * @param table la JTable da popolare
+     * @param data i dati delle lezioni (array di righe)
+     */
     private void caricaLezioniTable(JTable table,Object[][] data){
         DefaultTableModel model= (DefaultTableModel) table.getModel();
         if(data.length==0){

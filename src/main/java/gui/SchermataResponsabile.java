@@ -26,6 +26,13 @@ public class SchermataResponsabile {
     private JButton logoutButton;
     private JButton gestioneAuleButton;
 
+    /**
+     * Costruisce la schermata principale del Responsabile con i comandi per
+     * gestire richieste, lezioni e aule. Registra i listener sui pulsanti
+     * per aprire le rispettive finestre modali.
+     * @param controller controller dell'applicazione
+     * @param frameChiamante frame genitore usato per il posizionamento
+     */
     public SchermataResponsabile(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Responsabile");
         frame.setContentPane(panel1);

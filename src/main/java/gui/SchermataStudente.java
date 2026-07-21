@@ -64,6 +64,13 @@ public class SchermataStudente {
             "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"
     };
 
+    /**
+     * Costruisce la schermata Studente e popola il tabellone settimanale.
+     * Registra i listener per logout/indietro e aggiorna l'orario quando la finestra
+     * torna in primo piano.
+     * @param controller controller dell'applicazione
+     * @param frameChiamante frame genitore per il posizionamento
+     */
     public SchermataStudente(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Studente");
         frame.setContentPane(panel1);

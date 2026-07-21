@@ -273,8 +273,13 @@ public void rimuoviLezione(Lezione l,OrarioLezioni o){
     o.rimuoviLezione(l,this.token);
 }
 
+    /**
+     * Aggiunge una richiesta di spostamento alla coda del responsabile.
+     * Metodo usato dal Controller/DAO per segnalare nuove richieste.
+     * @param r la richiesta da inserire
+     */
     public static void inviaRichiesta(Richiesta r){
-richiesteSpostamento.add(r);
+        richiesteSpostamento.add(r);
     }
 
 }

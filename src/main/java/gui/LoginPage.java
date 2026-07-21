@@ -23,6 +23,13 @@ public class LoginPage {
     private JButton accediButton;
     private JButton annullaButton;
 
+    /**
+     * Costruisce la schermata di login, associa i pulsanti e delega al
+     * {@code controller} l'autenticazione. In caso di successo apre la
+     * schermata relativa al ruolo restituito dal controller.
+     * @param controller controller dell'applicazione
+     * @param frameChiamante frame genitore per il posizionamento
+     */
     public LoginPage(Controller controller, JFrame frameChiamante) {
         frame = new JFrame("Login");
         frame.setContentPane(panel1);
@@ -85,6 +92,10 @@ public class LoginPage {
         }
     }
 
+    /**
+     * Mostra un dialog di errore relativo alla procedura di login.
+     * @param e messaggio di errore da visualizzare
+     */
     public void erroreLogin(String e){
         JOptionPane.showMessageDialog(frame, "Errore: "+e, "Errore nel login", JOptionPane.ERROR_MESSAGE);
     }

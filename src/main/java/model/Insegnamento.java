@@ -80,9 +80,16 @@ this.docente=null;
         return new Docente(docente);
     }
 
+    /**
+     * Assegna un docente a questo insegnamento. Verifica che il docente abbia
+     * già registrato questo insegnamento nella propria lista, altrimenti
+     * l'operazione viene rifiutata.
+     * @param doc docente da assegnare
+     * @throws IllegalArgumentException se il docente non è abilitato a insegnare questa materia
+     */
     public void setDocente(Docente doc){
         if(!doc.getInsegnamenti().contains(this)) {
-        throw new IllegalArgumentException("Questo docente non può essere titolare di questa materia, perchè non la insegna!");
+            throw new IllegalArgumentException("Questo docente non può essere titolare di questa materia, perchè non la insegna!");
         }
         this.docente=doc;
     }

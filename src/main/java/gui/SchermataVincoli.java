@@ -58,6 +58,10 @@ public class SchermataVincoli {
         }
         caricaEvents();
     }
+    /**
+     * Registra gli ActionListener principali della GUI (indietro, aggiungi, rimuovi)
+     * e associa la logica dei pulsanti ai metodi del controller.
+     */
     private void caricaEvents(){
 
         if(indietroButton != null) {
@@ -111,6 +115,11 @@ public class SchermataVincoli {
 
     }
     }
+/**
+ * Valida i campi di input per l'aggiunta di un vincolo.
+ * Controlla che tutti i campi siano compilati e che siano numeri interi.
+ * @return {@code true} se i campi sono validi, {@code false} altrimenti
+ */
 private boolean checkCampi(){
     //controlla se tutti i campi sono stati compilati
     if(oraFineText.getText().isEmpty() || minutiFineText.getText().isEmpty() || oraInizioText.getText().isEmpty() || minutiInizioText.getText().isEmpty()){
@@ -129,13 +138,19 @@ dialogErroreWarning("Compila tutti i campi",1);
 
     return true;
 }
-private void resetCampi(){
+    /**
+     * Resetta i campi del form riportandoli a vuoto.
+     */
+    private void resetCampi(){
     oraFineText.setText("");
     minutiFineText.setText("");
     oraInizioText.setText("");
     minutiInizioText.setText("");
 }
 
+    /**
+     * Popola la tabella dei vincoli con i dati recuperati dal controller
+     */
     private void creaTable(){
         Object[][] data=controller.ottieniVincoli();
         tabellaVincoli.setModel(new DefaultTableModel(data,
@@ -152,6 +167,10 @@ private void resetCampi(){
         tabellaVincoli.setSelectionBackground(Color.LIGHT_GRAY);
     }
 
+    /**
+     * Richiama il controller per caricare i vincoli dal database e, in caso di
+     * errore, mostra un messaggio all'utente.
+     */
     private void caricaVincoli(){
         String ex= controller.caricaVincoliDaDB();
         if(ex!=null){
@@ -159,6 +178,11 @@ private void resetCampi(){
         }
     }
 
+    /**
+     * Mostra un dialog di errore o avviso con messaggio personalizzato.
+     * @param e il messaggio da visualizzare
+     * @param tipo {@code 0} mostra un messaggio di errore, {@code 1} un avviso
+     */
     private void dialogErroreWarning(String e, int tipo){
         switch (tipo){
             case 0:{

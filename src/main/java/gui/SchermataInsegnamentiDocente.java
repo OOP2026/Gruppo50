@@ -35,6 +35,13 @@ public class SchermataInsegnamentiDocente {
     private JPanel panel1;
    private final Controller controller;
    private final JFrame frameChiamante;
+    /**
+     * Costruisce la schermata per la gestione degli insegnamenti del docente.
+     * Popola la tabella, il menu delle materie disponibili e registra i listener
+     * per aggiungere o rimuovere insegnamenti.
+     * @param c controller dell'applicazione
+     * @param f frame chiamante usato per il posizionamento
+     */
     public SchermataInsegnamentiDocente(Controller c, JFrame f) {
         controller=c;
         frameChiamante=f;
@@ -52,6 +59,10 @@ public class SchermataInsegnamentiDocente {
 
     }
 
+    /**
+     * Registra gli ActionListener per i pulsanti (indietro, aggiungi) e la
+     * selezione della tabella che abilita la rimozione di un insegnamento.
+     */
     private void caricaEvents(){
 
         if(indietroButton != null) {
@@ -101,6 +112,10 @@ if(tabellaInsegnamenti != null) {
 }
     }
 
+    /**
+     * Riempie la combo box con gli insegnamenti disponibili che il docente
+     * non ha ancora associato. Mostra un messaggio d'errore se la GUI non è inizializzata.
+     */
     private void caricaInsegnamentiBox(){
         if(insegnamentiBox==null){
 dialogErrore("Errore GUI: insegnamentiBox non inizializzato dal designer, riavvia il programma");
@@ -113,6 +128,9 @@ dialogErrore("Errore GUI: insegnamentiBox non inizializzato dal designer, riavvi
         }
         insegnamentiBox.setSelectedIndex(0);
     }
+    /**
+     * Costruisce il modello della tabella degli insegnamenti e applica
+     */
     private void creaTable(){
         Object[][] data=controller.getInsegnamentiDocente();
         tabellaInsegnamenti.setModel(new DefaultTableModel(data,
@@ -128,12 +146,22 @@ dialogErrore("Errore GUI: insegnamentiBox non inizializzato dal designer, riavvi
         //quando le righe vengono cliccati diventano grigio chiaro
         tabellaInsegnamenti.setSelectionBackground(Color.LIGHT_GRAY);
     }
+    /**
+     * Richiama il controller per caricare gli insegnamenti dal database e,
+     * in caso di errore, visualizza un messaggio all'utente.
+     */
     private void caricaInsegnamenti(){
         String msg= controller.caricaInsegnamentiDaDB();
         if(msg!=null){
             dialogErrore(msg);
         }
     }
+    /**
+     * Rimuove l'insegnamento selezionato dal docente se l'utente conferma
+     * l'operazione. Aggiorna la combo e la tabella dopo la rimozione.
+     * @param risposta risposta del dialogo di conferma (YES/NO)
+     * @param materia nome dell'insegnamento da rimuovere
+     */
     private void eliminaInsegnamento(int risposta, String materia){
         if (risposta == JOptionPane.YES_OPTION) {
             String action = controller.removeInsegnamentoDocente(materia);
@@ -144,6 +172,10 @@ dialogErrore("Errore GUI: insegnamentiBox non inizializzato dal designer, riavvi
             creaTable();
         }
     }
+    /**
+     * Mostra un dialogo di errore con il messaggio fornito.
+     * @param e messaggio di errore
+     */
     private void dialogErrore(String e){
         JOptionPane.showMessageDialog(frame, e, "Errore", JOptionPane.ERROR_MESSAGE);
     }

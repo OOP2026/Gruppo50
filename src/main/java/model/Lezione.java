@@ -51,6 +51,10 @@ public class Lezione implements Comparable<Lezione> {
                 this.insegnamento.getDocente().nome+" "+this.insegnamento.getDocente().cognome+
                 " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
     }
+    /**
+     * Restituisce una descrizione testuale della lezione senza informazioni sul docente.
+     * @return stringa descrittiva della lezione (insegnamento, aula, orario)
+     */
     public String infoLezioneSenzaDocente(){
         return "Insegnamento: "+this.insegnamento.getNome()+
                 " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
@@ -64,9 +68,13 @@ public class Lezione implements Comparable<Lezione> {
         return new Insegnamento(this.insegnamento);
     }
 
+    /**
+     * Imposta l'insegnamento associato a questa lezione.
+     * @param i l'insegnamento da associare
+     */
     public void setInsegnamento(Insegnamento i){
         this.insegnamento=i;
-}
+    }
 
     /**
      * Restituisce l'aula della lezione tramite una copia.
@@ -76,6 +84,10 @@ public class Lezione implements Comparable<Lezione> {
         return new Aula(this.aula);
     }
 
+    /**
+     * Imposta l'aula in cui si svolge la lezione.
+     * @param a l'aula da associare
+     */
     public void setAula(Aula a){
         this.aula=a;
     }
@@ -87,6 +99,10 @@ public class Lezione implements Comparable<Lezione> {
         return new Orario(this.orario);
     }
 
+    /**
+     * Aggiorna l'orario (giorno e fascia) della lezione.
+     * @param o il nuovo orario da associare
+     */
     public void setOrario(Orario o){
         this.orario=o;}
 

@@ -52,6 +52,12 @@ public class SchermataRichiesta {
     JFrame frameChiamante;
     Controller controller;
 
+    /**
+     * Costruisce la schermata per inviare richieste di spostamento.
+     * Inizializza la GUI, registra i listener e prepara la tabella delle richieste.
+     * @param c controller dell'applicazione
+     * @param f frame chiamante usato per il centering
+     */
     public SchermataRichiesta(Controller c, JFrame f) {
         frameChiamante = f;
         controller = c;

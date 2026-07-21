@@ -113,6 +113,9 @@ public class GestioneAuleDialog {
 
     }
 
+    /**
+     * Resetta i campi del form di inserimento aula riportandoli a vuoto.
+     */
     private void resetCampi(){
         textField1.setText("");
         textField2.setText("");

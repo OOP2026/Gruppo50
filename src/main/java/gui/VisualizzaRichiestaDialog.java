@@ -42,6 +42,12 @@ public class VisualizzaRichiestaDialog {
 
     // ---------------------------------------------------------------
 
+    /**
+     * Costruisce la dialog per la gestione delle richieste.
+     * Inizializza la tabella, imposta i listener e prepara i controlli UI.
+     * @param controller controller dell'applicazione
+     * @param frameChiamante frame genitore per il posizionamento della dialog
+     */
     public VisualizzaRichiestaDialog(Controller controller, JFrame frameChiamante) {
         dialog = new JDialog(frameChiamante, "Gestione Richieste di Spostamento", true);
         dialog.setContentPane(panel1);
@@ -64,6 +70,10 @@ public class VisualizzaRichiestaDialog {
     // Inizializzazione tabella
     // ---------------------------------------------------------------
 
+    /**
+     * Inizializza il modello della tabella delle richieste e configura le colonne.
+     * Metodo chiamato all'avvio della dialog per predisporre la view.
+     */
     private void inizializzaTabella() {
         String[] colonne = {
                 "#", "Docente", "Orario attuale", "Nuovo orario", "Motivo", "Stato"
@@ -91,6 +101,11 @@ public class VisualizzaRichiestaDialog {
     // Carica / aggiorna dati dalla lista richieste del controller
     // ---------------------------------------------------------------
 
+    /**
+     * Ricarica i dati della tabella prendendoli dal {@code controller} e resetta
+     * lo stato dei pannelli di dettaglio e dei bottoni.
+     * @param controller il controller da cui leggere i dati
+     */
     private void aggiornaTabella(Controller controller) {
         tableModel.setRowCount(0);
         Object[][] richieste = controller.getRichiesteSpostamento();
@@ -107,6 +122,10 @@ public class VisualizzaRichiestaDialog {
     // ---------------------------------------------------------------
     // Listener
     // ---------------------------------------------------------------
+    /**
+     * Collega i listener UI agli elementi della dialog.
+     * @param controller il controller usato nei callback
+     */
     private void collegaListener(Controller controller) {
         // Ora il metodo fa solo ciò che dice il suo nome: collega i listener
         table1.getSelectionModel().addListSelectionListener(this::gestisciSelezioneTabella);
@@ -114,6 +133,12 @@ public class VisualizzaRichiestaDialog {
         rifiutaButton.addActionListener(e -> gestisciRifiuto(controller));
         modificaOrarioButton.addActionListener(e -> gestisciModificaOrario(controller));
     }
+    /**
+     * Gestisce la selezione di una riga nella tabella delle richieste.
+     * Mostra i dettagli della richiesta selezionata e abilita/disabilita
+     * i bottoni in base allo stato della richiesta.
+     * @param e evento di selezione della tabella
+     */
     private void gestisciSelezioneTabella(javax.swing.event.ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) return;
 
@@ -136,12 +161,21 @@ public class VisualizzaRichiestaDialog {
     }
 
     // Un piccolo metodo di supporto per evitare di ripetere l'abilitazione/disabilitazione
+    /**
+     * Abilita o disabilita i bottoni di azione (approva, rifiuta, modifica).
+     * @param abilitati {@code true} per abilitare, {@code false} per disabilitare
+     */
     private void impostaStatoBottoni(boolean abilitati) {
         approvaButton.setEnabled(abilitati);
         rifiutaButton.setEnabled(abilitati);
         modificaOrarioButton.setEnabled(abilitati);
     }
 
+    /**
+     * Esegue il flusso di approvazione per la richiesta attualmente selezionata:
+     * chiede conferma, invoca il controller e aggiorna la tabella.
+     * @param controller controller che esegue l'operazione di approvazione
+     */
     private void gestisciApprovazione(Controller controller) {
         if (rigaSelezionata < 0) return;
 
@@ -163,6 +197,11 @@ public class VisualizzaRichiestaDialog {
         aggiornaTabella(controller);
     }
 
+    /**
+     * Esegue il flusso di rifiuto per la richiesta attualmente selezionata:
+     * chiede conferma, invoca il controller e aggiorna la tabella.
+     * @param controller controller che esegue l'operazione di rifiuto
+     */
     private void gestisciRifiuto(Controller controller) {
         if (rigaSelezionata < 0) return;
 
@@ -180,6 +219,12 @@ public class VisualizzaRichiestaDialog {
         aggiornaTabella(controller);
     }
 
+    /**
+     * Richiede all'utente i nuovi valori d'orario e invoca il controller per
+     * aggiornare la richiesta selezionata. Gestisce la validazione dei numeri
+     * e segnala eventuali errori in una finestra di dialogo.
+     * @param controller controller che esegue l'aggiornamento
+     */
     private void gestisciModificaOrario(Controller controller) {
         if (rigaSelezionata < 0) return;
 
@@ -226,6 +271,10 @@ public class VisualizzaRichiestaDialog {
         if (labelOrari   != null) labelOrari.setText("—");
         if (labelMotivo  != null) labelMotivo.setText("—");
     }
+    /**
+     * Mostra un semplice dialog di errore con il messaggio fornito.
+     * @param e il messaggio di errore da visualizzare
+     */
     private void dialogErrore(String e){
         JOptionPane.showMessageDialog(dialog, e, "Errore", JOptionPane.ERROR_MESSAGE);
     }

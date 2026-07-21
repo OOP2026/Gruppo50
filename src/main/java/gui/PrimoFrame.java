@@ -19,6 +19,11 @@ public class PrimoFrame {
     private JButton loginButton;
     private JButton registratiButton;
 
+    /**
+     * Costruisce la schermata iniziale dell'applicazione, registrando i
+     * listener per navigare verso il login o la registrazione.
+     * @param controller controller dell'applicazione
+     */
     public PrimoFrame(Controller controller) {
         frame = new JFrame("Schermata di Accesso");
         frame.setContentPane(panel1);

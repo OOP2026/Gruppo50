@@ -26,6 +26,12 @@ public class SchermataDocente {
     private JButton logoutButton;
     private final Controller controller;
     private final JFrame frameChiamante;
+    /**
+     * Costruisce la schermata principale del Docente e registra i listener per
+     * navigare verso le schermate di richieste, orario, vincoli e insegnamenti.
+     * @param c controller dell'applicazione
+     * @param f frame chiamante usato per il posizionamento
+     */
     public SchermataDocente(Controller c,JFrame f) {
         controller=c;
         frameChiamante=f;
@@ -39,6 +45,10 @@ public class SchermataDocente {
 
     }
 
+    /**
+     * Registra tutti gli ActionListener per i pulsanti della schermata docente.
+     * Incapsula la logica di navigazione verso le altre finestre.
+     */
     private void caricaEvents(){
         //Controllo che il bottone invia richieste sia inizializzato correttamente
         if (schermataRichiesteButton != null) {
