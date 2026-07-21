@@ -37,6 +37,7 @@ public class Insegnamento {
      */
     public Insegnamento(String nome,int numeroCFU,int annoCorso){
         if(annoCorso>3 || annoCorso<1) throw new IllegalArgumentException("L'anno deve essere tra 1 e 3");
+        if(numeroCFU>15 || numeroCFU<1){throw new IllegalArgumentException("Numero di cfu deve essere tra 1 e 15");}
         this.nome=nome;
         this.numeroCFU=numeroCFU;
         this.annoCorso=annoCorso;
