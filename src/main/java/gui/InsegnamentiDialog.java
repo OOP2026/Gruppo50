@@ -100,8 +100,21 @@ caricaInsegnamenti();
                 labelErrore.setText("CFU e anno corso devono essere numeri interi.");
             }
         });
+caricaEventTable();
 
 
+    }
+
+    /**
+     * Carica i listener di selezione della tabella degli insegnamenti.
+     * <p>
+     * Attacca un {@code ListSelectionListener} alla tabella che reagisce quando
+     * l'utente seleziona una riga. A seconda che il docente sia assegnato ("nessuno" indica assenza),
+     * apre un dialog di gestione per assegnare il docente oppure per rimuovere l'insegnamento.
+     * La selezione viene automaticamente deselezionata dopo l'azione.
+     * </p>
+     */
+    private void caricaEventTable(){
         if(tabellaInsegnamenti != null) {
             tabellaInsegnamenti.getSelectionModel().addListSelectionListener(e -> {
                 int riga = tabellaInsegnamenti.getSelectedRow();
@@ -115,12 +128,23 @@ caricaInsegnamenti();
 
 
 
-             tabellaInsegnamenti.getSelectionModel().clearSelection();
+                tabellaInsegnamenti.getSelectionModel().clearSelection();
             });
         }
     }
 
-    public void rimuoviInsegnamento(int risposta,String nomeIns){
+    /**
+     * Rimuove un insegnamento dal sistema dopo conferma dell'utente.
+     * <p>
+     * Se l'utente ha confermato la rimozione ({@code YES_OPTION}), invoca il controller
+     * per eliminare l'insegnamento tramite {@link Controller#removeInsegnamento(String)}.
+     * Se la rimozione fallisce, mostra un messaggio di errore.
+     * Aggiorna la tabella indipendentemente dall'esito.
+     * </p>
+     * @param risposta il codice della risposta (JOptionPane.YES_OPTION o JOptionPane.NO_OPTION)
+     * @param nomeIns il nome dell'insegnamento da rimuovere
+     */
+    private void rimuoviInsegnamento(int risposta,String nomeIns){
         if (risposta == JOptionPane.YES_OPTION) {
             String action = controller.removeInsegnamento(nomeIns);
             if (action != null) {
@@ -131,7 +155,18 @@ caricaInsegnamenti();
 
     }
 
-    public void assegnaDocente(String nomeIns, String emailDocente){
+    /**
+     * Assegna un docente a un insegnamento.
+     * <p>
+     * Se l'email fornita non è vuota, invoca il controller per assegnare il docente
+     * tramite {@link Controller#assegnaDocente(String, String)}. Se l'operazione ha
+     * successo aggiorna la tabella; altrimenti mostra un messaggio di errore.
+     * Se l'email è vuota mostra un avviso all'utente.
+     * </p>
+     * @param nomeIns il nome dell'insegnamento a cui assegnare il docente
+     * @param emailDocente l'email del docente da assegnare
+     */
+    private void assegnaDocente(String nomeIns, String emailDocente){
         if (!emailDocente.trim().isEmpty()) {
             String action = controller.assegnaDocente(nomeIns,emailDocente);
             if (action != null) {
@@ -144,6 +179,15 @@ caricaInsegnamenti();
 
     }
 
+    /**
+     * Aggiorna il contenuto della tabella degli insegnamenti.
+     * <p>
+     * Pulisce tutte le righe precedenti e ricarica gli insegnamenti attivi
+     * dal controller tramite {@link Controller#getInsegnamentiAttivi()}, quindi
+     * le aggiunge alla tabella renderizzate come {@code Object[]}.
+     * </p>
+     * @param controller il controller da cui recuperare gli insegnamenti
+     */
     private void aggiornaTabella(Controller controller) {
         tableModel.setRowCount(0);
         for (Object[] riga : controller.getInsegnamentiAttivi()) {
@@ -151,6 +195,13 @@ caricaInsegnamenti();
         }
     }
 
+    /**
+     * Carica gli insegnamenti dal database tramite il controller.
+     * <p>
+     * Invoca {@link Controller#caricaInsegnamentiDaDB()} e in caso di errore
+     * mostra un dialog con il messaggio di errore.
+     * </p>
+     */
     private void caricaInsegnamenti(){
         String msg= controller.caricaInsegnamentiDaDB();
         if(msg!=null){
@@ -158,6 +209,18 @@ caricaInsegnamenti();
         }
     }
 
+    /**
+     * Apre un dialog per la gestione di un insegnamento senza docente assegnato.
+     * <p>
+     * Presenta all'utente tre opzioni:
+     * <ul>
+     * <li>Assegna docente - apre il panel di assegnazione del docente</li>
+     * <li>Rimuovi insegnamento - apre il panel di conferma rimozione</li>
+     * <li>Annulla - chiude il dialog senza fare nulla</li>
+     * </ul>
+     * </p>
+     * @param riga l'indice della riga selezionata nella tabella
+     */
     private void gestioneInsegnamento(int riga){
         String[] opzioni={"Assegna docente","Rimuovi insegnamento","Annulla"};
         int scelta= JOptionPane.showOptionDialog(dialog,"Cosa desideri fare con questo insegnamento?",
@@ -175,6 +238,16 @@ caricaInsegnamenti();
         }
 
     }
+    /**
+     * Mostra un dialog di conferma per la rimozione di un insegnamento.
+     * <p>
+     * Estrae il nome dell'insegnamento dalla riga selezionata e chiede conferma
+     * all'utente con un messaggio di avvertenza che include l'avviso che tutte
+     * le lezioni associate all'insegnamento saranno rimosse. Se confermato,
+     * chiama {@link #rimuoviInsegnamento(int, String)} con la risposta.
+     * </p>
+     * @param riga l'indice della riga selezionata nella tabella
+     */
     private void removePanel(int riga){
         String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
         String motivo = "Vuoi rimuovere l'insegnamento " + nomeInsegnamento + "? Se rimuovi l'insegnamento verrano rimosse anche le lezioni associate con questo insegnamento";
@@ -187,6 +260,17 @@ caricaInsegnamenti();
         scrollPane.setPreferredSize(new Dimension(120, 100));
         int risposta = JOptionPane.showConfirmDialog(dialog, scrollPane, "Rimozione Insegnamento", JOptionPane.YES_NO_OPTION);
         rimuoviInsegnamento(risposta, nomeInsegnamento);}
+    /**
+     * Mostra un dialog input per l'assegnazione di un docente a un insegnamento.
+     * <p>
+     * Estrae il nome dell'insegnamento dalla riga selezionata e chiede all'utente
+     * di inserire l'email del docente. Valida l'email tramite {@link #mailValidazione(String)};
+     * se la validazione fallisce mostra un avviso. Se valida, chiama
+     * {@link #assegnaDocente(String, String)} per completare l'assegnazione.
+     * Se l'utente cancella il dialog, il metodo ritorna senza fare nulla.
+     * </p>
+     * @param riga l'indice della riga selezionata nella tabella
+     */
     private void assegnaDocentePanel(int riga){
 
         String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
@@ -201,6 +285,15 @@ return;
         assegnaDocente(nomeInsegnamento,emailDocente.trim());
     }
 
+    /**
+     * Valida il formato di un indirizzo email tramite espressione regolare.
+     * <p>
+     * Verifica che l'email corrisponda al pattern:
+     * {@code ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}}
+     * </p>
+     * @param mail l'indirizzo email da validare
+     * @return {@code true} se l'email è valida, {@code false} altrimenti
+     */
     private boolean mailValidazione(String mail){
         // un modo per vedere se il pattern della mail è corretto attraverso regex
         String emailRegex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";

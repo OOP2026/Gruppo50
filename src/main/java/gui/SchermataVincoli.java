@@ -80,10 +80,10 @@ public class SchermataVincoli {
                 if (ex != null) {
                     dialogErroreWarning(ex, 0);
                     return;
-                }else{
+                }
                     JOptionPane.showMessageDialog(frame,"Vincolo aggiunto con successo","Vincolo Aggiunto",JOptionPane.INFORMATION_MESSAGE);
 
-                }
+
 
                 resetCampi();
                 creaTable();
@@ -101,10 +101,9 @@ public class SchermataVincoli {
                 dialogErroreWarning(ex, 0);
                 return;
             }
-            else{
-                JOptionPane.showMessageDialog(frame,"Vincolo rimosso con successo","Vincolo rimosso",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame,"Vincolo rimosso con successo","Vincolo rimosso",JOptionPane.INFORMATION_MESSAGE);
 
-            }
+
 
 
             creaTable();

@@ -65,7 +65,9 @@ public class OrarioLezioni {
             throw new NullPointerException("Questa lezione è vuota");
         }
 
-        if(!controlloConflittoLezione(l)) lezioni.add(l);
+        controlloConflittoLezione(l);
+
+    lezioni.add(l);
     }
 
     /**
@@ -239,11 +241,23 @@ public class OrarioLezioni {
     }
 
     /**
-     * Controlla se la nuova lezione entra in conflitto con lezioni già esistenti
-     * @param l la lezione da controllare
-     * @return true se viene rilevato un conflitto di risorse, false se può essere inserita
+     * Valida una nuova lezione per individuare conflitti con lezioni già presenti nell'orario.
+     * <p>
+     * Il metodo esamina tutte le lezioni già inserite e verifica due tipi di conflitti:
+     * <ul>
+     * <li><b>Conflitto di aula:</b> Se la nuova lezione si sovrappone temporalmente (stesso giorno
+     * e stesso intervallo orario) a un'altra lezione nella medesima aula.</li>
+     * <li><b>Conflitto di docente:</b> Se la nuova lezione si sovrappone temporalmente a un'altra
+     * lezione il cui docente titolare è lo stesso.</li>
+     * </ul>
+     * Se viene rilevato uno qualsiasi di questi conflitti, il metodo lancia un'eccezione
+     * con un messaggio esplicativo.
+     * </p>
+     * @param l la {@link Lezione} da validare prima dell'inserimento nell'orario
+     * @throws IllegalArgumentException se la lezione entra in conflitto con un'aula occupata
+     * o con un docente già impegnato nello stesso intervallo orario
      */
-    private boolean controlloConflittoLezione(Lezione l){
+    private void controlloConflittoLezione(Lezione l){
         for (Lezione lf : lezioni) {
             boolean conflittoOrario= controlloConflittoOrario(l,lf);
 
@@ -256,11 +270,8 @@ public class OrarioLezioni {
 
                 if(l.getInsegnamento().getDocente().getmail().equals(lf.getInsegnamento().getDocente().getmail())) throw new IllegalArgumentException("Il docente ha già un altra lezione in questa fascia oraria");
 
-
-
             }
         }
-        return false;
     }
 
     /**

@@ -215,7 +215,7 @@ private Lezione cercaLezioneDaSpostare(Richiesta r, OrarioLezioni elencoLezioni)
      * sostituendo quelle in memoria.
      * @param richiesteDaCaricare la lista di richieste recuperate dal database.
      */
-    public void caricaRichiesteSpostamento(List<Richiesta> richiesteDaCaricare){
+    public static void  caricaRichiesteSpostamento(List<Richiesta> richiesteDaCaricare){
         richiesteSpostamento = new ArrayList<>(richiesteDaCaricare);
     }
 

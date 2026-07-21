@@ -32,6 +32,7 @@ public class Lezione implements Comparable<Lezione> {
      * @param o l'{@link Orario} (giorno e fascia oraria) della lezione
      */
     public Lezione(Insegnamento i ,Aula a , Orario o){
+        if(i.getDocente()==null) throw new NullPointerException("Non puoi creare una lezione senza un docente!");
         this.insegnamento=i;
         this.aula=a;
         this.orario=o;

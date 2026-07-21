@@ -4,6 +4,7 @@ import database_connection.ConnessioneDatabase;
 import implementazionedao.*;
 import model.*;
 
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -613,7 +614,7 @@ public class  Controller {
 				// lo stato non viene letto: le richieste estratte sono tutte IN_ATTESA (default)
 				richieste.add(r);
 			}
-			responsabile.caricaRichiesteSpostamento(richieste);
+			Responsabile.caricaRichiesteSpostamento(richieste);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
@@ -717,56 +718,176 @@ public class  Controller {
 				return false; // Non possono esistere più user con la stessa mail o username.
 			}
 		}
-		Utente nuovoUtente;
 
 		switch (ruolo.toUpperCase()) {
 			case RESPONSABILE_RUOLO:
-				try {
-					if(ConnessioneDatabase.getStatus()) {
-						ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
-						responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
-					}
-				} catch (Exception e) {
-					logger.info("DB non disponibile, registrazione responsabile solo in memoria: " + e.getMessage());
-				}
-				nuovoUtente = new Responsabile(name, cogn, email, login, pass);
+				creaResponsabile(name,cogn,email,login,pass);
 				break;
 
 			case DOCENTE_RUOLO:
-				try {
-					if(ConnessioneDatabase.getStatus()){
-						DocenteDAO docenteDAO = new DocentePostgresDao();
-						docenteDAO.salvaDocDB(name, cogn, email, login, pass);
-					}
-				} catch (Exception e) {
-					logger.info("DB non disponibile, registrazione docente solo in memoria: " + e.getMessage());
-				}
-				Docente nuovoDocente = new Docente(name, cogn, email, login, pass);
-				nuovoUtente = nuovoDocente;
-				// Permette alla GUI di aggiungere subito le materie del docente appena registrato
-				// (stesso pattern usato per lo studente); la GUI chiama logout() a fine dialog.
-				this.docente = nuovoDocente;
+				creaDocente(name,cogn,email,login,pass);
 				break;
 
 			case STUDENTE_RUOLO:
 			default:
-				try {
-					if(ConnessioneDatabase.getStatus()){
-						StudenteDAO studenteDAO = new StudentePostgresDao();
-						// Passa direttamente la matricola ricevuta come parametro al DB
-						studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
-					}
-				} catch (Exception e) {
-					logger.info("DB non disponibile, registrazione studente solo in memoria: " + e.getMessage());
-				}
-				// Usa direttamente la matricola passata come parametro per creare l'oggetto
-				Studente nuovoStudente = new Studente(name, cogn, email, login, pass, matricola, 1);
-				nuovoUtente = nuovoStudente;
-				this.studente = nuovoStudente;
+			creaStudente(name, cogn, email, login, pass, matricola);
 				break;
 		}
-		utentiRegistrati.add(nuovoUtente);
+
 		return true;
+	}
+
+	/**
+	 * Crea un nuovo {@link Responsabile} nell'applicazione e lo aggiunge alla lista in memoria.
+	 * <p>
+	 * Il metodo prova prima a salvare il responsabile sul database chiamando
+	 * {@link #salvaResponsabileDB(String,String,String,String,String)}; indipendentemente
+	 * dall'esito del salvataggio (se la connessione è disabilitata non viene lanciata
+	 * un'eccezione), viene poi creata l'istanza in memoria e aggiunta a
+	 * {@code utentiRegistrati}. Eventuali errori vengono loggati.
+	 * </p>
+	 * @param name  nome del responsabile
+	 * @param cogn  cognome del responsabile
+	 * @param email email del responsabile (usata come identificativo)
+	 * @param login username per l'accesso
+	 * @param pass  password per l'accesso
+	 */
+	public void creaResponsabile(String name,String cogn,String email,String login,String pass){
+
+		try {
+			salvaResponsabileDB(name, cogn, email, login, pass);
+			Responsabile nuovoUtente = new Responsabile(name, cogn, email, login, pass);
+			utentiRegistrati.add(nuovoUtente);
+		}catch (SQLException e){
+			logger.warning("Registrazione del responsabile Impossibile a causa del DB: "+e.getMessage());
+		}catch (Exception e){
+			logger.warning(e.getMessage());
+		}
+
+
+	}
+	/**
+	 * Salva un responsabile nel database.
+	 * <p>
+	 * Se la connessione al database è disabilitata ({@link ConnessioneDatabase#getStatus()} == false)
+	 * il metodo ritorna senza effettuare alcuna operazione. In caso di errore SQL
+	 * viene rilanciata l'eccezione al chiamante.
+	 * </p>
+	 * @param name  nome del responsabile
+	 * @param cogn  cognome del responsabile
+	 * @param email email del responsabile
+	 * @param login username del responsabile
+	 * @param pass  password del responsabile
+	 * @throws SQLException se l'operazione di salvataggio sul database fallisce
+	 */
+	public void salvaResponsabileDB(String name,String cogn,String email,String login,String pass) throws  SQLException{
+
+			if(!ConnessioneDatabase.getStatus()){return;}
+				ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
+				responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
+	}
+	/**
+	 * Crea un nuovo {@link Docente} nell'applicazione.
+	 * <p>
+	 * Il metodo prova a salvare il docente nel database tramite
+	 * {@link #salvaDocenteDB(String,String,String,String,String)}. Se il salvataggio
+	 * riesce (o la connessione è disabilitata) viene creata l'istanza in memoria,
+	 * assegnata a {@code this.docente} e aggiunta a {@code utentiRegistrati}, in
+	 * modo che la GUI possa subito associare materie al docente appena creato.
+	 * Eventuali errori vengono loggati.
+	 * </p>
+	 * @param name  nome del docente
+	 * @param cogn  cognome del docente
+	 * @param email email del docente
+	 * @param login username per l'accesso
+	 * @param pass  password per l'accesso
+	 */
+	public void creaDocente(String name,String cogn,String email,String login,String pass){
+		try {
+			salvaDocenteDB(name, cogn, email, login, pass);
+			Docente nuovoUtente = new Docente(name, cogn, email, login, pass);
+			// Permette alla GUI di aggiungere subito le materie del docente appena registrato
+			// (stesso pattern usato per lo studente); la GUI chiama logout() a fine dialog.
+			this.docente=nuovoUtente;
+			utentiRegistrati.add(nuovoUtente);
+		}catch (SQLException e){
+			logger.warning("Registrazione del docente impossibile  a causa del DB: "+e.getMessage());
+		}catch (Exception e){
+			logger.warning(e.getMessage());
+		}
+
+
+	}
+	/**
+	 * Salva un {@link Docente} nel database.
+	 * <p>
+	 * Se la connessione al database è disabilitata il metodo non esegue nulla.
+	 * In caso di errore SQL l'eccezione viene propagata al chiamante.
+	 * </p>
+	 * @param name  nome del docente
+	 * @param cogn  cognome del docente
+	 * @param email email del docente
+	 * @param login username del docente
+	 * @param pass  password del docente
+	 * @throws SQLException se l'operazione di salvataggio sul database fallisce
+	 */
+	public void salvaDocenteDB(String name,String cogn,String email,String login,String pass) throws  SQLException{
+
+		if(!ConnessioneDatabase.getStatus()){return;}
+		DocenteDAO docenteDAO = new DocentePostgresDao();
+		docenteDAO.salvaDocDB(name, cogn, email, login, pass);
+	}
+
+	/**
+	 * Crea un nuovo {@link Studente} nell'applicazione.
+	 * <p>
+	 * Prova a salvare lo studente sul database tramite
+	 * {@link #salvaStudenteDB(String,String,String,String,String,String)}; in ogni
+	 * caso crea l'istanza in memoria (con anno di corso impostato a 1) e la aggiunge
+	 * a {@code utentiRegistrati}. Eventuali errori vengono loggati.
+	 * </p>
+	 * @param name      nome dello studente
+	 * @param cogn      cognome dello studente
+	 * @param email     email dello studente
+	 * @param login     username per l'accesso
+	 * @param pass      password per l'accesso
+	 * @param matricola matricola dello studente
+	 */
+	public void creaStudente(String name,String cogn,String email,String login,String pass,String matricola){
+		try {
+			salvaStudenteDB(name, cogn, email, login, pass,matricola);
+			Studente nuovoUtente = new Studente(name, cogn, email, login, pass, matricola, 1);
+			this.studente=nuovoUtente;
+			utentiRegistrati.add(nuovoUtente);
+		}catch (SQLException e){
+			logger.info("Registrazione dello studente impossibile a causa del DB: "+e.getMessage());
+		}catch (Exception e){
+			logger.warning(e.getMessage());
+		}
+
+
+	}
+	/**
+	 * Salva uno {@link Studente} nel database.
+	 * <p>
+	 * Se la connessione al database è disabilitata il metodo ritorna senza effettuare
+	 * operazioni. La matricola e l'anno (impostato a 1) vengono passati direttamente
+	 * al DAO. In caso di errore SQL l'eccezione viene propagata.
+	 * </p>
+	 * @param name      nome dello studente
+	 * @param cogn      cognome dello studente
+	 * @param email     email dello studente
+	 * @param login     username per l'accesso
+	 * @param pass      password per l'accesso
+	 * @param matricola matricola dello studente
+	 * @throws SQLException se l'operazione di salvataggio sul database fallisce
+	 */
+	public void salvaStudenteDB(String name,String cogn,String email,String login,String pass,String matricola) throws  SQLException{
+
+		if(!ConnessioneDatabase.getStatus()){return;}
+		StudenteDAO studenteDAO = new StudentePostgresDao();
+		// Passa direttamente la matricola ricevuta come parametro al DB
+		studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
 	}
 	/**
 	 * Verifica se una matricola risulta già registrata nel sistema.
