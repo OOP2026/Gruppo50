@@ -46,6 +46,7 @@ public class Lezione implements Comparable<Lezione> {
      * @return una stringa con le informazioni principali della lezione
      */
     public String infoLezione(){
+        if(insegnamento.getDocente()==null) {throw new NullPointerException("Impossibile, questa lezione non ha un docente");}
         return "Insegnamento: "+this.insegnamento.getNome()+" Docente: "+
                 this.insegnamento.getDocente().nome+" "+this.insegnamento.getDocente().cognome+
                 " Aula: "+this.aula.getNome()+" Orario: "+this.orario.getOrarioCompleto();
