@@ -20,8 +20,6 @@ import java.util.ArrayList;
  */
 public class DocentePostgresDao implements DocenteDAO {
 
-    /** Ruolo con cui i docenti sono salvati nella tabella utente. */
-    private static final String RUOLO = "DOCENTE";
     /** Prefisso delle matricole dei docenti. */
     private static final String PREFISSO_MATRICOLA = "DA";
 
@@ -62,40 +60,6 @@ public class DocentePostgresDao implements DocenteDAO {
         utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null);
     }
 
-    /**
-     * Recupera tutti i docenti: legge tutti gli utenti tramite
-     * {@link UtenteDAO#leggiUtentiDB} e filtra le righe con ruolo {@code "DOCENTE"}.
-     *
-     * @param nome la lista dei nomi dei docenti presenti nel db.
-     * @param cognome la lista dei  cognomi dei docenti presenti nel db.
-     * @param email la lista delle email dei docenti presenti nel db.
-     * @param login la lista degli username dei docenti presenti nel db.
-     * @param password la lista delle password dei docenti presenti nel db.
-     * @throws SQLException quando la lettura nel database fallisce.
-     */
-    @Override
-    public void leggiDocenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws SQLException {
-        ArrayList<String> nomi = new ArrayList<>();
-        ArrayList<String> cognomi = new ArrayList<>();
-        ArrayList<String> emails = new ArrayList<>();
-        ArrayList<String> logins = new ArrayList<>();
-        ArrayList<String> passwords = new ArrayList<>();
-        ArrayList<String> matricole = new ArrayList<>();
-        ArrayList<Integer> anniCorso = new ArrayList<>();
-        ArrayList<String> ruoli = new ArrayList<>();
-        utenteDao.leggiUtentiDB(nomi, cognomi, emails, logins, passwords, matricole, anniCorso, ruoli);
-
-        for (int i = 0; i < ruoli.size(); i++) {
-            if (RUOLO.equalsIgnoreCase(ruoli.get(i))) {
-                nome.add(nomi.get(i));
-                cognome.add(cognomi.get(i));
-                email.add(emails.get(i));
-                login.add(logins.get(i));
-                password.add(passwords.get(i));
-                // matricola e annoCorso vengono ignorati: per ora il docente non li visualizza.
-            }
-        }
-    }
 
     /**
      * Salva nella tabella {@code materiadocente} l'associazione tra il

@@ -28,12 +28,7 @@ public interface StudenteDAO {
      void salvaStudenteDB(String nome, String cognome, String email,
                           String login, String password,String matricola, int annoCorso) throws SQLException;
 
-    /**Recupera i dati di tutti gli studenti registrati.
-     * Le liste passate come parametro vengono riempite in modo parallelo
-     * (stesso indice = stesso studente).
-     */
-    void leggiStudenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
-                         ArrayList<String> login, ArrayList<String> password,ArrayList<String> matricola,ArrayList<Integer> annoCorso) throws SQLException;
+
 
 
 

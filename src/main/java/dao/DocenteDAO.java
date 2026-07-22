@@ -28,16 +28,6 @@ public interface DocenteDAO {
     void salvaDocDB(String nome, String cognome, String email,
                     String login, String password)throws SQLException;
 
-    /**Metodo da implementare in DocentePostgreDao per recuperare i dati di un docente registrato.
-     *
-     * @param  nome Nome di battesimo del docente.
-     * @param cognome cognome di battesimo del docente.
-     * @param email l'email con cui si registra il docente al sistema.
-     * @param login login con cui accede il docente al sistema.
-     * @param password password segreta del docente per accedere
-     */
-    void leggiDocenteDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email,
-                        ArrayList<String> login, ArrayList<String> password)throws SQLException;
 
     /**Salva nel database l'associazione tra il docente e una materia che può insegnare.
      * <p>Viene invocato sia in fase di registrazione (quando il docente appena
