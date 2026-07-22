@@ -77,6 +77,7 @@ public class RegisterPage {
         }
 
         String matricola = null;
+        int annoCorso = 1;
 
         // Controllo ruolo e richiesta matricola ciclica
         if ("Studente".equals(ruolo)) {
@@ -84,9 +85,13 @@ public class RegisterPage {
             if (matricola == null) {
                 return; // Interrompe l'intera registrazione
             }
+            annoCorso = chiediAnnoCorso();
+            if (annoCorso == -1) {
+                return; // Interrompe l'intera registrazione
+            }
         }
 
-        if (!controller.registra(nome, cognome, email, username, password, ruolo, matricola)) {
+        if (!controller.registra(nome, cognome, email, username, password, ruolo, matricola, annoCorso)) {
             JOptionPane.showMessageDialog(frame, "Username o Email già in uso.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -156,6 +161,31 @@ public class RegisterPage {
                 return matricola;
             }
         }
+    }
+
+    /**
+     * Chiede allo studente, dopo l'inserimento della matricola, a quale anno
+     * di corso è iscritto (primo, secondo o terzo) tramite una dialog a scelta.
+     * @return l'anno di corso (1, 2 o 3), oppure {@code -1} se l'utente chiude la dialog
+     */
+    private int chiediAnnoCorso() {
+        String[] anni = {"Primo anno", "Secondo anno", "Terzo anno"};
+        int scelta = JOptionPane.showOptionDialog(frame,
+                "A quale anno di corso sei iscritto?",
+                "Anno di corso",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                anni,
+                anni[0]);
+
+        // Se l'utente chiude la finestra con la 'X'
+        if (scelta == JOptionPane.CLOSED_OPTION) {
+            JOptionPane.showMessageDialog(frame, "L'anno di corso è obbligatorio per completare la registrazione.", TITOLO_ERRORE_REGISTRAZIONE, JOptionPane.ERROR_MESSAGE);
+            return -1;
+        }
+
+        return scelta + 1; // indice 0..2 -> anno 1..3
     }
 
     /**

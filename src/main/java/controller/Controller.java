@@ -231,9 +231,9 @@ public class  Controller {
 		if (insegnamento == null) {
 			return "Errore si sta provando a creare una lezione per un insegnamento non esistente";
 		}
-        if(insegnamento.getDocente()==null){
-            return "Questo insegnamento non ha un docente titolare";
-        }
+		if(insegnamento.getDocente()==null){
+			return "Questo insegnamento non ha un docente titolare";
+		}
 		//Cerco se il docente a cui il responsabile assegna la lezione esista davvero
 		Docente docenteTrovato = null;
 		for (Utente u : utentiRegistrati) {
@@ -710,9 +710,10 @@ public class  Controller {
 	 * @param pass la password con cui l'Utente accede.
 	 * @param ruolo indica che ruolo svolgi all'interno dell'università.
 	 * @param matricola la matricola inserita dallo studente in fase di registrazione.
+	 * @param annoCorso l'anno di corso (1-3) scelto dallo studente in fase di registrazione.
 	 * @return nel caso in cui l'inserimento nel DB fallisce e restituisce FALSE altrimenti torna TRUE.
 	 */
-	public boolean registra(String name, String cogn, String email, String login, String pass, String ruolo, String matricola) {
+	public boolean registra(String name, String cogn, String email, String login, String pass, String ruolo, String matricola, int annoCorso) {
 		for (Utente u : utentiRegistrati) {
 			if (u.getmail().equals(email) || u.getUsername().equals(login)) {
 				return false; // Non possono esistere più user con la stessa mail o username.
@@ -730,7 +731,7 @@ public class  Controller {
 
 			case STUDENTE_RUOLO:
 			default:
-			creaStudente(name, cogn, email, login, pass, matricola);
+				creaStudente(name, cogn, email, login, pass, matricola, annoCorso);
 				break;
 		}
 
@@ -782,9 +783,9 @@ public class  Controller {
 	 */
 	public void salvaResponsabileDB(String name,String cogn,String email,String login,String pass) throws  SQLException{
 
-			if(!ConnessioneDatabase.getStatus()){return;}
-				ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
-				responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
+		if(!ConnessioneDatabase.getStatus()){return;}
+		ResponsabileDAO responsabileDAO = new ResponsabilePostgresDao();
+		responsabileDAO.salvaResponsabileDB(name, cogn, email, login, pass);
 	}
 	/**
 	 * Crea un nuovo {@link Docente} nell'applicazione.
@@ -842,8 +843,8 @@ public class  Controller {
 	 * Crea un nuovo {@link Studente} nell'applicazione.
 	 * <p>
 	 * Prova a salvare lo studente sul database tramite
-	 * {@link #salvaStudenteDB(String,String,String,String,String,String)}; in ogni
-	 * caso crea l'istanza in memoria (con anno di corso impostato a 1) e la aggiunge
+	 * {@link #salvaStudenteDB(String,String,String,String,String,String,int)}; in ogni
+	 * caso crea l'istanza in memoria (con l'anno di corso indicato) e la aggiunge
 	 * a {@code utentiRegistrati}. Eventuali errori vengono loggati.
 	 * </p>
 	 * @param name      nome dello studente
@@ -852,11 +853,12 @@ public class  Controller {
 	 * @param login     username per l'accesso
 	 * @param pass      password per l'accesso
 	 * @param matricola matricola dello studente
+	 * @param annoCorso anno di corso dello studente (1-3)
 	 */
-	public void creaStudente(String name,String cogn,String email,String login,String pass,String matricola){
+	public void creaStudente(String name,String cogn,String email,String login,String pass,String matricola,int annoCorso){
 		try {
-			salvaStudenteDB(name, cogn, email, login, pass,matricola);
-			Studente nuovoUtente = new Studente(name, cogn, email, login, pass, matricola, 1);
+			salvaStudenteDB(name, cogn, email, login, pass,matricola,annoCorso);
+			Studente nuovoUtente = new Studente(name, cogn, email, login, pass, matricola, annoCorso);
 			this.studente=nuovoUtente;
 			utentiRegistrati.add(nuovoUtente);
 		}catch (SQLException e){
@@ -871,7 +873,7 @@ public class  Controller {
 	 * Salva uno {@link Studente} nel database.
 	 * <p>
 	 * Se la connessione al database è disabilitata il metodo ritorna senza effettuare
-	 * operazioni. La matricola e l'anno (impostato a 1) vengono passati direttamente
+	 * operazioni. La matricola e l'anno di corso vengono passati direttamente
 	 * al DAO. In caso di errore SQL l'eccezione viene propagata.
 	 * </p>
 	 * @param name      nome dello studente
@@ -880,14 +882,15 @@ public class  Controller {
 	 * @param login     username per l'accesso
 	 * @param pass      password per l'accesso
 	 * @param matricola matricola dello studente
+	 * @param annoCorso anno di corso dello studente (1-3)
 	 * @throws SQLException se l'operazione di salvataggio sul database fallisce
 	 */
-	public void salvaStudenteDB(String name,String cogn,String email,String login,String pass,String matricola) throws  SQLException{
+	public void salvaStudenteDB(String name,String cogn,String email,String login,String pass,String matricola,int annoCorso) throws  SQLException{
 
 		if(!ConnessioneDatabase.getStatus()){return;}
 		StudenteDAO studenteDAO = new StudentePostgresDao();
-		// Passa direttamente la matricola ricevuta come parametro al DB
-		studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, 1);
+		// Passa direttamente la matricola e l'anno di corso ricevuti come parametri al DB
+		studenteDAO.salvaStudenteDB(name, cogn, email, login, pass, matricola, annoCorso);
 	}
 	/**
 	 * Verifica se una matricola risulta già registrata nel sistema.
@@ -1008,8 +1011,8 @@ public class  Controller {
 	public List<Object[]> getInsegnamentiAttivi() {
 		List<Object[]> righe = new ArrayList<>();
 		for (Insegnamento ins : insegnamentiRegistrati) {
-            String d="nessuno";
-            if(ins.getDocente() != null){d=ins.getDocente().getmail(); }
+			String d="nessuno";
+			if(ins.getDocente() != null){d=ins.getDocente().getmail(); }
 
 			righe.add(new Object[]{
 					ins.getNome(),
@@ -1484,31 +1487,31 @@ public class  Controller {
 		}
 		docente.caricaVincoliInDocente(vs);
 	}
-    public String assegnaDocente(String ins,String email){
-       Docente d=null;
-        for (Utente u : utentiRegistrati) {
-            if (u.getmail().equals(email) && (u instanceof Docente)) {
-                d= (Docente)u;
-            }
-        }
-        if(d==null) {return "Non esiste un docente con questa email";}
+	public String assegnaDocente(String ins,String email){
+		Docente d=null;
+		for (Utente u : utentiRegistrati) {
+			if (u.getmail().equals(email) && (u instanceof Docente)) {
+				d= (Docente)u;
+			}
+		}
+		if(d==null) {return "Non esiste un docente con questa email";}
 
-        Insegnamento insegnamento = stringToInsegnamento(ins);
-        if (insegnamento == null) {
-            return "Errore si sta provando ad assegnare ad un insegnamento non esistente";
-        }
-        try{
-            if(ConnessioneDatabase.getStatus()) {
-                InsegnamentoPostgresDAO insDAO = new InsegnamentoPostgresDAO();
-                insDAO.assegnaDocenteTitolare(email,ins);
-            }
-            insegnamento.setDocente(d);
-        }catch(SQLException e){
-            logger.warning(e.getMessage());
-            return"Impossibile assegnare un docente a questa materia";
-        }catch(Exception e){
-            return e.getMessage();
-        }
-        return null;
-    }
+		Insegnamento insegnamento = stringToInsegnamento(ins);
+		if (insegnamento == null) {
+			return "Errore si sta provando ad assegnare ad un insegnamento non esistente";
+		}
+		try{
+			if(ConnessioneDatabase.getStatus()) {
+				InsegnamentoPostgresDAO insDAO = new InsegnamentoPostgresDAO();
+				insDAO.assegnaDocenteTitolare(email,ins);
+			}
+			insegnamento.setDocente(d);
+		}catch(SQLException e){
+			logger.warning(e.getMessage());
+			return"Impossibile assegnare un docente a questa materia";
+		}catch(Exception e){
+			return e.getMessage();
+		}
+		return null;
+	}
 }
