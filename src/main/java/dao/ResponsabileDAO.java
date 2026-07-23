@@ -1,6 +1,5 @@
 package dao;
 import java.sql.SQLException;
-import java.util.ArrayList;
 /**
  * Interfaccia DAO per i responsabili, memorizzati nella tabella unica
  * {@code utente} con ruolo {@code "RESPONSABILE"}.

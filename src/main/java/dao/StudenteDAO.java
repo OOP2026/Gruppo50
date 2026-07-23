@@ -1,6 +1,5 @@
 package dao;
 import java.sql.SQLException;
-import java.util.ArrayList;
 /**
  * Interfaccia DAO per gli studenti, memorizzati nella tabella unica
  * {@code utente} con ruolo {@code "STUDENTE"}.

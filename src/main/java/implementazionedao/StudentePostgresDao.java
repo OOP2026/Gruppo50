@@ -3,7 +3,6 @@ package implementazionedao;
 import dao.StudenteDAO;
 import dao.UtenteDAO;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Implementazione PostgreSQL dell'interfaccia {@link StudenteDAO}.
