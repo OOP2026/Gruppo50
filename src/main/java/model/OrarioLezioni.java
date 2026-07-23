@@ -47,6 +47,7 @@ public class OrarioLezioni {
 
     }
     /**
+     * <p>
      * Permette di aggiungere una nuova lezione all'orario
      * Solo un Responsabile in possesso del Token valido può eseguire questa operazione.
      * Il livello di privilegio è garantito a livello di codice dalla richiesta obbligatoria
