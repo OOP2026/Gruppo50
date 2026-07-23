@@ -3,7 +3,6 @@ package implementazionedao;
 import dao.ResponsabileDAO;
 import dao.UtenteDAO;
 
-import java.util.ArrayList;
 
 /**
  * Implementazione PostgreSQL dell'interfaccia {@link ResponsabileDAO}.

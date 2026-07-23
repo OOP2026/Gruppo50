@@ -1614,7 +1614,6 @@ public class  Controller {
 			logger.warning(e.getMessage());
 			return"Impossibile assegnare un docente a questa materia";
 		}catch(Exception e){
-			e.printStackTrace();
 			logger.warning(e.getMessage());
 			return e.getMessage();
 		}

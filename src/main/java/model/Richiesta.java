@@ -108,6 +108,7 @@ public class Richiesta{
      */
 
     public boolean equalsLezione(Lezione l){
+        if(l.getInsegnamento().getDocente()==null){throw new NullPointerException("Impossibile trovare controllare la lezione, non ha un docente!"); }
         return this.docenteRichiedente.email.equals(l.getInsegnamento().getDocente().email) &&
                 this.orarioLezioneDaSpostare.equals(l.getOrario());
     }

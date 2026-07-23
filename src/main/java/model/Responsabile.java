@@ -67,6 +67,7 @@ private final Token token;
      * @throws IllegalArgumentException se il docente ha impostato un vincolo in quell'orario.
      */
 public void inserisciLezione(Lezione l, OrarioLezioni elencoLezioni) {
+    if(l.getInsegnamento().getDocente()==null){throw new NullPointerException("Non è possibile inserire una lezione senza docente!"); }
     if(!(verificaDisponibilita(l.getInsegnamento().getDocente().getVincoli(), l.getOrario()))){
         throw new IllegalArgumentException("Il docente non è disponibile in questa fascia oraria");
     }
