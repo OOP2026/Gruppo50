@@ -121,10 +121,8 @@ caricaEventTable();
                 if (riga == -1 || !e.getValueIsAdjusting()) {return;}
                 String campoDocente = tabellaInsegnamenti.getValueAt(riga, 3).toString();
 
-                if(campoDocente.equalsIgnoreCase("nessuno")){
                     gestioneInsegnamento(riga);
-                }else{removePanel(riga);
-                }
+
 
 
 
@@ -153,6 +151,17 @@ caricaEventTable();
             aggiornaTabella(controller);
         }
 
+    }
+    private void modificaDocenteTitolare(String emailDocente, String nomeIns){
+        if (!emailDocente.trim().isEmpty()) {
+            String action = controller.modificaDocenteTitolare(emailDocente,nomeIns);
+            if (action != null) {
+                JOptionPane.showMessageDialog(dialog, action, "Errore nella modifica del docente titolare", JOptionPane.ERROR_MESSAGE);
+            }
+            aggiornaTabella(controller);
+        }else{
+            JOptionPane.showMessageDialog(dialog, "Il campo dell'email non può essere vuoto!", "ATTENZIONE!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
@@ -274,6 +283,9 @@ caricaEventTable();
     private void assegnaDocentePanel(int riga){
 
         String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
+        int numeroCfu= Integer.parseInt(tabellaInsegnamenti.getValueAt(riga,1).toString());
+        int annoCorso= Integer.parseInt(tabellaInsegnamenti.getValueAt(riga,2).toString());
+
 
         String emailDocente = JOptionPane.showInputDialog(dialog,"Inserisci l'email del docente da assegnare:",
                 "Assegnazione Docente",JOptionPane.QUESTION_MESSAGE);

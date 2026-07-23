@@ -1228,7 +1228,7 @@ public class  Controller {
 				return (Docente) u;
 			}
 		}
-		return new Docente("", "", email, "", "");
+		return null;
 	}
 	/**
 	 * Cerca tra gli insegnamenti registrati quello con nome e anno di corso
@@ -1514,4 +1514,39 @@ public class  Controller {
 		}
 		return null;
 	}
+
+	public String modificaDocenteTitolare(String emailDocente,String nomeIns){
+		try {
+			Docente d=null;
+			for (Utente u : utentiRegistrati) {
+				if (u.getmail().equals(emailDocente) && (u instanceof Docente)) {
+					d= (Docente)u;
+				}
+			}
+			if(d==null) {return "Non esiste un docente con questa email";}
+			Insegnamento ins= stringToInsegnamento(nomeIns);
+			if(ins==null) throw new NullPointerException("Impossibile modificare il docente, l'insegnamento non esiste");
+			int cfu= ins.getNumeroCFU();
+			int annoCorso= ins.getAnnoCorso();
+			if(ConnessioneDatabase.getStatus()){
+			InsegnamentoPostgresDAO insDAO= new InsegnamentoPostgresDAO();
+			insDAO.rimuoviInsegnamentoDB(nomeIns);
+			insDAO.salvaInsegnamento(nomeIns, annoCorso,cfu);
+			insDAO.assegnaDocenteTitolare(emailDocente,nomeIns);
+			}
+			removeLezioneByInsegnamento(ins);
+			ins.setDocente(d);
+
+
+        } catch (SQLException e) {
+			logger.warning(e.getMessage());
+            return "Impossibile modificare il docente titolare a causa del DB";
+        }catch (Exception e) {
+
+			return e.getMessage();
+		}
+
+		return null;
+	}
+
 }
