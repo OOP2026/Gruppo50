@@ -121,10 +121,8 @@ caricaEventTable();
                 if (riga == -1 || !e.getValueIsAdjusting()) {return;}
                 String campoDocente = tabellaInsegnamenti.getValueAt(riga, 3).toString();
 
-                if(campoDocente.equalsIgnoreCase("nessuno")){
                     gestioneInsegnamento(riga);
-                }else{removePanel(riga);
-                }
+
 
 
 
@@ -153,6 +151,17 @@ caricaEventTable();
             aggiornaTabella(controller);
         }
 
+    }
+    private void modificaDocenteTitolare(String emailDocente, String nomeIns){
+        if (!emailDocente.trim().isEmpty()) {
+            String action = controller.modificaDocenteTitolare(emailDocente,nomeIns);
+            if (action != null) {
+                JOptionPane.showMessageDialog(dialog, action, "Errore nella modifica del docente titolare", JOptionPane.ERROR_MESSAGE);
+            }
+            aggiornaTabella(controller);
+        }else{
+            JOptionPane.showMessageDialog(dialog, "Il campo dell'email non può essere vuoto!", "ATTENZIONE!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
@@ -274,15 +283,20 @@ caricaEventTable();
     private void assegnaDocentePanel(int riga){
 
         String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
+        String email=tabellaInsegnamenti.getValueAt(riga, 3).toString();
 
         String emailDocente = JOptionPane.showInputDialog(dialog,"Inserisci l'email del docente da assegnare:",
                 "Assegnazione Docente",JOptionPane.QUESTION_MESSAGE);
    if(emailDocente==null){return;}
-   if(mailValidazione(emailDocente)){
+   if(!mailValidazione(emailDocente)){
        JOptionPane.showMessageDialog(dialog, "Email non valida.", "ATTENZIONE!", JOptionPane.WARNING_MESSAGE);
 return;
    }
-        assegnaDocente(nomeInsegnamento,emailDocente.trim());
+   if(email.equalsIgnoreCase("nessuno")) {
+       assegnaDocente(nomeInsegnamento, emailDocente.trim());
+   }else{
+       modificaDocenteTitolare(emailDocente.trim(),nomeInsegnamento);
+   }
     }
 
     /**

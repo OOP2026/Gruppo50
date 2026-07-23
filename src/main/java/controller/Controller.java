@@ -1228,7 +1228,7 @@ public class  Controller {
 				return (Docente) u;
 			}
 		}
-		return new Docente("", "", email, "", "");
+		return null;
 	}
 	/**
 	 * Cerca tra gli insegnamenti registrati quello con nome e anno di corso
@@ -1492,6 +1492,7 @@ public class  Controller {
 		for (Utente u : utentiRegistrati) {
 			if (u.getmail().equals(email) && (u instanceof Docente)) {
 				d= (Docente)u;
+				logger.info(d.getmail());
 			}
 		}
 		if(d==null) {return "Non esiste un docente con questa email";}
@@ -1501,6 +1502,9 @@ public class  Controller {
 			return "Errore si sta provando ad assegnare ad un insegnamento non esistente";
 		}
 		try{
+			//Controlla se il docente puo insegnare questa materia
+		Insegnamento insTemp= new Insegnamento(insegnamento);
+    insTemp.setDocente(d);
 			if(ConnessioneDatabase.getStatus()) {
 				InsegnamentoPostgresDAO insDAO = new InsegnamentoPostgresDAO();
 				insDAO.assegnaDocenteTitolare(email,ins);
@@ -1510,8 +1514,49 @@ public class  Controller {
 			logger.warning(e.getMessage());
 			return"Impossibile assegnare un docente a questa materia";
 		}catch(Exception e){
+			e.printStackTrace();
+			logger.warning(e.getMessage());
 			return e.getMessage();
 		}
 		return null;
 	}
+
+	public String modificaDocenteTitolare(String emailDocente,String nomeIns){
+		try {
+			Docente d=null;
+			for (Utente u : utentiRegistrati) {
+				if (u.getmail().equals(emailDocente) && (u instanceof Docente)) {
+					d= (Docente)u;
+				}
+			}
+			if(d==null) {return "Non esiste un docente con questa email";}
+			Insegnamento ins= stringToInsegnamento(nomeIns);
+			if(ins==null) throw new NullPointerException("Impossibile modificare il docente, l'insegnamento non esiste");
+			int cfu= ins.getNumeroCFU();
+			int annoCorso= ins.getAnnoCorso();
+			//Controlla se il docente puo insegnare questa materia
+			Insegnamento insTemp= new Insegnamento(ins);
+			insTemp.setDocente(d);
+            if(ConnessioneDatabase.getStatus()){
+			InsegnamentoPostgresDAO insDAO= new InsegnamentoPostgresDAO();
+			insDAO.rimuoviInsegnamentoDB(nomeIns);
+			insDAO.salvaInsegnamento(nomeIns, annoCorso,cfu);
+			insDAO.assegnaDocenteTitolare(emailDocente,nomeIns);
+			}
+
+			removeLezioneByInsegnamento(ins);
+			ins.setDocente(d);
+
+
+        } catch (SQLException e) {
+			logger.warning(e.getMessage());
+            return "Impossibile modificare il docente titolare a causa del DB";
+        }catch (Exception e) {
+			logger.warning(e.getMessage());
+			return e.getMessage();
+		}
+
+		return null;
+	}
+
 }
