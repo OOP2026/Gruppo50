@@ -24,7 +24,7 @@ public class Studente extends Utente  {
 
     /**
      * Crea un nuovo oggetto Studente, dandogli dei valori.
-     * * @param nome il nome dello studente
+     * @param nome il nome dello studente
      * @param cognome il cognome dello studente
      * @param email l'indirizzo email dello studente
      * @param login l'username per l'accesso al sistema
@@ -34,8 +34,6 @@ public class Studente extends Utente  {
      * @throws IllegalArgumentException se la matricola è vuota, nulla, o già esistente,
      * oppure se l'anno di corso non è compreso tra 1 e 3
      */
-
-
     public Studente(String nome, String cognome, String email, String login, String password, String matricola, int annoCorso) {
         super(nome,cognome,email,login,password);
 
