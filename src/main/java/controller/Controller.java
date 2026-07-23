@@ -1487,6 +1487,27 @@ public class  Controller {
 		}
 		docente.caricaVincoliInDocente(vs);
 	}
+	/**Carica dal database le materie del docente indicato (tabella
+	 * {@code docenteinsegnamento}) e le mette nella sua lista in memoria.
+	 * Serve quando l'utente loggato NON è quel docente (es. il responsabile
+	 * assegna un titolare): in quel caso la lista in memoria è vuota perché
+	 * {@link #caricaMaterieDocenteDaDB()} viene invocato solo al login del docente.
+	 */
+	private void caricaMaterieDiDocente(Docente d) throws SQLException {
+		if(!ConnessioneDatabase.getStatus()){return;}
+		DocenteDAO docenteDAO = new DocentePostgresDao();
+		ArrayList<String> nomiMaterie = new ArrayList<>();
+		docenteDAO.leggiMaterieDocenteDB(d.getmail(), nomiMaterie);
+		List<Insegnamento> materie = new ArrayList<>();
+		for (String nome : nomiMaterie) {
+			Insegnamento i = stringToInsegnamento(nome);
+			if (i != null) {
+				materie.add(i);
+			}
+		}
+		d.caricaInsegnamentiInDocente(materie);
+	}
+
 	public String assegnaDocente(String ins,String email){
 		Docente d=null;
 		for (Utente u : utentiRegistrati) {
@@ -1502,9 +1523,12 @@ public class  Controller {
 			return "Errore si sta provando ad assegnare ad un insegnamento non esistente";
 		}
 		try{
+			//Ricarica dal DB le materie del docente: la sua lista in memoria
+			//è vuota se non è lui l'utente loggato (vedi caricaMaterieDocenteDaDB)
+			caricaMaterieDiDocente(d);
 			//Controlla se il docente puo insegnare questa materia
-		Insegnamento insTemp= new Insegnamento(insegnamento);
-    insTemp.setDocente(d);
+			Insegnamento insTemp= new Insegnamento(insegnamento);
+			insTemp.setDocente(d);
 			if(ConnessioneDatabase.getStatus()) {
 				InsegnamentoPostgresDAO insDAO = new InsegnamentoPostgresDAO();
 				insDAO.assegnaDocenteTitolare(email,ins);
@@ -1534,24 +1558,26 @@ public class  Controller {
 			if(ins==null) throw new NullPointerException("Impossibile modificare il docente, l'insegnamento non esiste");
 			int cfu= ins.getNumeroCFU();
 			int annoCorso= ins.getAnnoCorso();
+			//Ricarica dal DB le materie del docente (lista vuota se non è lui il loggato)
+			caricaMaterieDiDocente(d);
 			//Controlla se il docente puo insegnare questa materia
 			Insegnamento insTemp= new Insegnamento(ins);
 			insTemp.setDocente(d);
-            if(ConnessioneDatabase.getStatus()){
-			InsegnamentoPostgresDAO insDAO= new InsegnamentoPostgresDAO();
-			insDAO.rimuoviInsegnamentoDB(nomeIns);
-			insDAO.salvaInsegnamento(nomeIns, annoCorso,cfu);
-			insDAO.assegnaDocenteTitolare(emailDocente,nomeIns);
+			if(ConnessioneDatabase.getStatus()){
+				InsegnamentoPostgresDAO insDAO= new InsegnamentoPostgresDAO();
+				insDAO.rimuoviInsegnamentoDB(nomeIns);
+				insDAO.salvaInsegnamento(nomeIns, annoCorso,cfu);
+				insDAO.assegnaDocenteTitolare(emailDocente,nomeIns);
 			}
 
 			removeLezioneByInsegnamento(ins);
 			ins.setDocente(d);
 
 
-        } catch (SQLException e) {
+		} catch (SQLException e) {
 			logger.warning(e.getMessage());
-            return "Impossibile modificare il docente titolare a causa del DB";
-        }catch (Exception e) {
+			return "Impossibile modificare il docente titolare a causa del DB";
+		}catch (Exception e) {
 			logger.warning(e.getMessage());
 			return e.getMessage();
 		}
