@@ -283,18 +283,20 @@ caricaEventTable();
     private void assegnaDocentePanel(int riga){
 
         String nomeInsegnamento = tabellaInsegnamenti.getValueAt(riga, 0).toString();
-        int numeroCfu= Integer.parseInt(tabellaInsegnamenti.getValueAt(riga,1).toString());
-        int annoCorso= Integer.parseInt(tabellaInsegnamenti.getValueAt(riga,2).toString());
-
+        String email=tabellaInsegnamenti.getValueAt(riga, 3).toString();
 
         String emailDocente = JOptionPane.showInputDialog(dialog,"Inserisci l'email del docente da assegnare:",
                 "Assegnazione Docente",JOptionPane.QUESTION_MESSAGE);
    if(emailDocente==null){return;}
-   if(mailValidazione(emailDocente)){
+   if(!mailValidazione(emailDocente)){
        JOptionPane.showMessageDialog(dialog, "Email non valida.", "ATTENZIONE!", JOptionPane.WARNING_MESSAGE);
 return;
    }
-        assegnaDocente(nomeInsegnamento,emailDocente.trim());
+   if(email.equalsIgnoreCase("nessuno")) {
+       assegnaDocente(nomeInsegnamento, emailDocente.trim());
+   }else{
+       modificaDocenteTitolare(emailDocente.trim(),nomeInsegnamento);
+   }
     }
 
     /**

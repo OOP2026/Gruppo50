@@ -50,8 +50,11 @@ this.docente=null;
         this.nome=i.nome;
         this.numeroCFU=i.numeroCFU;
         this.annoCorso=i.annoCorso;
-        this.docente= new Docente(i.docente);
+        if(i.getDocente()!=null){
+            this.docente=i.docente;
+        }
     }
+
 //getter and setter
 
     /** Restituisce il nome dell'insegnamento.
@@ -107,8 +110,7 @@ this.docente=null;
         Insegnamento insegnamento = (Insegnamento) obj;
         return this.nome.equals(insegnamento.nome)
                 && this.numeroCFU == insegnamento.numeroCFU
-                && this.annoCorso == insegnamento.annoCorso
-                && this.docente.getmail().equals(insegnamento.docente.getmail());
+                && this.annoCorso == insegnamento.annoCorso;
     }
     /**
      * Crea un hash code per questo insegnamento su determinati attributi.
@@ -116,7 +118,7 @@ this.docente=null;
      */
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(this.nome, this.numeroCFU, this.annoCorso, this.docente.getmail());
+        return java.util.Objects.hash(this.nome, this.numeroCFU, this.annoCorso);
     }
     
 }
