@@ -27,8 +27,8 @@ public class Docente extends Utente {
 
 
     /**
-     * Crea una nuova lezione associando insegnamento, aula e orario.
-     *
+     * <p>Costruisce un nuovo responsabile definendo nome, cognome, email, login e password,
+     * i vincoli associati al docente e isuoi insegnamenti.</p>
      * @param nome primo nome di battesimo del docente.
      * @param cognome secondo nome di battesimo del docente.
      * @param email   email a uso universitario del docente tipicamente(nome.cognome@dominio.estensione).

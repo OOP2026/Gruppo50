@@ -112,8 +112,10 @@ public class  Controller {
 		return false;
 	}
 	/**
-	 * Questo metodo controlla se l'utente è uno studente.
-	 * @return  Ritorna un valore booleano.
+	 * Questo metodo controlla se l'utente è uno studente e in tal caso
+	 * lo imposta come studente attualmente loggato.
+	 * @param u l'utente da controllare.
+	 * @return {@code true} se l'utente è uno {@link Studente}, {@code false} altrimenti.
 	 */
 	public boolean isStudente(Utente u){
 		if (u instanceof Studente) {
@@ -122,9 +124,12 @@ public class  Controller {
 		}
 		return false;
 	}
+
 	/**
-	 * Questo metodo controlla se l'utente è un responsabile.
-	 * @return Ritorna un valore booleano.
+	 * Questo metodo controlla se l'utente è un responsabile e in tal caso
+	 * lo imposta come responsabile attualmente loggato.
+	 * @param u l'utente da controllare.
+	 * @return {@code true} se l'utente è uno {@link Responsabile}, {@code false} altrimenti.
 	 */
 	public boolean isResponsabile(Utente u){
 		if (u instanceof Responsabile) {
@@ -141,8 +146,10 @@ public class  Controller {
 		return false;
 	}
 	/**
-	 * Questo metodo controlla se l'utente è un docente
-	 * @return Ritorna un valore booleano.
+	 * Questo metodo controlla se l'utente è un docente e in tal caso
+	 * lo imposta come docente attualmente loggato.
+	 * @param u l'utente da controllare.
+	 * @return {@code true} se l'utente è uno {@link Docente}, {@code false} altrimenti.
 	 */
 	public boolean isDocente(Utente u){
 		if (u instanceof Docente) {
@@ -492,9 +499,10 @@ public class  Controller {
 		return data;
 	}
 	// Metodo per i vincoli
-	/**Permette al docente di aggiungere un {@link Vincolo} max 3.
-	 *Docente indica i il giorno e una fascia oraria in cui non può fare lezione.
-	 *@return Restituisce una {@code String} o {@code null}
+	/**Carica dal database i {@link Vincolo vincoli} del docente loggato e li
+	 * mette nella sua lista in memoria, sostituendo quella precedente per
+	 * evitare duplicati tra un login e l'altro.
+	 *@return Restituisce una {@code String} con l'errore o {@code null} se tutto ok.
 	 */
 	public String caricaVincoliDaDB(){
 		try{
@@ -1527,6 +1535,8 @@ public class  Controller {
 	 * Serve quando l'utente loggato NON è quel docente (es. il responsabile
 	 * assegna un titolare): in quel caso la lista in memoria è vuota perché
 	 * {@link #caricaMaterieDocenteDaDB()} viene invocato solo al login del docente.
+	 * @param d il docente di cui caricare le materie.
+	 * @throws SQLException se la lettura delle materie dal database fallisce.
 	 */
 	private void caricaMaterieDiDocente(Docente d) throws SQLException {
 		if(!ConnessioneDatabase.getStatus()){return;}
