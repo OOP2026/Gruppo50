@@ -69,7 +69,7 @@ public interface RichiestaDAO {
      *                              minutoInizio, oraFine, minutoFine]}
      * @param orarioProposto        lista in cui inserire gli orari proposti, nello
      *                              stesso formato di {@code orarioIniziale}
-     * @throws Exception se la lettura dal database fallisce
+     * @throws SQLException se la lettura dal database fallisce
      */
     void leggiRichiesteDocenteDB(String emailDocente,
                                  List<Integer> id,
@@ -85,9 +85,9 @@ public interface RichiestaDAO {
      * qualsiasi responsabile loggato possa vedere e gestire tutte le richieste
      * pendenti. Le liste sono parallele per indice.
      * @param id                    lista in cui inserire gli id delle richieste
-     * @throws Exception se la lettura dal database fallisce
+     * @throws SQLException se la lettura dal database fallisce
      */
-    public void leggiRichiesteInAttesaDB(List<Integer> id,
+    void leggiRichiesteInAttesaDB(List<Integer> id,
                                          List<String[]> datiTesto,
                                          List<int[]> orarioIniziale,
                                          List<int[]> orarioProposto) throws SQLException;
@@ -98,7 +98,7 @@ public interface RichiestaDAO {
      *
      * @param idRichiesta id della richiesta da aggiornare
      * @param nuovoStato  nuovo stato: {@code 'IN_ATTESA'}, {@code 'APPROVATA'} o {@code 'RIFIUTATA'}
-     * @throws Exception se l'aggiornamento fallisce (ad es. stato non ammesso dal CHECK)
+     * @throws SQLException se l'aggiornamento fallisce (ad es. stato non ammesso dal CHECK)
      */
     void aggiornaStatoRichiestaDB(int idRichiesta, String nuovoStato) throws SQLException;
 
@@ -112,7 +112,7 @@ public interface RichiestaDAO {
      * @param minutoInizioProposto nuovo minuto di inizio proposto
      * @param oraFineProposto      nuova ora di fine proposta
      * @param minutoFineProposto   nuovo minuto di fine proposto
-     * @throws Exception se l'aggiornamento fallisce
+     * @throws SQLException se l'aggiornamento fallisce
      */
     void aggiornaOrarioPropostoDB(int idRichiesta, String giornoProposto,
                                   int oraInizioProposto, int minutoInizioProposto,

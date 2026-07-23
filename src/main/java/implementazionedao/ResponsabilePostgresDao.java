@@ -16,8 +16,6 @@ import java.util.ArrayList;
  */
 public class ResponsabilePostgresDao implements ResponsabileDAO {
 
-    /** Ruolo con cui i responsabili sono salvati nella tabella utente. */
-    private static final String RUOLO = "RESPONSABILE";
     /** Prefisso delle matricole dei responsabili. */
     private static final String PREFISSO_MATRICOLA = "RE";
 
@@ -53,38 +51,4 @@ public class ResponsabilePostgresDao implements ResponsabileDAO {
         utenteDao.salvaUtenteDB(nome, cognome, email, login, password, matricola, null);
     }
 
-    /**
-     * Recupera tutti i responsabili: legge tutti gli utenti tramite
-     * {@link UtenteDAO#leggiUtentiDB} e filtra le righe con ruolo {@code "RESPONSABILE"}.
-     *
-     * @param nome la lista dei nomi dei responsabili presenti nel db.
-     * @param cognome la lista dei  cognomi dei responsabili presenti nel db.
-     * @param email la lista delle email dei responsabili presenti nel db.
-     * @param login la lista degli username dei responsabili presenti nel db.
-     * @param password la lista delle password dei responsabili presenti nel db.
-     * @throws java.sql.SQLException Throws exception quando la lettura nel database non va a buon fine.
-     */
-    @Override
-    public void leggiResponsabileDB(ArrayList<String> nome, ArrayList<String> cognome, ArrayList<String> email, ArrayList<String> login, ArrayList<String> password) throws java.sql.SQLException {
-        ArrayList<String> nomi = new ArrayList<>();
-        ArrayList<String> cognomi = new ArrayList<>();
-        ArrayList<String> emails = new ArrayList<>();
-        ArrayList<String> logins = new ArrayList<>();
-        ArrayList<String> passwords = new ArrayList<>();
-        ArrayList<String> matricole = new ArrayList<>();
-        ArrayList<Integer> anniCorso = new ArrayList<>();
-        ArrayList<String> ruoli = new ArrayList<>();
-        utenteDao.leggiUtentiDB(nomi, cognomi, emails, logins, passwords, matricole, anniCorso, ruoli);
-
-        for (int i = 0; i < ruoli.size(); i++) {
-            if (RUOLO.equalsIgnoreCase(ruoli.get(i))) {
-                nome.add(nomi.get(i));
-                cognome.add(cognomi.get(i));
-                email.add(emails.get(i));
-                login.add(logins.get(i));
-                password.add(passwords.get(i));
-                // matricola e annoCorso vengono ignorati: per ora il responsabile non li visualizza.
-            }
-        }
-    }
 }
