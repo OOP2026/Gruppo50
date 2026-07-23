@@ -1342,6 +1342,12 @@ public class  Controller {
 		}
 		return data;
 	}
+	/**
+	 * Restituisce le aule registrate formattate per la JTable della GUI.
+	 * <p>Ogni riga contiene: {@code [0]} il nome dell'aula e {@code [1]} la capienza.</p>
+	 * @return una matrice {@code Object[][]} con i dati delle aule;
+	 * {@code new Object[0][0]} se non è presente nessuna aula.
+	 */
 	public Object[][] getAuleData(){
 		if(aule.isEmpty()) return new Object[0][0];
 		Object[][] data= new Object[aule.size()][2];
@@ -1445,6 +1451,15 @@ public class  Controller {
 			}
 		}
 	}
+	/**
+	 * Rimuove dall'orario generale tutte le lezioni associate a un dato insegnamento.
+	 * <p>
+	 * L'operazione viene eseguita con i permessi del Responsabile. Serve quando un
+	 * insegnamento viene rimosso o gli viene cambiato il docente titolare, così da
+	 * non lasciare in orario lezioni ormai incoerenti.
+	 * </p>
+	 * @param ins l'insegnamento di cui si vogliono cancellare le lezioni.
+	 */
 	private void removeLezioneByInsegnamento(Insegnamento ins){
 		for(Lezione l:orarioLezioni.getOrarioLezioni()) {
 			if (l.getInsegnamento().equals(ins)) {
@@ -1452,7 +1467,17 @@ public class  Controller {
 			}
 		}
 	}
-
+	/**
+	 * Permette al {@link Responsabile responsabile} di rimuovere un insegnamento registrato.
+	 * <p>
+	 * L'insegnamento viene eliminato dal database (se la connessione è attiva) e dalla
+	 * lista in memoria {@code insegnamentiRegistrati}; vengono inoltre rimosse dall'orario
+	 * tutte le lezioni ad esso associate tramite {@link #removeLezioneByInsegnamento(Insegnamento)}.
+	 * </p>
+	 * @param nome il nome dell'insegnamento da rimuovere.
+	 * @return {@code null} se la rimozione ha avuto successo, altrimenti una
+	 * {@code String} con il messaggio di errore da mostrare in GUI.
+	 */
 	public String removeInsegnamento(String nome){
 		try{
 			Insegnamento ins= stringToInsegnamento(nome);
@@ -1476,6 +1501,16 @@ public class  Controller {
 		return null;
 	}
 	//Viene usato per quando responsabile crea lezione e deve controllare i vincoli
+	/**
+	 * Carica dal database i {@link Vincolo vincoli} del docente attualmente
+	 * impostato in {@code this.docente} e li mette nella sua lista in memoria,
+	 * sostituendo quella precedente.
+	 * <p>
+	 * Viene usato quando il responsabile crea una lezione e deve verificare la
+	 * disponibilità del docente titolare confrontando i vincoli con l'orario.
+	 * </p>
+	 * @throws SQLException se la lettura dei vincoli dal database fallisce.
+	 */
 	private void caricaVincoliDocenteDaDB() throws SQLException {
 		if(!ConnessioneDatabase.getStatus()) {return;}
 
@@ -1507,7 +1542,21 @@ public class  Controller {
 		}
 		d.caricaInsegnamentiInDocente(materie);
 	}
-
+	/**
+	 * Permette al {@link Responsabile responsabile} di assegnare il docente titolare
+	 * a un insegnamento registrato che ancora non ne ha uno.
+	 * <p>
+	 * Il docente deve essere registrato e avere questo insegnamento tra le proprie
+	 * materie (le materie del docente vengono ricaricate dal database prima del
+	 * controllo, dato che la sua lista in memoria è vuota quando non è lui l'utente
+	 * loggato). Se il controllo passa, l'associazione viene salvata sul database e
+	 * poi aggiornata in memoria.
+	 * </p>
+	 * @param ins il nome dell'insegnamento a cui assegnare il titolare.
+	 * @param email l'email del docente da rendere titolare.
+	 * @return {@code null} se l'assegnazione ha avuto successo, altrimenti una
+	 * {@code String} con il messaggio di errore da mostrare in GUI.
+	 */
 	public String assegnaDocente(String ins,String email){
 		Docente d=null;
 		for (Utente u : utentiRegistrati) {
@@ -1544,7 +1593,22 @@ public class  Controller {
 		}
 		return null;
 	}
-
+	/**
+	 * Permette al {@link Responsabile responsabile} di cambiare il docente titolare
+	 * di un insegnamento già assegnato.
+	 * <p>
+	 * Il nuovo docente deve essere registrato e avere questo insegnamento tra le
+	 * proprie materie (ricaricate dal database prima del controllo). Sul database
+	 * l'insegnamento viene rimosso e ricreato con il nuovo titolare (conservando
+	 * CFU e anno di corso); in memoria vengono eliminate dall'orario le lezioni del
+	 * vecchio titolare tramite {@link #removeLezioneByInsegnamento(Insegnamento)} e
+	 * viene aggiornato il docente dell'insegnamento.
+	 * </p>
+	 * @param emailDocente l'email del nuovo docente titolare.
+	 * @param nomeIns il nome dell'insegnamento di cui cambiare il titolare.
+	 * @return {@code null} se la modifica ha avuto successo, altrimenti una
+	 * {@code String} con il messaggio di errore da mostrare in GUI.
+	 */
 	public String modificaDocenteTitolare(String emailDocente,String nomeIns){
 		try {
 			Docente d=null;
