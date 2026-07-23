@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 import model.Responsabile.Token;
 import java.util.List;
 import java.util.logging.Logger;
+
 /**
  * Rappresenta l'orario delle lezioni; all'interno contiene e gestisce
  * tutte le lezioni create all'interno del sistema.
@@ -19,14 +20,15 @@ public class OrarioLezioni {
 
 
     /**
-     * Costruisce un nuovo oggetto OrarioLezioni, controllando l'arraylist */
-
+     * Costruisce un nuovo oggetto OrarioLezioni, controllando l'arraylist
+     */
     public OrarioLezioni(){
         lezioni=new ArrayList<>();
     }
 
     /**
      * Restituisce una lista di tutte le lezioni assegnate a un docente
+     *
      * @param docente il docente di cui si vogliono cercare le lezioni
      * @return una lista di {@link Lezione} associate al docente, vuota se non ha lezioni assegnate
      */
@@ -46,17 +48,19 @@ public class OrarioLezioni {
         return lista2;
 
     }
+
     /**
      * <p>
      * Permette di aggiungere una nuova lezione all'orario
      * Solo un Responsabile in possesso del Token valido può eseguire questa operazione.
      * Il livello di privilegio è garantito a livello di codice dalla richiesta obbligatoria
      * di un oggetto {@link Token} valido, che solo l'amministratore può generare e possedere.
-     *</p>
-     * @param l la {@link Lezione} da aggiungere all'orario
+     * </p>
+     *
+     * @param l     la {@link Lezione} da aggiungere all'orario
      * @param token l'oggetto Token che da i permessi al responsabile
      * @throws IllegalArgumentException se c'è un conflitto di orario, aula o docente con un'altra lezione
-     * @throws NullPointerException se la lezione passata è nulla o se il token è nullo (permesso negato)
+     * @throws NullPointerException     se la lezione passata è nulla o se il token è nullo (permesso negato)
      */
     public void aggiungiLezione(Lezione l, Token token)throws IllegalArgumentException, NullPointerException {
         //Solo il responsabile puo usare questo metodo
@@ -77,7 +81,8 @@ public class OrarioLezioni {
      * Come per l'inserimento, questa operazione distruttiva è blindata. È accessibile solo al
      * Responsabile, la cui identità viene verificata tramite la validazione del {@link Token}.
      * </p>
-     * @param l la {@link Lezione} da rimuovere dall'orario
+     *
+     * @param l     la {@link Lezione} da rimuovere dall'orario
      * @param token l'oggetto Token che fa da "chiave" per convalidare i permessi
      * @throws NullPointerException se la lezione passata è nulla o se il token di sicurezza è mancante
      */
@@ -112,6 +117,7 @@ public class OrarioLezioni {
     /**
      * Stampa nel terminale l'orario completo di tutti i corsi.
      * Operazione che solo il Responsabile puó fare.
+     *
      * @param token l'oggetto Token che da i permessi al responsabile
      */
     public void visualizzaOrarioCompleto(Token token){
@@ -160,8 +166,10 @@ public class OrarioLezioni {
     }
 
 //Studente
+
     /**
      * Stampa l'orario delle lezioni filtrate per l'anno di corso dello studente
+     *
      * @param studente lo studente che richiede di visualizzare il proprio orario
      */
     public void visualizzaOrarioCompleto(Studente studente){
@@ -178,8 +186,10 @@ public class OrarioLezioni {
 
 
 //Docente
+
     /**
      * Stampa l'orario delle lezioni assegnate a un docente specifico
+     *
      * @param docente il docente che richiede di visualizzare il proprio orario
      */
     public void visualizzaOrarioCompleto(Docente docente){
@@ -193,13 +203,12 @@ public class OrarioLezioni {
     }
 
 
-
     /**
      * Restituisce la lista completa di tutte le lezioni presenti nel sistema
+     *
      * @param token l'oggetto Token che da i permessi al responsabile
      * @return la lista completa delle lezioni, oppure una lista vuota se il permesso è negato
      */
-
     public List<Lezione> getOrarioLezioni(Token token) {
         if(token==null){
             logger.info("Non hai il permesso");
@@ -215,6 +224,7 @@ public class OrarioLezioni {
      * per impedire modifiche dirette alla lista e garantire che solo il Responsabile
      * possa alterare l'orario.
      * </p>
+     *
      * @return una nuova lista contenente tutte le lezioni a sistema
      */
     public List<Lezione> getOrarioLezioni() {
@@ -278,6 +288,7 @@ public class OrarioLezioni {
     /**
      * Restituisce le lezioni filtrate per anno di corso dello studente.
      * Non richiede il Token perché lo studente ha diritto di vedere il proprio orario.
+     *
      * @param studente lo studente di cui si vuole ottenere le lezioni per il proprio anno
      * @return una lista di lezioni appartenenti all'anno di corso dello studente
      */

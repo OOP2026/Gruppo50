@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
+
 
 /**
  * Finestra di dialogo (GUI) dedicata alla visualizzazione e all'aggiunta di nuovi insegnamenti.
@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
  * <li><b>Bottoni di Azione:</b> Aggiungi un nuovo insegnamento o chiudi la finestra.</li>
  * </ul>
  */
+@SuppressWarnings("unused")
 public class InsegnamentiDialog {
     JDialog dialog;
     private JPanel panel1;

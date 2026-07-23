@@ -2,12 +2,20 @@ package model;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * The type Test model.
+ */
 public class TestModel {
 	private static final Logger logger = Logger.getLogger(TestModel.class.getName());
 	// 1. Definisci le costanti all'inizio della classe
 	private static final String LUNEDI = "Lunedì";
 	private static final String MARTEDI = "Martedi";
 
+	/**
+	 * The entry point of application.
+	 *
+	 * @param args the input arguments
+	 */
 	public static void main(String[] args) {
 		//Testiamo se funziona la funzione che mostra in modo ordinato le lezioni di un docente, se funziona vuol dire che la funzione di ordinamento funziona correttamente
 		Responsabile luca= new Responsabile("Luca","Bianchi","luca.bianchi@gmail.com","luca.bianchi","password123");
