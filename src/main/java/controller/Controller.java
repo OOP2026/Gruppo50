@@ -11,7 +11,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.logging.Logger;
 
-
+/**
+ * Controller dell'applicazione secondo il pattern BCE (Boundary-Control-Entity).
+ * <p>
+ * Fa da intermediario tra la GUI (boundary) e il Model (entity): riceve le
+ * richieste delle schermate, delega la logica di dominio alle classi del Model
+ * ({@link Studente}, {@link Docente}, {@link Responsabile}, {@link Insegnamento},
+ * {@link Lezione}, ecc.) e ne restituisce i risultati in formati pronti per la
+ * visualizzazione (tipicamente {@code Object[][]} per le JTable o {@code String}
+ * con l'eventuale messaggio di errore, {@code null} se l'operazione è riuscita).
+ * </p>
+ * <p>
+ * Gestisce inoltre la persistenza tramite i DAO: all'avvio carica utenti,
+ * insegnamenti e lezioni dal database ({@link #caricaDatiIniziali()}) e a ogni
+ * operazione di scrittura salva prima sul database e poi aggiorna la memoria.
+ * Con {@link #offline()} / {@link #online()} è possibile disattivare o
+ * riattivare l'uso del database, lavorando solo in memoria.
+ * </p>
+ */
 public class  Controller {
 	private static final Logger logger = Logger.getLogger(Controller.class.getName());
 	private static final String RESPONSABILE_RUOLO= "RESPONSABILE";

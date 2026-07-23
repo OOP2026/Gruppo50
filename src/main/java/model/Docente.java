@@ -27,10 +27,11 @@ public class Docente extends Utente {
 
 
     /**
-     * <p>Costruisce un nuovo responsabile definendo nome, cognome, email, login e password,
-     * i vincoli associati al docente e isuoi insegnamenti.</p>
-     * @param nome primo nome di battesimo del docente.
-     * @param cognome secondo nome di battesimo del docente.
+     * Crea un nuovo docente con le sue credenziali, inizializzando vuote le liste
+     * di insegnamenti, vincoli e richieste inviate.
+     *
+     * @param nome nome di battesimo del docente.
+     * @param cognome cognome del docente.
      * @param email   email a uso universitario del docente tipicamente(nome.cognome@dominio.estensione).
      * @param login   username utilizzato dal docente per accedere.
      * @param password password utilizzata dal docente per accedere
@@ -71,6 +72,8 @@ public class Docente extends Utente {
      * Permette di rimuovere un insegnamento al docente.
      * @param insegnamento l'insegnamento da rimuovere.
      * @throws NullPointerException se l'insegnamento passato è null.
+     * @throws IllegalArgumentException se il docente è il titolare di questo
+     * insegnamento e quindi non può rimuoverlo dalle proprie materie.
      */
     public void removeInsegnamento(Insegnamento insegnamento){
         if(insegnamento==null){
@@ -143,7 +146,8 @@ public class Docente extends Utente {
 
 //Gestione dei vincoli
     /** Permette di aggiungere un vincolo, massimo fino a 3 vincoli.
-     * @throws IllegalArgumentException se si è raggiunto il limite di vincoli.
+     * @param v il vincolo (giorno e fascia oraria di indisponibilità) da aggiungere.
+     * @throws IllegalStateException se si è già raggiunto il limite di 3 vincoli.
      */
     public void aggiungiVincolo(Vincolo v){
         if(vincoli.size()==3){
